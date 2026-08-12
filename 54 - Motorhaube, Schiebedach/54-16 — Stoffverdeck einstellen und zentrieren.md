@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54-16.jpg]]
+![[54 - Motorhaube, Schiebedach/54-16.jpg]]
 
 *Originaltitel (EN): Convertible top (canvas) - replace*
 

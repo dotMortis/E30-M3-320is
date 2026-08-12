@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65-352.jpg]]
+![[65 - Radio und Sonderausstattung/65-352.jpg]]
 
 *Originaltitel (EN): "*
 

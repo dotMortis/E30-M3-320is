@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[61-03.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Anziehdrehmomente elektrischer Anschlüsse (61-0xx)/61-03.jpg]]
 
 *Originaltitel (EN): Control Units / Modules*
 

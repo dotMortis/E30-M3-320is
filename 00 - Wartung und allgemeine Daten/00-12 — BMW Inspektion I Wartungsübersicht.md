@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-12.jpg]]
+![[00 - Wartung und allgemeine Daten/00-12.jpg]]
 
 *Originaltitel (EN): BMW Inspection I*
 

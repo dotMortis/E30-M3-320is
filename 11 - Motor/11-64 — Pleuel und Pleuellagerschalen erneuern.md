@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-64.jpg]]
+![[11 - Motor/11-64.jpg]]
 
 *Originaltitel (EN): Connecting rod / Conrod bearing shells - replace*
 

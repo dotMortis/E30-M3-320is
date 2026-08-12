@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-21.jpg]]
+![[34 - Bremsen/34-21.jpg]]
 
 *Originaltitel (EN): Brakes - troubleshoot*
 

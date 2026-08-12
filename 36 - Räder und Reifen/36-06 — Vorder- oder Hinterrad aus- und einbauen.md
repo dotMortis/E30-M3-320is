@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[36-06.jpg]]
+![[36 - Räder und Reifen/36-06.jpg]]
 
 *Originaltitel (EN): Front / Rear wheels - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23-323.jpg]]
+![[23 - Schaltgetriebe/Schnittdarstellung Getrag Schaltgetriebe 265-6 Schnellgang (23-3xx)/23-323.jpg]]
 
 *Originaltitel (EN): "*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13-731.jpg]]
+![[13 - Kraftstoffsystem/Temperaturschalter aus- und einbauen und elektrisch prüfen (13-7xx)/13-731.jpg]]
 
 ---
 

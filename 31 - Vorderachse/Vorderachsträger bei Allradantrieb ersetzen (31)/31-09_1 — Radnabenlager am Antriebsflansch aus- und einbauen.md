@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-09_1.jpg]]
+![[31 - Vorderachse/Vorderachsträger bei Allradantrieb ersetzen (31)/31-09_1.jpg]]
 
 *Originaltitel (EN): Bearings (drive flange) - replace*
 

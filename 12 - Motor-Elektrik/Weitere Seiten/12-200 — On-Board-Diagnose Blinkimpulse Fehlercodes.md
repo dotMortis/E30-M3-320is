@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-200.jpg]]
+![[12 - Motor-Elektrik/Weitere Seiten/12-200.jpg]]
 
 *Originaltitel (EN): On-Board diagnosis - code / lamp pulses*
 

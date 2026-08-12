@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-10_1.jpg]]
+![[31 - Vorderachse/Vorderachsträger bei Allradantrieb ersetzen (31)/31-10_1.jpg]]
 
 *Originaltitel (EN): "*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64-502.jpg]]
+![[64 - Heizung und Klimaanlage/64-502.jpg]]
 
 *Originaltitel (EN): Freezing prevention switch - remove and install*
 

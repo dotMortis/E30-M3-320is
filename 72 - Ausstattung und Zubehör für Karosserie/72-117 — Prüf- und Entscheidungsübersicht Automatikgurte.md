@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[72-117.jpg]]
+![[72 - Ausstattung und Zubehör für Karosserie/72-117.jpg]]
 
 *Originaltitel (EN): "*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-25.jpg]]
+![[34 - Bremsen/34-25.jpg]]
 
 *Originaltitel (EN): Antiblock system (ABS) - description*
 

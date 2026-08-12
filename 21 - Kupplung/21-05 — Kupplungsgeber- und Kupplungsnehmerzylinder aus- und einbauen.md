@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[21-05.jpg]]
+![[21 - Kupplung/21-05.jpg]]
 
 *Originaltitel (EN): Removing and installing clutch master cylinder*
 

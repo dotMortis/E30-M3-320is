@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64-113.jpg]]
+![[64 - Heizung und Klimaanlage/64-113.jpg]]
 
 *Originaltitel (EN): Cable for fresh air flap - remove and install*
 

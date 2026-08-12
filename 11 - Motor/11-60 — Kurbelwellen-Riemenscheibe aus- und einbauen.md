@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-60.jpg]]
+![[11 - Motor/11-60.jpg]]
 
 *Originaltitel (EN): Crankshaft pulley - remove and install*
 

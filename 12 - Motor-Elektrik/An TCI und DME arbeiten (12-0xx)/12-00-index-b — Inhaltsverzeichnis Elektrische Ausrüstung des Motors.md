@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-00-index-b.jpg]]
+![[12 - Motor-Elektrik/An TCI und DME arbeiten (12-0xx)/12-00-index-b.jpg]]
 
 *Originaltitel (EN): BMW 3181/A*
 

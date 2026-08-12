@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16-00.jpg]]
+![[16 - Kraftstofftank und Leitungen/16-00.jpg]]
 
 *Originaltitel (EN): Fuel supply - pre 1988*
 

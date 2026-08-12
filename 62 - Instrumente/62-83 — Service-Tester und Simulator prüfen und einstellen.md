@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-83.jpg]]
+![[62 - Instrumente/62-83.jpg]]
 
 *Originaltitel (EN): "*
 

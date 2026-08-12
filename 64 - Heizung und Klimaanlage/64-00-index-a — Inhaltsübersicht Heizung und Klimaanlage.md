@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64-00-index-a.jpg]]
+![[64 - Heizung und Klimaanlage/64-00-index-a.jpg]]
 
 ---
 

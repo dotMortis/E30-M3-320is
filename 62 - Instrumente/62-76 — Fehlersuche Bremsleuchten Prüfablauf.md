@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-76.jpg]]
+![[62 - Instrumente/62-76.jpg]]
 
 *Originaltitel (EN): Test: Stop lights*
 

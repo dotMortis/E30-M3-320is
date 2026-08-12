@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23-00-index-b.jpg]]
+![[23 - Schaltgetriebe/Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung/23-00-index-b.jpg]]
 
 *Originaltitel (EN): ZF S5-16*
 

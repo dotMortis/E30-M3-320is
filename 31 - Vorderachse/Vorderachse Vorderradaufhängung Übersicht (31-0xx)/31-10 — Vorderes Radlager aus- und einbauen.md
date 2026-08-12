@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-10.jpg]]
+![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-10.jpg]]
 
 *Originaltitel (EN): Bearings (wheel hub) - replace*
 

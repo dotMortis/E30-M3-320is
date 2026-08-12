@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[63-01.jpg]]
+![[63 - Beleuchtung/63-01.jpg]]
 
 *Originaltitel (EN): Headlights - aim / Double headlights - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[72-112.jpg]]
+![[72 - Ausstattung und Zubehör für Karosserie/72-112.jpg]]
 
 *Originaltitel (EN): Seat belt, rear - remove and install or replace*
 

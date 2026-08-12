@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65-90.jpg]]
+![[65 - Radio und Sonderausstattung/65-90.jpg]]
 
 *Originaltitel (EN): Sound system layout*
 

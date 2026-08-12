@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-62.jpg]]
+![[11 - Motor/11-62.jpg]]
 
 *Originaltitel (EN): Pilot bearing in crankshaft - replace*
 

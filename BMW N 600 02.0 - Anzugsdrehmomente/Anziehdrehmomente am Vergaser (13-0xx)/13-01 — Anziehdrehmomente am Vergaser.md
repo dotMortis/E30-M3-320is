@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13-01.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Anziehdrehmomente am Vergaser (13-0xx)/13-01.jpg]]
 
 *Originaltitel (EN): Carburetor*
 

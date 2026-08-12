@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-05_1.jpg]]
+![[31 - Vorderachse/Vorderachsträger bei Allradantrieb ersetzen (31)/31-05_1.jpg]]
 
 *Originaltitel (EN): Front axle carrier (AWD) - replace*
 

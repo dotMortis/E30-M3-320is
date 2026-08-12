@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-01.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse (11-0xx)/11-01.jpg]]
 
 *Originaltitel (EN): Crankcase*
 

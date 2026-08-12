@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54-09.jpg]]
+![[54 - Motorhaube, Schiebedach/54-09.jpg]]
 
 *Originaltitel (EN): Sun roof - troubleshoot*
 

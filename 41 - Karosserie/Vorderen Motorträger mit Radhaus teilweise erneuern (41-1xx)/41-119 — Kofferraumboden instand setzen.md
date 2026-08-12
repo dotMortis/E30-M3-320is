@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41-119.jpg]]
+![[41 - Karosserie/Vorderen Motorträger mit Radhaus teilweise erneuern (41-1xx)/41-119.jpg]]
 
 ---
 

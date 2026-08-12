@@ -9,7 +9,7 @@ tags:
 > [!info] Zusätzliche Referenzzeichnungen und Übersichtsbilder.
 
 ### Bosch Motronic system drawing
-![[Bosch Motronic system drawing.png]]
+![[Referenzbilder/Bosch Motronic system drawing.png]]
 
 ---
 [[Startseite]]

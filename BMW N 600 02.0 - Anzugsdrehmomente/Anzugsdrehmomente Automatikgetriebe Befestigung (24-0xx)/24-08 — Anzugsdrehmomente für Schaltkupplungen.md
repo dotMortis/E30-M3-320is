@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[24-08.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Anzugsdrehmomente Automatikgetriebe Befestigung (24-0xx)/24-08.jpg]]
 
 *Originaltitel (EN): Shift Clutches*
 

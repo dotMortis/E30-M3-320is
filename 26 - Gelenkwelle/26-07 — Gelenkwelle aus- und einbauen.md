@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26-07.jpg]]
+![[26 - Gelenkwelle/26-07.jpg]]
 
 *Originaltitel (EN): "*
 

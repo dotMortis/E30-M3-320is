@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[52-00-index-a.jpg]]
+![[52 - Sitze/52-00-index-a.jpg]]
 
 ---
 

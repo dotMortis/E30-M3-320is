@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-711.jpg]]
+![[51 - Karosserieausstattung/Frontspoiler aus- und einbauen (51-7xx)/51-711.jpg]]
 
 *Originaltitel (EN): Panel on front side panel - replace*
 

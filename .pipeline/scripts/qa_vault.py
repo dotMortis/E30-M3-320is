@@ -67,11 +67,19 @@ def main() -> int:
         for m in EMBED_RE.findall(text):
             embed_count += 1
             name = m.split("/")[-1]
-            if name not in image_names:
+            if "/" in m:
+                # explicit vault-relative path: must point at a real file
+                if not (VAULT_ROOT / m).exists():
+                    problems.append(f"MISSING IMAGE: {p.relative_to(VAULT_ROOT)} -> {m}")
+            elif name not in image_names:
                 problems.append(f"MISSING IMAGE: {p.relative_to(VAULT_ROOT)} -> {m}")
-            elif "/" not in m and name in dup_image_names:
+            elif name in dup_image_names:
                 # bare embed of a non-unique filename -> resolves ambiguously
                 problems.append(f"AMBIGUOUS EMBED: {p.relative_to(VAULT_ROOT)} -> {m}")
+            else:
+                # bare embed of a unique name: resolves, but relative paths are
+                # the convention (build_vault emits them) -> warn to prevent drift
+                problems.append(f"BARE EMBED: {p.relative_to(VAULT_ROOT)} -> {m}")
 
         for m in LINK_RE.findall(text):
             link_count += 1

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-74.jpg]]
+![[62 - Instrumente/62-74.jpg]]
 
 *Originaltitel (EN): Check control wiring diagram*
 

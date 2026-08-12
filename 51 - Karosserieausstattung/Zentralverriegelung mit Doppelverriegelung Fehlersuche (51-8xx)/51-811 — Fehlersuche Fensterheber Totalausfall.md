@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-811.jpg]]
+![[51 - Karosserieausstattung/Zentralverriegelung mit Doppelverriegelung Fehlersuche (51-8xx)/51-811.jpg]]
 
 *Originaltitel (EN): 1. Failure of entire system*
 

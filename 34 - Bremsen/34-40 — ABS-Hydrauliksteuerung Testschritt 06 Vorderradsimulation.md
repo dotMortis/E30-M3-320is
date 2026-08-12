@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-40.jpg]]
+![[34 - Bremsen/34-40.jpg]]
 
 *Originaltitel (EN): "*
 

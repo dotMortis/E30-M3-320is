@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-06.jpg]]
+![[34 - Bremsen/34-06.jpg]]
 
 *Originaltitel (EN): Rear brake shoes - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.88**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41-312.jpg]]
+![[41 - Karosserie/Dachblech ohne Schiebedach aus- und einbauen (41-3xx)/41-312.jpg]]
 
 ---
 

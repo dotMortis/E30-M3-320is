@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-18.jpg]]
+![[34 - Bremsen/34-18.jpg]]
 
 *Originaltitel (EN): Brake force regulator - remove and install*
 

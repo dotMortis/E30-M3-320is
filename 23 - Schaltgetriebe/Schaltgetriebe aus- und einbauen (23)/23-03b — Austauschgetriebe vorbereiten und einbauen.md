@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23-03b.jpg]]
+![[23 - Schaltgetriebe/Schaltgetriebe aus- und einbauen (23)/23-03b.jpg]]
 
 *Originaltitel (EN): Transmission - exchange*
 

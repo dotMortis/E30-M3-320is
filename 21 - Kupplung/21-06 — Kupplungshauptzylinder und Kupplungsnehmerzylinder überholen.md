@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[21-06.jpg]]
+![[21 - Kupplung/21-06.jpg]]
 
 *Originaltitel (EN): Overhauling clutch master cylinder / slave cylinder*
 

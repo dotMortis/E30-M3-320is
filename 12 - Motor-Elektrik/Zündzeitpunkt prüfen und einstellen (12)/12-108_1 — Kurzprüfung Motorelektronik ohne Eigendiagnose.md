@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-108_1.jpg]]
+![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-108_1.jpg]]
 
 *Originaltitel (EN): Engine electric / electronic brief test list*
 

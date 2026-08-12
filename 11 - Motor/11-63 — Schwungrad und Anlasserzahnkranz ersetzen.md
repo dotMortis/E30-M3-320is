@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-63.jpg]]
+![[11 - Motor/11-63.jpg]]
 
 *Originaltitel (EN): Flywheel / Starter gear ring - replace*
 

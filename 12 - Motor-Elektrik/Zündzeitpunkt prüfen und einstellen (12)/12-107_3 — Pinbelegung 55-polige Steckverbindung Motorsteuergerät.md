@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.91**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-107_3.jpg]]
+![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-107_3.jpg]]
 
 *Originaltitel (EN): 55 Pin plug connection (table)*
 

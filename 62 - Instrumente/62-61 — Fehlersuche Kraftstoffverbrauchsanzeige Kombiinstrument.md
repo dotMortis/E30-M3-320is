@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-61.jpg]]
+![[62 - Instrumente/62-61.jpg]]
 
 *Originaltitel (EN): Troubleshooting fuel consumption indicator*
 

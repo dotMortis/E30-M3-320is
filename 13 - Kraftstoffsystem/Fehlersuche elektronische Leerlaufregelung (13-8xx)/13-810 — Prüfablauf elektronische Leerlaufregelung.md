@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13-810.jpg]]
+![[13 - Kraftstoffsystem/Fehlersuche elektronische Leerlaufregelung (13-8xx)/13-810.jpg]]
 
 *Originaltitel (EN): Troubleshooting electronic idle control (BMW 325e)*
 

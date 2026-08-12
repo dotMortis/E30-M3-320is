@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-01a.jpg]]
+![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-01a.jpg]]
 
 *Originaltitel (EN): Checking / adjusting ignition timing*
 

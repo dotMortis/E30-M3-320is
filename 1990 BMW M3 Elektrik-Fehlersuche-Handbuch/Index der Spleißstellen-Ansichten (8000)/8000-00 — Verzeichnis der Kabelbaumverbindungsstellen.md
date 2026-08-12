@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[8000-00.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Index der Spleißstellen-Ansichten (8000)/8000-00.jpg]]
 
 *Originaltitel (EN): Splice Location Views – Index*
 

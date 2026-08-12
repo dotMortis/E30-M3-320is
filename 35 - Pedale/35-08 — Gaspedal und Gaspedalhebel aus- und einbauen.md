@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35-08.jpg]]
+![[35 - Pedale/35-08.jpg]]
 
 *Originaltitel (EN): Accelerator pedal / lever - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[52-101.jpg]]
+![[52 - Sitze/52-101.jpg]]
 
 *Originaltitel (EN): Front seat / Front seat rails - remove and install*
 

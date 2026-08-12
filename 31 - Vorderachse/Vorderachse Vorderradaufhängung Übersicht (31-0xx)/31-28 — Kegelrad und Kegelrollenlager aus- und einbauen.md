@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-28.jpg]]
+![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-28.jpg]]
 
 *Originaltitel (EN): "*
 

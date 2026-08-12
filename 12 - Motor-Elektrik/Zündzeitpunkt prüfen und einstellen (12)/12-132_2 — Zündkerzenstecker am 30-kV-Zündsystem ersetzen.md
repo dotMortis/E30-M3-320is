@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-132_2.jpg]]
+![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-132_2.jpg]]
 
 *Originaltitel (EN): Replacing one spark plug connector*
 

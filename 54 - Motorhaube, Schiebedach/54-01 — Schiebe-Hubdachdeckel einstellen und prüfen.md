@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54-01.jpg]]
+![[54 - Motorhaube, Schiebedach/54-01.jpg]]
 
 *Originaltitel (EN): Sun roof - adjusting*
 

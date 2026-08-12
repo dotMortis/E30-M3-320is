@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[8500-07.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Diagnosestecker C101 Kontaktbelegung (8500)/8500-07.jpg]]
 
 *Originaltitel (EN): " O2 sensors, Computer, Windows, Rear lights, defogger*
 

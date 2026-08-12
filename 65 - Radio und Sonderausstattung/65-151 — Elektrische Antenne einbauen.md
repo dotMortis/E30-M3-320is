@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65-151.jpg]]
+![[65 - Radio und Sonderausstattung/65-151.jpg]]
 
 *Originaltitel (EN): Power antenna - install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-00-index-b.jpg]]
+![[62 - Instrumente/62-00-index-b.jpg]]
 
 ---
 

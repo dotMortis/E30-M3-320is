@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-00-index-e.jpg]]
+![[12 - Motor-Elektrik/An TCI und DME arbeiten (12-0xx)/12-00-index-e.jpg]]
 
 *Originaltitel (EN): BMW 325 / 325e / 325es / 325i / M3*
 

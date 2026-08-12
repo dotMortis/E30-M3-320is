@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-800.jpg]]
+![[51 - Karosserieausstattung/Zentralverriegelung mit Doppelverriegelung Fehlersuche (51-8xx)/51-800.jpg]]
 
 *Originaltitel (EN): Central locks with double-lock-description / Troubleshoot:*
 

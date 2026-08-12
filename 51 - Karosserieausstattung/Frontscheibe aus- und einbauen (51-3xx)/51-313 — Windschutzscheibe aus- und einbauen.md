@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-313.jpg]]
+![[51 - Karosserieausstattung/Frontscheibe aus- und einbauen (51-3xx)/51-313.jpg]]
 
 *Originaltitel (EN): Windshield installation (M3)*
 

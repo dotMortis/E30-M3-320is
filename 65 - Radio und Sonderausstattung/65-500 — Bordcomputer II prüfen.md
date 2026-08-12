@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65-500.jpg]]
+![[65 - Radio und Sonderausstattung/65-500.jpg]]
 
 *Originaltitel (EN): On-board computer (Generation II) - testing instructions*
 

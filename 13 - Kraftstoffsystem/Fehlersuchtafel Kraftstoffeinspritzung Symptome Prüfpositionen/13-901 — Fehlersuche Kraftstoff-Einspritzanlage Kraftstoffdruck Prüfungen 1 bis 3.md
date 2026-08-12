@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13-901.jpg]]
+![[13 - Kraftstoffsystem/Fehlersuchtafel Kraftstoffeinspritzung Symptome Prüfpositionen/13-901.jpg]]
 
 *Originaltitel (EN): Troubleshooting Fuel Injection – test 1, 2, 3*
 

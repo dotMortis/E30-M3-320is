@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-84.jpg]]
+![[62 - Instrumente/62-84.jpg]]
 
 *Originaltitel (EN): "*
 

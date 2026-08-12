@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[18-07.jpg]]
+![[18 - Abgasanlage/18-07.jpg]]
 
 *Originaltitel (EN): Replacing the catalytic convertor - 6 cylinder M20*
 

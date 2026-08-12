@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25-19.jpg]]
+![[25 - Schaltmechanismus/25-19.jpg]]
 
 *Originaltitel (EN): Selector level - version with shift rod*
 

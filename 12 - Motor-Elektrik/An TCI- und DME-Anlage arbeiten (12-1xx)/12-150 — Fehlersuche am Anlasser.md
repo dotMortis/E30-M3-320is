@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-150.jpg]]
+![[12 - Motor-Elektrik/An TCI- und DME-Anlage arbeiten (12-1xx)/12-150.jpg]]
 
 *Originaltitel (EN): Troubleshooting starter*
 

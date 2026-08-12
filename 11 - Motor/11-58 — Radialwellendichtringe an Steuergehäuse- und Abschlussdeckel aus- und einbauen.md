@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-58.jpg]]
+![[11 - Motor/11-58.jpg]]
 
 *Originaltitel (EN): Lower timing case / Clutch end cover - radial oil seal*
 

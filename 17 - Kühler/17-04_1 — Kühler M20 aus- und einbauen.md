@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[17-04_1.jpg]]
+![[17 - Kühler/17-04_1.jpg]]
 
 *Originaltitel (EN): Removing and installing radiator - M20, 1988 models*
 

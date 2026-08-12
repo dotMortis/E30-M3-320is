@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-370.jpg]]
+![[51 - Karosserieausstattung/Frontscheibe aus- und einbauen (51-3xx)/51-370.jpg]]
 
 *Originaltitel (EN): Power window, rear, left or right - remove and install*
 

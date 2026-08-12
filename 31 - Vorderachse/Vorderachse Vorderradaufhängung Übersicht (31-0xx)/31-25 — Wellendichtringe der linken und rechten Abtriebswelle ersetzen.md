@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-25.jpg]]
+![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-25.jpg]]
 
 *Originaltitel (EN): Shaft seal for output shaft, left/right - replace*
 

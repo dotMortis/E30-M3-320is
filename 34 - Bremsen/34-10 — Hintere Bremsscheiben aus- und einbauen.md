@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-10.jpg]]
+![[34 - Bremsen/34-10.jpg]]
 
 *Originaltitel (EN): Rear brake discs - remove and install*
 

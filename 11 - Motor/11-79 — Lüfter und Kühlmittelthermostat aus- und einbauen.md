@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-79.jpg]]
+![[11 - Motor/11-79.jpg]]
 
 *Originaltitel (EN): Fan / Fan clutch / Coolant thermostat*
 

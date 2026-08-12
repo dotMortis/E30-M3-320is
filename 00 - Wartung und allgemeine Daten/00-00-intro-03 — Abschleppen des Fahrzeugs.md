@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-00-intro-03.jpg]]
+![[00 - Wartung und allgemeine Daten/00-00-intro-03.jpg]]
 
 *Originaltitel (EN): Towing*
 

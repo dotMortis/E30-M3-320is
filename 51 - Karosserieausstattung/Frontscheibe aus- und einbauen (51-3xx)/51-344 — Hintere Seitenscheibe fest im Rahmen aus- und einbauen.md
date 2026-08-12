@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-344.jpg]]
+![[51 - Karosserieausstattung/Frontscheibe aus- und einbauen (51-3xx)/51-344.jpg]]
 
 *Originaltitel (EN): Rear door window (fixed in frame) - adjust*
 

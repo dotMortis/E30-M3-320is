@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-113.jpg]]
+![[12 - Motor-Elektrik/An TCI- und DME-Anlage arbeiten (12-1xx)/12-113.jpg]]
 
 *Originaltitel (EN): Troubleshooting DME - test 4, 5*
 

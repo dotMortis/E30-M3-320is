@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-30.jpg]]
+![[34 - Bremsen/34-30.jpg]]
 
 *Originaltitel (EN): ABS electronic control unit, wiring harness - remove and install*
 

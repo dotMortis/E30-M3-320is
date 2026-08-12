@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[6210-02.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Schaltplan Instrumentenkombination Geschwindigkeitsmesser/6210-02.jpg]]
 
 *Originaltitel (EN): Gauges - Oil Temp, Computer, Fuel Sender*
 

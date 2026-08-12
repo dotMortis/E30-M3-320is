@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-00-index-b.jpg]]
+![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-00-index-b.jpg]]
 
 ---
 

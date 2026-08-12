@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[7000-09.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Bauteil-Lageansichten im Motorraum (7000)/7000-09.jpg]]
 
 *Originaltitel (EN): "*
 

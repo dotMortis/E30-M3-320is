@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25-10.jpg]]
+![[25 - Schaltmechanismus/25-10.jpg]]
 
 *Originaltitel (EN): Shift rod joint replace - aluminum metal shift console*
 

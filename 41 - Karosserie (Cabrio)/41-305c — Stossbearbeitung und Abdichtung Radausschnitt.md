@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.93**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41-305c.jpg]]
+![[41 - Karosserie (Cabrio)/41-305c.jpg]]
 
 ---
 

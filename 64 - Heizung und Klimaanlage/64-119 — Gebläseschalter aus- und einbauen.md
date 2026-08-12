@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64-119.jpg]]
+![[64 - Heizung und Klimaanlage/64-119.jpg]]
 
 *Originaltitel (EN): Blower switch - remove and install*
 

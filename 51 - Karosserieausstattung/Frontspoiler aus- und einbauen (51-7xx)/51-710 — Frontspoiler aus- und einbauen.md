@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-710.jpg]]
+![[51 - Karosserieausstattung/Frontspoiler aus- und einbauen (51-7xx)/51-710.jpg]]
 
 *Originaltitel (EN): Splash guard, front - remove and Install*
 

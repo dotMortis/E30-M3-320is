@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[52-103.jpg]]
+![[52 - Sitze/52-103.jpg]]
 
 *Originaltitel (EN): Back panel on front seat backrest - remove and install*
 

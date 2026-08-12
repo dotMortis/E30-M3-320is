@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[8500-03.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Diagnosestecker C101 Kontaktbelegung (8500)/8500-03.jpg]]
 
 *Originaltitel (EN): " A/C, Cruise Control, Barometric, Blower Speed, Central Locking, Chime*
 

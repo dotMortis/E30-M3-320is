@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[36-05.jpg]]
+![[36 - Räder und Reifen/36-05.jpg]]
 
 *Originaltitel (EN): Check for radial and lateral runout*
 

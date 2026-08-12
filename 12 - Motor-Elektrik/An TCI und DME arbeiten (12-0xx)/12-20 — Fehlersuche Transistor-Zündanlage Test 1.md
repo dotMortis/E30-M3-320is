@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-20.jpg]]
+![[12 - Motor-Elektrik/An TCI und DME arbeiten (12-0xx)/12-20.jpg]]
 
 *Originaltitel (EN): Troubleshooting transistor coil ignition / TCI - test 1*
 

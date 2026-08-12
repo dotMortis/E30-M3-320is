@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26-15.jpg]]
+![[26 - Gelenkwelle/26-15.jpg]]
 
 *Originaltitel (EN): Propellor shaft - troubleshoot*
 

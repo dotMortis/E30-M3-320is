@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-56.jpg]]
+![[11 - Motor/11-56.jpg]]
 
 *Originaltitel (EN): Radial oil seal in distributor - replace*
 

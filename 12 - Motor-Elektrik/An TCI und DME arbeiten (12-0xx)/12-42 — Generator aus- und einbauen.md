@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-42.jpg]]
+![[12 - Motor-Elektrik/An TCI und DME arbeiten (12-0xx)/12-42.jpg]]
 
 *Originaltitel (EN): Removing and installing alternator*
 

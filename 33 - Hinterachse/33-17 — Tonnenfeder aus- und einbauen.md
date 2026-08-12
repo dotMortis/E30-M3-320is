@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33-17.jpg]]
+![[33 - Hinterachse/33-17.jpg]]
 
 *Originaltitel (EN): Barrel spring - remove and install*
 

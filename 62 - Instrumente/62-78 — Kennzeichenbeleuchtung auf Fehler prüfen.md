@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-78.jpg]]
+![[62 - Instrumente/62-78.jpg]]
 
 *Originaltitel (EN): Test: License plate lights*
 

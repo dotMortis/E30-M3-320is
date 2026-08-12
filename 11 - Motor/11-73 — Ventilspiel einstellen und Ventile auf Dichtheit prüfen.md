@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-73.jpg]]
+![[11 - Motor/11-73.jpg]]
 
 *Originaltitel (EN): Valves - check for leaks*
 

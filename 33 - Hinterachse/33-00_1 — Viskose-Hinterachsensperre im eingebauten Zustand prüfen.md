@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33-00_1.jpg]]
+![[33 - Hinterachse/33-00_1.jpg]]
 
 *Originaltitel (EN): Checking viscous rear axle lock in car - 325ix*
 

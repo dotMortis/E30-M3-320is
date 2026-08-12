@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-411.jpg]]
+![[51 - Karosserieausstattung/Türverkleidung vorne links oder rechts aus- und einbauen (51-4xx)/51-411.jpg]]
 
 *Originaltitel (EN): "*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26-13.jpg]]
+![[26 - Gelenkwelle/26-13.jpg]]
 
 *Originaltitel (EN): Propellor shaft cap (front, AWD) - remove and install*
 

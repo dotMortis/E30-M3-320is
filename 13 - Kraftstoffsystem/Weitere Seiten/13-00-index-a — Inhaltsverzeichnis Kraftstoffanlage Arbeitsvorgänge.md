@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13-00-index-a.jpg]]
+![[13 - Kraftstoffsystem/Weitere Seiten/13-00-index-a.jpg]]
 
 ---
 

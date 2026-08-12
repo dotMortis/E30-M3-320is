@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[6500A-01.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Radioanlage Funktionsweise und Fehlersuche (6500A)/6500A-01.jpg]]
 
 *Originaltitel (EN): "*
 

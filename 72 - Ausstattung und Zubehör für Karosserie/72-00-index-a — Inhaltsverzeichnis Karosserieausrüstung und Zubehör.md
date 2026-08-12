@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[72-00-index-a.jpg]]
+![[72 - Ausstattung und Zubehör für Karosserie/72-00-index-a.jpg]]
 
 ---
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35-01.jpg]]
+![[35 - Pedale/35-01.jpg]]
 
 *Originaltitel (EN): Pedals - layout drawing*
 

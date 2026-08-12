@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-456.jpg]]
+![[51 - Karosserieausstattung/Türverkleidung vorne links oder rechts aus- und einbauen (51-4xx)/51-456.jpg]]
 
 *Originaltitel (EN): Trim panel for dashboard, bottom, center, right, left - remove*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[6100-00.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Schaltplan Hupenanlage und Türschlossheizung (6100)/6100-00.jpg]]
 
 *Originaltitel (EN): Horns*
 

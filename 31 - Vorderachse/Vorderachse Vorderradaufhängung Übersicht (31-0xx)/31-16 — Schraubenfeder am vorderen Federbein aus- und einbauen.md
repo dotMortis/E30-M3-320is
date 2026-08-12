@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31-16.jpg]]
+![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-16.jpg]]
 
 *Originaltitel (EN): Coil spring for front strut - remove and install*
 

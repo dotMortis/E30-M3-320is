@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54-04.jpg]]
+![[54 - Motorhaube, Schiebedach/54-04.jpg]]
 
 *Originaltitel (EN): Sun roof - gearbox (manual)*
 

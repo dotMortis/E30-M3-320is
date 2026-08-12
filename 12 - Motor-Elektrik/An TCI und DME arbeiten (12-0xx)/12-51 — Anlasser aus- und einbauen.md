@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12-51.jpg]]
+![[12 - Motor-Elektrik/An TCI und DME arbeiten (12-0xx)/12-51.jpg]]
 
 *Originaltitel (EN): Removing and installing starter*
 

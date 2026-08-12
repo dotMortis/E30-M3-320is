@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-319a.jpg]]
+![[51 - Karosserieausstattung/Weitere Seiten/51-319a.jpg]]
 
 *Originaltitel (EN): Repairing stone damage on laminated safety glass windshields (clear and tinted)*
 

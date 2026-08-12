@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41-213.jpg]]
+![[41 - Karosserie/B-Säule links oder rechts erneuern (41-2xx)/41-213.jpg]]
 
 ---
 

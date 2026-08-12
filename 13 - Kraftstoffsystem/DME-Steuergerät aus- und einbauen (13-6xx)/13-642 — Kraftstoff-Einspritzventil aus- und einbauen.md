@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13-642.jpg]]
+![[13 - Kraftstoffsystem/DME-Steuergerät aus- und einbauen (13-6xx)/13-642.jpg]]
 
 *Originaltitel (EN): Fuel injector*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-320.jpg]]
+![[51 - Karosserieausstattung/Frontscheibe aus- und einbauen (51-3xx)/51-320.jpg]]
 
 *Originaltitel (EN): Window regulator In front door, left or right - remove and install or replace*
 

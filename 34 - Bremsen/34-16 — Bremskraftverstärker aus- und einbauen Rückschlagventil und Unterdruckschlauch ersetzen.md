@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-16.jpg]]
+![[34 - Bremsen/34-16.jpg]]
 
 *Originaltitel (EN): Brake booster / check valve / vacuum hose - replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54-07.jpg]]
+![[54 - Motorhaube, Schiebedach/54-07.jpg]]
 
 *Originaltitel (EN): Sun roof - gate, left or right*
 

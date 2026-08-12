@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[21-07.jpg]]
+![[21 - Kupplung/21-07.jpg]]
 
 *Originaltitel (EN): Troubleshooting clutch*
 

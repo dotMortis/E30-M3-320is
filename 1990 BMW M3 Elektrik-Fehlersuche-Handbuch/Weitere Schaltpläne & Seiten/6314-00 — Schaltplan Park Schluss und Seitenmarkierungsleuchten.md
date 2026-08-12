@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[6314-00.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Weitere Schaltpläne & Seiten/6314-00.jpg]]
 
 *Originaltitel (EN): Park / Tail / Front marker lights*
 

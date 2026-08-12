@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64-501.jpg]]
+![[64 - Heizung und Klimaanlage/64-501.jpg]]
 
 *Originaltitel (EN): "*
 

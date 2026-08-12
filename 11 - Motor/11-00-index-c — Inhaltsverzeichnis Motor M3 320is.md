@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11-00-index-c.jpg]]
+![[11 - Motor/11-00-index-c.jpg]]
 
 *Originaltitel (EN): (duplicate, better quality, later manual)*
 

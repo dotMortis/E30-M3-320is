@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[8500-10.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Diagnosestecker C101 Kontaktbelegung (8500)/8500-10.jpg]]
 
 *Originaltitel (EN): " C152, C153, C154, C200, C201, C202, C203, C204, C209, C210, C191*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65-360.jpg]]
+![[65 - Radio und Sonderausstattung/65-360.jpg]]
 
 *Originaltitel (EN): On-board computer - remove and install*
 

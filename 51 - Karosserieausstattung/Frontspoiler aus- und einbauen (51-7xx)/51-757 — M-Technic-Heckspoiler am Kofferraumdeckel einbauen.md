@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51-757.jpg]]
+![[51 - Karosserieausstattung/Frontspoiler aus- und einbauen (51-7xx)/51-757.jpg]]
 
 *Originaltitel (EN): Rear spoiler - Install (M-Technic)*
 

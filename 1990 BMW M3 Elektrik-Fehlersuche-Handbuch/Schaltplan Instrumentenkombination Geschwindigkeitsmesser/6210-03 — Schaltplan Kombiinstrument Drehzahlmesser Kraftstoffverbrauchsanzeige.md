@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[6210-03.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Schaltplan Instrumentenkombination Geschwindigkeitsmesser/6210-03.jpg]]
 
 *Originaltitel (EN): Tachometer / Fuel Economy*
 

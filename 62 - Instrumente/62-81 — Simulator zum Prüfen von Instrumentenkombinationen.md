@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62-81.jpg]]
+![[62 - Instrumente/62-81.jpg]]
 
 *Originaltitel (EN): Simulator for checking instrument clusters*
 

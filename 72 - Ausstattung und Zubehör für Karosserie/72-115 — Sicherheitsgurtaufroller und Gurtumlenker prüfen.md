@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[72-115.jpg]]
+![[72 - Ausstattung und Zubehör für Karosserie/72-115.jpg]]
 
 *Originaltitel (EN): Seat belts - inspect*
 

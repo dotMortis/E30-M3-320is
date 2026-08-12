@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[63-04.jpg]]
+![[63 - Beleuchtung/63-04.jpg]]
 
 *Originaltitel (EN): Third brake light, high mounted stop light – replace*
 

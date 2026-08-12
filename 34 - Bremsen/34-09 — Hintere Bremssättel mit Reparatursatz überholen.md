@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-09.jpg]]
+![[34 - Bremsen/34-09.jpg]]
 
 *Originaltitel (EN): Rear brake calipers - overhaul*
 

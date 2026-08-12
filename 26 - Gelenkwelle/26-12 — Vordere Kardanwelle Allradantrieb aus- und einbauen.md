@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26-12.jpg]]
+![[26 - Gelenkwelle/26-12.jpg]]
 
 *Originaltitel (EN): Propellor shaft (front, AWD) - remove and install*
 

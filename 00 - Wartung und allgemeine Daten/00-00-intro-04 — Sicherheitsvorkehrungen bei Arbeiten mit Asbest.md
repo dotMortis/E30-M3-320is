@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-00-intro-04.jpg]]
+![[00 - Wartung und allgemeine Daten/00-00-intro-04.jpg]]
 
 *Originaltitel (EN): Precautions for working with asbestos*
 

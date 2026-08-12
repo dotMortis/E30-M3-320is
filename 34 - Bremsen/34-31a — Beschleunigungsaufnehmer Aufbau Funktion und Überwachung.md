@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34-31a.jpg]]
+![[34 - Bremsen/34-31a.jpg]]
 
 *Originaltitel (EN): Acceleration sensor - operation and description*
 

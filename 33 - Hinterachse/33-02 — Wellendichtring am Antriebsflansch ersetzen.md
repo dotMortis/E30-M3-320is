@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33-02.jpg]]
+![[33 - Hinterachse/33-02.jpg]]
 
 *Originaltitel (EN): Shaft seal for drive flange - replace*
 

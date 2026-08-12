@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54-03.jpg]]
+![[54 - Motorhaube, Schiebedach/54-03.jpg]]
 
 *Originaltitel (EN): Sun roof - lid / seal / liner frame*
 
