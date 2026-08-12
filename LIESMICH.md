@@ -45,10 +45,31 @@ Danach die **[[Startseite]]** öffnen — dein Ausgangspunkt zu allen Abschnitte
 
 ## 4. Suchen (deutsch **und** englisch)
 
-- Taste **`Strg`+`Umschalt`+`F`** (Mac: `Cmd`+`Umschalt`+`F`) öffnet die globale Suche.
+Dieser Tresor bringt eine **eigene, verbesserte Suche** mit (Plugin *Vault Search*,
+vorinstalliert und aktiv). Sie ist auf dieses Handbuch abgestimmt und deutlich
+treffsicherer als die Standardsuche.
+
+- Taste **`Strg`+`Umschalt`+`F`** (Mac: `Cmd`+`Umschalt`+`F`) öffnet die Handbuch‑Suche.
+- Ergebnisse werden **gewichtet** sortiert: zuerst Treffer im **Titel**, dann in den
+  **Tags**, dann im **Inhalt**. Die relevanteste Seite steht oben.
+- **Tippfehlertolerant:** kleine Vertipper werden automatisch korrigiert; die Suche
+  zeigt dann einen Hinweis „meintest du …?“ und liefert trotzdem die passenden Seiten.
+- **Sinnverwandte Begriffe** werden mitgesucht: „*Benzin*“, „*Sprit*“ oder „*Auspuff*“
+  finden auch die Seiten zu *Kraftstoff* bzw. *Abgasanlage* (auf Basis des Glossars
+  und gängiger Alltagsbegriffe).
+- **Zusammengesetzte Wörter** werden zerlegt: „*Ventil*“ findet auch
+  *Tankentlüftungs**ventil***, „*Kerze*“ findet *Zünd**kerze***. Umgekehrt findet
+  „*Kraftstofftank*“ auch Seiten, die nur *Tank* nennen.
+- **Umlaute egal:** „*kuehler*“ und „*kühler*“, „*tuer*“ und „*tür*“ liefern das Gleiche.
 - Beispiel: **„Bremsscheibe“** oder **„brake disc“** — beides findet die passenden Seiten.
-- Mit **`Strg`+`O`** springst du schnell zu einer Seite über ihren Titel oder BMW‑Code.
-- Über **Tags** (z. B. `sektion/34`, `typ/diagram`) lässt sich gezielt filtern.
+- **Tags mitsuchen:** einfach mit eintippen, z. B. „*typ diagram bremsen*“ oder „*sektion 34*“.
+- Beim ersten Aufruf wird der Suchindex kurz aufgebaut (etwa eine Zehntelsekunde) —
+  danach ist die Suche sofort da.
+
+> [!tip] Standardsuche weiterhin verfügbar
+> Obsidians eingebaute globale Suche erreichst du weiterhin über die Seitenleiste
+> oder die Befehlspalette (**`Strg`+`P`** → „*Suche: In allen Dateien suchen*“).
+> Mit **`Strg`+`O`** springst du wie gewohnt über Titel oder BMW‑Code zu einer Seite.
 
 ## 5. Zoom / Lupe für die Scans
 

@@ -1,5 +1,6 @@
 [
   "hide-image-files",
   "auto-reveal-active-file",
-  "show-local-graph"
+  "show-local-graph",
+  "vault-search"
 ]

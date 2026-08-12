@@ -478,10 +478,29 @@ def write_obsidian_config():
         "outgoing-link", "tag-pane", "page-preview", "note-composer",
         "command-palette", "outline", "word-count", "file-recovery",
     ], indent=2), encoding="utf-8")
+    # Keep this in sync with the plugins actually vendored under
+    # .obsidian/plugins/. A full pipeline rebuild rewrites this file, so any
+    # enabled plugin missing here would be silently disabled on rebuild.
     (OBS / "community-plugins.json").write_text(
-        json.dumps(["obsidian-image-toolkit"], indent=2), encoding="utf-8")
+        json.dumps([
+            "obsidian-image-toolkit",
+            "hide-image-files",
+            "auto-reveal-active-file",
+            "show-local-graph",
+            "vault-search",
+        ], indent=2), encoding="utf-8")
     (OBS / "appearance.json").write_text(json.dumps({
         "readableLineLength": False, "theme": "obsidian",
+    }, indent=2), encoding="utf-8")
+    # Rebind Ctrl/Cmd+Shift+F from the core global search to the Vault Search
+    # plugin. The empty list for "global-search" clears the core default so
+    # there is no hotkey conflict (Obsidian ignores a plugin hotkey that
+    # collides with an existing core binding).
+    (OBS / "hotkeys.json").write_text(json.dumps({
+        "global-search": [],
+        "vault-search:open-vault-search": [
+            {"modifiers": ["Mod", "Shift"], "key": "F"},
+        ],
     }, indent=2), encoding="utf-8")
     itk = OBS / "plugins" / "obsidian-image-toolkit"
     itk.mkdir(parents=True, exist_ok=True)

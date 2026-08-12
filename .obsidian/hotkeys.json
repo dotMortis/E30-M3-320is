@@ -1,0 +1,9 @@
+{
+  "global-search": [],
+  "vault-search:open-vault-search": [
+    {
+      "modifiers": ["Mod", "Shift"],
+      "key": "F"
+    }
+  ]
+}
