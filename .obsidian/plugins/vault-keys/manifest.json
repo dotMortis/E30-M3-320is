@@ -1,0 +1,9 @@
+{
+  "id": "vault-keys",
+  "name": "Vault Keys",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Settings-only plugin to manage the GEMINI_API_KEY and OPENCODE_API_KEY used by the .pipeline RAG scripts, stored in .env at the vault root.",
+  "author": "E30-M3-320is vault",
+  "isDesktopOnly": true
+}

@@ -25,3 +25,99 @@
     font-weight: var(--vault-search-highlight-weight);
     border-radius: var(--radius-s, 3px);
 }
+
+/* -------------------------------------------------------------------------
+ * Two-pane layout: results list on the left, live page preview on the right.
+ * The dialog is enlarged (default Obsidian modals are far too narrow for a
+ * side-by-side reading preview).
+ * ---------------------------------------------------------------------- */
+
+.vault-search-modal {
+    width: 95vw;
+    max-width: 95vw;
+    height: 85vh;
+    max-height: 85vh;
+}
+
+/* Let the content fill the enlarged modal and lay out as two columns. */
+.vault-search-modal .vault-search-content {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Left column: fixed width, full height, input on top + scrollable list. */
+.vault-search-left {
+    flex: 0 0 340px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    border-right: 1px solid var(--background-modifier-border);
+    padding: var(--size-4-3, 12px);
+    box-sizing: border-box;
+}
+
+.vault-search-input {
+    width: 100%;
+    flex: 0 0 auto;
+    margin-bottom: var(--size-4-2, 8px);
+    box-sizing: border-box;
+}
+
+.vault-search-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    margin: calc(-1 * var(--size-4-1, 4px));
+    padding: var(--size-4-1, 4px);
+}
+
+/* Result rows. */
+.vault-search-list .vault-search-suggestion {
+    padding: var(--size-4-2, 8px);
+    border-radius: var(--radius-m, 6px);
+    cursor: pointer;
+}
+
+.vault-search-list .vault-search-suggestion.is-active,
+.vault-search-list .vault-search-suggestion:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.vault-search-title {
+    font-weight: var(--font-medium, 500);
+}
+
+.vault-search-meta {
+    opacity: 0.7;
+    font-size: 0.8em;
+}
+
+.vault-search-snippet {
+    opacity: 0.85;
+    font-size: 0.85em;
+    margin-top: 2px;
+}
+
+/* Right column: fills the remaining width, generous padding, scrollable. */
+.vault-search-preview {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding: var(--size-4-9, 36px) var(--size-4-12, 48px);
+    box-sizing: border-box;
+}
+
+.vault-search-preview.vault-search-preview-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.9em;
+}

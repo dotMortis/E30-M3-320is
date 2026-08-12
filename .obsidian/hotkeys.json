@@ -4,6 +4,10 @@
     {
       "modifiers": ["Mod", "Shift"],
       "key": "F"
+    },
+    {
+      "modifiers": ["Ctrl"],
+      "key": " "
     }
   ]
 }

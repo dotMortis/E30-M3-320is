@@ -1,6 +1,6 @@
 "use strict";
 
-const { Plugin, SuggestModal, Notice, renderMatches } = require("obsidian");
+const { Plugin, Modal, Component, MarkdownRenderer, Notice, renderMatches } = require("obsidian");
 
 // ---------------------------------------------------------------------------
 // Vault Search
@@ -713,229 +713,427 @@ function scoreTermAgainstDoc(index, doc, term, fuzzyFactor) {
   return score * fuzzyFactor * index.idfOf(term);
 }
 
+// ------------------------------------------------------------- search driver
+
+// Run the full weighted/typo-tolerant search for `rawQuery` against `index`.
+// Pure function: no UI state. Returns the ranked docs (capped at `limit`), the
+// typo-correction hint (if any) and the set of resolved highlight terms so the
+// renderer can bold matching characters.
+function runSearch(index, rawQuery, limit) {
+  const query = (rawQuery || "").trim();
+  if (!query || !index.ready) {
+    return { docs: [], correction: null, highlightTerms: new Set() };
+  }
+
+  const queryTokens = tokenize(query);
+  if (queryTokens.length === 0) {
+    return { docs: [], correction: null, highlightTerms: new Set() };
+  }
+
+  // Resolve each query token into a set of scored "variants". Each variant
+  // carries a `factor` in [0,1] that discounts its field-tier score:
+  //   - the token itself                     -> factor 1        (best)
+  //   - synonym expansions                   -> SYNONYM_FACTOR  (discounted)
+  //   - a typo correction (only if unknown)  -> FUZZY_PENALTY
+  //   - a synonym of a typo correction       -> FUZZY_PENALTY * SYNONYM_FACTOR
+  // Because the discount is a factor (not a flat cap), a synonym that lands in
+  // a title still beats a synonym that only lands in content -- the field
+  // tiers are preserved, just scaled down relative to a literal match.
+  const perToken = [];
+  let correctionNote = null;
+  for (const tok of queryTokens) {
+    // "primary" variants describe the SAME concept as the typed token; the
+    // doc's score for them is best-of (they're alternatives, not additive).
+    const primary = [];
+    const inVocab = index.vocabulary.has(tok);
+
+    // exact token always considered (even if not in vocab, substring may hit)
+    primary.push({ term: tok, factor: 1 });
+
+    // synonyms (discounted by a factor, so a literal match always wins)
+    for (const syn of index.expandSynonyms(tok)) {
+      primary.push({ term: syn, factor: SYNONYM_FACTOR });
+    }
+
+    // typo correction only if the raw token isn't known and long enough
+    if (!inVocab) {
+      const corrected = index.correct(tok);
+      if (corrected && corrected !== tok) {
+        primary.push({ term: corrected, factor: FUZZY_PENALTY });
+        for (const syn of index.expandSynonyms(corrected)) {
+          primary.push({ term: syn, factor: FUZZY_PENALTY * SYNONYM_FACTOR });
+        }
+        if (!correctionNote) correctionNote = { from: tok, to: corrected };
+      }
+    }
+
+    // query-side decompounding: a typed compound ("bremsscheibe") also
+    // searches for its validated parts ("brems", "scheibe"). Unlike primary
+    // variants, parts are ADDITIVE (a doc matching BOTH parts should beat a
+    // doc matching only one), each with its own best-of synonym alternatives.
+    const partGroups = [];
+    const qParts = index.splitToken(tok);
+    if (qParts) {
+      for (const p of qParts) {
+        const alts = [{ term: p, factor: SPLIT_QUALITY }];
+        for (const syn of index.expandSynonyms(p)) {
+          alts.push({ term: syn, factor: SPLIT_QUALITY * SYNONYM_FACTOR });
+        }
+        partGroups.push(alts);
+      }
+    }
+
+    perToken.push({ raw: tok, primary, partGroups });
+  }
+
+  const bestOf = (doc, variants) => {
+    let best = 0;
+    for (const v of variants) {
+      const s = scoreTermAgainstDoc(index, doc, v.term, v.factor);
+      if (s > best) best = s;
+    }
+    return best;
+  };
+
+  // Score one query token against a doc: the better of
+  //   (a) a single match on the full token / its synonyms / a typo fix, or
+  //   (b) the SUM over the token's compound parts (best-of each part's alts),
+  // so matching more parts of a compound scores higher, but a full literal
+  // match still wins outright.
+  const bestForToken = (doc, t) => {
+    let primaryBest = bestOf(doc, t.primary);
+    let partsSum = 0;
+    for (const alts of t.partGroups) partsSum += bestOf(doc, alts);
+    return Math.max(primaryBest, partsSum);
+  };
+
+  // Score documents. A doc must match every query token (AND) via at least
+  // one of that token's variants.
+  const scoreDoc = (doc) => {
+    let total = 0;
+    for (const t of perToken) {
+      const b = bestForToken(doc, t);
+      if (b <= 0) return { ok: false, score: 0 };
+      total += b;
+    }
+    return { ok: true, score: total };
+  };
+
+  let results = [];
+  for (const doc of index.docs) {
+    const r = scoreDoc(doc);
+    if (r.ok) results.push({ doc, score: r.score });
+  }
+
+  // OR fallback: if AND produced nothing, rank by how many tokens matched
+  // (primary) then by accumulated score (secondary), so you never get an
+  // empty result page while a partial match exists.
+  if (results.length === 0) {
+    for (const doc of index.docs) {
+      let matchedTokens = 0;
+      let total = 0;
+      for (const t of perToken) {
+        const b = bestForToken(doc, t);
+        if (b > 0) {
+          matchedTokens++;
+          total += b;
+        }
+      }
+      if (matchedTokens > 0) {
+        results.push({ doc, score: matchedTokens * 1e6 + total });
+      }
+    }
+  }
+
+  results.sort((a, b) => b.score - a.score);
+
+  // Collect every resolved (folded) term that drove scoring so the renderer
+  // can bold the matching characters -- including synonyms, typo corrections
+  // and decompound parts, not just the literal query text.
+  const highlightTerms = new Set();
+  for (const t of perToken) {
+    for (const v of t.primary) highlightTerms.add(v.term);
+    for (const alts of t.partGroups) {
+      for (const v of alts) highlightTerms.add(v.term);
+    }
+  }
+
+  const cap = limit && limit > 0 ? limit : results.length;
+  return {
+    docs: results.slice(0, cap).map((r) => r.doc),
+    correction: correctionNote,
+    highlightTerms,
+  };
+}
+
+// Build a short matched-text snippet from a doc's content around the earliest
+// occurrence of any raw query token. Pure function. Returns "" if nothing hits.
+function snippetFor(doc, rawQuery) {
+  const q = tokenize(rawQuery || "");
+  if (q.length === 0) return "";
+  const src = doc.snippetSource || "";
+  const foldedSrc = fold(src);
+  // find the earliest position of any query token (or a substring of it)
+  let pos = -1;
+  for (const tok of q) {
+    const p = foldedSrc.indexOf(tok);
+    if (p !== -1 && (pos === -1 || p < pos)) pos = p;
+  }
+  if (pos === -1) return "";
+  const start = Math.max(0, pos - 40);
+  const end = Math.min(src.length, pos + 80);
+  let snip = src.slice(start, end).replace(/\s+/g, " ").trim();
+  if (start > 0) snip = "… " + snip;
+  if (end < src.length) snip = snip + " …";
+  return snip;
+}
+
 // ---------------------------------------------------------------- the modal
 
-class VaultSearchModal extends SuggestModal {
+// Debounce (ms) before rendering a preview, so sweeping the mouse across many
+// rows (or holding an arrow key) doesn't trigger a markdown render per row.
+const PREVIEW_DEBOUNCE_MS = 80;
+
+// Max results to score/show in the list.
+const RESULT_LIMIT = 50;
+
+class VaultSearchModal extends Modal {
   constructor(app, plugin) {
     super(app);
     this.plugin = plugin;
     this.index = plugin.index;
-    this.setPlaceholder("Suche im Handbuch (Titel > Tags > Inhalt, tippfehlertolerant)…");
-    this.setInstructions([
-      { command: "↑↓", purpose: "navigieren" },
-      { command: "↵", purpose: "öffnen" },
-      { command: "esc", purpose: "schließen" },
-    ]);
-    this.limit = 30;
+
+    this.results = []; // current ranked docs
+    this.correction = null; // typo-correction hint for the current query
+    this.highlightTerms = new Set(); // folded terms to bold in rows
+    this.activeIndex = -1; // currently highlighted/previewed row
+    this.rowEls = []; // per-result row elements (parallel to this.results)
+    this._previewTimer = null; // debounce handle
+    this._previewToken = 0; // guards against out-of-order async previews
+    this._previewComponent = null; // lifecycle owner for rendered markdown
   }
 
-  async onOpen() {
-    super.onOpen();
-    // Build the index the first time the modal is opened.
+  onOpen() {
+    this.modalEl.addClass("vault-search-modal");
+    this.contentEl.addClass("vault-search-content");
+
+    // ---- left column: input pinned on top, scrollable result list below.
+    const left = this.contentEl.createDiv({ cls: "vault-search-left" });
+
+    this.inputEl = left.createEl("input", {
+      cls: "vault-search-input",
+      attr: {
+        type: "text",
+        placeholder: "Suche im Handbuch (Titel > Tags > Inhalt, tippfehlertolerant)…",
+        spellcheck: "false",
+      },
+    });
+
+    this.listEl = left.createDiv({ cls: "vault-search-list" });
+
+    // ---- right column: padded, scrollable markdown preview.
+    this.previewEl = this.contentEl.createDiv({
+      cls: "vault-search-preview markdown-rendered",
+    });
+    this._setPreviewPlaceholder("");
+
+    // wire interactions
+    this.inputEl.addEventListener("input", () => this._onQueryChanged());
+    this.scope.register([], "ArrowDown", (evt) => {
+      evt.preventDefault();
+      this._moveActive(1);
+      return false;
+    });
+    this.scope.register([], "ArrowUp", (evt) => {
+      evt.preventDefault();
+      this._moveActive(-1);
+      return false;
+    });
+    this.scope.register([], "Enter", (evt) => {
+      evt.preventDefault();
+      this._openActive();
+      return false;
+    });
+
+    // Build the index the first time the modal is opened, then focus + render.
     if (!this.index.ready) {
-      this.resultContainerEl.setText("Baue Suchindex …");
-      await this.index.ensureBuilt();
-      this.resultContainerEl.empty();
+      this.listEl.setText("Baue Suchindex …");
+      this.index
+        .ensureBuilt()
+        .then(() => this._onQueryChanged())
+        .catch((e) => {
+          console.error("vault-search: index build failed", e);
+          this.listEl.setText("Indexaufbau fehlgeschlagen (siehe Konsole).");
+        });
+    } else {
+      this._onQueryChanged();
+    }
+
+    // focus the input so typing starts immediately
+    window.setTimeout(() => this.inputEl.focus(), 0);
+  }
+
+  onClose() {
+    if (this._previewTimer) {
+      window.clearTimeout(this._previewTimer);
+      this._previewTimer = null;
+    }
+    if (this._previewComponent) {
+      this._previewComponent.unload();
+      this._previewComponent = null;
+    }
+    this.contentEl.empty();
+  }
+
+  // Re-run the search for the current input and rebuild the result list.
+  _onQueryChanged() {
+    if (!this.index.ready) return;
+    const raw = this.inputEl.value || "";
+    const { docs, correction, highlightTerms } = runSearch(
+      this.index,
+      raw,
+      RESULT_LIMIT
+    );
+    this.results = docs;
+    this.correction = correction;
+    this.highlightTerms = highlightTerms;
+    this._renderList();
+
+    // auto-select + preview the top result so the pane is never empty.
+    if (this.results.length > 0) {
+      this._setActive(0, true);
+    } else {
+      this.activeIndex = -1;
+      this._setPreviewPlaceholder(raw.trim() ? "Keine Treffer." : "");
     }
   }
 
-  getSuggestions(rawQuery) {
-    const query = (rawQuery || "").trim();
-    if (!query || !this.index.ready) return [];
+  _renderList() {
+    this.listEl.empty();
+    this.rowEls = [];
 
-    const queryTokens = tokenize(query);
-    if (queryTokens.length === 0) return [];
+    if (this.results.length === 0) return;
 
-    // Resolve each query token into a set of scored "variants". Each variant
-    // carries a `factor` in [0,1] that discounts its field-tier score:
-    //   - the token itself                     -> factor 1        (best)
-    //   - synonym expansions                   -> SYNONYM_FACTOR  (discounted)
-    //   - a typo correction (only if unknown)  -> FUZZY_PENALTY
-    //   - a synonym of a typo correction       -> FUZZY_PENALTY * SYNONYM_FACTOR
-    // Because the discount is a factor (not a flat cap), a synonym that lands in
-    // a title still beats a synonym that only lands in content -- the field
-    // tiers are preserved, just scaled down relative to a literal match.
-    const perToken = [];
-    let correctionNote = null;
-    for (const tok of queryTokens) {
-      // "primary" variants describe the SAME concept as the typed token; the
-      // doc's score for them is best-of (they're alternatives, not additive).
-      const primary = [];
-      const inVocab = this.index.vocabulary.has(tok);
+    const raw = this.inputEl.value || "";
+    this.results.forEach((doc, i) => {
+      const el = this.listEl.createDiv({ cls: "vault-search-suggestion" });
+      this.rowEls.push(el);
 
-      // exact token always considered (even if not in vocab, substring may hit)
-      primary.push({ term: tok, factor: 1 });
+      const titleEl = el.createDiv({ cls: "vault-search-title" });
+      if (doc.code) {
+        renderMatches(titleEl, doc.code, findTermRanges(doc.code, this.highlightTerms));
+        titleEl.appendText(" · ");
+      }
+      const titleText = doc.title || doc.file.basename;
+      renderMatches(titleEl, titleText, findTermRanges(titleText, this.highlightTerms));
 
-      // synonyms (discounted by a factor, so a literal match always wins)
-      for (const syn of this.index.expandSynonyms(tok)) {
-        primary.push({ term: syn, factor: SYNONYM_FACTOR });
+      const meta = [];
+      if (doc.section) meta.push(doc.section);
+      if (this.correction) meta.push(`(meintest du „${this.correction.to}"?)`);
+      if (meta.length) {
+        el.createDiv({ cls: "vault-search-meta", text: meta.join(" — ") });
       }
 
-      // typo correction only if the raw token isn't known and long enough
-      if (!inVocab) {
-        const corrected = this.index.correct(tok);
-        if (corrected && corrected !== tok) {
-          primary.push({ term: corrected, factor: FUZZY_PENALTY });
-          for (const syn of this.index.expandSynonyms(corrected)) {
-            primary.push({ term: syn, factor: FUZZY_PENALTY * SYNONYM_FACTOR });
-          }
-          if (!correctionNote) correctionNote = { from: tok, to: corrected };
-        }
+      const snippet = snippetFor(doc, raw);
+      if (snippet) {
+        const snEl = el.createDiv({ cls: "vault-search-snippet" });
+        renderMatches(snEl, snippet, findTermRanges(snippet, this.highlightTerms));
       }
 
-      // query-side decompounding: a typed compound ("bremsscheibe") also
-      // searches for its validated parts ("brems", "scheibe"). Unlike primary
-      // variants, parts are ADDITIVE (a doc matching BOTH parts should beat a
-      // doc matching only one), each with its own best-of synonym alternatives.
-      const partGroups = [];
-      const qParts = this.index.splitToken(tok);
-      if (qParts) {
-        for (const p of qParts) {
-          const alts = [{ term: p, factor: SPLIT_QUALITY }];
-          for (const syn of this.index.expandSynonyms(p)) {
-            alts.push({ term: syn, factor: SPLIT_QUALITY * SYNONYM_FACTOR });
-          }
-          partGroups.push(alts);
-        }
-      }
-
-      perToken.push({ raw: tok, primary, partGroups });
-    }
-
-    const bestOf = (doc, variants) => {
-      let best = 0;
-      for (const v of variants) {
-        const s = scoreTermAgainstDoc(this.index, doc, v.term, v.factor);
-        if (s > best) best = s;
-      }
-      return best;
-    };
-
-    // Score one query token against a doc: the better of
-    //   (a) a single match on the full token / its synonyms / a typo fix, or
-    //   (b) the SUM over the token's compound parts (best-of each part's alts),
-    // so matching more parts of a compound scores higher, but a full literal
-    // match still wins outright.
-    const bestForToken = (doc, t) => {
-      let primaryBest = bestOf(doc, t.primary);
-      let partsSum = 0;
-      for (const alts of t.partGroups) partsSum += bestOf(doc, alts);
-      return Math.max(primaryBest, partsSum);
-    };
-
-    // Score documents. A doc must match every query token (AND) via at least
-    // one of that token's variants.
-    const scoreDoc = (doc) => {
-      let total = 0;
-      for (const t of perToken) {
-        const b = bestForToken(doc, t);
-        if (b <= 0) return { ok: false, score: 0 };
-        total += b;
-      }
-      return { ok: true, score: total };
-    };
-
-    let results = [];
-    for (const doc of this.index.docs) {
-      const r = scoreDoc(doc);
-      if (r.ok) results.push({ doc, score: r.score });
-    }
-
-    // OR fallback: if AND produced nothing, rank by how many tokens matched
-    // (primary) then by accumulated score (secondary), so you never get an
-    // empty result page while a partial match exists.
-    if (results.length === 0) {
-      for (const doc of this.index.docs) {
-        let matchedTokens = 0;
-        let total = 0;
-        for (const t of perToken) {
-          const b = bestForToken(doc, t);
-          if (b > 0) {
-            matchedTokens++;
-            total += b;
-          }
-        }
-        if (matchedTokens > 0) {
-          results.push({ doc, score: matchedTokens * 1e6 + total });
-        }
-      }
-    }
-
-    results.sort((a, b) => b.score - a.score);
-    this._lastCorrection = correctionNote;
-
-    // Collect every resolved (folded) term that drove scoring so the renderer
-    // can bold the matching characters -- including synonyms, typo corrections
-    // and decompound parts, not just the literal query text.
-    const highlightTerms = new Set();
-    for (const t of perToken) {
-      for (const v of t.primary) highlightTerms.add(v.term);
-      for (const alts of t.partGroups) {
-        for (const v of alts) highlightTerms.add(v.term);
-      }
-    }
-    this._lastHighlightTerms = highlightTerms;
-
-    return results.slice(0, this.limit).map((r) => r.doc);
+      el.addEventListener("mouseenter", () => this._setActive(i, true));
+      el.addEventListener("click", () => {
+        this._setActive(i, false);
+        this._openActive();
+      });
+    });
   }
 
-  renderSuggestion(doc, el) {
-    el.addClass("vault-search-suggestion");
-    const titleEl = el.createDiv({ cls: "vault-search-title" });
-    const terms = this._lastHighlightTerms || new Set();
+  // Move the active row by `delta`, wrapping, and sync the preview.
+  _moveActive(delta) {
+    if (this.results.length === 0) return;
+    let next = this.activeIndex + delta;
+    if (next < 0) next = this.results.length - 1;
+    if (next >= this.results.length) next = 0;
+    this._setActive(next, true);
+  }
 
-    // Code prefix (e.g. "16-02"), highlighted where it matches, then a plain
-    // separator, then the title with matching characters bolded.
-    if (doc.code) {
-      renderMatches(titleEl, doc.code, findTermRanges(doc.code, terms));
-      titleEl.appendText(" · ");
+  // Mark row `i` active; when `preview` is true also (debounced) render it.
+  _setActive(i, preview) {
+    if (i < 0 || i >= this.results.length) return;
+    if (this.activeIndex >= 0 && this.rowEls[this.activeIndex]) {
+      this.rowEls[this.activeIndex].removeClass("is-active");
     }
-    const titleText = doc.title || doc.file.basename;
-    renderMatches(titleEl, titleText, findTermRanges(titleText, terms));
+    this.activeIndex = i;
+    const el = this.rowEls[i];
+    if (el) {
+      el.addClass("is-active");
+      el.scrollIntoView({ block: "nearest" });
+    }
+    if (preview) this._schedulePreview(this.results[i]);
+  }
 
-    const meta = [];
-    if (doc.section) meta.push(doc.section);
-    if (this._lastCorrection) {
-      meta.push(`(meintest du „${this._lastCorrection.to}"?)`);
-    }
-    if (meta.length) {
-      const metaEl = el.createDiv({ cls: "vault-search-meta" });
-      metaEl.setText(meta.join(" — "));
-      metaEl.style.opacity = "0.7";
-      metaEl.style.fontSize = "0.8em";
-    }
+  _schedulePreview(doc) {
+    if (this._previewTimer) window.clearTimeout(this._previewTimer);
+    this._previewTimer = window.setTimeout(() => {
+      this._previewTimer = null;
+      this._renderPreview(doc);
+    }, PREVIEW_DEBOUNCE_MS);
+  }
 
-    // matched-text snippet from content, with matching characters bolded.
-    const snippet = this._snippetFor(doc);
-    if (snippet) {
-      const snEl = el.createDiv({ cls: "vault-search-snippet" });
-      renderMatches(snEl, snippet, findTermRanges(snippet, terms));
-      snEl.style.opacity = "0.85";
-      snEl.style.fontSize = "0.85em";
+  async _renderPreview(doc) {
+    if (!doc) return;
+    const token = ++this._previewToken;
+
+    // tear down the previous render's lifecycle owner
+    if (this._previewComponent) {
+      this._previewComponent.unload();
+      this._previewComponent = null;
+    }
+    this.previewEl.empty();
+    this.previewEl.removeClass("vault-search-preview-empty");
+
+    let raw = "";
+    try {
+      raw = await this.app.vault.cachedRead(doc.file);
+    } catch (e) {
+      raw = "";
+    }
+    // a newer preview was requested while we were reading -> abandon this one
+    if (token !== this._previewToken) return;
+
+    const component = new Component();
+    component.load();
+    this._previewComponent = component;
+    try {
+      await MarkdownRenderer.render(
+        this.app,
+        raw,
+        this.previewEl,
+        doc.file.path,
+        component
+      );
+    } catch (e) {
+      console.error("vault-search: preview render failed", e);
+      if (token === this._previewToken) {
+        this._setPreviewPlaceholder("Vorschau konnte nicht gerendert werden.");
+      }
     }
   }
 
-  _snippetFor(doc) {
-    const q = tokenize(this.inputEl.value || "");
-    if (q.length === 0) return "";
-    const src = doc.snippetSource || "";
-    const foldedSrc = fold(src);
-    // find the earliest position of any query token (or a substring of it)
-    let pos = -1;
-    for (const tok of q) {
-      const p = foldedSrc.indexOf(tok);
-      if (p !== -1 && (pos === -1 || p < pos)) pos = p;
+  _setPreviewPlaceholder(text) {
+    if (this._previewComponent) {
+      this._previewComponent.unload();
+      this._previewComponent = null;
     }
-    if (pos === -1) return "";
-    const start = Math.max(0, pos - 40);
-    const end = Math.min(src.length, pos + 80);
-    let snip = src.slice(start, end).replace(/\s+/g, " ").trim();
-    if (start > 0) snip = "… " + snip;
-    if (end < src.length) snip = snip + " …";
-    return snip;
+    this.previewEl.empty();
+    this.previewEl.addClass("vault-search-preview-empty");
+    if (text) this.previewEl.setText(text);
   }
 
-  onChooseSuggestion(doc) {
+  _openActive() {
+    if (this.activeIndex < 0 || this.activeIndex >= this.results.length) return;
+    const doc = this.results[this.activeIndex];
+    this.close();
     this.app.workspace.getLeaf(false).openFile(doc.file);
   }
 }
@@ -957,8 +1155,12 @@ module.exports = class VaultSearchPlugin extends Plugin {
     this.addCommand({
       id: "open-vault-search",
       name: "Handbuch durchsuchen (gewichtet, tippfehlertolerant)",
-      // Replace the standard global-search shortcut with this search.
-      hotkeys: [{ modifiers: ["Mod", "Shift"], key: "F" }],
+      // Replace the standard global-search shortcut with this search, and add
+      // Ctrl+Space as a quick-open alternative.
+      hotkeys: [
+        { modifiers: ["Mod", "Shift"], key: "F" },
+        { modifiers: ["Ctrl"], key: "Space" },
+      ],
       callback: () => {
         new VaultSearchModal(this.app, this).open();
       },
