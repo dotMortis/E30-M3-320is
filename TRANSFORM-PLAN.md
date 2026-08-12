@@ -15,6 +15,12 @@ rich German translation** (description + transcription + BMW part terms), search
   est. **~$1.50** total for all 1243 pages
 - **Execution:** standalone Python script calling the Zen API (`https://opencode.ai/zen/v1`),
   with batching + resume
+- **Auth:** Zen API key is stored in `.env` at the repo root as `OPENCODE_API_KEY`
+  (loaded at runtime; `.env` is gitignored, never committed)
+- **Cost control:** per-page cost computed from the API `usage` object
+  (Luna: $0.20/1M input, $1.20/1M output); hard **budget cap of $3.00** enforced as a
+  pre-call gate. On reaching the cap the run **stops cleanly and stays resumable**
+  (cached pages preserved; raise cap + rerun to continue).
 - **Images:** copied into the vault (self-contained ~800 MB handoff)
 - **Zoom:** dedicated zoom/pan viewer (Obsidian "Image Toolkit" community plugin, pre-configured)
 
@@ -32,7 +38,8 @@ rich German translation** (description + transcription + BMW part terms), search
 ## Phase 0 — Setup & safety
 - Create working branch (`bilingual-obsidian-kb`); build vault additively into `vault/` (originals untouched)
 - Add `.gitignore` for the API key file and generated caches
-- Document `ZEN_API_KEY` handling (env var; never hardcoded/committed)
+- Zen API key lives in `.env` at the repo root as `OPENCODE_API_KEY`; scripts load it via
+  python-dotenv / `os.environ` at runtime. Never hardcoded or committed.
 
 ## Phase 1 — Extract structured data → `manifest.json`
 - Python parser for `index-all.html` + each `SECTION/index.html`:
@@ -52,6 +59,16 @@ rich German translation** (description + transcription + BMW part terms), search
     - `konfidenz`
   - **resume support**: writes each result to `cache/<page_id>.json`; reruns skip completed pages (protects spend)
   - concurrency limit + retry/backoff; running **cost + token log**
+- **Cost tracking & budget guard:**
+  - read `usage.input_tokens` / `usage.output_tokens` from each Zen response
+  - `cost_page = in/1e6*0.20 + out/1e6*1.20`; accumulate into `cache/cost_log.json`
+    (persisted, survives restarts by summing cached results)
+  - **pre-call gate:** before each request, if
+    `running_total + worst_case_page_est (~$0.002) > budget` → stop cleanly, do **not** send,
+    print pages-done / spend / pages-remaining
+  - per-page log: `page_id, in_tokens, out_tokens, cost, cumulative_cost`
+  - `--budget` CLI flag (**default $3.00**) so the cap is adjustable without code edits
+  - final run summary prints total tokens + total USD spent (feeds Phase 7 spend summary)
 - Merge results back into `manifest.json`
 - Tesseract path documented as offline fallback (requires installing `tesseract-ocr` + `deu`/`eng` packs)
 
@@ -97,7 +114,8 @@ rich German translation** (description + transcription + BMW part terms), search
 - `TRANSFORM-PLAN.md` — this plan
 
 ## Cost & risk notes
-- **Est. ~$1.50** on GPT 5.6 Luna for all pages; resume/cache prevents double-spend
+- **Est. ~$1.50** on GPT 5.6 Luna for all pages; hard **$3.00 cap** guarantees spend can't
+  exceed budget (worst-case overshoot is one page, ~$0.002); resume/cache prevents double-spend
 - If dense wiring diagrams transcribe weakly, selectively re-run those on Gemini 3.5 Flash Lite (few cents)
 - OCR/vision on 1989 scans is imperfect → German text is for **searchability/context**;
   the **original scan remains authoritative** (stated in each note)
@@ -110,4 +128,4 @@ rich German translation** (description + transcription + BMW part terms), search
 | GPT 5.6 Luna | `opencode/gpt-5.6-luna` | 0.20 | 1.20 | Primary vision analysis |
 | Gemini 3.5 Flash Lite | `opencode/gemini-3.5-flash-lite` | 0.30 | 2.50 | Fallback for dense diagrams |
 
-Endpoint: `https://opencode.ai/zen/v1` — auth via `ZEN_API_KEY` env var.
+Endpoint: `https://opencode.ai/zen/v1` — auth via `OPENCODE_API_KEY` (stored in `.env` at repo root).
