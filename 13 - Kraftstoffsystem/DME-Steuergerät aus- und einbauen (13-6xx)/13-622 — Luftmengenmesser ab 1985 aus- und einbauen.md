@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13-622.jpg]]s
+![[13-622.jpg]]
 
 *Originaltitel (EN): Air flow sensor – post 1985*
 
