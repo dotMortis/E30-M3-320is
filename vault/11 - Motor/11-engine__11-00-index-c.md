@@ -1,0 +1,58 @@
+---
+titel: "11-engine__11-00-index-c"
+sektion_nr: "11"
+sektion: "Motor"
+seitentyp: "table"
+konfidenz: 0.99
+bilddatei: "11-00-index-c.jpg"
+tags:
+  - sektion/11
+  - seite
+  - typ/table
+---
+
+# 11-engine__11-00-index-c  ·  Motor
+
+> [!info] Originalseite oben, Übersetzung unten
+> Typ: **Tabelle** · Konfidenz: **0.99**
+> Die **Originalseite ist maßgeblich**; die deutsche Übersetzung dient der Suche und dem Verständnis.
+
+![[11-engine__11-00-index-c.jpg]]
+
+*Originaltitel (EN): (duplicate, better quality, later manual)*
+
+---
+
+## Beschreibung
+Inhaltsverzeichnis des Kapitels 11 „Motor“ für die Motoren M3 / 320is. Die Seite führt die verfügbaren Arbeitsanweisungen mit BMW-Arbeitspositionsnummern und den zugehörigen Seitenverweisen auf, darunter Motoransicht, Kompressionsprüfung, Motoraus- und -einbau sowie Arbeiten am Zylinderkopf und an der Ölwanne.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 11 Motor
+>
+> Motor M3 / 320is
+>
+> Motoransicht ........................................................ 11-100
+> 11 00 039 Kompression aller Zylinder – prüfen ....................... 11-101
+> 050 Motor – aus- und einbauen ....................................... 11-102
+> 11 12 000 Zylinderkopfhaube – aus- und einbauen ..................... 11-105
+> 100 Zylinderkopf – aus- und einbauen ................................. 11-106
+> 11 13 010 Oberer Abschnitt der Ölwanne – aus- und einbauen .......... 11-109
+> 020 Unterer Abschnitt der Ölwanne – aus- und einbauen ............... 11-109
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| Engine | Motor |
+| Engine view | Motoransicht |
+| Compression of all cylinders | Kompression aller Zylinder |
+| check | prüfen |
+| remove and install | aus- und einbauen |
+| Cylinder head cover | Zylinderkopfhaube |
+| Cylinder head | Zylinderkopf |
+| Oil pan upper section | oberer Abschnitt der Ölwanne |
+| Oil pan lower section | unterer Abschnitt der Ölwanne |
+
+---
+[[Startseite]] · [[_ÜBERSICHT|Abschnittsübersicht]] · [[Glossar]]

@@ -1,0 +1,73 @@
+---
+titel: "31-front-axle__31-08"
+sektion_nr: "31"
+sektion: "Vorderachse"
+seitentyp: "diagram"
+konfidenz: 0.98
+bilddatei: "31-08.jpg"
+tags:
+  - sektion/31
+  - seite
+  - typ/diagram
+---
+
+# 31-front-axle__31-08  ·  Vorderachse
+
+> [!info] Originalseite oben, Übersetzung unten
+> Typ: **Diagramm** · Konfidenz: **0.98**
+> Die **Originalseite ist maßgeblich**; die deutsche Übersetzung dient der Suche und dem Verständnis.
+
+![[31-front-axle__31-08.jpg]]
+
+*Originaltitel (EN): Rubber mounts for control arms – remove and install*
+
+---
+
+## Beschreibung
+Die Seite 31-8 beschreibt den Ausbau, die Einbaulage und die Prüfung des Gummilagers am linken oder rechten Querlenker. Dargestellt sind das Aus- und Einpressen des Gummilagers in den Querlenkerhalter mit dem Sonderwerkzeug 31 2 130, die vorgeschriebene Ausrichtung anhand des Pfeils und der Gussnase sowie die Kontrolle des Spaltmaßes A bei normaler Fahrzeugstellung. Die Angaben gelten ausdrücklich auch für Sechszylinder- und M3-Modelle.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 31-8
+> 31 2 130 – GUMMILAGER FÜR LINKEN ODER RECHTEN QUERLENKER ERSETZEN
+>
+> Querlenkerhalter 31 12 048 aus- und einbauen.
+> Gummilager mit dem Sonderwerkzeug 31 2 130 aus dem Halter herauspressen.
+> Gummilager immer auf beiden Seiten ersetzen und Lager desselben Herstellers verwenden (am Lager erkennbar).
+>
+> Einbau:
+> Einbaulage prüfen!
+> Der Pfeil auf dem Gummilager muss zur Gussnase (1) am Halter zeigen.
+> Halter und Gummilager fettfrei reinigen.
+> Gummilager für Sechszylinder- und M3-Modelle sind mit einem orangefarbenen Farbpunkt (2) gekennzeichnet.
+>
+> Gummilager vom abgeschrägten Ende des Halters aus mit dem Sonderwerkzeug 31 2 130 in den Halter einpressen.
+>
+> Gummilager prüfen:
+> Fahrzeug in Normalstellung*.
+> Spaltmaß (A) mit einer Fühlerlehre messen.
+> Sollwert A = 0,7 bis 1,7 mm (0,028 bis 0,067 Zoll).
+> Weicht der gemessene Wert vom Sollwert ab, Gummilager ersetzen.
+>
+> * Siehe Technische Daten.
+>
+> Abbildungs-/Werkzeugbezeichnungen: 31 2 130; 30 31 031; 30 31 033; 30 31 043
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| rubber mount | Gummilager |
+| control arm | Querlenker |
+| control arm bracket | Querlenkerhalter |
+| special tool | Sonderwerkzeug |
+| rubber bearing | Gummilager |
+| cast boss | Gussnase |
+| angled end | abgeschrägtes Ende |
+| feeler gauge blade | Fühlerlehrenblatt |
+| normal position | Normalstellung |
+| gap | Spaltmaß |
+| orange paint dot | oranger Farbpunkt |
+
+---
+[[Startseite]] · [[_ÜBERSICHT|Abschnittsübersicht]] · [[Glossar]]

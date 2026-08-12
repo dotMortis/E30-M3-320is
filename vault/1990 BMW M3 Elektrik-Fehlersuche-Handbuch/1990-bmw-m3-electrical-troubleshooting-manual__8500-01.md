@@ -1,0 +1,74 @@
+---
+titel: "1990-bmw-m3-electrical-troubleshooting-manual__8500-01"
+sektion_nr: "??"
+sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
+seitentyp: "diagram"
+konfidenz: 0.99
+bilddatei: "8500-01.jpg"
+tags:
+  - sektion/??
+  - seite
+  - typ/diagram
+---
+
+# 1990-bmw-m3-electrical-troubleshooting-manual__8500-01  ·  1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+
+> [!info] Originalseite oben, Übersetzung unten
+> Typ: **Diagramm** · Konfidenz: **0.99**
+> Die **Originalseite ist maßgeblich**; die deutsche Übersetzung dient der Suche und dem Verständnis.
+
+![[1990-bmw-m3-electrical-troubleshooting-manual__8500-01.jpg]]
+
+*Originaltitel (EN): Connector pin-outs: C302*
+
+---
+
+## Beschreibung
+Die Seite zeigt die Steckeransicht des Zubehörsteckers C302 im Fahrzeug sowie eine Zuordnung aller Anschlussklemmen A bis Z zu den daran angeschlossenen Stromkreisen. Die Vorderansicht gilt für die Einbaulage unter der linken Seite des Armaturenbretts vor der Pedalerie und dient zur Identifizierung der Anschlusspositionen bei Prüfung, Fehlersuche und Nachrüstung elektrischer Ausstattungen.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> STECKERANSICHTEN 8500-1
+> ZUBEHÖRSTECKER
+>
+> STROMKREISE MIT C302 (ZUBEHÖRSTECKER)
+>
+> Abbildung 1 – C302 (Zubehörstecker)
+> Vorderansicht – unter der linken Seite des Armaturenbretts, vor der Pedalerie
+>
+> Klemme | Stromkreis | Klemme | Stromkreis
+> A | Nicht verwendet | N | Nicht verwendet
+> B | Nicht verwendet | O | Nicht verwendet
+> C | Antiblockiersystem (ABS) | P | Nicht verwendet
+> D | Nicht verwendet | Q | Elektrische Fensterheber
+> E | Nicht verwendet | R | Antiblockiersystem (ABS)
+> F | Nicht verwendet | S | Geschwindigkeitsregelung
+> G | Antiblockiersystem (ABS) | T | Nicht verwendet
+> H | Multifunktionsuhr | U | Nicht verwendet
+> I | Nicht verwendet | V | Radio
+> J | Nicht verwendet | W | Radio
+> K | Nicht verwendet | X | Radio
+> L | Nicht verwendet | Y | Radio
+> M | Nicht verwendet | Z | Elektrische Antenne
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| Connector Views | Steckeransichten |
+| Accessory Connector | Zubehörstecker |
+| Connector C302 | Stecker C302 |
+| Terminal | Klemme bzw. Anschluss |
+| Circuit | Stromkreis |
+| Anti-Lock Braking | Antiblockiersystem (ABS) |
+| Multifunction Clock | Multifunktionsuhr |
+| Power Windows | Elektrische Fensterheber |
+| Cruise Control | Geschwindigkeitsregelung bzw. Tempomat |
+| Radio | Radio |
+| Power Antenna | Elektrische Antenne |
+| Front View | Vorderansicht |
+| Dash | Armaturenbrett |
+| Pedal Assembly | Pedalerie |
+
+---
+[[Startseite]] · [[_ÜBERSICHT|Abschnittsübersicht]] · [[Glossar]]

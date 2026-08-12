@@ -1,0 +1,9 @@
+{
+  "viewImageGlobal": true,
+  "viewImageInCPB": true,
+  "viewImageWithLink": true,
+  "viewImageOther": true,
+  "imageMoveSpeed": 10,
+  "imgTipToggle": true,
+  "imgFullScreenMode": "FIT"
+}

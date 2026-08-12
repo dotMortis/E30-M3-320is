@@ -125,7 +125,34 @@ rich German translation** (description + transcription + BMW part terms), search
 ## Model reference (OpenCode Zen)
 | Model | Model ID | Input $/1M | Output $/1M | Role |
 |---|---|---|---|---|
-| GPT 5.6 Luna | `opencode/gpt-5.6-luna` | 0.20 | 1.20 | Primary vision analysis |
-| Gemini 3.5 Flash Lite | `opencode/gemini-3.5-flash-lite` | 0.30 | 2.50 | Fallback for dense diagrams |
+| GPT 5.6 Luna | `gpt-5.6-luna` | 0.20 | 1.20 | Primary vision analysis |
+| Gemini 3.5 Flash Lite | `gemini-3.5-flash-lite` | 0.30 | 2.50 | Fallback for dense diagrams |
 
 Endpoint: `https://opencode.ai/zen/v1` — auth via `OPENCODE_API_KEY` (stored in `.env` at repo root).
+
+---
+
+## EXECUTION NOTES (verified against the live Zen gateway)
+Corrections discovered during pre-flight and execution — authoritative for re-runs:
+- **Vision endpoint is `/v1/responses` (Responses API), NOT `/v1/chat/completions`.**
+  Chat-completions silently drops image input on this gateway (empty message, no usage).
+- **Model IDs are bare** (`gpt-5.6-luna`), *without* the `opencode/` prefix (prefix → "not supported").
+- **Request shape:** `input:[{role:user, content:[{type:input_text,text},{type:input_image,image_url:"data:image/jpeg;base64,..."}]}]`.
+- **Response text:** read `output[-1].content[0].text` (top-level `output_text` is null).
+- **Usage fields:** `usage.input_tokens` / `usage.output_tokens` (matches cost formula). Prompt caching is active and lowers real spend.
+- **Cloudflare:** requests must send a browser-like `User-Agent`; Python's default urllib UA gets a 403 (code 1010). `analyze.py` sets one.
+- **Manifest parsing:** image paths live in `<a href>` (not `src`); `page_id` includes the folder slug because section numbers repeat (`41 - Body` vs `41 - Body (Convertibles)`, `00 - Maintenance` vs `00 - Torque Specs`).
+- **Vault attachments:** image basenames collide across sections (46 collisions), so scans are copied to `_attachments/` under their unique `page_id` filename, not the raw basename.
+
+## ACTUAL RESULTS
+- **1243/1243 pages analyzed** (100%), all with valid structured JSON; every page konfidenz ≥ 0.8 (1240 at ≥ 0.9).
+- **Total API spend: $2.02** (in 2,344,987 tok / out 1,295,943 tok), avg **$0.00163/page**, well under the $3.00 cap.
+- Page types: 631 diagram / 357 text / 255 table. Glossary: 5,817 EN↔DE terms (94 canonical-anchored) from 16,639 extracted pairs.
+- **Vault: 1243 page notes + 29 section MOCs + Startseite + Glossar + Technische-Daten + LIESMICH**, self-contained (~207 MB incl. scans). QA: 0 broken links, 0 missing embeds, DE search verified.
+
+## Scripts (all re-runnable / resumable)
+- `scripts/parse_manifest.py` → `manifest.json`
+- `scripts/analyze.py` → vision analysis (`--pilot N`, `--budget`, `--merge`); cache in `cache/`
+- `scripts/build_glossary.py` → `glossary.json`
+- `scripts/build_vault.py` → `vault/`
+- `scripts/qa_vault.py` → link/embed/search QA

@@ -1,0 +1,72 @@
+---
+titel: "13-fuel-system__13-806"
+sektion_nr: "13"
+sektion: "Kraftstoffsystem"
+seitentyp: "text"
+konfidenz: 0.99
+bilddatei: "13-806.jpg"
+tags:
+  - sektion/13
+  - seite
+  - typ/text
+---
+
+# 13-fuel-system__13-806  ·  Kraftstoffsystem
+
+> [!info] Originalseite oben, Übersetzung unten
+> Typ: **Text** · Konfidenz: **0.99**
+> Die **Originalseite ist maßgeblich**; die deutsche Übersetzung dient der Suche und dem Verständnis.
+
+![[13-fuel-system__13-806.jpg]]
+
+*Originaltitel (EN): "*
+
+---
+
+## Beschreibung
+Die Seite 13-806 beschreibt im Abschnitt „Bevorzugte Schaltung“ die Spannungsprüfung an einem Anschluss zwischen Klemme 4 und Klemme 7 zur Fehlersuche im Startfreigabe- beziehungsweise Wählhebelschalterkreis. Es werden getrennte Prüfschritte für Fahrzeuge mit Automatikgetriebe und Schaltgetriebe angegeben. Zusätzlich weist ein Hinweis darauf hin, dass bei Fahrzeugen mit Automatikgetriebe nach der Wahl einer Fahrstufe die Nennleerlaufdrehzahl von 750 ± 50 U/min geregelt wird.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> Wichtig!
+> Nach der Wahl einer Fahrstufe (Fahrzeuge mit Automatikgetriebe) wird die Nennleerlaufdrehzahl (750 ± 50 U/min) immer geregelt.
+>
+> 6.) Bevorzugte Schaltung:
+>
+> (Fahrzeuge mit Automatikgetriebe)
+> Voltmeter (M 01) zwischen Klemme 4 und Klemme 7 anschließen.
+> Zündung einschalten.
+> Wählhebel des Automatikgetriebes in Stellung „N“ oder „P“ bringen.
+> Zeigt das Voltmeter mindestens 9 Volt an?
+>
+> NEIN → Blau/gelbes Kabel mit Ohmmeter (M 06) auf Unterbrechungen prüfen.
+> Unterbrechungen beseitigen.
+> Wählhebelschalter prüfen oder ersetzen.
+>
+> (Fahrzeuge mit Schaltgetriebe)
+> Voltmeter (M 01) zwischen Klemme 4 und Klemme 7 anschließen.
+> Zündung einschalten.
+> Zeigt das Voltmeter mindestens 9 Volt an?
+>
+> NEIN → Unterbrechungen im grün/gelben Kabel (von Klemme 7 zu Klemme 2) beseitigen.
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| preferred circuit | bevorzugte Schaltung |
+| automatic transmission | Automatikgetriebe |
+| manual transmission | Schaltgetriebe |
+| drive range | Fahrstufe |
+| nominal idle speed | Nennleerlaufdrehzahl |
+| voltmeter | Voltmeter |
+| ohmmeter | Ohmmeter |
+| terminal | Klemme |
+| selector lever | Wählhebel |
+| selector lever switch | Wählhebelschalter |
+| ignition | Zündung |
+| wire | Kabel |
+| breaks | Unterbrechungen |
+
+---
+[[Startseite]] · [[_ÜBERSICHT|Abschnittsübersicht]] · [[Glossar]]
