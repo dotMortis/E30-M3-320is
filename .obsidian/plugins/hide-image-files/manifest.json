@@ -1,0 +1,9 @@
+{
+  "id": "hide-image-files",
+  "name": "Hide Image Files",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Hides image files (jpg, jpeg, png, gif, webp) from the file explorer. Embedded images in notes still render.",
+  "author": "E30-M3-320is vault",
+  "isDesktopOnly": false
+}

@@ -1,6 +1,12 @@
 {
+  "readableLineLength": false,
   "newFileLocation": "root",
   "alwaysUpdateLinks": true,
   "showUnsupportedFiles": false,
-  "attachmentFolderPath": "./"
+  "attachmentFolderPath": "./",
+  "promptDelete": true,
+  "trashOption": "local",
+  "newLinkFormat": "relative",
+  "useMarkdownLinks": false,
+  "defaultViewMode": "preview"
 }
