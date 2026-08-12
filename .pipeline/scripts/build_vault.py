@@ -69,6 +69,28 @@ def sanitize(s):
     return _CTRL_RE.sub("", s)
 
 
+# Obsidian on some platforms (observed on Linux/Electron) fails to serve image
+# embeds via the app:// scheme when a FOLDER in the path contains a non-ASCII
+# character (e.g. umlauts). Folder names are therefore transliterated to ASCII.
+# Note filenames and titles keep their German umlauts -- only directory names
+# are affected, which is what breaks image rendering.
+_TRANSLIT = str.maketrans({
+    "ä": "ae", "ö": "oe", "ü": "ue",
+    "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss",
+    "é": "e", "è": "e", "á": "a", "à": "a", "ñ": "n", "ç": "c",
+})
+
+
+def ascii_fold(s: str) -> str:
+    """Transliterate common non-ASCII letters to ASCII (for folder names)."""
+    return (s or "").translate(_TRANSLIT)
+
+
+def fs_safe_dir(name: str, cap: int = 90) -> str:
+    """Like fs_safe but ASCII-only, for directory names (app:// image fix)."""
+    return fs_safe(ascii_fold(name), cap=cap)
+
+
 def fs_safe(name: str, cap: int = 90) -> str:
     """Filesystem/Obsidian-safe component (keeps German letters, spaces, dashes)."""
     name = sanitize(name or "")
@@ -176,10 +198,10 @@ def compute_subgroups(pages: list[dict]) -> dict[str, str] | None:
         if len(band_pages) < 3:
             small.append(key)
             continue
-        name = fs_safe(f"{representative_title(band_pages)} ({key})", cap=70)
+        name = fs_safe_dir(f"{representative_title(band_pages)} ({key})", cap=70)
         mapping[key] = name
     for key in small:
-        mapping[key] = "Weitere Schaltpläne & Seiten" if any(
+        mapping[key] = "Weitere Schaltplaene & Seiten" if any(
             band_key(p) == key and re.match(r"^\d{3,4}", code_of(p)) for p in pages
         ) else "Weitere Seiten"
     return mapping
@@ -477,7 +499,7 @@ def main() -> int:
 
     for no, de, folder in section_order:
         pages = section_pages[folder]
-        sec_dirname = fs_safe(de if not no else f"{no} - {de}", cap=90)
+        sec_dirname = fs_safe_dir(de if not no else f"{no} - {de}", cap=90)
         sec_dir = REPO / sec_dirname
         subgroups = compute_subgroups(pages)
 
