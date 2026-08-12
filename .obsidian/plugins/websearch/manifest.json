@@ -1,0 +1,9 @@
+{
+  "id": "websearch",
+  "name": "Websearch",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Fügt einen animierten KI-Button hinzu, der eine Google-Suche aus Seitenkontext (BMW E30 M3, Titel/Sektion) und deiner Frage erstellt.",
+  "author": "E30-M3-320is vault",
+  "isDesktopOnly": false
+}

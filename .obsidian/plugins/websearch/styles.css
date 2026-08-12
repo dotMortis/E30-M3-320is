@@ -1,0 +1,162 @@
+/* Websearch -- animated sparkle ribbon icon + modal styling. */
+
+/* -------------------------------------------------------------------------
+ * Ribbon icon: continuous pulsing glow + slow rainbow hue-cycle, with a
+ * quicker wiggle on hover for tactile feedback.
+ * ---------------------------------------------------------------------- */
+
+.websearch-ribbon-icon svg {
+  animation:
+    websearch-pulse 2.2s ease-in-out infinite,
+    websearch-hue-cycle 6s linear infinite;
+  transform-origin: center;
+}
+
+.websearch-ribbon-icon:hover svg {
+  animation:
+    websearch-pulse 0.9s ease-in-out infinite,
+    websearch-hue-cycle 2.5s linear infinite,
+    websearch-wiggle 0.6s ease-in-out infinite;
+}
+
+@keyframes websearch-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 1px currentColor) drop-shadow(0 0 2px currentColor);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 4px currentColor) drop-shadow(0 0 8px currentColor);
+    transform: scale(1.15);
+  }
+}
+
+@keyframes websearch-hue-cycle {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes websearch-wiggle {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: -12deg;
+  }
+  75% {
+    rotate: 12deg;
+  }
+}
+
+/* Respect users who asked the OS to reduce motion: keep a static glow only. */
+@media (prefers-reduced-motion: reduce) {
+  .websearch-ribbon-icon svg,
+  .websearch-ribbon-icon:hover svg {
+    animation: none;
+    filter: drop-shadow(0 0 3px currentColor);
+  }
+}
+
+/* -------------------------------------------------------------------------
+ * Modal content.
+ * ---------------------------------------------------------------------- */
+
+.websearch-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4-2, 8px);
+}
+
+.websearch-heading {
+  margin: 0 0 var(--size-4-1, 4px) 0;
+  text-align: center;
+}
+
+.websearch-sparkle-emoji {
+  display: inline-block;
+  animation: websearch-twinkle 1.6s ease-in-out infinite;
+}
+
+.websearch-sparkle-emoji:last-child {
+  animation-delay: 0.4s;
+}
+
+@keyframes websearch-twinkle {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.85) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(15deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .websearch-sparkle-emoji {
+    animation: none;
+  }
+}
+
+.websearch-subtext {
+  margin: 0;
+  opacity: 0.75;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.websearch-textarea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.websearch-button-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Animated gradient "shimmer" sweep across the Search button. */
+.websearch-search-btn {
+  background-image: linear-gradient(
+    100deg,
+    var(--interactive-accent) 0%,
+    var(--interactive-accent) 35%,
+    color-mix(in srgb, var(--interactive-accent) 60%, white) 50%,
+    var(--interactive-accent) 65%,
+    var(--interactive-accent) 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  animation: websearch-shimmer 3.5s linear infinite;
+  transition: filter 0.15s ease;
+}
+
+.websearch-search-btn:hover {
+  filter: brightness(1.1) drop-shadow(0 0 6px var(--interactive-accent));
+  animation-duration: 1.2s;
+}
+
+@keyframes websearch-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .websearch-search-btn {
+    animation: none;
+    background-position: 0 0;
+  }
+}
