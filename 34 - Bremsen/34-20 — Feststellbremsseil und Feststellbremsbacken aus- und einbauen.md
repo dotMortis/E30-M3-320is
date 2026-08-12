@@ -1,0 +1,98 @@
+---
+titel: "Feststellbremsseil und Feststellbremsbacken aus- und einbauen"
+seitencode: "34-20"
+sektion_nr: "34"
+sektion: "Bremsen"
+titel_en: "Parking brake cable, shoes - remove and install"
+seitentyp: "text"
+konfidenz: 0.98
+bilddatei: "34-20.jpg"
+tags:
+  - sektion/34
+  - seite
+  - typ/text
+---
+
+# Feststellbremsseil und Feststellbremsbacken aus- und einbauen
+
+> [!info] BMW-Seite `34-20` · Abschnitt 34 — Bremsen
+> Typ: **Text** · Konfidenz: **0.98**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[34-20.jpg]]
+
+*Originaltitel (EN): Parking brake cable, shoes - remove and install*
+
+---
+
+## Beschreibung
+Die BMW-Werkstatthandbuchseite 34–20 beschreibt den Ausbau und Einbau des Feststellbremsseils sowie der Feststellbremsbacken an der Hinterachse mit Scheibenbremse. Die Bildfolgen zeigen das Lösen des Seils am Schräglenker und an den Haltern, das Abnehmen der Bremsbacken durch Lösen der Haltefedern sowie die Prüfung und Montage des Spreizers. Zusätzlich enthält die Seite Hinweise zum Einbremsen neuer Feststellbremsbacken und zur Schmierung der Gleitflächen und Bolzen.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 34–20
+>
+> 34 41 100  AUS- UND EINBAU DES FESTSTELLBREMSSEILS – HINTERE SCHEIBENBREMSEN
+>
+> Spreizer für Feststellbremsbacken aus- und einbauen, 34 41 250.
+> Feststellbremshebel aus- und einbauen, 34 41 000.
+> Einbau:
+> Feststellbremse einstellen, 34 10 014.
+>
+> Feststellbremsseil am Schräglenker lösen.
+> Feststellbremsseil aus dem Schutzrohr herausziehen.
+> Einbau:
+> Der Seilhalter muss am Schutzrohr anliegen.
+>
+> Halter des Feststellbremsseils lösen.
+> Feststellbremsseil herausziehen.
+>
+> 34 41 200  AUS- UND EINBAU DER FESTSTELLBREMSBACKEN
+>
+> Hintere Scheibenbremse aus- und einbauen, 34 21 300.
+> Untere Rückholfeder mit einer Bremsfederzange aushängen.
+> Einbau:
+> Rückholfeder prüfen, bei Bedarf ersetzen.
+> Feststellbremse einstellen, 34 10 014.
+>
+> Haltefedern mit dem Sonderwerkzeug 34 4 000 um 90° drehen und aushängen.
+>
+> Bremsbacken unten auseinanderdrücken und nach oben abheben.
+>
+> EINBREMSEN DER FESTSTELLBREMSE NACH DEM ERSETZEN DER BREMSBACKEN
+> Das Fahrzeug muss in drei Phasen eingebremst werden.
+> Phase 1: 5 kräftige Bremsungen bis zum Stillstand aus 50 km/h (30 mph).
+> Phase 2: Bremsen abkühlen lassen.
+> Phase 3: 5 weitere Bremsungen aus 50 km/h (30 mph).
+>
+> 34 41 250  PRÜFEN, AUS- UND EINBAU DES SPREIZERS
+>
+> Feststellbremsbacken aus- und einbauen, 34 41 200.
+> Teil A nach hinten abziehen.
+> Bolzen B herausdrücken.
+> Teil C abziehen.
+> Einbau:
+> Gleitflächen und Bolzen dünn mit Molykote-G-Paste bestreichen.
+> Feststellbremse einstellen, 34 10 014.
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| parking brake cable | Feststellbremsseil |
+| parking brake shoes | Feststellbremsbacken |
+| rear disc brakes | hintere Scheibenbremsen |
+| spreader | Spreizer |
+| parking brake lever | Feststellbremshebel |
+| swinging arm | Schräglenker |
+| protective tube | Schutzrohr |
+| cable holder | Seilhalter |
+| return spring | Rückholfeder |
+| retainer spring | Haltefeder |
+| brake spring pliers | Bremsfederzange |
+| special tool | Sonderwerkzeug |
+| sliding surfaces | Gleitflächen |
+| Molykote G paste | Molykote-G-Paste |
+
+---
+[[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

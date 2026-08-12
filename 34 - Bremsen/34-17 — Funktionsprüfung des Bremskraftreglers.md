@@ -1,0 +1,84 @@
+---
+titel: "Funktionsprüfung des Bremskraftreglers"
+seitencode: "34-17"
+sektion_nr: "34"
+sektion: "Bremsen"
+titel_en: "Check function of brake force regulator"
+seitentyp: "diagram"
+konfidenz: 0.98
+bilddatei: "34-17.jpg"
+tags:
+  - sektion/34
+  - seite
+  - typ/diagram
+---
+
+# Funktionsprüfung des Bremskraftreglers
+
+> [!info] BMW-Seite `34-17` · Abschnitt 34 — Bremsen
+> Typ: **Diagramm** · Konfidenz: **0.98**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[34-17.jpg]]
+
+*Originaltitel (EN): Check function of brake force regulator*
+
+---
+
+## Beschreibung
+Die Seite beschreibt die Funktionsprüfung des Bremskraftreglers. Dazu werden je ein Hochdruckmanometer am Bremskreis der Vorderachse und an der Entlüfterschraube eines Hinterradbremszylinders angeschlossen. Nach mehrmaligem Betätigen und anschließendem Festhalten des Bremspedals werden Einlass- und Auslassdruck miteinander verglichen. Das Diagramm zeigt den zulässigen Druckverlauf sowie den Umschaltdruck von 25 bar; bei Abweichungen von den angegebenen Werten ist der Bremskraftregler zu ersetzen.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 34-17
+> 34 34 099 – FUNKTIONSPRÜFUNG DES BREMSKRAFTREGLERS
+>
+> Vorderrad aus- und einbauen, siehe 36 10 300.
+> Hinterrad aus- und einbauen, siehe 36 10 320.
+> Ein Hochdruckmanometer am Bremskreis der Vorderachse anschließen.
+> Hochdruckmanometer entlüften.
+>
+> Zweites Hochdruckmanometer an der Entlüfterschraube des Hinterradbremszylinders anschließen.
+> Hochdruckmanometer entlüften.
+>
+> Diagramm:
+> A = Einlassdruck
+> B = Auslassdruck
+> C = Umschaltdruck
+> Umschaltdruck C = 25 bar
+> Beispielwerte im Diagramm: 31,8 ± 2 bar und 58,2 ± 3 bar.
+>
+> Bremspedal mindestens fünfmal kräftig betätigen.
+> Bremspedal mit einer Pedalstütze gedrückt halten.
+> Bis zu einem Druck von 25 bar (355 psi) müssen beide Hochdruckmanometer denselben Wert anzeigen.
+> Ab einem Druck von 25 bar (355 psi) muss der Druck im Hinterradbremszylinder entsprechend dem Diagramm abfallen.
+>
+> Beispiel:
+> Einlassdruck (= Vorderachsdruck)
+> Druck I: 40 bar (569 psi)
+> Druck II: 100 bar (1422 psi)
+>
+> Auslassdruck (= Hinterachsdruck)
+> Druck I: 31,8 bar (452 psi)
+> Druck II: 58,2 bar (828 psi)
+>
+> Falls erforderlich, den Mittelwert aus drei Messungen bilden.
+> Wenn die gemessenen Werte von den vorgegebenen Werten abweichen, den Bremskraftregler ersetzen.
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| brake force regulator | Bremskraftregler |
+| high pressure meter | Hochdruckmanometer |
+| front axle brake circuit | Bremskreis der Vorderachse |
+| rear wheel brake cylinder | Hinterradbremszylinder |
+| bleeder screw | Entlüfterschraube |
+| inlet pressure | Einlassdruck |
+| outlet pressure | Auslassdruck |
+| switching over pressure | Umschaltdruck |
+| brake pedal | Bremspedal |
+| pedal prop | Pedalstütze |
+
+---
+[[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

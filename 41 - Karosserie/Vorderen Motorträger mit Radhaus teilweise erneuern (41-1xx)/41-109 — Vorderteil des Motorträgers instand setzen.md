@@ -1,0 +1,69 @@
+---
+titel: "Vorderteil des Motorträgers instand setzen"
+seitencode: "41-109"
+sektion_nr: "41"
+sektion: "Karosserie"
+titel_en: ""
+seitentyp: "diagram"
+konfidenz: 0.98
+bilddatei: "41-109.jpg"
+tags:
+  - sektion/41
+  - seite
+  - typ/diagram
+---
+
+# Vorderteil des Motorträgers instand setzen
+
+> [!info] BMW-Seite `41-109` · Abschnitt 41 — Karosserie
+> Typ: **Diagramm** · Konfidenz: **0.98**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[41-109.jpg]]
+
+---
+
+## Beschreibung
+Die Seite 41-109 zeigt in einer Folge von Reparaturfotos und einer schematischen Darstellung die Instandsetzung des vorderen Motorträgerbereichs einschließlich des Anschlusses an das Radhaus. Dargestellt werden das Entfernen von Restblech, das Richten und Vorbereiten der Fügeflächen, das Anpassen und Klemmen eines neuen Vorderteils des Motorträgers sowie die Ausführung von Punkt- und Schutzgas-Lochpunktschweißungen. Abschließend wird ein Halter angeschweißt und seine Einbaulage kontrolliert.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 41-109
+>
+> Restblech entfernen. Fügeflächen richten und anschleifen. Die für das Punktschweißen erforderlichen Fügeflächen mit Zinkstaubfarbe beschichten.
+>
+> Fahrzeug auf der Richtbank aufnehmen.
+>
+> Fügeflächen am neuen Vorderteil des Motorträgers anschleifen und mit Zinkstaubfarbe beschichten. Im Bereich der Radhausstütze Löcher für das Lochpunktschweißen bohren.
+>
+> Neues Vorderteil des Motorträgers einbauen und festklemmen.
+>
+> Vorderteil des Motorträgers am Radhaus punktschweißen.
+>
+> Vorderteil des Motorträgers an der Radhausstütze und am Motorträger mit Schutzgas lochpunktschweißen.
+>
+> Motorträger und Radhaus von außen mit Schutzgas lochpunktschweißen.
+>
+> Halter anschweißen. Lage prüfen.
+>
+> Bildnummern: 30 41 106 bis 30 41 113
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| engine carrier | Motorträger |
+| engine carrier front section | Vorderteil des Motorträgers |
+| wheel house | Radhaus |
+| wheel house support | Radhausstütze |
+| scrap metal | Restblech |
+| mating surfaces | Fügeflächen |
+| straightening bench | Richtbank |
+| zinc dust paint | Zinkstaubfarbe |
+| spot welding | Punktschweißen |
+| plug spot welding | Lochpunktschweißen |
+| inert gas plug weld | Schutzgas-Lochpunktschweißung |
+| bracket | Halter |
+
+---
+[[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

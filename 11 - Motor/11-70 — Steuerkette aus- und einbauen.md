@@ -1,0 +1,105 @@
+---
+titel: "Steuerkette aus- und einbauen"
+seitencode: "11-70"
+sektion_nr: "11"
+sektion: "Motor"
+titel_en: "Timing chain - replace"
+seitentyp: "diagram"
+konfidenz: 0.98
+bilddatei: "11-70.jpg"
+tags:
+  - sektion/11
+  - seite
+  - typ/diagram
+---
+
+# Steuerkette aus- und einbauen
+
+> [!info] BMW-Seite `11-70` · Abschnitt 11 — Motor
+> Typ: **Diagramm** · Konfidenz: **0.98**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[11-70.jpg]]
+
+*Originaltitel (EN): Timing chain - replace*
+
+---
+
+## Beschreibung
+Die Seite 11-70 zeigt eine Explosionsdarstellung der Ventilsteuerung mit der zweireihigen Steuerkette, den Kettenführungs- und Spannschienen sowie dem Kettenspanner. Daneben sind die Arbeitsschritte zum Ersetzen der Steuerkette und zum Aus- und Einbau der oberen Spannschiene einschließlich der erforderlichen BMW-Sonderwerkzeuge dargestellt. Die Seite dient als Arbeitsanweisung für die Demontage, Montage und Prüfung dieser Bauteile.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> Seite 11-70
+>
+> Ventilsteuerung
+> 1 Zweireihige Steuerkette
+> 2 Kettenrad (Führungsrad)
+> 3 Nadelhülse
+> 4 Welle
+> 5 O-Ring
+> 6 Scheibe
+> 7 Federscheibe
+> 8 Sechskantmutter
+> 9 Führungsschiene
+> 10 Wellenbolzen
+> 11 Sicherungsblech
+> 12 Scheibe
+> 13 Wellenbolzen
+> 14 Spannschiene, unten (Kopf ausgebaut)
+> 15 Sicherungsblech
+> 16 Sicherungsring
+> 17 Spannschiene, oben (Kette ausgebaut)
+> 18 Wellenbolzen
+> 19 O-Ring
+> 20 Kettenspannerkolben und Zylinder (paarig abgestimmt)
+> 21 Feder
+> 22 Dichtung
+> 23 Dichtung
+> 24 Stopfen
+> 25 Führungsschiene
+> 26 Bolzen
+> 27 Scheibe
+>
+> 11 31 051 STEUERKETTE ERSETZEN
+> Untere Steuerkastendeckelabdeckung ausbauen – siehe 11 14 110.
+> Kettenräder an den Nockenwellen ausbauen – siehe 11 31 000.
+> Sicherungsbleche entfernen.
+> Führungsschiene nach vorn ziehen und zur Seite schwenken.
+> Steuerkette ausbauen.
+>
+> Einbau:
+> Die Steuerkette ist vorgelängt.
+>
+> 11 31 ... OBERE SPANNSCHIENE AUS- UND EINBAUEN
+> Steuerkette ausbauen – siehe 11 31 051.
+> Bolzen (1) teilweise herausdrehen.
+> Sonderwerkzeuge 11 3 040, 11 3 042 und 11 3 062 verwenden.
+> Welle austreiben.
+>
+> Einbau:
+> O-Ring prüfen und gegebenenfalls ersetzen.
+> Anordnung der Spannschiene prüfen!
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| timing chain | Steuerkette |
+| double-row timing chain | zweireihige Steuerkette |
+| sprocket (guide wheel) | Kettenrad (Führungsrad) |
+| guide rail | Führungsschiene |
+| tensioning rail | Spannschiene |
+| chain tensioner piston and cylinder | Kettenspannerkolben und Zylinder |
+| upper tensioning rail | obere Spannschiene |
+| lower tensioning rail | untere Spannschiene |
+| lockwasher | Sicherungsblech |
+| circlip | Sicherungsring |
+| needle sleeve | Nadelhülse |
+| O-ring | O-Ring |
+| pre-stretched | vorgelängt |
+| special tools | Sonderwerkzeuge |
+| camshaft sprockets | Kettenräder der Nockenwellen |
+
+---
+[[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

@@ -1,0 +1,83 @@
+---
+titel: "Radhaus vorn links erneuern"
+seitencode: "41-122"
+sektion_nr: "41"
+sektion: "Karosserie"
+titel_en: ""
+seitentyp: "diagram"
+konfidenz: 0.96
+bilddatei: "41-122.jpg"
+tags:
+  - sektion/41
+  - seite
+  - typ/diagram
+---
+
+# Radhaus vorn links erneuern
+
+> [!info] BMW-Seite `41-122` · Abschnitt 41 — Karosserie
+> Typ: **Diagramm** · Konfidenz: **0.96**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[41-122.jpg]]
+
+---
+
+## Beschreibung
+Die Seite 41-122 beschreibt den Ausbau beziehungsweise das Ersetzen des linken vorderen Radhauses am BMW. Sie enthält eine vorbereitende Ausbau- und Abklemm-Liste sowie mehrere Bildfolgen, in denen die Trennschnitte, das Ausbohren der Punktschweißungen, das Abschleifen der Schweißnähte und das Abheben des Radhauses dargestellt sind. Abschließend sind die Voraussetzungen für die Karosseriearbeiten sowie die anschließende Kontrolle und Einstellung der Vorderradgeometrie angegeben.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 41-122
+>
+> 41 14 021  LINKES VORDERES RADHAUS ERSETZEN
+>
+> Siehe Informationen auf Seite 41-001.
+>
+> Folgende Teile ausbauen bzw. abklemmen:
+> Masseleitung an der Batterie, Stoßfänger, obere und untere Radhausverkleidung, sämtliche Teile des Kühlergrills einschließlich Haubenschloss, Motorhaubenentriegelung, Frontspoiler, alle Scheinwerfer, Nebelscheinwerfer, falls vorhanden, beide Stoßfängerhalter, Signalhörner, Dichtung der Heizungswand, Einstiegsabdeckung am Vordersitz, Verkleidung der Instrumententafel, Teppiche teilweise, Fußraum-Isoliermatte teilweise, Bremskraftverstärker mit Hauptbremszylinder, Kraftstofffilter, Zündspule, Bremsleitungen teilweise, Motor, Vorderachse und Getriebe, Kabelbaum im Motorraum teilweise, Kühlerverkleidung, Typschild.
+>
+> Vorderradstellung prüfen und einstellen.
+> Beide Seitenwände ausbauen.
+> Frontblech mit Stirnwand ausbauen – siehe 41 33 001.
+>
+> Radhaus entlang der Linie abtrennen. (30 41 473)
+>
+> Radhaus an der Motorraumwand abtrennen. (30 41 474)
+>
+> Radhaus am Abschlussblech abtrennen. (30 41 475)
+>
+> Radhaus am Motorträger abtrennen.
+> Radhaushalter ausbohren.
+> Radhaus abheben. (30 41 476)
+>
+> Punktschweißungen ausbohren.
+> Schweißnähte abschleifen. (30 41 477)
+>
+> Nahtabdichtmasse entfernen.
+> Punktschweißungen ausbohren. (30 41 478)
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| left front wheel house | linkes vorderes Radhaus |
+| wheel house | Radhaus |
+| wheel house trim | Radhausverkleidung |
+| engine compartment wall | Motorraumwand |
+| end plate | Abschlussblech |
+| engine carrier | Motorträger |
+| wheel house support | Radhaushalter |
+| spot welds | Punktschweißungen |
+| welded seams | Schweißnähte |
+| joint sealing compound | Nahtabdichtmasse |
+| bumper brackets | Stoßfängerhalter |
+| heater wall seal | Dichtung der Heizungswand |
+| brake booster | Bremskraftverstärker |
+| brake master cylinder | Hauptbremszylinder |
+| front axle | Vorderachse |
+| engine compartment wire harness | Kabelbaum im Motorraum |
+| front wheel alignment | Vorderradgeometrie |
+
+---
+[[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

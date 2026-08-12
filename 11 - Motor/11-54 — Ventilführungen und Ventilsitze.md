@@ -1,0 +1,88 @@
+---
+titel: "Ventilführungen und Ventilsitze"
+seitencode: "11-54"
+sektion_nr: "11"
+sektion: "Motor"
+titel_en: "Valve guide, Valve seats"
+seitentyp: "diagram"
+konfidenz: 0.96
+bilddatei: "11-54.jpg"
+tags:
+  - sektion/11
+  - seite
+  - typ/diagram
+---
+
+# Ventilführungen und Ventilsitze
+
+> [!info] BMW-Seite `11-54` · Abschnitt 11 — Motor
+> Typ: **Diagramm** · Konfidenz: **0.96**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[11-54.jpg]]
+
+*Originaltitel (EN): Valve guide, Valve seats*
+
+---
+
+## Beschreibung
+Die Seite 11-54 beschreibt die Prüfung des Kippspiels zwischen Ventilschaft und Ventilführung, das Aufreiben einer verschlissenen Ventilführung sowie die Bearbeitung von Ventilsitzen und Ventilen bei ausgebauten Ventilen. Sie enthält die zulässigen Verschleißgrenzen, Maße für Übermaß-Ventilschäfte sowie die Sollmaße, Winkel und Sitzbreiten für Einlass- und Auslassventile.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 11-54
+>
+> 11 12 595 – VENTILFÜHRUNG AUF VERSCHLEISS PRÜFEN
+> – Ventil ausgebaut –
+> Zum Messen ein neues Ventil so einsetzen, dass das Ende des Ventilschafts bündig mit der Ventilführung abschließt. Messuhr ansetzen und das Kippspiel messen.
+> Maximal zulässiges Kippspiel:
+> Einlassventil: 0,65 mm (0,025")
+> Auslassventil: 0,80 mm (0,031")
+>
+> 11 12 600 – VENTILFÜHRUNG AUFREIBEN
+> – Ventil ausgebaut –
+> Bei übermäßigem Spiel zwischen Ventilführung und Ventilschaft, siehe 11 12 595, die Ventilführung aufreiben und ein Übermaßventil mit dem Schaftdurchmesser „S“ = 7,1 oder 7,2 mm (0,279 oder 0,283") einbauen.
+> Der Ventilsitz muss ebenfalls bearbeitet werden – siehe 11 12 607.
+> Ventilführung (1) gegen den Ventilsitz drücken und die Ventilführung von der Seite des Brennraums aus aufreiben – Reibahle einmal zurückdrehen.
+> Werkzeugkennzeichnung: 00 4 21.
+>
+> 11 12 607 – VENTILSITZE UND VENTILE BEARBEITEN
+> – Ventile ausgebaut –
+> Das Ventil muss ersetzt werden, wenn die Mindestdicke des Randes „A“ nicht eingehalten wird.
+> „A“ Einlassventil: 0,50 mm (0,020")
+> „A“ Auslassventil: 0,95 mm (0,037")
+> „T“ Einlassventil: 37,0 ± 0,1 mm (1,457 ± 0,004")
+> „T“ Auslassventil: 32,0 ± 0,1 mm (1,260 ± 0,004")
+>
+> Nach dem Bearbeiten des Ventilsitzwinkels (45°) den Ventilsitzdurchmesser „V“ und die Sitzbreite „B“ durch Bearbeitung mit Korrekturwinkeln (35°/60°) herstellen.
+> Ventile mit Einschleifpaste einschleifen und auf Dichtheit prüfen, siehe 11 34 509.
+> „V“ Einlassventil: 36,6 + 0,1 mm (1,441 + 0,004")
+> „V“ Auslassventil: 31,4 + 0,1 mm (1,236 + 0,004")
+> „B“ Einlassventil: 1,2 + 0,1 mm (0,047 + 0,004")
+> „B“ Auslassventil: 1,4 + 0,1 mm (0,055 + 0,004")
+>
+> Abbildungsmaße und Winkel: A, T, S, V, B, D, H; 45°, 35°, 60°.
+> Abbildungsnummern: M88 11 074, M88 11 075, M88 11 076, M88 11 006.
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| valve guide | Ventilführung |
+| valve seat | Ventilsitz |
+| valve stem | Ventilschaft |
+| tilt play | Kippspiel |
+| dial gauge | Messuhr |
+| reamer | Reibahle |
+| oversize valve | Übermaßventil |
+| intake valve | Einlassventil |
+| exhaust valve | Auslassventil |
+| valve seat angle | Ventilsitzwinkel |
+| correction angles | Korrekturwinkel |
+| seat diameter | Ventilsitzdurchmesser |
+| seat width | Ventilsitzbreite |
+| combustion chamber | Brennraum |
+| grinding paste | Einschleifpaste |
+
+---
+[[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

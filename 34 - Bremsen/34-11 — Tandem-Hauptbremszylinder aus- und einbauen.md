@@ -1,0 +1,88 @@
+---
+titel: "Tandem-Hauptbremszylinder aus- und einbauen"
+seitencode: "34-11"
+sektion_nr: "34"
+sektion: "Bremsen"
+titel_en: "Tandem brake master cylinder - remove and install"
+seitentyp: "diagram"
+konfidenz: 0.98
+bilddatei: "34-11.jpg"
+tags:
+  - sektion/34
+  - seite
+  - typ/diagram
+---
+
+# Tandem-Hauptbremszylinder aus- und einbauen
+
+> [!info] BMW-Seite `34-11` · Abschnitt 34 — Bremsen
+> Typ: **Diagramm** · Konfidenz: **0.98**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[34-11.jpg]]
+
+*Originaltitel (EN): Tandem brake master cylinder - remove and install*
+
+---
+
+## Beschreibung
+Die Seite 34-11 beschreibt den Ausbau und Einbau des Tandem-Hauptbremszylinders am BMW. Die Bildfolgen zeigen das Absaugen der Bremsflüssigkeit, das Abziehen der Anschlüsse, das Trennen der Bremsleitungen sowie das Lösen des Bremsflüssigkeitsbehälters und der Befestigungsschrauben. Die Schnittzeichnung erläutert zusätzlich die Funktion des Zweikreis-Tandem-Hauptbremszylinders mit den Kolben, Primärmanschetten, Ausgleichsbohrungen und den Druckkammern A und B bei Ausfall eines Bremskreises.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 34-11
+>
+> 34 31 000 AUS- UND EINBAU DES HAUPTBREMSZYLINDERS
+>
+> Bremsflüssigkeit mit einer ausschließlich für Bremsflüssigkeit verwendeten Spritze aus dem Behälter absaugen.
+> Stecker abziehen.
+> Hydraulikschlauch der Kupplung (1) abziehen.
+> Einbau:
+> Bremsanlage entlüften, siehe 34 00 046.
+>
+> Bremsleitungen (2 und 3) abschrauben.
+>
+> Behälter abziehen.
+> Befestigungsschrauben (4 und 5) herausdrehen.
+> Einbau:
+> Gummidichtung und Anschlüsse prüfen.
+>
+> Einbau:
+> Gummiring (7) prüfen.
+> Bei mangelhafter Abdichtung wird der Aufbau des Unterdrucks beeinträchtigt.
+>
+> Beschreibung des Tandem-Hauptbremszylinders:
+> Durch Betätigung des Bremspedals werden die Kolben (1 und 4) nach vorn bewegt.
+> Die Primärmanschetten (2 und 5) gleiten über die Ausgleichsbohrungen (3 und 6).
+> Dadurch herrscht in den Kammern A und B der gleiche Druck.
+>
+> Zweikreisanlage:
+> Kammer A versorgt das rechte und linke Vorderrad.
+> Kammer B versorgt das rechte und linke Hinterrad.
+> Bei Ausfall eines Bremskreises vergrößert sich der Bremspedalweg beträchtlich.
+> Bei Ausfall des zweiten Bremskreises wirkt der in Kammer A aufgebaute Druck auf Kolben (1) und bewegt Kolben (4) in der drucklosen Kammer B gegen das Gehäuse des Tandem-Hauptbremszylinders. Dadurch wird die Funktion des ersten Bremskreises wiederhergestellt.
+> Bei Ausfall des ersten Bremskreises wird Kolben (1) gegen die Feder (7) in der drucklosen Kammer A gedrückt; der zweite Bremskreis arbeitet über Kammer B normal weiter.
+>
+> Schnittzeichnung: Kammern A und B; Bauteile 1 bis 7.
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| tandem brake master cylinder | Tandem-Hauptbremszylinder |
+| brake master cylinder | Hauptbremszylinder |
+| brake fluid reservoir | Bremsflüssigkeitsbehälter |
+| clutch hydraulic hose | Hydraulikschlauch der Kupplung |
+| brake lines | Bremsleitungen |
+| piston | Kolben |
+| primary cup | Primärmanschette |
+| compensation bore | Ausgleichsbohrung |
+| chamber | Druckkammer |
+| dual circuit system | Zweikreisanlage |
+| rubber seal | Gummidichtung |
+| rubber ring | Gummiring |
+| vacuum | Unterdruck |
+| brake circuit | Bremskreis |
+
+---
+[[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

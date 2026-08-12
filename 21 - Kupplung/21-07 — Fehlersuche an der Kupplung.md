@@ -1,0 +1,130 @@
+---
+titel: "Fehlersuche an der Kupplung"
+seitencode: "21-07"
+sektion_nr: "21"
+sektion: "Kupplung"
+titel_en: "Troubleshooting clutch"
+seitentyp: "table"
+konfidenz: 0.96
+bilddatei: "21-07.jpg"
+tags:
+  - sektion/21
+  - seite
+  - typ/table
+---
+
+# Fehlersuche an der Kupplung
+
+> [!info] BMW-Seite `21-07` · Abschnitt 21 — Kupplung
+> Typ: **Tabelle** · Konfidenz: **0.96**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[21-07.jpg]]
+
+*Originaltitel (EN): Troubleshooting clutch*
+
+---
+
+## Beschreibung
+Die Seite 21-7 enthält eine Fehlersuchtabelle für die Kupplung. Sie ordnet vier Fehlerbilder – rutschende Kupplung, rupfende Kupplung, nicht trennende Kupplung und Kupplungsgeräusche – möglichen Ursachen zu und nennt jeweils die vorgesehenen Abhilfemaßnahmen einschließlich BMW-Arbeitspositionsnummern. Der Sternvermerk verweist auf die technischen Sollwerte in den Spezifikationen.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 21-7
+> FEHLERSUCHE KUPPLUNG
+>
+> Fehlerbild | Ursache | Abhilfe
+>
+> Kupplung rutscht
+> Ursache:
+> a) Kupplungsanpressdruck* unzureichend
+> b) Belag stark verschlissen
+> c) Belag mit Öl bespritzt – Getriebe- oder Kurbelwellendichtring schadhaft
+> d) Kupplung überhitzt
+> e) Kupplung kein Original-BMW-Teil
+> Abhilfe:
+> a) Kupplung erneuern, 21 21 000
+> b) Kupplungsscheibe erneuern, 21 21 000
+> c) Schadhaften Dichtring und Kupplungsscheibe erneuern
+> d) Kupplung erneuern, 21 21 000
+> e) Original-BMW-Teile einbauen
+>
+> Kupplung rupft
+> Ursache:
+> a) Belag nicht entsprechend der Spezifikation
+> b) Belag mit Öl bespritzt
+> c) Ausrückdruck einseitig
+> d) Druckplattenfeder verbogen
+> e) Kurbelwelle nicht zur Getriebeeingangswelle ausgerichtet
+> f) Motor- und Getriebeaufhängung fest
+> g) Kupplungsscheibe kein Original-BMW-Teil
+> Abhilfe:
+> a) Kupplungsscheibe erneuern, 21 21 000
+> b) Kupplungsscheibe erneuern, 21 21 000
+> c) Ausrückhebel prüfen
+> d) Druckplatte erneuern, 21 21 000
+> e) Zentrierflächen an Motor und Getriebe prüfen
+> f) Motor- und Getriebeaufhängung erneuern
+> g) Original-BMW-Teile einbauen
+>
+> Kupplung trennt nicht
+> Ursache:
+> a) Kupplungsscheibe stark verzogen oder Belag gebrochen
+> b) Kupplungsscheibe hat übermäßigen Seitenschlag*
+> c) Belag auf dem Schwungrad verrostet
+> d) Kupplungsscheibe auf der Getriebeeingangswelle festgerostet oder festgeklemmt
+> e) Lager in der Kurbelwelle für die Getriebeeingangswelle schadhaft
+> f) Luft im hydraulischen Kupplungssystem
+> g) Tangentialblattfedern der Kupplung verbogen
+> Abhilfe:
+> a) Kupplungsscheibe erneuern, 21 21 000
+> b) Kupplungsscheibe richten oder erneuern, 21 21 565
+> c) Schwungrad reinigen, Belagflächen mit Schmirgelleinen aufrauen
+> d) Kupplungsscheibe auf der Getriebeeingangswelle instand setzen; beschädigte Teile erforderlichenfalls ersetzen
+> e) Lager in der Kurbelwelle erneuern, 11 21 571
+> f) Kupplung entlüften, 21 00 006
+> g) Kupplung erneuern, 21 21 000
+>
+> Kupplungsgeräusche
+> Ursache:
+> a) Unwucht* von Kupplung und Kupplungsscheibe zu groß
+> b) Torsionsdämpfer schadhaft
+> c) Kupplungsausrückung fehlerhaft
+> d) Lager in der Kurbelwelle für die Getriebeeingangswelle schadhaft
+> e) Kupplungsniete locker
+> Abhilfe:
+> a) Kupplung und/oder Kupplungsscheibe erneuern, 21 21 000
+> b) Kupplungsscheibe erneuern, 21 21 000
+> c) Kupplungsausrückung erneuern
+> d) Lager in der Kurbelwelle erneuern, 11 21 571
+> e) Kupplung erneuern, 21 21 000
+>
+> * Siehe Spezifikationen
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| troubleshooting clutch | Kupplungs-Fehlersuche |
+| clutch | Kupplung |
+| clutch slips | Kupplung rutscht |
+| clutch grabs | Kupplung rupft |
+| clutch does not release | Kupplung trennt nicht |
+| clutch noise | Kupplungsgeräusch |
+| clutch contact pressure | Kupplungsanpressdruck |
+| liner | Kupplungsbelag |
+| drive plate | Kupplungsscheibe |
+| pressure plate | Kupplungsdruckplatte |
+| release lever | Ausrückhebel |
+| transmission input shaft | Getriebeeingangswelle |
+| crankshaft bearing | Lager in der Kurbelwelle |
+| flywheel | Schwungrad |
+| clutch hydraulic system | hydraulisches Kupplungssystem |
+| tangential leaf springs | Tangentialblattfedern |
+| torsional damper | Torsionsdämpfer |
+| lateral runout | Seitenschlag |
+| seal | Dichtring |
+| engine and transmission suspension | Motor- und Getriebeaufhängung |
+
+---
+[[Startseite]] · [[_Übersicht 21 — Kupplung|Abschnittsübersicht]] · [[Glossar]]

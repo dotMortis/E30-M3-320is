@@ -1,0 +1,516 @@
+#!/usr/bin/env python3
+"""
+Phase B — Build the clean, German, well-structured Obsidian vault.
+
+The REPO root IS the Obsidian vault. Each section becomes a German-named folder
+holding BOTH the original scans and their notes, co-located. Large sections are
+sub-grouped by BMW code band into topic sub-folders.
+
+Per page:
+  <Section DE>/[<Subgroup>/]<code> — <titel_de>.md   note (scan embedded in-folder)
+  <Section DE>/[<Subgroup>/]<code>.jpg                original scan (git mv'd here)
+
+Also:
+  Startseite.md, Glossar.md, Technische-Daten.md      top-level German notes
+  <Section DE>/_Übersicht.md                          per-section index (MOC)
+  .obsidian/                                          search + Image Toolkit zoom
+
+Filenames: '<code> — <title>' stems are globally unique, so notes link by bare
+name ([[stem]]). Scans are moved with `git mv` to preserve bytes + history.
+
+No information loss: EN caption, German description, full transcription, term
+table and metadata are all retained in each note; tooling stays under .pipeline/.
+"""
+from __future__ import annotations
+
+import json
+import re
+import subprocess
+import sys
+from collections import Counter, defaultdict
+from pathlib import Path
+
+PIPE = Path(__file__).resolve().parent.parent          # .pipeline/
+REPO = PIPE.parent                                      # repo root = vault root
+MANIFEST = PIPE / "manifest.json"
+GLOSSARY = PIPE / "glossary.json"
+OBS = REPO / ".obsidian"
+
+TYPE_DE = {"diagram": "Diagramm", "table": "Tabelle", "text": "Text"}
+SUBGROUP_THRESHOLD = 60          # only sections larger than this get sub-grouped
+
+_CTRL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
+_FS_BAD = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
+
+
+def sanitize(s):
+    """Repair the model's stray-NUL-for-umlaut glitch, strip control chars."""
+    if not isinstance(s, str):
+        return s
+    s = re.sub(r"(?<=[A-Za-zÄÖÜäöüß])\x00(?=[A-Za-zÄÖÜäöüß])", "ü", s)
+    return _CTRL_RE.sub("", s)
+
+
+def fs_safe(name: str, cap: int = 90) -> str:
+    """Filesystem/Obsidian-safe component (keeps German letters, spaces, dashes)."""
+    name = sanitize(name or "")
+    name = _FS_BAD.sub(" ", name)
+    name = name.replace("[", "(").replace("]", ")")
+    name = re.sub(r"\s+", " ", name).strip().strip(".")
+    if len(name) > cap:
+        name = name[:cap].rsplit(" ", 1)[0].rstrip(" -—")
+    return name or "ohne-Titel"
+
+
+def code_of(page: dict) -> str:
+    return re.sub(r"\.jpg$", "", page["image_file"], flags=re.I)
+
+
+def note_stem(page: dict) -> str:
+    return f"{code_of(page)} — {fs_safe(page.get('titel_de') or page['image_file'])}"
+
+
+def esc_yaml(s: str) -> str:
+    return (s or "").replace('"', "'")
+
+
+def transcription_block(text: str) -> str:
+    text = (text or "").strip()
+    if not text:
+        return ""
+    lines = text.split("\n")
+    body = "\n".join(f"> {ln}" if ln.strip() else ">" for ln in lines)
+    return "> [!note]- Transkription (aufklappen)\n" + body + "\n"
+
+
+def begriffe_table(pairs) -> str:
+    if not pairs:
+        return ""
+    rows = ["| Englisch | Deutsch |", "| --- | --- |"]
+    seen = set()
+    for p in pairs:
+        en = sanitize(p.get("en") or "").strip()
+        de = sanitize(p.get("de") or "").strip()
+        if not en and not de:
+            continue
+        k = (en.lower(), de.lower())
+        if k in seen:
+            continue
+        seen.add(k)
+        rows.append(f"| {en.replace('|', '\\|')} | {de.replace('|', '\\|')} |")
+    return "\n".join(rows)
+
+
+# ---------------------------------------------------------------- sub-grouping
+
+def band_key(page: dict) -> str:
+    """BMW code band used to cluster a section's pages into sub-topics."""
+    stem = code_of(page)
+    parts = stem.split("-")
+    # electrical module style: 0670-02, 5126A-01 -> leading module code
+    if re.match(r"^\d{3,4}[A-Za-z]?$", parts[0]):
+        return parts[0]
+    # torque-spec style: 11-01, 24-03 -> leading system number
+    # standard style: 23-101 -> 23-1xx ; 34-01 -> 34-0xx
+    if len(parts) >= 2 and re.match(r"^\d+$", parts[1]):
+        n = parts[1]
+        return f"{parts[0]}-{n[0]}xx" if len(n) >= 3 else f"{parts[0]}-0xx"
+    return parts[0]
+
+
+def representative_title(pages: list[dict]) -> str:
+    """Pick a concise sub-group name from a band's pages.
+
+    Prefer the first non-index page's first noun phrase; fall back to the most
+    common leading words across titles.
+    """
+    ordered = sorted(pages, key=lambda p: code_of(p))
+    for p in ordered:
+        t = sanitize(p.get("titel_de") or "")
+        if not t:
+            continue
+        low = t.lower()
+        if low.startswith(("inhaltsverzeichnis", "inhaltsübersicht", "übersicht der",
+                            "verzeichnis")):
+            continue
+        return t
+    # fallback: most common first two words
+    firsts = Counter()
+    for p in pages:
+        t = sanitize(p.get("titel_de") or "").split()
+        if t:
+            firsts[" ".join(t[:2])] += 1
+    return firsts.most_common(1)[0][0] if firsts else "Weitere Seiten"
+
+
+def compute_subgroups(pages: list[dict]) -> dict[str, str] | None:
+    """Return {band_key: subfolder_name} for a section, or None if not sub-grouped."""
+    if len(pages) <= SUBGROUP_THRESHOLD:
+        return None
+    bands: dict[str, list] = defaultdict(list)
+    for p in pages:
+        bands[band_key(p)].append(p)
+    # tiny bands (1-2 pages) are merged into a shared 'Sonstiges' bucket to avoid
+    # a mess of one-page folders in the electrical section.
+    mapping: dict[str, str] = {}
+    small: list[str] = []
+    for key, band_pages in bands.items():
+        if len(band_pages) < 3:
+            small.append(key)
+            continue
+        name = fs_safe(f"{representative_title(band_pages)} ({key})", cap=70)
+        mapping[key] = name
+    for key in small:
+        mapping[key] = "Weitere Schaltpläne & Seiten" if any(
+            band_key(p) == key and re.match(r"^\d{3,4}", code_of(p)) for p in pages
+        ) else "Weitere Seiten"
+    return mapping
+
+
+# ---------------------------------------------------------------- note bodies
+
+def build_page_note(page: dict, section_de: str, section_no: str) -> str:
+    a = page.get("analysis") or {}
+    seitentyp = a.get("seitentyp") or "text"
+    typ_de = TYPE_DE.get(seitentyp, seitentyp)
+    konf = a.get("konfidenz")
+    caption = sanitize(page.get("caption_en") or "").strip()
+    titel_de = sanitize(page.get("titel_de") or "").strip()
+    code = code_of(page)
+    img = page["image_file"]
+
+    tags = [f"sektion/{section_no}", "seite", f"typ/{seitentyp}"]
+    if konf is not None and konf < 0.6:
+        tags.append("pruefen")
+
+    fm = [
+        "---",
+        f'titel: "{esc_yaml(titel_de)}"',
+        f'seitencode: "{esc_yaml(code)}"',
+        f'sektion_nr: "{esc_yaml(str(section_no))}"',
+        f'sektion: "{esc_yaml(section_de)}"',
+        f'titel_en: "{esc_yaml(caption)}"',
+        f'seitentyp: "{esc_yaml(seitentyp)}"',
+        f"konfidenz: {konf if konf is not None else 'null'}",
+        f'bilddatei: "{esc_yaml(img)}"',
+        "tags:",
+    ]
+    fm += [f"  - {t}" for t in tags]
+    fm.append("---")
+
+    parts = ["\n".join(fm), ""]
+    parts.append(f"# {titel_de}")
+    parts.append("")
+    parts.append(f"> [!info] BMW-Seite `{code}` · Abschnitt {section_no} — {section_de}")
+    parts.append(f"> Typ: **{typ_de}**" + (f" · Konfidenz: **{konf:.2f}**" if konf is not None else ""))
+    parts.append("> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.")
+    parts.append("")
+    parts.append(f"![[{img}]]")
+    parts.append("")
+    if caption:
+        parts.append(f"*Originaltitel (EN): {caption}*")
+        parts.append("")
+    parts.append("---")
+    parts.append("")
+    parts.append("## Beschreibung")
+    parts.append(sanitize(a.get("beschreibung")) or "_Keine Beschreibung verfügbar._")
+    parts.append("")
+    trans = transcription_block(sanitize(a.get("transkription")) or "")
+    if trans:
+        parts.append("## Transkription")
+        parts.append(trans)
+        parts.append("")
+    tbl = begriffe_table(a.get("begriffe") or [])
+    if tbl:
+        parts.append("## Fachbegriffe (EN → DE)")
+        parts.append(tbl)
+        parts.append("")
+    parts.append("---")
+    parts.append(f"[[Startseite]] · [[{section_moc_stem(section_no, section_de)}|Abschnittsübersicht]] · [[Glossar]]")
+    parts.append("")
+    return "\n".join(parts)
+
+
+def section_moc_stem(section_no: str, section_de: str) -> str:
+    # unique per section; e.g. "_Übersicht 34 — Bremsen"
+    return fs_safe(f"_Übersicht {section_no} — {section_de}", cap=90)
+
+
+def build_section_moc(section_de: str, section_no: str, pages: list[dict],
+                      subgroups: dict[str, str] | None) -> str:
+    fm = [
+        "---",
+        f'titel: "Übersicht {esc_yaml(section_de)}"',
+        f'sektion_nr: "{esc_yaml(str(section_no))}"',
+        "tags:",
+        f"  - sektion/{section_no}",
+        "  - uebersicht",
+        "---",
+        "",
+        f"# Abschnitt {section_no} — {section_de}",
+        "",
+        f"> [!abstract] {len(pages)} Seiten in diesem Abschnitt",
+        "",
+    ]
+
+    def row(p):
+        a = p.get("analysis") or {}
+        typ = TYPE_DE.get(a.get("seitentyp"), a.get("seitentyp") or "")
+        # link without alias: the stem already carries the title, so we avoid
+        # escaping a pipe inside a Markdown table cell.
+        return f"| `{code_of(p)}` | [[{note_stem(p)}]] | {typ} |"
+
+    if subgroups:
+        grouped: dict[str, list] = defaultdict(list)
+        for p in pages:
+            grouped[subgroups[band_key(p)]].append(p)
+        for gname in sorted(grouped, key=lambda g: min(code_of(x) for x in grouped[g])):
+            fm.append(f"## {gname}")
+            fm.append("")
+            fm.append("| Code | Seite | Typ |")
+            fm.append("| --- | --- | --- |")
+            for p in sorted(grouped[gname], key=code_of):
+                fm.append(row(p))
+            fm.append("")
+    else:
+        fm.append("| Code | Seite | Typ |")
+        fm.append("| --- | --- | --- |")
+        for p in sorted(pages, key=code_of):
+            fm.append(row(p))
+        fm.append("")
+
+    fm += ["---", "[[Startseite]] · [[Glossar]] · [[Technische-Daten]]", ""]
+    return "\n".join(fm)
+
+
+def build_home(section_order: list[tuple], section_pages: dict) -> str:
+    lines = [
+        "---",
+        'titel: "Startseite"',
+        "tags:\n  - startseite",
+        "---",
+        "",
+        "# BMW E30 M3 / 320is — Reparaturhandbuch",
+        "",
+        "> [!tip] Willkommen!",
+        "> Dieses Wissensarchiv enthält das originale BMW-Werkstatthandbuch als **gescannte Seiten**",
+        "> mit **deutscher Übersetzung** (Beschreibung, Transkription, Fachbegriffe).",
+        "> Nutze die **Suche** (`Strg`+`Umschalt`+`F`) — sie funktioniert auf Deutsch und Englisch.",
+        "",
+        "## Abschnitte",
+        "",
+    ]
+    for no, de, folder in section_order:
+        count = len(section_pages.get(folder, []))
+        lines.append(f"- **{no}** · [[{section_moc_stem(no, de)}|{de}]] — {count} Seiten")
+    lines += [
+        "",
+        "## Zusatzmaterial",
+        "- [[Bosch Motronic ML 3.1 (Zusatz)]] — Diagnosehandbuch Bosch Motronic ML 3.1",
+        "- [[Referenzbilder]] — zusätzliche Referenzzeichnungen",
+        "",
+        "## Nachschlagen",
+        "- [[Glossar]] — zweisprachiges Fachwörterbuch (EN ↔ DE)",
+        "- [[Technische-Daten]] — technische Daten M3 / 320is",
+        "- [[LIESMICH]] — Anleitung (Installation, Suche, Zoom)",
+        "",
+        "> [!note] Hinweis zur Genauigkeit",
+        "> Die deutschen Texte wurden automatisch aus den Scans von 1989 erzeugt und dienen der",
+        "> **Durchsuchbarkeit und dem Verständnis**. Im Zweifel gilt immer die **Originalseite**.",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def build_glossary_note(glossary: dict) -> str:
+    terms = glossary["terms"]
+    lines = [
+        "---",
+        'titel: "Glossar"',
+        "tags:\n  - glossar",
+        "---",
+        "",
+        "# Glossar — Fachbegriffe EN ↔ DE",
+        "",
+        f"> [!abstract] {len(terms)} Begriffe, aus allen Seiten zusammengeführt.",
+        "",
+        "| Englisch | Deutsch | Häufigkeit | Varianten |",
+        "| --- | --- | ---: | --- |",
+    ]
+    for t in terms:
+        en = sanitize(t["en"]).replace("|", "\\|")
+        de = sanitize(t["de"]).replace("|", "\\|")
+        var = sanitize(", ".join(t.get("variants") or [])).replace("|", "\\|")
+        star = " ⭐" if t.get("canonical") else ""
+        lines.append(f"| {en}{star} | {de} | {t['count']} | {var} |")
+    lines += ["", "⭐ = kuratierter Standardbegriff", "", "[[Startseite]]", ""]
+    return "\n".join(lines)
+
+
+def build_techspec_note(techspecs) -> str:
+    lines = ["---", 'titel: "Technische Daten"', "tags:\n  - technische-daten", "---",
+             "", "# Technische Daten", ""]
+    for spec in techspecs:
+        lines.append(f"## {spec['model']}")
+        lines.append("")
+        for row in spec["rows"]:
+            row = [c.replace("|", "\\|") for c in row]
+            if len(row) == 1:
+                lines.append(f"**{row[0]}**")
+            else:
+                lines.append("| " + " | ".join(row) + " |")
+        lines.append("")
+    lines += ["[[Startseite]]", ""]
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------- obsidian cfg
+
+def write_obsidian_config():
+    OBS.mkdir(parents=True, exist_ok=True)
+    (OBS / "app.json").write_text(json.dumps({
+        "newFileLocation": "root",
+        "alwaysUpdateLinks": True,
+        "showUnsupportedFiles": False,
+        "attachmentFolderPath": "./",
+    }, indent=2), encoding="utf-8")
+    (OBS / "core-plugins.json").write_text(json.dumps([
+        "file-explorer", "global-search", "switcher", "graph", "backlink",
+        "outgoing-link", "tag-pane", "page-preview", "note-composer",
+        "command-palette", "outline", "word-count", "file-recovery",
+    ], indent=2), encoding="utf-8")
+    (OBS / "community-plugins.json").write_text(
+        json.dumps(["obsidian-image-toolkit"], indent=2), encoding="utf-8")
+    (OBS / "appearance.json").write_text(json.dumps({
+        "readableLineLength": False, "theme": "obsidian",
+    }, indent=2), encoding="utf-8")
+    itk = OBS / "plugins" / "obsidian-image-toolkit"
+    itk.mkdir(parents=True, exist_ok=True)
+    (itk / "data.json").write_text(json.dumps({
+        "viewImageGlobal": True, "viewImageInCPB": True, "viewImageWithLink": True,
+        "viewImageOther": True, "imageMoveSpeed": 10, "imgTipToggle": True,
+        "imgFullScreenMode": "FIT",
+    }, indent=2), encoding="utf-8")
+
+
+# ---------------------------------------------------------------- moves
+
+def write_reference_index(folder: Path, title: str, desc: str):
+    """Create an index note that embeds every image in a reference folder."""
+    if not folder.exists():
+        return
+    imgs = sorted([p for p in folder.iterdir()
+                   if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".gif")])
+    lines = [
+        "---",
+        f'titel: "{esc_yaml(title)}"',
+        "tags:\n  - zusatzmaterial",
+        "---",
+        "",
+        f"# {title}",
+        "",
+        f"> [!info] {desc}",
+        "",
+    ]
+    for p in imgs:
+        lines.append(f"### {p.stem}")
+        lines.append(f"![[{p.name}]]")
+        lines.append("")
+    lines += ["---", "[[Startseite]]", ""]
+    (folder / f"{fs_safe(title)}.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+def git_mv(src: Path, dst: Path):
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    if src.resolve() == dst.resolve():
+        return
+    r = subprocess.run(["git", "mv", "-k", str(src), str(dst)],
+                       cwd=REPO, capture_output=True, text=True)
+    if r.returncode != 0:
+        # fall back to a plain move (e.g. file untracked)
+        if src.exists():
+            src.rename(dst)
+
+
+def main() -> int:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    glossary = json.loads(GLOSSARY.read_text(encoding="utf-8"))
+    sections_meta = glossary["sections"]
+
+    section_pages: dict[str, list] = defaultdict(list)
+    for p in manifest["pages"]:
+        section_pages[p["section_folder"]].append(p)
+
+    # section ordering for the home page
+    section_order = []
+    for folder in section_pages:
+        meta = sections_meta.get(folder, {"no": None, "de": folder})
+        section_order.append((meta.get("no") or "", meta["de"], folder))
+    section_order.sort(key=lambda x: (x[0] or "zzz", x[2]))
+
+    n_notes = n_moved = 0
+    stems_seen: set[str] = set()
+
+    for no, de, folder in section_order:
+        pages = section_pages[folder]
+        sec_dirname = fs_safe(de if not no else f"{no} - {de}", cap=90)
+        sec_dir = REPO / sec_dirname
+        subgroups = compute_subgroups(pages)
+
+        for p in pages:
+            # destination sub-folder
+            if subgroups:
+                sub = subgroups[band_key(p)]
+                dest_dir = sec_dir / sub
+            else:
+                dest_dir = sec_dir
+            dest_dir.mkdir(parents=True, exist_ok=True)
+
+            # 1) move the scan next to its note
+            src_img = REPO / p["image_path"]
+            dst_img = dest_dir / p["image_file"]
+            if src_img.exists():
+                git_mv(src_img, dst_img)
+                n_moved += 1
+
+            # 2) write the note
+            stem = note_stem(p)
+            assert stem not in stems_seen, f"dup stem: {stem}"
+            stems_seen.add(stem)
+            (dest_dir / f"{stem}.md").write_text(
+                build_page_note(p, de, no), encoding="utf-8")
+            n_notes += 1
+
+        # section MOC at the section root
+        (sec_dir / f"{section_moc_stem(no, de)}.md").write_text(
+            build_section_moc(de, no, pages, subgroups), encoding="utf-8")
+
+    write_reference_index(
+        REPO / "Bosch Motronic ML 3.1 (Zusatz)",
+        "Bosch Motronic ML 3.1 (Zusatz)",
+        "Diagnosehandbuch der Bosch-Motronic-ML-3.1-Einspritzanlage (Original italienisch, "
+        "gescannte Seiten). Ergänzendes Material, nicht Teil des BMW-Werkstatthandbuchs.",
+    )
+    write_reference_index(
+        REPO / "Referenzbilder",
+        "Referenzbilder",
+        "Zusätzliche Referenzzeichnungen und Übersichtsbilder.",
+    )
+
+    (REPO / "Startseite.md").write_text(build_home(section_order, section_pages), encoding="utf-8")
+    (REPO / "Glossar.md").write_text(build_glossary_note(glossary), encoding="utf-8")
+    (REPO / "Technische-Daten.md").write_text(
+        build_techspec_note(manifest.get("techspecs") or []), encoding="utf-8")
+
+    write_obsidian_config()
+
+    print("Vault root:", REPO)
+    print(f"  notes written : {n_notes}")
+    print(f"  scans moved   : {n_moved}")
+    print(f"  sections      : {len(section_order)}")
+    print(f"  glossary terms: {len(glossary['terms'])}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

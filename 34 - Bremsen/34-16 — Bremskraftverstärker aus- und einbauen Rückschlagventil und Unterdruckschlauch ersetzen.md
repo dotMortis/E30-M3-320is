@@ -1,0 +1,79 @@
+---
+titel: "Bremskraftverstärker aus- und einbauen Rückschlagventil und Unterdruckschlauch ersetzen"
+seitencode: "34-16"
+sektion_nr: "34"
+sektion: "Bremsen"
+titel_en: "Brake booster / check valve / vacuum hose - replace"
+seitentyp: "diagram"
+konfidenz: 0.99
+bilddatei: "34-16.jpg"
+tags:
+  - sektion/34
+  - seite
+  - typ/diagram
+---
+
+# Bremskraftverstärker aus- und einbauen Rückschlagventil und Unterdruckschlauch ersetzen
+
+> [!info] BMW-Seite `34-16` · Abschnitt 34 — Bremsen
+> Typ: **Diagramm** · Konfidenz: **0.99**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[34-16.jpg]]
+
+*Originaltitel (EN): Brake booster / check valve / vacuum hose - replace*
+
+---
+
+## Beschreibung
+Die Seite 34-16 beschreibt den Ausbau und Einbau des Bremskraftverstärkers zusammen mit dem Tandem-Hauptbremszylinder sowie den Austausch des Rückschlagventils und des Unterdruckschlauchs für den Bremskraftverstärker. Mehrere Montagefotos zeigen die zu lösenden Schlauchschellen und die Einbaurichtung des Rückschlagventils. Zusätzlich wird auf die Prüfung des Dichtrings zwischen Tandem-Hauptbremszylinder und Bremskraftverstärker sowie auf das vorgeschriebene Anzugsdrehmoment gemäß Technischen Daten verwiesen.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 34-16
+>
+> 34 33 000  BREMSKRAFTVERSTÄRKER AUS- UND EINBAUEN
+> Bremskraftverstärker zusammen mit Tandem-Hauptbremszylinder aus- und einbauen, siehe 34 33 000.
+> Tandem-Hauptbremszylinder vom Bremskraftverstärker abbauen.
+> Einbau:
+> Anzugsdrehmoment*.
+> Gummiring (7) zwischen Tandem-Hauptbremszylinder und Bremskraftverstärker prüfen und bei Bedarf ersetzen.
+>
+> 34 33 051  RÜCKSCHLAGVENTIL FÜR BREMSKRAFTVERSTÄRKER ERSETZEN
+> Unterdruckschlauch am Rückschlagventil (1) abziehen.
+> Einbau:
+> Schelle bei Bedarf ersetzen.
+> Schellen lösen und Rückschlagventil abnehmen.
+> Einbau:
+> Pfeil bzw. schwarze Seite zeigt zum Ansaugkrümmer.
+> Schelle bei Bedarf ersetzen.
+>
+> 34 33 071  UNTERDRUCKSCHLAUCH FÜR BREMSKRAFTVERSTÄRKER ERSETZEN
+> Unterdruckschlauch am Bremskraftverstärker abziehen.
+> Einbau:
+> Schelle bei Bedarf ersetzen.
+>
+> Unterdruckschlauch am Rückschlagventil (1) abziehen.
+> Einbau:
+> Schelle bei Bedarf ersetzen.
+>
+> * Siehe Technische Daten
+>
+> Bild-/Referenznummern: 30 34 053, 30 34 071, 30 34 500, 30 34 502, 30 34 501
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| brake booster | Bremskraftverstärker |
+| tandem brake master cylinder | Tandem-Hauptbremszylinder |
+| check valve | Rückschlagventil |
+| vacuum hose | Unterdruckschlauch |
+| vacuum hose clamp | Unterdruckschlauchschelle |
+| clamp | Schelle |
+| rubber ring | Gummiring |
+| intake manifold | Ansaugkrümmer |
+| tightening torque | Anzugsdrehmoment |
+
+---
+[[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

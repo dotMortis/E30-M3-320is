@@ -1,0 +1,82 @@
+---
+titel: "Zylinderkopf im Wasserbad auf Risse prüfen"
+seitencode: "11-55"
+sektion_nr: "11"
+sektion: "Motor"
+titel_en: "Cylinder head sealing surface - grind"
+seitentyp: "diagram"
+konfidenz: 0.98
+bilddatei: "11-55.jpg"
+tags:
+  - sektion/11
+  - seite
+  - typ/diagram
+---
+
+# Zylinderkopf im Wasserbad auf Risse prüfen
+
+> [!info] BMW-Seite `11-55` · Abschnitt 11 — Motor
+> Typ: **Diagramm** · Konfidenz: **0.98**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[11-55.jpg]]
+
+*Originaltitel (EN): Cylinder head sealing surface - grind*
+
+---
+
+## Beschreibung
+Die Seite 11-55 behandelt zwei Arbeiten am zerlegten Zylinderkopf: das Schleifen der Zylinderkopfdichtfläche sowie die Prüfung des Zylinderkopfs im Wasserbad auf Risse. Für das Schleifen liegt laut Hinweis noch keine Freigabe vor; zulässig ist lediglich das Reinigen durch Benetzen auf einer Richtplatte. Der Schwerpunkt der dargestellten Arbeitsanweisung ist die Druckprüfung des Zylinderkopfs mit BMW-Sonderwerkzeugen und 2 bar Prüfdruck.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 11-55
+>
+> 11 12 719  ZYLINDERKOPF-DICHTFLÄCHE SCHLEIFEN
+> – Zylinderkopf zerlegt –
+>
+> Für das Schleifen von Zylinderköpfen liegt noch keine Freigabe vor.
+> Der Zylinderkopf darf durch Benetzen auf einer Richtplatte gereinigt werden.
+>
+> Z
+>
+> 11 12 729  ZYLINDERKOPF IM WASSERBAD AUF RISSE PRÜFEN
+> – Zylinderkopf zerlegt –
+>
+> Auf Sonderwerkzeug 11 11 111 aufschrauben.
+>
+> Anschluss (1) abschrauben.
+> Öffnung mit Schraube (2) verschließen – Kupferschraube vom Abgaskrümmer M30.
+>
+> Sonderwerkzeug 11 11 012 mit Sonderwerkzeug 11 11 112 verschrauben.
+> Sonderwerkzeug 11 11 113 montieren.
+>
+> Zylinderkopf mit 2 bar (28 psi) Prüfdruck mit Luft beaufschlagen – Zylinderkopf in ein Wasserbad legen und auf Risse prüfen.
+>
+> Hinweis:
+> Falls erforderlich, die Oberflächenspannung des Wasserbads durch Zugabe eines Reinigungsmittels herabsetzen.
+>
+> Abbildungen: 14 29, 14 30, 14 31
+> Sonderwerkzeug-Kennzeichnungen: 11 11 111, 11 11 012, 11 11 112, 11 11 113
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| cylinder head | Zylinderkopf |
+| cylinder head sealing surface | Zylinderkopfdichtfläche |
+| grinding | Schleifen |
+| surface plate | Richtplatte |
+| water test | Wasserbadprüfung |
+| cracks | Risse |
+| special tool | Sonderwerkzeug |
+| connector | Anschluss |
+| plug | Verschlussstopfen |
+| copper bolt | Kupferschraube |
+| air pressure | Luftdruck |
+| testing pressure | Prüfdruck |
+| water bath | Wasserbad |
+| detergent | Reinigungsmittel |
+
+---
+[[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

@@ -1,0 +1,73 @@
+---
+titel: "Rechtes hinteres Radhaus-Außenteil und Seitenwand ersetzen"
+seitencode: "41-127"
+sektion_nr: "41"
+sektion: "Karosserie"
+titel_en: ""
+seitentyp: "diagram"
+konfidenz: 0.99
+bilddatei: "41-127.jpg"
+tags:
+  - sektion/41
+  - seite
+  - typ/diagram
+---
+
+# Rechtes hinteres Radhaus-Außenteil und Seitenwand ersetzen
+
+> [!info] BMW-Seite `41-127` · Abschnitt 41 — Karosserie
+> Typ: **Diagramm** · Konfidenz: **0.99**
+> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
+
+![[41-127.jpg]]
+
+---
+
+## Beschreibung
+Seite 41-127 beschreibt den Karosserie-Instandsetzungsvorgang „Ersetzen des rechten hinteren Radhaus-Außenteils und der Seitenwand“ als Teilersatz bis zur Fensterlinie. Die Bildfolge zeigt das Ausbohren der Schweißpunkte, das Abnehmen des alten Radhaus-Außenteils, die Vorbereitung und den Korrosionsschutz der Fügeflächen, das Ausrichten und Klemmen des Ersatzteils an den Passstiftbohrungen sowie das probeweise Ansetzen der Seitenwand und das anschließende Punktschweißen von der Innenseite.
+
+## Transkription
+> [!note]- Transkription (aufklappen)
+> 41-127
+>
+> 41 14 132 – Rechtes hinteres Radhaus-Außenteil und Seitenwand ersetzen (Teilersatz bis zur Fensterlinie)
+>
+> Siehe Informationen auf Seite 41-001.
+> Rechte hintere Seitenwand als Teilersatz bis zur Fensterlinie ersetzen: 41 35 291.
+>
+> Schweißpunkte ausbohren.
+> Radhaus-Außenteil abheben.
+>
+> Fügeflächen richten und blank schleifen.
+> Für das Punktschweißen vorbereitete Flächen mit Zinkstaubfarbe beschichten.
+>
+> Fügeflächen am neuen Radhaus-Außenteil blank schleifen und mit Zinkstaubfarbe beschichten.
+>
+> Radhaus-Außenteil festklemmen und an den Passstiftbohrungen ausrichten.
+>
+> Radhaus-Außenteil festklemmen und an den Passstiftbohrungen ausrichten. Falls erforderlich, Radhaus-Außenteil durch Heftpunkte fixieren und die Seitenwand zur Kontrolle anbauen.
+>
+> Von der Innenseite des Radhaus-Außenteils punktschweißen.
+>
+> Von der Innenseite des Radhaus-Außenteils punktschweißen.
+>
+> Bildnummern: 30 41 278, 30 41 279, 30 41 280, 30 41 281, 30 41 282, 30 41 283, 30 41 284.
+
+
+## Fachbegriffe (EN → DE)
+| Englisch | Deutsch |
+| --- | --- |
+| right rear wheel house outside section | rechtes hinteres Radhaus-Außenteil |
+| side panel | Seitenwand |
+| partial replacement up to window line | Teilersatz bis zur Fensterlinie |
+| welded spots | Schweißpunkte |
+| mating surfaces | Fügeflächen |
+| spot welding | Punktschweißen |
+| zinc dust paint | Zinkstaubfarbe |
+| dowel pin bores | Passstiftbohrungen |
+| clamp | festklemmen |
+| tack weld | Heftpunktschweißen |
+| inside of wheel house outside section | Innenseite des Radhaus-Außenteils |
+
+---
+[[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]
