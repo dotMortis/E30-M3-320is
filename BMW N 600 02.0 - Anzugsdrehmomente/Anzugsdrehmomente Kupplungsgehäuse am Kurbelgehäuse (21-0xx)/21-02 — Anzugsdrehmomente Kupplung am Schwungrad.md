@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[21-02.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Anzugsdrehmomente Kupplungsgehäuse am Kurbelgehäuse (21-0xx)/21-02.jpg]]
 
 *Originaltitel (EN): Clutch Disc and Drive Plate*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-08.jpg]]
+![[00 - Wartung und allgemeine Daten/00-08.jpg]]
 
 *Originaltitel (EN): BMW Running-in inspection at 1200 miles*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-03.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Elektrische Fehlersuche BMW M3 (00-0xx)/00-03.jpg]]
 
 *Originaltitel (EN): How to use this manual*
 

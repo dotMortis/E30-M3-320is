@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26-01.jpg]]
+![[26 - Gelenkwelle/26-01.jpg]]
 
 *Originaltitel (EN): Propellor shaft vibration and noise – eliminate*
 

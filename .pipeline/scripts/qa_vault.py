@@ -41,6 +41,13 @@ def main() -> int:
     image_names = {p.name for p in images}
     note_stems = {p.stem for p in md_files}
 
+    # Image filenames that live in more than one folder. A bare embed ![[name]]
+    # of such a file is ambiguous: Obsidian resolves it to a single arbitrary
+    # match, so notes in the other folder(s) show the wrong or a missing image.
+    from collections import Counter
+    name_counts = Counter(p.name for p in images)
+    dup_image_names = {n for n, c in name_counts.items() if c > 1}
+
     problems = []
     embed_count = link_count = 0
     stem_seen = {}
@@ -62,6 +69,9 @@ def main() -> int:
             name = m.split("/")[-1]
             if name not in image_names:
                 problems.append(f"MISSING IMAGE: {p.relative_to(VAULT_ROOT)} -> {m}")
+            elif "/" not in m and name in dup_image_names:
+                # bare embed of a non-unique filename -> resolves ambiguously
+                problems.append(f"AMBIGUOUS EMBED: {p.relative_to(VAULT_ROOT)} -> {m}")
 
         for m in LINK_RE.findall(text):
             link_count += 1

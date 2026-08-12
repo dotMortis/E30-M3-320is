@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-04.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Maximale Anzugsdrehmomente metrischer Gewinde (00-0xx)/00-04.jpg]]
 
 *Originaltitel (EN): M8 / M8x1 Threads*
 

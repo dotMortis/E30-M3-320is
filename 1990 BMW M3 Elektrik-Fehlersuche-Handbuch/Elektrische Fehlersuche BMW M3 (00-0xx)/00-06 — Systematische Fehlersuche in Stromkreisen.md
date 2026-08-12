@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-06.jpg]]
+![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Elektrische Fehlersuche BMW M3 (00-0xx)/00-06.jpg]]
 
 *Originaltitel (EN): Systematic Troubleshooting / How To*
 

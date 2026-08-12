@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[17-03.jpg]]
+![[17 - Kühler/17-03.jpg]]
 
 *Originaltitel (EN): Checking cooling system for leaks*
 

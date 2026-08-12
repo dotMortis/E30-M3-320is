@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16-04.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Anzugsdrehmomente Kraftstofftank und Anbauteile (16-0xx)/16-04.jpg]]
 
 *Originaltitel (EN): Fuel Pump*
 

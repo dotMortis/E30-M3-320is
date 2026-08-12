@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[17-02.jpg]]
+![[17 - Kühler/17-02.jpg]]
 
 *Originaltitel (EN): Coolant circuit - 325e, 325i*
 

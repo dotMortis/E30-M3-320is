@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25-02.jpg]]
+![[BMW N 600 02.0 - Anzugsdrehmomente/Weitere Seiten/25-02.jpg]]
 
 *Originaltitel (EN): Shift Console - Automatic*
 

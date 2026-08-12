@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[18-01.jpg]]
+![[18 - Abgasanlage/18-01.jpg]]
 
 *Originaltitel (EN): Removing and installing the exhaust assembly - 318i*
 

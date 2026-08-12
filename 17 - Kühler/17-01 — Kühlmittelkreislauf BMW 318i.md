@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[17-01.jpg]]
+![[17 - Kühler/17-01.jpg]]
 
 *Originaltitel (EN): Coolant circuit - 318i*
 

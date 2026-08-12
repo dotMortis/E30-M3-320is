@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[00-03.jpg]]
+![[00 - Wartung und allgemeine Daten/00-03.jpg]]
 
 *Originaltitel (EN): Pre-delivery inspection*
 

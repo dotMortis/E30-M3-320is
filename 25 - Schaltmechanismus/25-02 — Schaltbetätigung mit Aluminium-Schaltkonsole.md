@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25-02.jpg]]
+![[25 - Schaltmechanismus/25-02.jpg]]
 
 *Originaltitel (EN): Shift layout drawing - aluminum metal shift console*
 

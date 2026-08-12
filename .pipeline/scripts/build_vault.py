@@ -17,6 +17,9 @@ Also:
 
 Filenames: '<code> — <title>' stems are globally unique, so notes link by bare
 name ([[stem]]). Scans are moved with `git mv` to preserve bytes + history.
+Scan embeds use the bare filename when unique, but fall back to a vault-relative
+path when the same scan filename occurs in more than one folder (duplicate BMW
+page codes across sections) so Obsidian always resolves the correct image.
 
 No information loss: EN caption, German description, full transcription, term
 table and metadata are all retained in each note; tooling stays under .pipeline/.
@@ -38,6 +41,19 @@ OBS = REPO / ".obsidian"
 
 TYPE_DE = {"diagram": "Diagramm", "table": "Tabelle", "text": "Text"}
 SUBGROUP_THRESHOLD = 60          # only sections larger than this get sub-grouped
+
+# Image filenames that occur in more than one folder. Obsidian resolves a bare
+# embed ![[name]] to a single arbitrary match when the name is not unique, which
+# makes notes in the other folder(s) show the wrong scan or a broken image.
+# Populated in main(); such embeds are written as vault-relative paths instead.
+DUP_IMAGE_NAMES: set[str] = set()
+
+
+def embed_target(img: str, dest_dir: Path) -> str:
+    """Embed path for a scan: vault-relative when the bare name is ambiguous."""
+    if img in DUP_IMAGE_NAMES:
+        return f"{(dest_dir / img).relative_to(REPO).as_posix()}"
+    return img
 
 _CTRL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
 _FS_BAD = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
@@ -169,7 +185,8 @@ def compute_subgroups(pages: list[dict]) -> dict[str, str] | None:
 
 # ---------------------------------------------------------------- note bodies
 
-def build_page_note(page: dict, section_de: str, section_no: str) -> str:
+def build_page_note(page: dict, section_de: str, section_no: str,
+                    dest_dir: Path) -> str:
     a = page.get("analysis") or {}
     seitentyp = a.get("seitentyp") or "text"
     typ_de = TYPE_DE.get(seitentyp, seitentyp)
@@ -205,7 +222,7 @@ def build_page_note(page: dict, section_de: str, section_no: str) -> str:
     parts.append(f"> Typ: **{typ_de}**" + (f" · Konfidenz: **{konf:.2f}**" if konf is not None else ""))
     parts.append("> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.")
     parts.append("")
-    parts.append(f"![[{img}]]")
+    parts.append(f"![[{embed_target(img, dest_dir)}]]")
     parts.append("")
     if caption:
         parts.append(f"*Originaltitel (EN): {caption}*")
@@ -414,7 +431,7 @@ def write_reference_index(folder: Path, title: str, desc: str):
     ]
     for p in imgs:
         lines.append(f"### {p.stem}")
-        lines.append(f"![[{p.name}]]")
+        lines.append(f"![[{embed_target(p.name, folder)}]]")
         lines.append("")
     lines += ["---", "[[Startseite]]", ""]
     (folder / f"{fs_safe(title)}.md").write_text("\n".join(lines), encoding="utf-8")
@@ -440,6 +457,11 @@ def main() -> int:
     section_pages: dict[str, list] = defaultdict(list)
     for p in manifest["pages"]:
         section_pages[p["section_folder"]].append(p)
+
+    # Detect image filenames that appear in more than one page so their embeds
+    # can be written as unambiguous vault-relative paths (see embed_target).
+    _img_counts = Counter(p["image_file"] for p in manifest["pages"])
+    DUP_IMAGE_NAMES.update(n for n, c in _img_counts.items() if c > 1)
 
     # section ordering for the home page
     section_order = []
@@ -478,7 +500,7 @@ def main() -> int:
             assert stem not in stems_seen, f"dup stem: {stem}"
             stems_seen.add(stem)
             (dest_dir / f"{stem}.md").write_text(
-                build_page_note(p, de, no), encoding="utf-8")
+                build_page_note(p, de, no, dest_dir), encoding="utf-8")
             n_notes += 1
 
         # section MOC at the section root

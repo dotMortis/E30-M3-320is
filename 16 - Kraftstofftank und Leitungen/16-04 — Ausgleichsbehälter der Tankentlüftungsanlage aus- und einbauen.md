@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16-04.jpg]]
+![[16 - Kraftstofftank und Leitungen/16-04.jpg]]
 
 *Originaltitel (EN): Replacing expansion tank for venting system*
 

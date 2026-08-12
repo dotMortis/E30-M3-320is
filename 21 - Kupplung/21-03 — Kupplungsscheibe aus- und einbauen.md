@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[21-03.jpg]]
+![[21 - Kupplung/21-03.jpg]]
 
 *Originaltitel (EN): Removing and installing clutch disc*
 
