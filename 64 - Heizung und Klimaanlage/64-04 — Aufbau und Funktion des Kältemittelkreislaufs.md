@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64 - Heizung und Klimaanlage/64-04.jpg]]
+![[64-04.jpg]]
 
 *Originaltitel (EN): Refrigerant circuit*
 

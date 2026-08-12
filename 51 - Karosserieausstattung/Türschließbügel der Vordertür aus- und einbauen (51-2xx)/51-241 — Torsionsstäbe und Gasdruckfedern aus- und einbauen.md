@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Türschließbügel der Vordertür aus- und einbauen (51-2xx)/51-241.jpg]]
+![[51-241.jpg]]
 
 *Originaltitel (EN): Trunk lid torsion bars / Gas pressure props - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-55.jpg]]
+![[11-55.jpg]]
 
 *Originaltitel (EN): Cylinder head sealing surface - grind*
 

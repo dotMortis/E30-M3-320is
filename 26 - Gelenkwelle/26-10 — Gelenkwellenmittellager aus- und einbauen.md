@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26 - Gelenkwelle/26-10.jpg]]
+![[26-10.jpg]]
 
 *Originaltitel (EN): Propellor shaft center mount assmebly - replace*
 

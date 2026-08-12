@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anziehdrehmomente am Vergaser (13-0xx)/13-11.jpg]]
+![[13-11.jpg]]
 
 *Originaltitel (EN): Air intake valves, low-pressure and vacuum hoses*
 

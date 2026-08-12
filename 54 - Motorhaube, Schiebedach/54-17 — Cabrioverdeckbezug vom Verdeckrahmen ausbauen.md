@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54 - Motorhaube, Schiebedach/54-17.jpg]]
+![[54-17.jpg]]
 
 *Originaltitel (EN): "*
 

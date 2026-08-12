@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65 - Radio und Sonderausstattung/65-00-index-b.jpg]]
+![[65-00-index-b.jpg]]
 
 ---
 

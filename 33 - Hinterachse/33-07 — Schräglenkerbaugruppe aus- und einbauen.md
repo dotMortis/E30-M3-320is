@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-07.jpg]]
+![[33-07.jpg]]
 
 *Originaltitel (EN): Trailing arm assembly - remove and install*
 

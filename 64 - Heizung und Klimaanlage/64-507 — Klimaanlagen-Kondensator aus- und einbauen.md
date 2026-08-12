@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64 - Heizung und Klimaanlage/64-507.jpg]]
+![[64-507.jpg]]
 
 *Originaltitel (EN): A/C Condenser - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34 - Bremsen/34-35.jpg]]
+![[34-35.jpg]]
 
 *Originaltitel (EN): Troubleshooting ABS*
 

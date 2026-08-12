@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Weitere Seiten/27-01.jpg]]
+![[27-01.jpg]]
 
 *Originaltitel (EN): Transfer Box in General*
 

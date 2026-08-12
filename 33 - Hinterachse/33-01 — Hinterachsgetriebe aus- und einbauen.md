@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-01.jpg]]
+![[33-01.jpg]]
 
 *Originaltitel (EN): Final drive - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16 - Kraftstofftank und Leitungen/16-10.jpg]]
+![[16-10.jpg]]
 
 *Originaltitel (EN): Fuel return pipe - since 1988*
 

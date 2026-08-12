@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62 - Instrumente/62-80.jpg]]
+![[62-80.jpg]]
 
 *Originaltitel (EN): Test: Power supply and outlet wires on check control*
 

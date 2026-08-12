@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Thermoplastische Kunststoffstoßfänger reparieren (51-1xx)/51-122.jpg]]
+![[51-122.jpg]]
 
 *Originaltitel (EN): Rear bumper - remove and Install*
 

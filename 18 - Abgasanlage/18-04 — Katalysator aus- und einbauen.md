@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[18 - Abgasanlage/18-04.jpg]]
+![[18-04.jpg]]
 
 *Originaltitel (EN): Replacing the catalytic convertor - 318i*
 

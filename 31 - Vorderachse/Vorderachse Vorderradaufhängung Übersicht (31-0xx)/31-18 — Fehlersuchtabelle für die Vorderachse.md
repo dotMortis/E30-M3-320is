@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-18.jpg]]
+![[31-18.jpg]]
 
 *Originaltitel (EN): Front axle - troubleshoot*
 

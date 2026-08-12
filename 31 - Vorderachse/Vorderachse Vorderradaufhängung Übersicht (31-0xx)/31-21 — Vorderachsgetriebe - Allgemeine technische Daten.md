@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-21.jpg]]
+![[31-21.jpg]]
 
 *Originaltitel (EN): Front axle drive final drive - general information*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41 - Karosserie/Weitere Seiten/41-601.jpg]]
+![[41-601.jpg]]
 
 ---
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25 - Schaltmechanismus/25-12.jpg]]
+![[25-12.jpg]]
 
 *Originaltitel (EN): Shift lever console - sheet metal shift console*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-26.jpg]]
+![[31-26.jpg]]
 
 *Originaltitel (EN): Drive pinion / ring gear - remove and install*
 

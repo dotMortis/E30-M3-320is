@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/An TCI- und DME-Anlage arbeiten (12-1xx)/12-133.jpg]]
+![[12-133.jpg]]
 
 *Originaltitel (EN): Checking ignition coil*
 

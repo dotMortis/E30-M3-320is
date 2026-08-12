@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Zentralverriegelung mit Doppelverriegelung Fehlersuche (51-8xx)/51-807.jpg]]
+![[51-807.jpg]]
 
 *Originaltitel (EN): 5. No function of one or both rear doors (unlocking - locking or double-locking)*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse (11-0xx)/11-19.jpg]]
+![[11-19.jpg]]
 
 *Originaltitel (EN): Connecting Rods and Bearings*
 

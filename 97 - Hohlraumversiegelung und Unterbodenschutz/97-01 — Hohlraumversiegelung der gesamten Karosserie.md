@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[97 - Hohlraumversiegelung und Unterbodenschutz/97-01.jpg]]
+![[97-01.jpg]]
 
 *Originaltitel (EN): Body cavity sealing for entire car (text)*
 

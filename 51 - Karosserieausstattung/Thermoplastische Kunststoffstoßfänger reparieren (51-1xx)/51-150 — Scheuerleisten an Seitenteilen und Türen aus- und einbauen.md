@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Thermoplastische Kunststoffstoßfänger reparieren (51-1xx)/51-150.jpg]]
+![[51-150.jpg]]
 
 *Originaltitel (EN): Rubbing strip (panels / doors) - remove and install*
 

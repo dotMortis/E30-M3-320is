@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16 - Kraftstofftank und Leitungen/16-06.jpg]]
+![[16-06.jpg]]
 
 *Originaltitel (EN): Checking venting system for fuel tank - M20*
 

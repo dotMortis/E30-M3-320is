@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35 - Pedale/35-03.jpg]]
+![[35-03.jpg]]
 
 *Originaltitel (EN): Pedal base - remove and install*
 

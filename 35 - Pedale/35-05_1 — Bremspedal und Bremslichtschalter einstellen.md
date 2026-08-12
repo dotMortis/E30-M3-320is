@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35 - Pedale/35-05_1.jpg]]
+![[35-05_1.jpg]]
 
 *Originaltitel (EN): "*
 

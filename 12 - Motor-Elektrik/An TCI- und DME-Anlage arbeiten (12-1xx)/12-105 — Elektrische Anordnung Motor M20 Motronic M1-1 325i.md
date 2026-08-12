@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/An TCI- und DME-Anlage arbeiten (12-1xx)/12-105.jpg]]
+![[12-105.jpg]]
 
 *Originaltitel (EN): Engine electrical layout - M20 (M1.1) / 325i models*
 

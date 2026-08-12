@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[36 - Räder und Reifen/36-00-index-a.jpg]]
+![[36-00-index-a.jpg]]
 
 ---
 

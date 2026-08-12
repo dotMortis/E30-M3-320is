@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/An TCI und DME arbeiten (12-0xx)/12-45.jpg]]
+![[12-45.jpg]]
 
 *Originaltitel (EN): Inspecting components of alternator*
 

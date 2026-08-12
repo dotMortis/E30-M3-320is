@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Frontscheibe aus- und einbauen (51-3xx)/51-361.jpg]]
+![[51-361.jpg]]
 
 *Originaltitel (EN): Rear side window, left or right - replace*
 

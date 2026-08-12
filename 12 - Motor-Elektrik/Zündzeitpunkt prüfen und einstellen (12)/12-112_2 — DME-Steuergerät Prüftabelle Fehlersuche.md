@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-112_2.jpg]]
+![[12-112_2.jpg]]
 
 *Originaltitel (EN): Troubleshooting DME - test 2, 3*
 

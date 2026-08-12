@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41 - Karosserie/Türscharnier-Lagerbuchsen aus- und einbauen (41-5xx)/41-501.jpg]]
+![[41-501.jpg]]
 
 ---
 

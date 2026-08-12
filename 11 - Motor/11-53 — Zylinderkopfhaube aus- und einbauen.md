@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-53.jpg]]
+![[11-53.jpg]]
 
 *Originaltitel (EN): Cylinder head cover - remove and install*
 

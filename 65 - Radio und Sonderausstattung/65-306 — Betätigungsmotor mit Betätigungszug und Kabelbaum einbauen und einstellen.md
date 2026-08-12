@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65 - Radio und Sonderausstattung/65-306.jpg]]
+![[65-306.jpg]]
 
 *Originaltitel (EN): "*
 

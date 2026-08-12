@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-00.jpg]]
+![[33-00.jpg]]
 
 *Originaltitel (EN): Rear axle (15° drop) - layout drawing*
 

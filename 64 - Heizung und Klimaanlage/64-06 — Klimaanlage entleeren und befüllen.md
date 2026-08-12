@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64 - Heizung und Klimaanlage/64-06.jpg]]
+![[64-06.jpg]]
 
 *Originaltitel (EN): Discharging and charging the air conditioner*
 

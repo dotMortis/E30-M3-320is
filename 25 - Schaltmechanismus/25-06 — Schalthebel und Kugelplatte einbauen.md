@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.93**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25 - Schaltmechanismus/25-06.jpg]]
+![[25-06.jpg]]
 
 *Originaltitel (EN): "*
 

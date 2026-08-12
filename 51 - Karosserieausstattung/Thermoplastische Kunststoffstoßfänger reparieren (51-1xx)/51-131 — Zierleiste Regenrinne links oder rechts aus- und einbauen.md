@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Thermoplastische Kunststoffstoßfänger reparieren (51-1xx)/51-131.jpg]]
+![[51-131.jpg]]
 
 *Originaltitel (EN): Rain molding strip, left or right - replace*
 

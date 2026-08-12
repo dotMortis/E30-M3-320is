@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25 - Schaltmechanismus/25-00-index-a.jpg]]
+![[25-00-index-a.jpg]]
 
 ---
 

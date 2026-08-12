@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-109.jpg]]
+![[11-109.jpg]]
 
 *Originaltitel (EN): Oil upper pan section - remove and install*
 

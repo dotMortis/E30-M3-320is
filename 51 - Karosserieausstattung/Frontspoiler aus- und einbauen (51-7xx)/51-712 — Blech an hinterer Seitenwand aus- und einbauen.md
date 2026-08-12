@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Frontspoiler aus- und einbauen (51-7xx)/51-712.jpg]]
+![[51-712.jpg]]
 
 *Originaltitel (EN): Panel on rear side panel - replace*
 

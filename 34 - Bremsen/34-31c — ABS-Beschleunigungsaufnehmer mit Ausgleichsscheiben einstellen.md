@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34 - Bremsen/34-31c.jpg]]
+![[34-31c.jpg]]
 
 *Originaltitel (EN): Acceleration sensor for ABS - adjust*
 

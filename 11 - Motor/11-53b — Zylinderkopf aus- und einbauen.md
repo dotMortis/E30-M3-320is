@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-53b.jpg]]
+![[11-53b.jpg]]
 
 *Originaltitel (EN): Cylinder head - remove and install*
 

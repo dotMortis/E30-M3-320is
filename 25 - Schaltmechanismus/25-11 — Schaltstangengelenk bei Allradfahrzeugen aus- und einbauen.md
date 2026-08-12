@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25 - Schaltmechanismus/25-11.jpg]]
+![[25-11.jpg]]
 
 *Originaltitel (EN): Shift rod joint replace - all wheel drive cars*
 

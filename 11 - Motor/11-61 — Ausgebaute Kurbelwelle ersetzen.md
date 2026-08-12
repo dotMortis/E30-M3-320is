@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-61.jpg]]
+![[11-61.jpg]]
 
 *Originaltitel (EN): Crankshaft - replace (crankshaft removed)*
 

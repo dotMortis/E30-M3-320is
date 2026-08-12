@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Thermoplastische Kunststoffstoßfänger reparieren (51-1xx)/51-162.jpg]]
+![[51-162.jpg]]
 
 *Originaltitel (EN): Center console - remove and install*
 

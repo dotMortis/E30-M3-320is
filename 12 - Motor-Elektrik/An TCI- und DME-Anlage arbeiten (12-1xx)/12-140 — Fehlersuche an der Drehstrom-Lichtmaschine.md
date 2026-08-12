@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/An TCI- und DME-Anlage arbeiten (12-1xx)/12-140.jpg]]
+![[12-140.jpg]]
 
 *Originaltitel (EN): Troubleshooting alternator*
 

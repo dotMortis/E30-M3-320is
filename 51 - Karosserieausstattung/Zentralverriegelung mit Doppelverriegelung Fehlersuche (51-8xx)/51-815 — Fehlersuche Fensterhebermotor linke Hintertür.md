@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Zentralverriegelung mit Doppelverriegelung Fehlersuche (51-8xx)/51-815.jpg]]
+![[51-815.jpg]]
 
 *Originaltitel (EN): "*
 

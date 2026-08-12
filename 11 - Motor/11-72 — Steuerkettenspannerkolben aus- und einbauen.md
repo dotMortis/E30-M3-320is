@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-72.jpg]]
+![[11-72.jpg]]
 
 *Originaltitel (EN): Timing chain tensioner piston - remove and install*
 

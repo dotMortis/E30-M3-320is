@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Türschließbügel der Vordertür aus- und einbauen (51-2xx)/51-262.jpg]]
+![[51-262.jpg]]
 
 *Originaltitel (EN): Switch for trunk lid lock (drive) - replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anzugsdrehmomente Automatikgetriebe Befestigung (24-0xx)/24-07.jpg]]
+![[24-07.jpg]]
 
 *Originaltitel (EN): Planetary Gear Drive*
 

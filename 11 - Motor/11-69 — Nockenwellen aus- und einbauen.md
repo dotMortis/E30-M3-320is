@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-69.jpg]]
+![[11-69.jpg]]
 
 *Originaltitel (EN): Camshaft - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Weitere Schaltpläne & Seiten/6571-00.jpg]]
+![[6571-00.jpg]]
 
 *Originaltitel (EN): Cruise Control*
 

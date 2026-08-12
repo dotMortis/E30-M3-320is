@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Frontscheibe aus- und einbauen (51-3xx)/51-312.jpg]]
+![[51-312.jpg]]
 
 *Originaltitel (EN): Instructions for window Installation (M3)*
 

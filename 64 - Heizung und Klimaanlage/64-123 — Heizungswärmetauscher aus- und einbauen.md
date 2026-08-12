@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[64 - Heizung und Klimaanlage/64-123.jpg]]
+![[64-123.jpg]]
 
 *Originaltitel (EN): Heater core - remove and install*
 

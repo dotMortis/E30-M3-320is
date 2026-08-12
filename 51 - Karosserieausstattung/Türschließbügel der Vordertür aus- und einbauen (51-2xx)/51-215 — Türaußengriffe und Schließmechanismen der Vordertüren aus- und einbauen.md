@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Türschließbügel der Vordertür aus- und einbauen (51-2xx)/51-215.jpg]]
+![[51-215.jpg]]
 
 *Originaltitel (EN): Outside handles and lock mechanisms of both front doors - remove and install/replace*
 

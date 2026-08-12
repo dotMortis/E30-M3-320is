@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse (11-0xx)/11-21.jpg]]
+![[11-21.jpg]]
 
 *Originaltitel (EN): Camshaft*
 

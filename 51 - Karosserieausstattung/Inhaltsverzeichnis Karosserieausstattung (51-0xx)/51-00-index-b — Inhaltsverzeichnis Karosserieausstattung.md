@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Inhaltsverzeichnis Karosserieausstattung (51-0xx)/51-00-index-b.jpg]]
+![[51-00-index-b.jpg]]
 
 ---
 

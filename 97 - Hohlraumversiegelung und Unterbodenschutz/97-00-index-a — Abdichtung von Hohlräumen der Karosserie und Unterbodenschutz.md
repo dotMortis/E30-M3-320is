@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[97 - Hohlraumversiegelung und Unterbodenschutz/97-00-index-a.jpg]]
+![[97-00-index-a.jpg]]
 
 ---
 

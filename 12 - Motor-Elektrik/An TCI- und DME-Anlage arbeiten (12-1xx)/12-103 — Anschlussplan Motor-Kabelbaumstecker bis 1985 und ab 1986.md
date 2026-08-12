@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/An TCI- und DME-Anlage arbeiten (12-1xx)/12-103.jpg]]
+![[12-103.jpg]]
 
 *Originaltitel (EN): Connection plan for engine wire harness plug - pre 1985*
 

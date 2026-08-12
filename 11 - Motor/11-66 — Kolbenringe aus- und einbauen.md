@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-66.jpg]]
+![[11-66.jpg]]
 
 *Originaltitel (EN): Piston rings of one piston*
 

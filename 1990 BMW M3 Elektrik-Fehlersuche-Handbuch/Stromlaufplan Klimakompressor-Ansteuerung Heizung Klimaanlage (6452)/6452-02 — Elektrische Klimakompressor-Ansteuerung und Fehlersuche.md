@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Stromlaufplan Klimakompressor-Ansteuerung Heizung Klimaanlage (6452)/6452-02.jpg]]
+![[6452-02.jpg]]
 
 *Originaltitel (EN): "*
 

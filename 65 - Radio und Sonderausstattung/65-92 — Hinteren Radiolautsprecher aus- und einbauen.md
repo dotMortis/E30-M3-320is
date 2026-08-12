@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[65 - Radio und Sonderausstattung/65-92.jpg]]
+![[65-92.jpg]]
 
 *Originaltitel (EN): Radio speaker, rear - remove and install*
 

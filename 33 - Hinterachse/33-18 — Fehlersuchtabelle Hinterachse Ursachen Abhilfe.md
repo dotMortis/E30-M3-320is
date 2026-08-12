@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-18.jpg]]
+![[33-18.jpg]]
 
 *Originaltitel (EN): Rear axle - troubleshoot*
 

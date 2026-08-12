@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[52 - Sitze/52-201.jpg]]
+![[52-201.jpg]]
 
 *Originaltitel (EN): Rear seat cushion and backrest - remove and install*
 

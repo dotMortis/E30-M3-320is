@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41 - Karosserie (Cabrio)/41-00-index-f.jpg]]
+![[41-00-index-f.jpg]]
 
 ---
 

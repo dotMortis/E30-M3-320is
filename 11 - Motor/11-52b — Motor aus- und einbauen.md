@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-52b.jpg]]
+![[11-52b.jpg]]
 
 *Originaltitel (EN): Engine - remove and install*
 

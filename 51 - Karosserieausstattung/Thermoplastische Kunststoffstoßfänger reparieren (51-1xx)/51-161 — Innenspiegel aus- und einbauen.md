@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Thermoplastische Kunststoffstoßfänger reparieren (51-1xx)/51-161.jpg]]
+![[51-161.jpg]]
 
 *Originaltitel (EN): Mirror on inside of car - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13 - Kraftstoffsystem/DME-Steuergerät aus- und einbauen (13-6xx)/13-621.jpg]]
+![[13-621.jpg]]
 
 *Originaltitel (EN): Air flow sensor - pre 1985*
 

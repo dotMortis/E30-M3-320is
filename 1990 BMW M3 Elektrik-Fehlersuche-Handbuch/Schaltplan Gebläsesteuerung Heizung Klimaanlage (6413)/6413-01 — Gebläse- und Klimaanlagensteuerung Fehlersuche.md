@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Schaltplan Gebläsesteuerung Heizung Klimaanlage (6413)/6413-01.jpg]]
+![[6413-01.jpg]]
 
 *Originaltitel (EN): "*
 

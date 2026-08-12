@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Diagnosestecker C101 Kontaktbelegung (8500)/8500-11.jpg]]
+![[8500-11.jpg]]
 
 *Originaltitel (EN): " C240, C242, C243, C303, C304, C306, C404, C405, C413, C421, C422, C243, C503*
 

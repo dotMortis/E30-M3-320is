@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-05.jpg]]
+![[33-05.jpg]]
 
 *Originaltitel (EN): Dust cover - replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[54 - Motorhaube, Schiebedach/54-06.jpg]]
+![[54-06.jpg]]
 
 *Originaltitel (EN): Sun roof - drive cable (electric)*
 

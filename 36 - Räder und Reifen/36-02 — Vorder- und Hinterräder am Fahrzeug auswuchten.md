@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[36 - Räder und Reifen/36-02.jpg]]
+![[36-02.jpg]]
 
 *Originaltitel (EN): Front / Rear wheels on car - balance - 325ix*
 

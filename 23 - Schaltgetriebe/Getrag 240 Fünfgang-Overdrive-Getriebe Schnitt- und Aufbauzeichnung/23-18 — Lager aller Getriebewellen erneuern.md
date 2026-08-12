@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung/23-18.jpg]]
+![[23-18.jpg]]
 
 *Originaltitel (EN): Bearings of all transmission shafts - replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Frontspoiler aus- und einbauen (51-7xx)/51-716.jpg]]
+![[51-716.jpg]]
 
 *Originaltitel (EN): Stone guard panel, rear - replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-57.jpg]]
+![[11-57.jpg]]
 
 *Originaltitel (EN): Lower timing case cover seal - remove and install*
 

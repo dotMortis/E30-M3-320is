@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[21 - Kupplung/21-00-index-a.jpg]]
+![[21-00-index-a.jpg]]
 
 ---
 

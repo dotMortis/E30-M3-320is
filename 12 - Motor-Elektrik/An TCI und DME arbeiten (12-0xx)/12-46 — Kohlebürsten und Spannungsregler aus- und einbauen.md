@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/An TCI und DME arbeiten (12-0xx)/12-46.jpg]]
+![[12-46.jpg]]
 
 *Originaltitel (EN): Replacing alternator carbon brushes / voltage regulator*
 

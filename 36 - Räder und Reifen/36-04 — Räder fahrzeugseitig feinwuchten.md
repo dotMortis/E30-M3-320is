@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[36 - Räder und Reifen/36-04.jpg]]
+![[36-04.jpg]]
 
 *Originaltitel (EN): "*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41 - Karosserie/Einleitung Sicherheitshinweise Karosseriearbeiten (41-0xx)/41-015.jpg]]
+![[41-015.jpg]]
 
 ---
 

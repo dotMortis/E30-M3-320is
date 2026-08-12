@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[17 - Kühler/17-06.jpg]]
+![[17-06.jpg]]
 
 *Originaltitel (EN): Removing and installing coolant expansion tank*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-143_2.jpg]]
+![[12-143_2.jpg]]
 
 *Originaltitel (EN): Replacing alternator voltage regulator*
 

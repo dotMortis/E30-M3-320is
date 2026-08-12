@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anzugsdrehmomente Zündverteiler und Verteilerkappe (12-0xx)/12-13.jpg]]
+![[12-13.jpg]]
 
 *Originaltitel (EN): Oil Pressure, Oil Temperature, Oil Level Display*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[36 - Räder und Reifen/36-01.jpg]]
+![[36-01.jpg]]
 
 *Originaltitel (EN): Front / Rear wheels on car - balance*
 

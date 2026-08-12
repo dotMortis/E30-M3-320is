@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-50.jpg]]
+![[11-50.jpg]]
 
 *Originaltitel (EN): S14 Engine Drawing*
 

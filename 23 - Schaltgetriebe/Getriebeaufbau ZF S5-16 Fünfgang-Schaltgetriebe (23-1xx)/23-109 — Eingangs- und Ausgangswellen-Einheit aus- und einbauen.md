@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe (23-1xx)/23-109.jpg]]
+![[23-109.jpg]]
 
 *Originaltitel (EN): Input and output shaft assembly remove and install*
 

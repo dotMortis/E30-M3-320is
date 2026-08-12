@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anzugsdrehmomente Zündverteiler und Verteilerkappe (12-0xx)/12-12.jpg]]
+![[12-12.jpg]]
 
 *Originaltitel (EN): Engine Wiring Harness*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Diagnosestecker C101 Kontaktbelegung (8500)/8500-04.jpg]]
+![[8500-04.jpg]]
 
 *Originaltitel (EN): " mixed*
 

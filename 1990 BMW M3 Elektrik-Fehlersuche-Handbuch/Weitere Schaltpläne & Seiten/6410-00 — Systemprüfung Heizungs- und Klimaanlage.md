@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Weitere Schaltpläne & Seiten/6410-00.jpg]]
+![[6410-00.jpg]]
 
 *Originaltitel (EN): Heating & A/C*
 

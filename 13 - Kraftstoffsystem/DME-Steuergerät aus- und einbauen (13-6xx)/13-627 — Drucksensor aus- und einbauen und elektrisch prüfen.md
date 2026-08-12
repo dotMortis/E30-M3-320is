@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13 - Kraftstoffsystem/DME-Steuergerät aus- und einbauen (13-6xx)/13-627.jpg]]
+![[13-627.jpg]]
 
 *Originaltitel (EN): Pressure sensor*
 

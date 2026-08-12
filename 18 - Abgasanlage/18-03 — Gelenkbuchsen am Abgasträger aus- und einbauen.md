@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[18 - Abgasanlage/18-03.jpg]]
+![[18-03.jpg]]
 
 *Originaltitel (EN): Replacing pivot sleeves on exhaust carrier - 318i*
 

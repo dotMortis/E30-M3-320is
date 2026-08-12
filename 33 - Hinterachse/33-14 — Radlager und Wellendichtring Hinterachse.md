@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-14.jpg]]
+![[33-14.jpg]]
 
 *Originaltitel (EN): Wheel bearings and shaft seal*
 

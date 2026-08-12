@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13 - Kraftstoffsystem/Fehlersuche elektronische Leerlaufregelung (13-8xx)/13-811.jpg]]
+![[13-811.jpg]]
 
 *Originaltitel (EN): "*
 

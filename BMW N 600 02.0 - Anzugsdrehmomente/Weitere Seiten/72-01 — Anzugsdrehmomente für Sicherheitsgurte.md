@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Weitere Seiten/72-01.jpg]]
+![[72-01.jpg]]
 
 *Originaltitel (EN): Seat Belts*
 

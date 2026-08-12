@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-13.jpg]]
+![[33-13.jpg]]
 
 *Originaltitel (EN): Rubber mounts for rear axle carrier - replace*
 

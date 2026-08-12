@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Schnittdarstellung Getrag Schaltgetriebe 265-6 Schnellgang (23-3xx)/23-312.jpg]]
+![[23-312.jpg]]
 
 *Originaltitel (EN): Radial oil seal for selector shaft / input shaft - replace*
 

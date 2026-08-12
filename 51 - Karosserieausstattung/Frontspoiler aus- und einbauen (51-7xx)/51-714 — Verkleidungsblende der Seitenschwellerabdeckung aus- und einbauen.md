@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Frontspoiler aus- und einbauen (51-7xx)/51-714.jpg]]
+![[51-714.jpg]]
 
 *Originaltitel (EN): Trim panel for cover on side member - replace*
 

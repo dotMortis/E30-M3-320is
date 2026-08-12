@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Stromverteilungskasten Sicherungs- und Relaisanordnung (0670)/0670-01.jpg]]
+![[0670-01.jpg]]
 
 *Originaltitel (EN): " - fuse data chart [fuel pump = 11]*
 

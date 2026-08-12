@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-107_2.jpg]]
+![[12-107_2.jpg]]
 
 *Originaltitel (EN): Engine plug connections - S14*
 

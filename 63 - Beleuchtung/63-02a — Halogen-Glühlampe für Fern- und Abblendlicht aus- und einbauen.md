@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[63 - Beleuchtung/63-02a.jpg]]
+![[63-02a.jpg]]
 
 *Originaltitel (EN): Halogen light bulb for high / low beam – replace*
 

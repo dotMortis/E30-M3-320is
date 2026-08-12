@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35 - Pedale/35-07.jpg]]
+![[35-07.jpg]]
 
 *Originaltitel (EN): Bearing sleeve for clutch pedal / brake pedal - replace*
 

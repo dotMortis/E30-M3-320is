@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Türschließbügel der Vordertür aus- und einbauen (51-2xx)/51-213.jpg]]
+![[51-213.jpg]]
 
 *Originaltitel (EN): Front door lock cylinder, left or right - remove and Install or replace*
 

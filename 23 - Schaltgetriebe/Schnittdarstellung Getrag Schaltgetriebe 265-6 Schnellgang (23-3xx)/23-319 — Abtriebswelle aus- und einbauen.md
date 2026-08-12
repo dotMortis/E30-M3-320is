@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Schnittdarstellung Getrag Schaltgetriebe 265-6 Schnellgang (23-3xx)/23-319.jpg]]
+![[23-319.jpg]]
 
 *Originaltitel (EN): Output shaft - replace*
 

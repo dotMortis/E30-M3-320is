@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Zentralverriegelung Systemprüfung Prüfschritte (5126A)/5126A-00.jpg]]
+![[5126A-00.jpg]]
 
 *Originaltitel (EN): "*
 

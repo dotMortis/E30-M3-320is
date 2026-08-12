@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse (11-0xx)/11-40.jpg]]
+![[11-40.jpg]]
 
 *Originaltitel (EN): Engine Suspension*
 

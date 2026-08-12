@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25 - Schaltmechanismus/25-21.jpg]]
+![[25-21.jpg]]
 
 *Originaltitel (EN): Cable for range selector level – replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/Zündzeitpunkt prüfen und einstellen (12)/12-142_3.jpg]]
+![[12-142_3.jpg]]
 
 *Originaltitel (EN): Replacing alternator ball bearing*
 

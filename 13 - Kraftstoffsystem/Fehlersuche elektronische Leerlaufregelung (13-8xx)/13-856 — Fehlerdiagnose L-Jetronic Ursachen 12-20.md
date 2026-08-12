@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13 - Kraftstoffsystem/Fehlersuche elektronische Leerlaufregelung (13-8xx)/13-856.jpg]]
+![[13-856.jpg]]
 
 *Originaltitel (EN): Troubleshooting L-Jetronic - cause 12, 13, 14, 15, 16, 17, 18, 19, 20*
 

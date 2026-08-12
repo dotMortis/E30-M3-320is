@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34 - Bremsen/34-32.jpg]]
+![[34-32.jpg]]
 
 *Originaltitel (EN): ABS pulse sensor, front / rear - remove and install*
 

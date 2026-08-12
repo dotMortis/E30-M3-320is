@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-04.jpg]]
+![[33-04.jpg]]
 
 *Originaltitel (EN): Output shaft - remove and install*
 

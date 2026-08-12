@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.93**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-08.jpg]]
+![[33-08.jpg]]
 
 *Originaltitel (EN): Trailing arm / Silent blocks - replace*
 

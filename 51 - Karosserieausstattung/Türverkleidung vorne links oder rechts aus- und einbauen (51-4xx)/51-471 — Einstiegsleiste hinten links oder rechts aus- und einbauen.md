@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Türverkleidung vorne links oder rechts aus- und einbauen (51-4xx)/51-471.jpg]]
+![[51-471.jpg]]
 
 *Originaltitel (EN): Entrance cover strip, rear, left or right - remove and Install or replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16 - Kraftstofftank und Leitungen/16-00-index-a.jpg]]
+![[16-00-index-a.jpg]]
 
 ---
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26 - Gelenkwelle/26-08.jpg]]
+![[26-08.jpg]]
 
 *Originaltitel (EN): Propellor shaft joint (rear, AWD) - replace*
 

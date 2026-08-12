@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[12 - Motor-Elektrik/An TCI- und DME-Anlage arbeiten (12-1xx)/12-154.jpg]]
+![[12-154.jpg]]
 
 *Originaltitel (EN): Disassembling and assembling starter layshaft*
 

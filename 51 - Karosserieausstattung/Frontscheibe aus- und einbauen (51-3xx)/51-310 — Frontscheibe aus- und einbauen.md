@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Frontscheibe aus- und einbauen (51-3xx)/51-310.jpg]]
+![[51-310.jpg]]
 
 *Originaltitel (EN): Windshield - replace*
 

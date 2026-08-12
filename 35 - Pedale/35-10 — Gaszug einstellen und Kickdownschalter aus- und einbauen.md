@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35 - Pedale/35-10.jpg]]
+![[35-10.jpg]]
 
 *Originaltitel (EN): Accelerator cable – adjust, kickdown switch - replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.93**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung/23-19.jpg]]
+![[23-19.jpg]]
 
 *Originaltitel (EN): "*
 

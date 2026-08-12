@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-07.jpg]]
+![[31-07.jpg]]
 
 *Originaltitel (EN): Control arm bracket – remove and install*
 

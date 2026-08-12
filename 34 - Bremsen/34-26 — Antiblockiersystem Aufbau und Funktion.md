@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34 - Bremsen/34-26.jpg]]
+![[34-26.jpg]]
 
 *Originaltitel (EN): ABS System / Hydraulic Unit operational description*
 

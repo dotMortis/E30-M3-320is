@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Schaltgetriebe aus- und einbauen (23)/23-168a.jpg]]
+![[23-168a.jpg]]
 
 *Originaltitel (EN): Transmission - exchange*
 

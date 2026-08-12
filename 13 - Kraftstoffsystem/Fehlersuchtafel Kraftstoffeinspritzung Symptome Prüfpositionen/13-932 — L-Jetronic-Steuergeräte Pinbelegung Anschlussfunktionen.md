@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[13 - Kraftstoffsystem/Fehlersuchtafel Kraftstoffeinspritzung Symptome Prüfpositionen/13-932.jpg]]
+![[13-932.jpg]]
 
 *Originaltitel (EN): L-Jetronic plug connections / pin-out*
 

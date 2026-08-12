@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16 - Kraftstofftank und Leitungen/16-09.jpg]]
+![[16-09.jpg]]
 
 *Originaltitel (EN): Removing and disassembling fuel level sender and intank pump - since 1988*
 

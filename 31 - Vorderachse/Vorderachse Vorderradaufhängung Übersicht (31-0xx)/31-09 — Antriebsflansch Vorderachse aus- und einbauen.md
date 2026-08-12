@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31 - Vorderachse/Vorderachse Vorderradaufhängung Übersicht (31-0xx)/31-09.jpg]]
+![[31-09.jpg]]
 
 *Originaltitel (EN): Drive flange for front axles - replace*
 

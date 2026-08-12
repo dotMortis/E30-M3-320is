@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Türverkleidung vorne links oder rechts aus- und einbauen (51-4xx)/51-410.jpg]]
+![[51-410.jpg]]
 
 *Originaltitel (EN): Door trim panel, front, left or right - replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[63 - Beleuchtung/63-02.jpg]]
+![[63-02.jpg]]
 
 *Originaltitel (EN): High beam / low beam headlight, tail light lamp – replace*
 

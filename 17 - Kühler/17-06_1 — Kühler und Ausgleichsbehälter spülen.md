@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[17 - Kühler/17-06_1.jpg]]
+![[17-06_1.jpg]]
 
 *Originaltitel (EN): Flushing radiator*
 

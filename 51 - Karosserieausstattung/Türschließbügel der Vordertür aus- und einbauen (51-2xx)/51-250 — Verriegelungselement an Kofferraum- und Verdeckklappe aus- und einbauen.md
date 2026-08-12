@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[51 - Karosserieausstattung/Türschließbügel der Vordertür aus- und einbauen (51-2xx)/51-250.jpg]]
+![[51-250.jpg]]
 
 *Originaltitel (EN): Locking element - remove and Install or replace*
 

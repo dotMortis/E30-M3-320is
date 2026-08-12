@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Weitere Schaltpläne & Seiten/6411-01.jpg]]
+![[6411-01.jpg]]
 
 *Originaltitel (EN): "*
 

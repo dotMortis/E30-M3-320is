@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[21 - Kupplung/21-04.jpg]]
+![[21-04.jpg]]
 
 *Originaltitel (EN): Checking drive plate for lateral runout / Replacing clutch release*
 

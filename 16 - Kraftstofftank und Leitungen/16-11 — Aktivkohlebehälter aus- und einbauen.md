@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16 - Kraftstofftank und Leitungen/16-11.jpg]]
+![[16-11.jpg]]
 
 *Originaltitel (EN): Repacing carbon canister (fuel filter)*
 

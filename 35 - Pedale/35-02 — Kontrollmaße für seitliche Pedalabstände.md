@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35 - Pedale/35-02.jpg]]
+![[35-02.jpg]]
 
 *Originaltitel (EN): Side clearance of pedals - control distances*
 

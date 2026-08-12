@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Anzugsdrehmomente Zündverteiler und Verteilerkappe (12-0xx)/12-11.jpg]]
+![[12-11.jpg]]
 
 *Originaltitel (EN): Plug Connectors, Terminals*
 

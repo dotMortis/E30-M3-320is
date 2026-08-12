@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Stromverteilungskasten Sicherungs- und Relaisanordnung (0670)/0670-09.jpg]]
+![[0670-09.jpg]]
 
 *Originaltitel (EN): " - Fuse 20*
 

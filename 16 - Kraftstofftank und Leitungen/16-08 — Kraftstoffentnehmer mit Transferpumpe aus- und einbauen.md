@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[16 - Kraftstofftank und Leitungen/16-08.jpg]]
+![[16-08.jpg]]
 
 *Originaltitel (EN): Removing and installing fuel tank (w/ integrated fuel transfer pump)*
 

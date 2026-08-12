@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[72 - Ausstattung und Zubehör für Karosserie/72-116.jpg]]
+![[72-116.jpg]]
 
 *Originaltitel (EN): "*
 

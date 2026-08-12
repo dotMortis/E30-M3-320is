@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[72 - Ausstattung und Zubehör für Karosserie/72-120.jpg]]
+![[72-120.jpg]]
 
 *Originaltitel (EN): Wind deflector - install*
 

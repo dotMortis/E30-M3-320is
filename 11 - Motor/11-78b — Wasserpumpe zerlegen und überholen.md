@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-78b.jpg]]
+![[11-78b.jpg]]
 
 *Originaltitel (EN): Water pump overhaul (PAGE 11-34?)*
 

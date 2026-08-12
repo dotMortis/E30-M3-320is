@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.95**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[63 - Beleuchtung/63-00-index-a.jpg]]
+![[63-00-index-a.jpg]]
 
 ---
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31 - Vorderachse/Vorderachsträger bei Allradantrieb ersetzen (31)/31-11_1.jpg]]
+![[31-11_1.jpg]]
 
 *Originaltitel (EN): Spring strut - remove and install (AWD)*
 

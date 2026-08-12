@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34 - Bremsen/34-33.jpg]]
+![[34-33.jpg]]
 
 *Originaltitel (EN): ABS hydraulic control unit relay / indicator lamp - replace*
 

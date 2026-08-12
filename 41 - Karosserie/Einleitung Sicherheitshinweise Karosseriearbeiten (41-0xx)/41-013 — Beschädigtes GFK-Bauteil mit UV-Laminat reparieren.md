@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[41 - Karosserie/Einleitung Sicherheitshinweise Karosseriearbeiten (41-0xx)/41-013.jpg]]
+![[41-013.jpg]]
 
 ---
 

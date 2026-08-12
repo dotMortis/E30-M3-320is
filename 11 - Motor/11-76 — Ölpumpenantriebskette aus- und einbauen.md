@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[11 - Motor/11-76.jpg]]
+![[11-76.jpg]]
 
 *Originaltitel (EN): Oil pump drive chain*
 

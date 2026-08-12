@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[62 - Instrumente/62-71.jpg]]
+![[62-71.jpg]]
 
 *Originaltitel (EN): Troubleshooting check control*
 

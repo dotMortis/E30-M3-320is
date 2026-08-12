@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[35 - Pedale/35-06.jpg]]
+![[35-06.jpg]]
 
 *Originaltitel (EN): Clutch pedal - remove and install*
 

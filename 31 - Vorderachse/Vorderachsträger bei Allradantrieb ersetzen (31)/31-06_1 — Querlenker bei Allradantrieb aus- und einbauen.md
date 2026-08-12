@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[31 - Vorderachse/Vorderachsträger bei Allradantrieb ersetzen (31)/31-06_1.jpg]]
+![[31-06_1.jpg]]
 
 *Originaltitel (EN): Control arm (AWD) - remove and install*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[BMW N 600 02.0 - Anzugsdrehmomente/Weitere Seiten/72-02.jpg]]
+![[72-02.jpg]]
 
 *Originaltitel (EN): Airbag Generator*
 

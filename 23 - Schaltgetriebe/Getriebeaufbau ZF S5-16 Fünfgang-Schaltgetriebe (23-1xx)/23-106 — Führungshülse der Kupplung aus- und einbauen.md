@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe (23-1xx)/23-106.jpg]]
+![[23-106.jpg]]
 
 *Originaltitel (EN): Guide sleeve for clutch release remove and install*
 

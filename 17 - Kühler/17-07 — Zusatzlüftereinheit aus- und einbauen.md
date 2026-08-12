@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[17 - Kühler/17-07.jpg]]
+![[17-07.jpg]]
 
 *Originaltitel (EN): Removing and installing extra fan assembly*
 

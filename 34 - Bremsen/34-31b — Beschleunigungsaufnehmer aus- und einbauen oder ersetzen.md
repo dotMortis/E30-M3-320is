@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34 - Bremsen/34-31b.jpg]]
+![[34-31b.jpg]]
 
 *Originaltitel (EN): Acceleration sensor - remove and install or replace (325ix)*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Elektrische Fehlersuche BMW M3 (00-0xx)/00-02-index-b.jpg]]
+![[00-02-index-b.jpg]]
 
 *Originaltitel (EN): A-Z listing of electrical circuits*
 

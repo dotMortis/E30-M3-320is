@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-06.jpg]]
+![[33-06.jpg]]
 
 *Originaltitel (EN): Rear axle carrier assembly - remove and install*
 

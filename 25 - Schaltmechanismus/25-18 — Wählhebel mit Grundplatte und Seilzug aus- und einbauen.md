@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[25 - Schaltmechanismus/25-18.jpg]]
+![[25-18.jpg]]
 
 *Originaltitel (EN): Shift lever complete w/ base - version with cable (AWD)*
 

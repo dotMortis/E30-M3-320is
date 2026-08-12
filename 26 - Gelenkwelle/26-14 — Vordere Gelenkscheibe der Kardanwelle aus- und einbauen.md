@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26 - Gelenkwelle/26-14.jpg]]
+![[26-14.jpg]]
 
 *Originaltitel (EN): Propellor shaft joint (front, AWD) - remove and install*
 

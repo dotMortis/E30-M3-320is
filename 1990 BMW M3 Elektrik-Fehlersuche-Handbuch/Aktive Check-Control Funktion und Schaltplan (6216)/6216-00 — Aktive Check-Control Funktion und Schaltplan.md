@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Aktive Check-Control Funktion und Schaltplan (6216)/6216-00.jpg]]
+![[6216-00.jpg]]
 
 *Originaltitel (EN): Active Check Control (EN: 62141385263/4, IT: 62141385256)*
 

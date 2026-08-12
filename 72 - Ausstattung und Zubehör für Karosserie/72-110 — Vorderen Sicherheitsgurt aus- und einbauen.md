@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[72 - Ausstattung und Zubehör für Karosserie/72-110.jpg]]
+![[72-110.jpg]]
 
 *Originaltitel (EN): Seat belt, front - remove and install or replace*
 

@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[23 - Schaltgetriebe/Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe (23-1xx)/23-121.jpg]]
+![[23-121.jpg]]
 
 *Originaltitel (EN): Transmission - troubleshoot*
 

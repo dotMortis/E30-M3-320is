@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Index der Spleißstellen-Ansichten (8000)/8000-04.jpg]]
+![[8000-04.jpg]]
 
 *Originaltitel (EN): "*
 

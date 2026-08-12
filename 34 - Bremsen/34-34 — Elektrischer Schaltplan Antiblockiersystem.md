@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[34 - Bremsen/34-34.jpg]]
+![[34-34.jpg]]
 
 *Originaltitel (EN): ABS - wiring diagram*
 

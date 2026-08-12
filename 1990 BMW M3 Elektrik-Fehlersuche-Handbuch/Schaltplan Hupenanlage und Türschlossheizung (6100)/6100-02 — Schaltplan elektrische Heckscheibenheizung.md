@@ -19,7 +19,7 @@ tags:
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[1990 BMW M3 Elektrik-Fehlersuche-Handbuch/Schaltplan Hupenanlage und Türschlossheizung (6100)/6100-02.jpg]]
+![[6100-02.jpg]]
 
 *Originaltitel (EN): Rear defogger*
 

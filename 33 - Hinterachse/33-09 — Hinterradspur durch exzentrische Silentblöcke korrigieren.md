@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.94**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-09.jpg]]
+![[33-09.jpg]]
 
 *Originaltitel (EN): "*
 

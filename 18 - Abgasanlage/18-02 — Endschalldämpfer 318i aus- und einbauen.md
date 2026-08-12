@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[18 - Abgasanlage/18-02.jpg]]
+![[18-02.jpg]]
 
 *Originaltitel (EN): Replacing final muffler - 318i*
 

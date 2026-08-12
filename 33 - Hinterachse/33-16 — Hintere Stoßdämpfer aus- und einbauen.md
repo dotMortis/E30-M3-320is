@@ -19,7 +19,7 @@ tags:
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[33 - Hinterachse/33-16.jpg]]
+![[33-16.jpg]]
 
 *Originaltitel (EN): Shock absorbers - remove and install*
 

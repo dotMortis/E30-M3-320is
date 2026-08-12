@@ -19,7 +19,7 @@ tags:
 > Typ: **Tabelle** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
-![[26 - Gelenkwelle/26-00-index-a.jpg]]
+![[26-00-index-a.jpg]]
 
 ---
 

@@ -42,18 +42,20 @@ OBS = REPO / ".obsidian"
 TYPE_DE = {"diagram": "Diagramm", "table": "Tabelle", "text": "Text"}
 SUBGROUP_THRESHOLD = 60          # only sections larger than this get sub-grouped
 
-# Bare wikilink embeds (![[name]]) rely on Obsidian's name-based resolution,
-# which is unreliable: it breaks when a filename occurs in more than one folder
-# (duplicate BMW page codes across sections) and has proven flaky for some
-# folder names even when the scan is co-located. Embeds are therefore always
-# written as explicit vault-relative paths, matching the vault's configured
-# "relative" newLinkFormat. DUP_IMAGE_NAMES is retained for QA/reporting only.
+# Obsidian resolves a bare wikilink embed (![[name]]) by unique filename. That
+# is the canonical, most reliable form -- but it is ambiguous when the same
+# filename occurs in more than one folder (duplicate BMW page codes across
+# sections), where Obsidian would pick one arbitrary match. Bare names are
+# therefore used for unique scans, and an explicit vault-relative path is
+# emitted only for the duplicates. DUP_IMAGE_NAMES is populated in main().
 DUP_IMAGE_NAMES: set[str] = set()
 
 
 def embed_target(img: str, dest_dir: Path) -> str:
-    """Vault-relative embed path for a scan (unambiguous for Obsidian)."""
-    return (dest_dir / img).relative_to(REPO).as_posix()
+    """Embed path for a scan: bare filename if unique, else vault-relative."""
+    if img in DUP_IMAGE_NAMES:
+        return (dest_dir / img).relative_to(REPO).as_posix()
+    return img
 
 _CTRL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
 _FS_BAD = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
