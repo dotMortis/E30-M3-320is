@@ -63,5 +63,12 @@ Die Seite 23–7 beschreibt den Ausbau und Einbau des Radialwellendichtrings der
 | special tools | Spezialwerkzeuge |
 | open end | offene Seite |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-08 — Anziehdrehmomente Schaltarme Getriebegehäuse]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -58,6 +58,13 @@ Die Seite 11-53 beschreibt den Ausbau und Einbau der Zylinderkopfhaube am BMW-Mo
 | bleeder hose | Entlüftungsschlauch |
 | gaskets | Dichtungen |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-10 — Anzugsdrehmomente Zylinderkopfhaube Ölabscheider Steuergehäuse]]
+- [[11-08 — Anzugsdrehmomente für Zylinderkopf und Zylinderkopfhaube]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

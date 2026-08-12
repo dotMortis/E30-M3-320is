@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Kraftstoffdampf-Entlüftungstank Karosserie"
 seitencode: "16-03"
-sektion_nr: ""
+sektion_nr: "16"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fuel Vapor Venting"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "16-03.jpg"
 tags:
-  - sektion/
+  - sektion/16
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Kraftstoffdampf-Entlüftungstank Karosserie
 
 > [!info] BMW-Seite `16-03` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **16**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

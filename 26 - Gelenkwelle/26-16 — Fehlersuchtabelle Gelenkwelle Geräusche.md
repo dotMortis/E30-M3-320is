@@ -88,6 +88,13 @@ Die Seite 26-16 enthält eine Fehlersuchtabelle für die Gelenkwelle. Sie ordnet
 | preload | Vorspannung |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[26-02 — Anzugsdrehmomente komplette Gelenkwelle]]
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

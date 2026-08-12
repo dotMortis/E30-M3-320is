@@ -1,14 +1,14 @@
 ---
 titel: "Stromlaufplan Instrumentenkombination Öltemperatur Kraftstoff Bordcomputer"
 seitencode: "6210-02"
-sektion_nr: ""
+sektion_nr: "62"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Gauges - Oil Temp, Computer, Fuel Sender"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "6210-02.jpg"
 tags:
-  - sektion/
+  - sektion/62
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Stromlaufplan Instrumentenkombination Öltemperatur Kraftstoff Bordcomputer
 
 > [!info] BMW-Seite `6210-02` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **62**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

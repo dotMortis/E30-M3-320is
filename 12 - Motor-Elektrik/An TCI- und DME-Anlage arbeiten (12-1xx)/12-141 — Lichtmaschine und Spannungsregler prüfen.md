@@ -85,6 +85,13 @@ Die Seite 12–141 beschreibt die Prüfung von Lichtmaschine und Spannungsregler
 | starter | Anlasser |
 | ground connection | Masseverbindung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-07 — Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen]]
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

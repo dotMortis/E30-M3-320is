@@ -67,6 +67,15 @@ Inhaltsübersicht des Kapitels 23 „Schaltgetriebe“ für das Getrag-265/6-Fü
 | input shaft | Eingangswelle |
 | Overdrive | Overdrive |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-08 — Anziehdrehmomente Schaltarme Getriebegehäuse]]
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]]
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

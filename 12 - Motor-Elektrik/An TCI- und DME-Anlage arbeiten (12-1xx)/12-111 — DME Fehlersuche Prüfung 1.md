@@ -81,5 +81,11 @@ Werkstattprüfseite 12–111 zur systematischen Fehlersuche an der Digitalen Mot
 | starter | Anlasser |
 | engine wiring diagram | Motorkabelbaum-Schaltplan |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

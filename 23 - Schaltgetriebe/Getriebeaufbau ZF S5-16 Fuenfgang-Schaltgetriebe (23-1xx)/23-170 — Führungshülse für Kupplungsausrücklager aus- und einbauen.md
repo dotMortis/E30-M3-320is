@@ -97,6 +97,12 @@ Die Seite 23–170 zeigt Arbeitsanweisungen zum Ausbau und Einbau des genuteten 
 | reverse gear switch | Rückwärtsgangschalter |
 | hot air blower | Heißluftgebläse |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

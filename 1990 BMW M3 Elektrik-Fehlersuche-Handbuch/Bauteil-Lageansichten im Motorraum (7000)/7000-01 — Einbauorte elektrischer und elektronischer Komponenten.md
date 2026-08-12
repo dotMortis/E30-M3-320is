@@ -11,6 +11,7 @@ tags:
   - sektion/
   - seite
   - typ/diagram
+  - elektrik-referenz
 ---
 
 # Einbauorte elektrischer und elektronischer Komponenten

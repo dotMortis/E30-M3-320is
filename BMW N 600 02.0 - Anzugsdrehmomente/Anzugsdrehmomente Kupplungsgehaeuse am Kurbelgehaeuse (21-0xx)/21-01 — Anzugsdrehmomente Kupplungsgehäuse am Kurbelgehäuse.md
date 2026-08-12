@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Kupplungsgehäuse am Kurbelgehäuse"
 seitencode: "21-01"
-sektion_nr: ""
+sektion_nr: "21"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Bell Housing"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "21-01.jpg"
 tags:
-  - sektion/
+  - sektion/21
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Kupplungsgehäuse am Kurbelgehäuse
 
 > [!info] BMW-Seite `21-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **21**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -53,10 +54,11 @@ Die Seite ist eine BMW-Drehmomenttabelle aus dem Kapitel 21-1 „Kupplung“. Si
 | Unit | Einheit |
 | Crankcase | Kurbelgehäuse |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 21 — Kupplung|Abschnitt 21]]
+- [[21-03 — Kupplungsscheibe aus- und einbauen]]
+- [[21-07 — Fehlersuche an der Kupplung]]
 
 
 ---

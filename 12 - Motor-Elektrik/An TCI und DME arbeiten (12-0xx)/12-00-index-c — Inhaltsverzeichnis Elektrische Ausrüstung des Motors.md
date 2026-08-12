@@ -81,6 +81,15 @@ Inhaltsverzeichnis des Kapitels 12 „Elektrische Ausrüstung des Motors“ für
 | exhaust system | Abgasanlage |
 | catalytic converter | Katalysator |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-05 — Anzugsdrehmomente Vorgluehrelais Anschluesse]]
+- [[12-06 — Anzugsdrehmomente Glühkerzen und Glühkerzenleitungen]]
+- [[12-08 — Reglerschalter Anzugsdrehmomente]]
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

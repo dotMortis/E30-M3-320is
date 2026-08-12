@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente Schaltarme Getriebegehäuse"
 seitencode: "23-08"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Interior Shift Components"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "23-08.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente Schaltarme Getriebegehäuse
 
 > [!info] BMW-Seite `23-08` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -56,10 +57,14 @@ Die Seite ist eine Drehmomenttabelle zum Abschnitt 23 31 „Innenliegende Schalt
 | Measure | Maß / Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+- [[23-07 — Radialwellendichtring der Eingangswelle aus- und einbauen]]
+- [[23-121 — Fehlersuchtabelle Schaltgetriebe Ursachen Abhilfen]]
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]]
+- [[23-171 — Führungsbuchse aus- und einbauen und Spiel einstellen]]
+- [[23-321 — Lager aller Getriebewellen ersetzen]]
 
 
 ---

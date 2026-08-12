@@ -76,6 +76,12 @@ Flussdiagramm zur Fehlersuche an den Kraftstoff-Einspritzventilen, Testposition 
 | fuel flow rate | Kraftstoff-Fördermenge |
 | cold start valve | Kaltstartventil |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-08 — Anzugsdrehmomente der Kraftstoff-Einspritzventile]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

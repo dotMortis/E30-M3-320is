@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Gehäuse und Deckel"
 seitencode: "23-05"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Case and Covers"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "23-05.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Gehäuse und Deckel
 
 > [!info] BMW-Seite `23-05` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -58,6 +59,16 @@ Die Seite ist eine Anzugsdrehmomenttabelle aus dem Abschnitt „Schaltgetriebe�
 | detent plate | Rastierplatte |
 | screw | Schraube |
 | torque | Anzugsdrehmoment |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[23-121 — Fehlersuchtabelle Schaltgetriebe Ursachen Abhilfen]]
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]]
+- [[23-301 — Schaltmechanik GETRAG-265-6-Getriebe mit Schnellgang]]
+- [[23-314 — Schaltgetriebe weiter zerlegen]]
+- [[23-317 — Rückwärtsgangbereich des fünften Gangs zusammenbauen]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente für M6- und M7-Gewinde"
 seitencode: "00-03"
-sektion_nr: ""
+sektion_nr: "00"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "M6 / M7 Threads"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "00-03.jpg"
 tags:
-  - sektion/
+  - sektion/00
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente für M6- und M7-Gewinde
 
 > [!info] BMW-Seite `00-03` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **00**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

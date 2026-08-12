@@ -77,6 +77,13 @@ Die Seite 12–105 zeigt die elektrische Anordnung des M20-Motors mit Motronic M
 | electric fuel pumps | Elektrische Kraftstoffpumpen |
 | oxygen sensor | Lambdasonde |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-04 — Anzugsdrehmomente elektronische Schalt- und Steuergeräte]]
+- [[12-14 — Anzugsdrehmomente Temperaturfühler und Temperaturschalter]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

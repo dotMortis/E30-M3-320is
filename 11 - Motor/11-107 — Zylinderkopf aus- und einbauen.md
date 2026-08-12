@@ -87,6 +87,15 @@ Die Seite 11-107 beschreibt anhand mehrerer Detailabbildungen die vorbereitenden
 | upper tensioning rail | obere Spannschiene |
 | hose clamp | Schlauchschelle |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]]
+- [[11-21 — Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe]]
+- [[11-22 — Anzugsdrehmomente Nockenwelle und Kettenspanner]]
+- [[11-34 — Anzugsdrehmomente Abgaskrümmer Befestigung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

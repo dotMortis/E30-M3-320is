@@ -79,5 +79,11 @@ Die Seite 23-119 beschreibt den Ausbau und Einbau eines Rillenkugellagers, eines
 | special tool | Sonderwerkzeug |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-04 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -71,6 +71,12 @@ Die Seite 12-23 zeigt die Prüfschritte 5 und 6 der Fehlersuche an der Transisto
 | resistance | Widerstand |
 | burning traces | Brandspuren |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-02 — Anzugsdrehmomente für Zündkerzengewinde]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente elektronische Schalt- und Steuergeräte"
 seitencode: "12-04"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Electronic Shift / Control Units"
 seitentyp: "table"
 konfidenz: 0.97
 bilddatei: "12-04.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente elektronische Schalt- und Steuergeräte
 
 > [!info] BMW-Seite `12-04` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -64,10 +65,15 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Kapitel „Elektrische Anlag
 | cylinder crankcase | Zylinderkurbelgehäuse |
 | torque | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+- [[12-01a — Zündzeitpunkt prüfen und einstellen]]
+- [[12-07 — Steuergerät der Transistorzündung aus- und einbauen]]
+- [[12-105 — Elektrische Anordnung Motor M20 Motronic M1-1 325i]]
+- [[12-108 — Inkrementenrad der Ein-Geber-Motronic]]
+- [[12-20 — Fehlersuche Transistor-Zündanlage Test 1]]
+- [[12-21 — Fehlersuche Transistorzündanlage Prüfschritt 2]]
 
 
 ---

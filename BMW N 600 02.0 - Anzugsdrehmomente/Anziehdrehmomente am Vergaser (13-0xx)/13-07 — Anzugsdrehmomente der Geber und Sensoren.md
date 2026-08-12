@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente der Geber und Sensoren"
 seitencode: "13-07"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Senders for Control Unit"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-07.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente der Geber und Sensoren
 
 > [!info] BMW-Seite `13-07` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -62,10 +63,15 @@ Die Seite gehört zum Kapitel 13-7 „Kraftstoffanlage“ und enthält eine Anzu
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+- [[13-900 — Fehlersuchtafel Kraftstoffeinspritzung Symptome Prüfpositionen]]
+- [[13-626 — Temperaturzeitschalter prüfen aus- und einbauen]]
+- [[13-629 — Motorkühlmitteltemperaturfühler aus- und einbauen und prüfen]]
+- [[13-643 — Kraftstoff-Einspritzventile und Steckerplatte aus- und einbauen]]
+- [[13-700 — Temperaturschalter aus- und einbauen und elektrisch prüfen]]
+- [[13-703 — Kühlmitteltemperaturschalter aus- und einbauen und prüfen]]
 
 
 ---

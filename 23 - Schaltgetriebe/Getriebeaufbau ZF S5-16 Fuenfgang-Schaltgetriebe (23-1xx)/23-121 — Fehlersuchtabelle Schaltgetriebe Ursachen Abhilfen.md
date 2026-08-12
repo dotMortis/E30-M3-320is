@@ -112,5 +112,14 @@ Die Seite 23-121 enthält eine Fehlersuchtabelle für das manuelle Getriebe. Sie
 | shift console | Schaltkonsole |
 | selector fork | Schaltgabel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]]
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-09 — Anzugsdrehmomente Schaltgetriebe Befestigung]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

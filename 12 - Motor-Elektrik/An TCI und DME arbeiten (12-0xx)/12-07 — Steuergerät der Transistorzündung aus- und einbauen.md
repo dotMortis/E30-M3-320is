@@ -75,6 +75,12 @@ Die Seite beschreibt den Ausbau und Einbau des Steuergeräts der Transistorzünd
 | ignition timing | Zündzeitpunkt |
 | Curil K 2 | Curil K 2-Dichtmittel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-04 — Anzugsdrehmomente elektronische Schalt- und Steuergeräte]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -50,6 +50,8 @@ tags:
 ## Nachschlagen
 - [[Glossar]] — zweisprachiges Fachwörterbuch (EN ↔ DE)
 - [[Technische-Daten]] — technische Daten M3 / 320is
+- [[Sonderwerkzeuge]] — BMW-Spezialwerkzeug-Index mit Seitenverweisen
+- [[Sicherheitshinweise]] — Warnhinweise aus dem ganzen Handbuch, nach Abschnitt
 - [[LIESMICH]] — Anleitung (Installation, Suche, Zoom)
 
 > [!note] Hinweis zur Genauigkeit

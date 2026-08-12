@@ -59,5 +59,11 @@ Inhaltsverzeichnis der Reparaturgruppe 26 „Gelenkwelle“ auf Seite 41 eines B
 | troubleshoot | Fehlersuche |
 | replace | erneuern |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[26-02 — Anzugsdrehmomente komplette Gelenkwelle]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

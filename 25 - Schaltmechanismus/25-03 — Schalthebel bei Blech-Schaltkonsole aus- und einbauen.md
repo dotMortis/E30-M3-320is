@@ -69,5 +69,11 @@ Die Seite 25-3 beschreibt den Aus- und Einbau des Schalthebels bei Fahrzeugen mi
 | spherical plates | Kugelschalen |
 | Molykote Longterm 2 | Molykote Longterm 2 Schmierfett |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-02 — Anzugsdrehmomente Schaltkonsole Automatikgetriebe]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

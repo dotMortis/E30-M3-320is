@@ -91,6 +91,12 @@ Werkstatthandbuchseite 13-702 für den BMW M3/320is mit Katalysator. Sie beschre
 | special tool | Spezialwerkzeug |
 | push rod | Druckstange |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-01 — Anziehdrehmomente am Vergaser]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

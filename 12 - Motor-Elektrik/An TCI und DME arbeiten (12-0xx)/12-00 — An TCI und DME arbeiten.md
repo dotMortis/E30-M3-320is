@@ -75,6 +75,13 @@ Die Seite 12-0 enthält allgemeine Sicherheits- und Arbeitsanweisungen für Arbe
 | test lamp | Prüflampe |
 | burglar alarm system | Diebstahlwarnanlage |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-03 — Anziehdrehmomente der Zündspule]]
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

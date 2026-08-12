@@ -1,14 +1,14 @@
 ---
 titel: "Drehmomenttabelle Getriebewellen Schaltgetriebe"
 seitencode: "23-07"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Transmission Shafts"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "23-07.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Drehmomenttabelle Getriebewellen Schaltgetriebe
 
 > [!info] BMW-Seite `23-07` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -64,10 +65,15 @@ Die Seite ist eine Drehmomenttabelle für das Schaltgetriebe, Kapitel 23-7 „Ma
 | Screw | Schraube |
 | Measure | Drehmomentwert |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+- [[23-117 — Explosionszeichnung Zahnrad- und Lagersatz Schaltgetriebe]]
+- [[23-184 — Lager aller Getriebewellen ersetzen]]
+- [[23-320 — Explosionsdarstellung Schaltgetriebe Bauteile]]
+- [[23-06 — Radialwellendichtringe an Abtriebsflansch und Schaltwelle ersetzen]]
+- [[23-107 — Radialwellendichtringe Abtriebsflansch Schaltwelle aus- und einbauen]]
+- [[23-172 — Radialwellendichtring am Abtriebsflansch aus- und einbauen]]
 
 
 ---

@@ -77,6 +77,15 @@ Inhaltsverzeichnis des Kapitels 11 „Engine“ für den BMW M3 mit Motor S14 Z.
 | Flywheel | Schwungrad |
 | Starter gear ring | Anlasszahnkranz |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-10 — Anzugsdrehmomente Zylinderkopfhaube Ölabscheider Steuergehäuse]]
+- [[11-14 — Anzugsdrehmomente Schwungradbefestigung Kurbelwelle]]
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-11 — Anzugsdrehmomente Ölwanne und Ölablassschraube]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

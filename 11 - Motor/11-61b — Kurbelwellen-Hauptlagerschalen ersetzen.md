@@ -94,6 +94,15 @@ Werkstattanweisung zum Ersetzen der Kurbelwellen-Hauptlagerschalen bei ausgebaut
 | color code | Farbkennzeichnung |
 | correct torque | vorgeschriebenes Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-01 — Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse]]
+- [[11-02 — Anzugsdrehmomente und Anzugswinkel Kurbelgehäuse]]
+- [[11-26 — Anzugsdrehmomente Ölpumpe mit Ansaugsieb und Antrieb]]
+- [[11-30 — Anzugsdrehmomente Wasserpumpe Kurbelgehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -108,6 +108,13 @@ Die Seite 12-150 zeigt ein Fehlersuch-Flussdiagramm für den Anlasser. Ausgehend
 | planet gears | Planetenräder |
 | short | Kurzschluss |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-09 — Anzugsdrehmomente Anlasser und Befestigungsteile]]
+- [[12-05 — Anzugsdrehmomente Vorgluehrelais Anschluesse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

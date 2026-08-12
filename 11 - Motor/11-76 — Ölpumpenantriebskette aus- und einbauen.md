@@ -91,6 +91,12 @@ Die Seite 11-76 beschreibt die Prüfung, Reinigung und Zerlegung der Ölpumpe ei
 | oil pan | Ölwanne |
 | chain tightness | Kettenspannung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-26 — Anzugsdrehmomente Ölpumpe mit Ansaugsieb und Antrieb]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

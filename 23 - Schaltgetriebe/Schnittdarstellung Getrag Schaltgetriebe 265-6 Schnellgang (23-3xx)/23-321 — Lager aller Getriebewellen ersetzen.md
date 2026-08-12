@@ -90,6 +90,12 @@ Werkstattanweisung BMW, Seite 23-321, zum Ersetzen der Lager aller Getriebewelle
 | hot air blower | Heißluftgebläse |
 | special tool | Sonderwerkzeug |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-08 — Anziehdrehmomente Schaltarme Getriebegehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

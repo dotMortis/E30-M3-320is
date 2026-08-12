@@ -63,5 +63,11 @@ Die BMW-Werkstatthandbuchseite 13-700 beschreibt den Ausbau, Einbau und die elek
 | tightening torque | Anzugsdrehmoment |
 | temperature | Temperatur |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-07 — Anzugsdrehmomente der Geber und Sensoren]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

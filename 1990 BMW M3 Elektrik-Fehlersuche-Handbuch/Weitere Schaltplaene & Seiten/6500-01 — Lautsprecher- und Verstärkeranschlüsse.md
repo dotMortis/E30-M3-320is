@@ -1,14 +1,14 @@
 ---
 titel: "Lautsprecher- und Verstärkeranschlüsse"
 seitencode: "6500-01"
-sektion_nr: ""
+sektion_nr: "65"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Speaker / Amplifier connections"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "6500-01.jpg"
 tags:
-  - sektion/
+  - sektion/65
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Lautsprecher- und Verstärkeranschlüsse
 
 > [!info] BMW-Seite `6500-01` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **65**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

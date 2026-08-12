@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Luftpumpe Leitungen Steuerventile"
 seitencode: "11-38"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Air Pump, Lines and Valves"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-38.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Luftpumpe Leitungen Steuerventile
 
 > [!info] BMW-Seite `11-38` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -52,12 +53,6 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle im Kapitel 11–38 „Motor“. Sie 
 | Lock nut | Kontermutter |
 | Screw | Schraube |
 | Torque | Anzugsdrehmoment |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

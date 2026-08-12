@@ -69,6 +69,12 @@ Werkstattverfahren 25 11 003 zum Zerlegen und Zusammenbauen des Schalthebels an 
 | lower ribbed plate | untere gerippte Platte |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-02 — Anzugsdrehmomente Schaltkonsole Automatikgetriebe]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

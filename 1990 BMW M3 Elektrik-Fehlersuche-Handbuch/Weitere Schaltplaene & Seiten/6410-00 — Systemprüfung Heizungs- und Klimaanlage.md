@@ -1,14 +1,14 @@
 ---
 titel: "Systemprüfung Heizungs- und Klimaanlage"
 seitencode: "6410-00"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Heating & A/C"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "6410-00.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Systemprüfung Heizungs- und Klimaanlage
 
 > [!info] BMW-Seite `6410-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

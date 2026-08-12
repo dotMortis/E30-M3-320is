@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente der Vakuumpumpe"
 seitencode: "11-37"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Vacuum Pump"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "11-37.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente der Vakuumpumpe
 
 > [!info] BMW-Seite `11-37` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -56,10 +57,15 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle im Kapitel 11 „Motor“, Abschni
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-100 — Motorübersicht S14 B20 B23]]
+- [[11-103 — Motor aus- und einbauen]]
+- [[11-106 — Zylinderkopf aus- und einbauen]]
+- [[11-107 — Zylinderkopf aus- und einbauen]]
+- [[11-108 — Zylinderkopf aus- und einbauen]]
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]]
 
 
 ---

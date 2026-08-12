@@ -98,6 +98,12 @@ Die Seite 18-1 beschreibt im Arbeitsvorgang 18 00 020 den Ausbau und Einbau der 
 | automatic transmission | Automatikgetriebe |
 | preload | Vorspannung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[18-01 — Anzugs- und Montagevorgaben Abgasanlage]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

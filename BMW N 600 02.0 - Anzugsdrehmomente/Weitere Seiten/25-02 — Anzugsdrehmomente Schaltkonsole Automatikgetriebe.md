@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Schaltkonsole Automatikgetriebe"
 seitencode: "25-02"
-sektion_nr: ""
+sektion_nr: "25"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Shift Console - Automatic"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "25-02.jpg"
 tags:
-  - sektion/
+  - sektion/25
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Schaltkonsole Automatikgetriebe
 
 > [!info] BMW-Seite `25-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **25**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -60,10 +61,15 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle zum Kapitel 25 „Schaltmechanismus�
 | Interlock cable | Sperrzug |
 | Torque | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 25 — Schaltmechanismus|Abschnitt 25]]
+- [[25-05 — Schalthebel bei Allradfahrzeugen aus- und einbauen]]
+- [[25-02 — Schaltbetätigung mit Aluminium-Schaltkonsole]]
+- [[25-06 — Schalthebel und Kugelplatte einbauen]]
+- [[25-03 — Schalthebel bei Blech-Schaltkonsole aus- und einbauen]]
+- [[25-04 — Schalthebel der Aluminium-Schaltkonsole aus- und einbauen]]
+- [[25-07 — Schalthebel an Blech-Schaltkonsole zerlegen und zusammenbauen]]
 
 
 ---

@@ -81,6 +81,14 @@ Die Seite 12-107/1 zeigt die 20-polige Motorsteckverbindung des BMW-M20-Motors i
 | diagnosis plug | Diagnosestecker |
 | voltage while starting | Spannung während des Anlassens |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+- [[12-14 — Anzugsdrehmomente Temperaturfühler und Temperaturschalter]]
+- [[12-17 — Anzugsdrehmomente Steuergerätegehäuse DME]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

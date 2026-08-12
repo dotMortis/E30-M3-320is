@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente Schaltventile Parksperre"
 seitencode: "24-12"
-sektion_nr: ""
+sektion_nr: "24"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Shift Valves, Parking Lock"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "24-12.jpg"
 tags:
-  - sektion/
+  - sektion/24
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente Schaltventile Parksperre
 
 > [!info] BMW-Seite `24-12` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **24**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

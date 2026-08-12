@@ -86,6 +86,14 @@ Die Seite 11-52a zeigt anhand mehrerer Motorraum-Fotografien die Arbeitsschritte
 | carbon canister | Aktivkohlebehälter |
 | clamp | Schelle |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-33 — Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube]]
+- [[11-11 — Anzugsdrehmomente Ölwanne und Ölablassschraube]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

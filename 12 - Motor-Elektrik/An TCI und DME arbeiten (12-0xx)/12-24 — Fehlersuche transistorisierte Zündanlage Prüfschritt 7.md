@@ -71,6 +71,12 @@ Flussdiagramm des Prüfschritts 7 zur Fehlersuche an der transistorisierten Zün
 | ignition voltage | Zündspannung |
 | nominal value microfiche | Mikrofilm mit Nennwerten |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

@@ -66,6 +66,12 @@ Inhaltsverzeichnis der BMW-Werkstattunterlage für die Instrumente im Kapitel 62
 | Troubleshooting | Fehlersuche |
 | Economy control | Verbrauchsanzeige |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[62-01 — Anzugsdrehmoment Befestigungsschrauben Geschwindigkeitsgeber]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

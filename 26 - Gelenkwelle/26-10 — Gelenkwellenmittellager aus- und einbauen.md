@@ -88,11 +88,18 @@ Die Seite 26-10 beschreibt den Ausbau und Einbau der Mittellagerbaugruppe der Ge
 | tightening torque | Anzugsdrehmoment |
 | balancing | Auswuchtung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]]
+- [[26-02 — Anzugsdrehmomente komplette Gelenkwelle]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
 - [[26-02 — Schiebestück der Gelenkwelle aus- und einbauen]] — gemeinsame Begriffe: balancing, slide, universal joint
-- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]] — gemeinsame Begriffe: slide, universal joint
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]] — Abschnitt 26: gemeinsame Begriffe: slide, universal joint
 
 
 ---

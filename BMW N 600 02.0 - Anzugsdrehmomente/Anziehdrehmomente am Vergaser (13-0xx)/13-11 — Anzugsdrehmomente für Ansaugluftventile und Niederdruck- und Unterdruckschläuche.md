@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für Ansaugluftventile und Niederdruck- und Unterdruckschläuche"
 seitencode: "13-11"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Air intake valves, low-pressure and vacuum hoses"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-11.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für Ansaugluftventile und Niederdruck- und Unterdruckschläuche
 
 > [!info] BMW-Seite `13-11` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -52,12 +53,6 @@ Die Seite ist eine Drehmomenttabelle aus dem Abschnitt 13-11 „Kraftstoffanlage
 | Measure | Maß |
 | Unit | Einheit |
 | Nm | Newtonmeter |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

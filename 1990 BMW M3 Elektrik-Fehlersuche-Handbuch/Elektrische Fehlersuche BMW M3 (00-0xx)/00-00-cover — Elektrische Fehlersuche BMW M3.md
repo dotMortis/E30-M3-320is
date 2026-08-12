@@ -1,14 +1,14 @@
 ---
 titel: "Elektrische Fehlersuche BMW M3"
 seitencode: "00-00-cover"
-sektion_nr: ""
+sektion_nr: "00"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: ""
 seitentyp: "text"
 konfidenz: 0.99
 bilddatei: "00-00-cover.jpg"
 tags:
-  - sektion/
+  - sektion/00
   - seite
   - typ/text
 ---
@@ -16,6 +16,7 @@ tags:
 # Elektrische Fehlersuche BMW M3
 
 > [!info] BMW-Seite `00-00-cover` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **00**.
 > Typ: **Text** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -95,6 +95,12 @@ Die Seite 23-5 beschreibt den Ausbau und Einbau der Führungshülse für das Kup
 | Loctite No. 573 | Loctite Nr. 573 |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

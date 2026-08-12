@@ -42,5 +42,11 @@ Die Seite ist eine Inhalts- beziehungsweise Abschnittsübersicht des BMW-Werksta
 | instrument clusters | Instrumentenkombinationen |
 | Simulator for testing instrument clusters | Simulator zum Prüfen von Instrumentenkombinationen |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[62-01 — Anzugsdrehmoment Befestigungsschrauben Geschwindigkeitsgeber]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

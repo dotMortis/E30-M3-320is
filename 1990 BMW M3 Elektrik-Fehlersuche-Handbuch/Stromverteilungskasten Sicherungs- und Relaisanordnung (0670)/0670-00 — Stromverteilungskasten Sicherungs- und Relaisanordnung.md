@@ -1,14 +1,14 @@
 ---
 titel: "Stromverteilungskasten Sicherungs- und Relaisanordnung"
 seitencode: "0670-00"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Power Distribution - fuse / relay box"
 seitentyp: "diagram"
 konfidenz: 0.99
 bilddatei: "0670-00.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Stromverteilungskasten Sicherungs- und Relaisanordnung
 
 > [!info] BMW-Seite `0670-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -85,6 +85,13 @@ Die Seite 26-4 zeigt anhand mehrerer Montagefotos den Aus- und Einbau der Gelenk
 | fuel tank connecting line | Verbindungsleitung des Kraftstofftanks |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]]
+- [[26-02 — Anzugsdrehmomente komplette Gelenkwelle]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

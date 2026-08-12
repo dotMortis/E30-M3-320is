@@ -59,10 +59,18 @@ Die Seite 28 zeigt das Inhaltsverzeichnis des Abschnitts 21 „Kupplung“ eines
 | Overhaul | Überholen |
 | Troubleshoot | Fehlersuche |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]]
+- [[21-03 — Anzugsdrehmomente hydraulische Kupplungsbetätigung]]
+- [[21-01 — Anzugsdrehmomente Kupplungsgehäuse am Kurbelgehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
-- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]] — gemeinsame Begriffe: clutch disc, drive plate
+- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]] — Abschnitt 21: gemeinsame Begriffe: clutch disc, drive plate
 - [[23-122 — Fehlersuchtabelle für Schaltgetriebe]] — Abschnitt 23: gemeinsame Begriffe: clutch release, drive plate
 - [[23-303 — Schaltgetriebe aus- und einbauen]] — Abschnitt 23: gemeinsame Begriffe: clutch housing, drive plate
 - [[21-02 — Kupplungsscheibe aus- und einbauen]] — gemeinsame Begriffe: clutch disc, drive plate

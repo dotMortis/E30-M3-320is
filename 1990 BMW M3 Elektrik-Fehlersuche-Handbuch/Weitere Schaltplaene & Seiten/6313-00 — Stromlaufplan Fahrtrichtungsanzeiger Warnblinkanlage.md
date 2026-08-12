@@ -1,14 +1,14 @@
 ---
 titel: "Stromlaufplan Fahrtrichtungsanzeiger Warnblinkanlage"
 seitencode: "6313-00"
-sektion_nr: ""
+sektion_nr: "63"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Turn / Hazard Indicators"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6313-00.jpg"
 tags:
-  - sektion/
+  - sektion/63
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Stromlaufplan Fahrtrichtungsanzeiger Warnblinkanlage
 
 > [!info] BMW-Seite `6313-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **63**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

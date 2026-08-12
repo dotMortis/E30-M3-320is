@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente der Kraftstoff-Einspritzventile"
 seitencode: "13-08"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fuel Injectors"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-08.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente der Kraftstoff-Einspritzventile
 
 > [!info] BMW-Seite `13-08` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -50,6 +51,16 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle zum Kraftstoffzufuhr- und Kraft
 | screw | Schraube |
 | measure | Anzugsmaß beziehungsweise Anzugsdrehmoment |
 | Nm | Newtonmeter |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[13-643 — Kraftstoff-Einspritzventile und Steckerplatte aus- und einbauen]]
+- [[13-903 — Fehlersuche Kraftstoff-Einspritzventile Test 6]]
+- [[13-640 — Kaltstartventil aus- und einbauen und prüfen]]
+- [[13-641 — Kaltstartventil aus- und einbauen und prüfen]]
+- [[13-642 — Kraftstoff-Einspritzventil aus- und einbauen]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

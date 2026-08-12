@@ -79,5 +79,11 @@ Die Seite 13-703 beschreibt Ausbau, Einbau und elektrische Prüfung von zwei Kü
 | fill and bleed | auffüllen und entlüften |
 | temperature switch terminal | Anschluss des Temperaturschalters |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-07 — Anzugsdrehmomente der Geber und Sensoren]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

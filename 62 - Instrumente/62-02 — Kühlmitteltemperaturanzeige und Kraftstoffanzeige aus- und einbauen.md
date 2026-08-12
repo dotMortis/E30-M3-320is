@@ -68,6 +68,12 @@ Die Seite 62-2 beschreibt anhand bebilderter Arbeitsschritte den Ausbau und Einb
 | lock | Verriegelung |
 | instruments | Instrumente |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[62-01 — Anzugsdrehmoment Befestigungsschrauben Geschwindigkeitsgeber]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

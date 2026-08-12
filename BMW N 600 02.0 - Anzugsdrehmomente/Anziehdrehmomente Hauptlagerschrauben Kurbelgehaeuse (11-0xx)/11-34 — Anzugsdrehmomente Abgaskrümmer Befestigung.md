@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Abgaskrümmer Befestigung"
 seitencode: "11-34"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Exhaust Manifold"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-34.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Abgaskrümmer Befestigung
 
 > [!info] BMW-Seite `11-34` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -63,10 +64,15 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für den Abgaskrümmer im Motorberei
 | screw | Schraube |
 | torque | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-100 — Motorübersicht S14 B20 B23]]
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]]
+- [[11-103 — Motor aus- und einbauen]]
+- [[11-106 — Zylinderkopf aus- und einbauen]]
+- [[11-107 — Zylinderkopf aus- und einbauen]]
+- [[11-108 — Zylinderkopf aus- und einbauen]]
 
 
 ## Verwandte Seiten

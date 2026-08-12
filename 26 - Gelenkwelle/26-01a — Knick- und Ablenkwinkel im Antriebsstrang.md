@@ -71,6 +71,13 @@ Die Seite 26–1a beschreibt die Messung und gegebenenfalls Korrektur der Knick-
 | universal joint | Kreuzgelenk |
 | shims | Ausgleichsscheiben |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[26-02 — Anzugsdrehmomente komplette Gelenkwelle]]
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

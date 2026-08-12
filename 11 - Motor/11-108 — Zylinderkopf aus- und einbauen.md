@@ -96,6 +96,15 @@ Die Seite 11-108 behandelt den Ausbau und Einbau des Zylinderkopfs einschließli
 | crankcase | Kurbelgehäuse |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-10 — Anzugsdrehmomente Zylinderkopfhaube Ölabscheider Steuergehäuse]]
+- [[11-12 — Anzugsdrehmomente Steuergehäuse- und Abschlussdeckel]]
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]]
+- [[11-01 — Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -81,6 +81,12 @@ Seite 26-15 aus dem Abschnitt zur Fehlersuche an der Kardanwelle. Die Tabelle or
 | engine/transmission suspension | Motor-/Getriebeaufhängung |
 | special tool | Sonderwerkzeug |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[26-02 — Anzugsdrehmomente komplette Gelenkwelle]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

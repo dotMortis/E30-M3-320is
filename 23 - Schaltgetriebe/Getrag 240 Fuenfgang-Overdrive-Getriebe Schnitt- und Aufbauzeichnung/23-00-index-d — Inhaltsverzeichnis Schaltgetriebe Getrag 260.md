@@ -57,5 +57,14 @@ Seite 32 ist ein Inhaltsverzeichnis des Kapitels 23 „Schaltgetriebe“. Sie f�
 | disassemble and assemble | zerlegen und zusammenbauen |
 | overdrive | Schongang |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]]
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-09 — Anzugsdrehmomente Schaltgetriebe Befestigung]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

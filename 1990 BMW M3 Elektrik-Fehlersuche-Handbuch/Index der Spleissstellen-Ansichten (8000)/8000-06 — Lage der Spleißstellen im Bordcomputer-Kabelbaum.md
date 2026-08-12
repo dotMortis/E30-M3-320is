@@ -11,6 +11,7 @@ tags:
   - sektion/
   - seite
   - typ/diagram
+  - elektrik-referenz
 ---
 
 # Lage der Spleißstellen im Bordcomputer-Kabelbaum

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Schaltkonsole und Schaltstange"
 seitencode: "25-01"
-sektion_nr: ""
+sektion_nr: "25"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Shift Console - Manual"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "25-01.jpg"
 tags:
-  - sektion/
+  - sektion/25
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Schaltkonsole und Schaltstange
 
 > [!info] BMW-Seite `25-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **25**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -68,10 +69,13 @@ Die Seite ist eine Anzugsdrehmomenttabelle aus dem Kapitel 25-1 „Schaltmechani
 | screw | Schraube |
 | measure | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 25 — Schaltmechanismus|Abschnitt 25]]
+- [[25-02 — Schaltbetätigung mit Aluminium-Schaltkonsole]]
+- [[25-05 — Schalthebel bei Allradfahrzeugen aus- und einbauen]]
+- [[25-06 — Schalthebel und Kugelplatte einbauen]]
+- [[25-09 — Schaltstangengelenk an Blechschaltkonsole aus- und einbauen]]
 
 
 ---

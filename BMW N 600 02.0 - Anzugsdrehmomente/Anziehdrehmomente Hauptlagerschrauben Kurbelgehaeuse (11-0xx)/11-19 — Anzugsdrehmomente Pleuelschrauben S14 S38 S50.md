@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Pleuelschrauben S14 S38 S50"
 seitencode: "11-19"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Connecting Rods and Bearings"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-19.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Pleuelschrauben S14 S38 S50
 
 > [!info] BMW-Seite `11-19` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -60,12 +61,6 @@ Die Seite ist eine BMW-Drehmomenttabelle für den Motorbereich 11-19, Untergrupp
 | Type | Motortyp |
 | Measure | Wert / Maß |
 | Unit | Einheit |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
-
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Ölwanne und Ölablassschraube"
 seitencode: "11-11"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Oil Pan"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "11-11.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Ölwanne und Ölablassschraube
 
 > [!info] BMW-Seite `11-11` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -56,10 +57,15 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für den Motorbereich 11-11, Untergr
 | Thread | Gewinde |
 | Strength class | Festigkeitsklasse |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-109 — Ober- und Unterteil der Ölwanne aus- und einbauen]]
+- [[11-55a — Obere und untere Ölwannensektion aus- und einbauen]]
+- [[11-103 — Motor aus- und einbauen]]
+- [[11-104 — Motor aus- und einbauen]]
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]]
+- [[11-52a — Motor aus- und einbauen]]
 
 
 ---

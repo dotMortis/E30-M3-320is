@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente am Vergaser"
 seitencode: "13-01"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Carburetor"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-01.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente am Vergaser
 
 > [!info] BMW-Seite `13-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -61,10 +62,15 @@ Die Seite zeigt eine Anziehdrehmomenttabelle für das Kraftstoffzufuhr- und Gemi
 | warm-up regulator | Warmlaufregler |
 | torque | Anziehdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+- [[13-640 — Kaltstartventil aus- und einbauen und prüfen]]
+- [[13-641 — Kaltstartventil aus- und einbauen und prüfen]]
+- [[13-642 — Kraftstoff-Einspritzventil aus- und einbauen]]
+- [[13-643 — Kraftstoff-Einspritzventile und Steckerplatte aus- und einbauen]]
+- [[13-700a — Leerlaufdrehzahl und CO-Gehalt einstellen sowie Drosselklappen synchronisieren]]
+- [[13-702 — Leerlaufdrehzahl CO-Gehalt Drosselklappen synchronisieren]]
 
 
 ---

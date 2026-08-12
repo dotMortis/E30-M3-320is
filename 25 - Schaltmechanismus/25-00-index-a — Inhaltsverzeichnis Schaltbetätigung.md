@@ -80,5 +80,12 @@ Seite 40 enthält das Inhaltsverzeichnis des Kapitels 25 „Schaltbetätigung“
 | range selector lever | Wählhebel |
 | all wheel drive | Allradantrieb |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-02 — Anzugsdrehmomente Schaltkonsole Automatikgetriebe]]
+- [[25-01 — Anzugsdrehmomente Schaltkonsole und Schaltstange]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

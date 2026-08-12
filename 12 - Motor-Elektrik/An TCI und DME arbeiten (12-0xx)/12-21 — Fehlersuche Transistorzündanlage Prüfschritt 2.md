@@ -89,6 +89,12 @@ Die Seite beschreibt den zweiten Prüfschritt zur Fehlersuche an der Transistor-
 | starter terminal 50 | Starterklemme 50 |
 | ignition timing retard while starting | Zündzeitpunktverstellung beim Starten |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-04 — Anzugsdrehmomente elektronische Schalt- und Steuergeräte]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

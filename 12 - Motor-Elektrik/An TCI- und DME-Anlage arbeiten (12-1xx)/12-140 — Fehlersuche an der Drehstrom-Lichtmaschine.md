@@ -100,6 +100,12 @@ Flussdiagramm zur Fehlersuche an der Drehstrom-Lichtmaschine. Die Seite führt a
 | battery | Batterie |
 | power drain | Ruhestrom |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-07 — Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

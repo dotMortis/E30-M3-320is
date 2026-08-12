@@ -57,6 +57,13 @@ Die Seite 11-105 beschreibt im Arbeitsgang 11 12 000 den Aus- und Einbau des Zyl
 | gaskets | Dichtungen |
 | removing and installing | Aus- und Einbau |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-07 — Anziehdrehmomente Zylinderkopf Zylinderkopfdeckel]]
+- [[11-10 — Anzugsdrehmomente Zylinderkopfhaube Ölabscheider Steuergehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

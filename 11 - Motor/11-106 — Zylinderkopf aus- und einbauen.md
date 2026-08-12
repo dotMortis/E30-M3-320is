@@ -92,6 +92,15 @@ Die Werkstattbuchseite 11-106 beschreibt vorbereitende Arbeitsschritte zum Aus- 
 | pressure regulator | Druckregler |
 | electric lead | elektrische Leitung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-33 — Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube]]
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]]
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-34 — Anzugsdrehmomente Abgaskrümmer Befestigung]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

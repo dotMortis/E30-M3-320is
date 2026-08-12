@@ -1,14 +1,14 @@
 ---
 titel: "Masseverteilungs-Schaltplan G200 G300"
 seitencode: "0670-16"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "' - G200, G300"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "0670-16.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Masseverteilungs-Schaltplan G200 G300
 
 > [!info] BMW-Seite `0670-16` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

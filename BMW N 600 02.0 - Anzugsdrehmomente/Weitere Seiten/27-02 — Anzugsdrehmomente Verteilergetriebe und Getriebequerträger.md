@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Verteilergetriebe und Getriebequerträger"
 seitencode: "27-02"
-sektion_nr: ""
+sektion_nr: "27"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Transfer Box – Four Wheel Drive"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "27-02.jpg"
 tags:
-  - sektion/
+  - sektion/27
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Verteilergetriebe und Getriebequerträger
 
 > [!info] BMW-Seite `27-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **27**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

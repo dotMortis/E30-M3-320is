@@ -92,6 +92,13 @@ Die Seite 12-3 beschreibt die Prüfung und den Austausch des Impulsgebers im Zü
 | multimeter | Multimeter |
 | coil resistance | Spulenwiderstand |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+- [[12-12 — Anzugsdrehmomente für Motorkabelbaum-Befestigungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

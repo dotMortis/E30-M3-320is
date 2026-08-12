@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Kupplung am Schwungrad"
 seitencode: "21-02"
-sektion_nr: ""
+sektion_nr: "21"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Clutch Disc and Drive Plate"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "21-02.jpg"
 tags:
-  - sektion/
+  - sektion/21
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Kupplung am Schwungrad
 
 > [!info] BMW-Seite `21-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **21**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -57,6 +58,15 @@ Die Seite aus dem Kapitel „Kupplung“ enthält die Anzugsdrehmomente für die
 | Type | Ausführung |
 | Measure | Drehmomentwert |
 | Unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[21-03 — Kupplungsscheibe aus- und einbauen]]
+- [[21-02 — Kupplungsscheibe aus- und einbauen]]
+- [[21-07 — Fehlersuche an der Kupplung]]
+- [[21-04 — Kupplungsscheibe prüfen und Kupplungsausrückung erneuern]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

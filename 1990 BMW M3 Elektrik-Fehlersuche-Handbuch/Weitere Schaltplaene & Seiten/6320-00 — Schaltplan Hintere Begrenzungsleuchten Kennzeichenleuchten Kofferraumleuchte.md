@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Hintere Begrenzungsleuchten Kennzeichenleuchten Kofferraumleuchte"
 seitencode: "6320-00"
-sektion_nr: ""
+sektion_nr: "63"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Rear marker / License / Trunk lights"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6320-00.jpg"
 tags:
-  - sektion/
+  - sektion/63
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Hintere Begrenzungsleuchten Kennzeichenleuchten Kofferraumleuchte
 
 > [!info] BMW-Seite `6320-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **63**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -71,12 +72,6 @@ Schaltplan der Gruppe 6320-0 für die elektrische Versorgung und Überwachung de
 | ground distribution | Masseverteilung |
 | connector | Steckverbindung |
 | side marker light | Seitenmarkierungsleuchte |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 63 — Beleuchtung|Abschnitt 63]]
-
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

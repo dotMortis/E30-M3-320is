@@ -1,14 +1,14 @@
 ---
 titel: "Maximale Anziehdrehmomente M18 M18x1-5 Gewinde"
 seitencode: "00-09"
-sektion_nr: ""
+sektion_nr: "00"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "M18 / M18x1.5 Threads"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "00-09.jpg"
 tags:
-  - sektion/
+  - sektion/00
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Maximale Anziehdrehmomente M18 M18x1-5 Gewinde
 
 > [!info] BMW-Seite `00-09` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **00**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

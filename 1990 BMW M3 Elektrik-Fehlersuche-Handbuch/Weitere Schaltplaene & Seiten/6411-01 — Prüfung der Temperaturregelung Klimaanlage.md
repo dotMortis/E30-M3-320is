@@ -1,14 +1,14 @@
 ---
 titel: "Prüfung der Temperaturregelung Klimaanlage"
 seitencode: "6411-01"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "text"
 konfidenz: 0.97
 bilddatei: "6411-01.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/text
 ---
@@ -16,6 +16,7 @@ tags:
 # Prüfung der Temperaturregelung Klimaanlage
 
 > [!info] BMW-Seite `6411-01` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Text** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

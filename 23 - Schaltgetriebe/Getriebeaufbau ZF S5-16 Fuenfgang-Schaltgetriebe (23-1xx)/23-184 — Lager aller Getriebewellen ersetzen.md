@@ -104,6 +104,12 @@ Die Seite 23-184 beschreibt den Austausch der Lager sämtlicher Getriebewellen b
 | bolt cement | Schraubensicherung |
 | special tool | Sonderwerkzeug |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-07 — Drehmomenttabelle Getriebewellen Schaltgetriebe]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Fehlersuche Klimaanlagen-Luftverteilung Spannungsmessung"
 seitencode: "6412-02"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "6412-02.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Fehlersuche Klimaanlagen-Luftverteilung Spannungsmessung
 
 > [!info] BMW-Seite `6412-02` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

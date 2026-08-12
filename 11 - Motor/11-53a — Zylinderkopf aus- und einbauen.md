@@ -90,6 +90,13 @@ Die Seite 11-53a beschreibt im Rahmen der Arbeitsanweisung 11 12 00 die vorberei
 | vacuum hose | Unterdruckschlauch |
 | intake manifold brace | Ansaugkrümmerstrebe |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-33 — Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube]]
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

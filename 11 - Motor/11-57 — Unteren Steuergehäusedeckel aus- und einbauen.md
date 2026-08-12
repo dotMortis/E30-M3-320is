@@ -80,6 +80,13 @@ Die Seite 11-57 beschreibt den Ausbau und Einbau des unteren Steuergehäusedecke
 | Three Bond Silicone 1207 | Three Bond Silicone 1207-Dichtmittel |
 | Loctite No. 270 | Loctite Nr. 270 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-12 — Anzugsdrehmomente Steuergehäuse- und Abschlussdeckel]]
+- [[11-31 — Anzugsdrehmoment Überwurfmutter Lüfterkupplung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

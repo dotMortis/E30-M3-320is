@@ -62,6 +62,12 @@ Schnittdarstellung der Schaltmechanik des GETRAG-265/6-Getriebes mit Schnellgang
 | Reversing lever | Rückwärtsganghebel |
 | Transmission housing | Getriebegehäuse |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-05 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

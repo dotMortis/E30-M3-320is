@@ -55,6 +55,14 @@ Die Seite ist ein Inhaltsverzeichnis des Kapitels 23 „Schaltgetriebe“ und f�
 | Bearing | Lager |
 | Synchronization | Synchronisierung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-05 — Anzugsdrehmomente Gehäuse und Deckel]]
+- [[23-06 — Anzugsdrehmomente für Gehäuse und Deckel]]
+- [[23-08 — Anziehdrehmomente Schaltarme Getriebegehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

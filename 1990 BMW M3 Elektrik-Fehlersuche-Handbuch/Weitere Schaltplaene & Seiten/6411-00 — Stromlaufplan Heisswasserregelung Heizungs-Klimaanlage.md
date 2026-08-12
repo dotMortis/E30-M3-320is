@@ -1,14 +1,14 @@
 ---
 titel: "Stromlaufplan Heisswasserregelung Heizungs-Klimaanlage"
 seitencode: "6411-00"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6411-00.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Stromlaufplan Heisswasserregelung Heizungs-Klimaanlage
 
 > [!info] BMW-Seite `6411-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

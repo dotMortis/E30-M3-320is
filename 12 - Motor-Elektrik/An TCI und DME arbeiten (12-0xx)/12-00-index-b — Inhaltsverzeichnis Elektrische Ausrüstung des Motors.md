@@ -53,5 +53,14 @@ Die Seite ist ein Inhaltsverzeichnis des Kapitels 12 „Elektrische Ausrüstung 
 | inspect | prüfen |
 | Starter components | Anlasserbauteile |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+- [[12-05 — Anzugsdrehmomente Vorgluehrelais Anschluesse]]
+- [[12-06 — Anzugsdrehmomente Glühkerzen und Glühkerzenleitungen]]
+- [[12-08 — Reglerschalter Anzugsdrehmomente]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

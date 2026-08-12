@@ -90,5 +90,11 @@ Die Seite 12-142/1 beschreibt die Zerlegung und den Zusammenbau einer ausgebaute
 | circlip | Sicherungsring |
 | bushing | Buchse |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-07 — Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

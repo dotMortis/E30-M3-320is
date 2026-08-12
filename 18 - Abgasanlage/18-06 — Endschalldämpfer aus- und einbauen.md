@@ -77,6 +77,12 @@ Die Seite 18-6 beschreibt den Ausbau und Einbau des Endschalldämpfers einschlie
 | preload | Vorspannung |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[18-01 — Anzugs- und Montagevorgaben Abgasanlage]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

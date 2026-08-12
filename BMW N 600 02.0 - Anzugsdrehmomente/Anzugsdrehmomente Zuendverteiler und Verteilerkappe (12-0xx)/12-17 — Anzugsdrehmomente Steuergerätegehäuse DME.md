@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Steuergerätegehäuse DME"
 seitencode: "12-17"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Control Unit Housing (DME)"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-17.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Steuergerätegehäuse DME
 
 > [!info] BMW-Seite `12-17` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -58,10 +59,15 @@ Die Seite gehört zum Kapitel „Elektrische Anlage des Motors“, Abschnitt 12 
 | Nm (ft. lbs.) | Nm (ft-lb) |
 | DME control unit | DME-Steuergerät |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+- [[12-101 — Motorleitungssatz Anordnung 1984 1985 Modelle]]
+- [[12-106 — Elektrische Anlage Motor M3 S14]]
+- [[12-107 — Relais- und DME-Steuergerät-Übersicht M20]]
+- [[12-107_1 — Motorsteckverbindung M20 Anschlussbelegung]]
+- [[12-108_1 — Kurzprüfung Motorelektronik ohne Eigendiagnose]]
+- [[12-110 — DME Fehlersuchtabelle nach Symptomen]]
 
 
 ---

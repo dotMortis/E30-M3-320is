@@ -11,6 +11,7 @@ tags:
   - sektion/
   - seite
   - typ/table
+  - elektrik-referenz
 ---
 
 # Einbauortübersicht Bauteile und Steckverbinder

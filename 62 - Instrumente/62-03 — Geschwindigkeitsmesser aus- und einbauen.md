@@ -59,6 +59,12 @@ Werkstatthandbuchseite 62–3 zur Arbeitsposition 62 12 000 „Aus- und Einbauen
 | remove | ausbauen beziehungsweise herausnehmen |
 | install | einbauen |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[62-01 — Anzugsdrehmoment Befestigungsschrauben Geschwindigkeitsgeber]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

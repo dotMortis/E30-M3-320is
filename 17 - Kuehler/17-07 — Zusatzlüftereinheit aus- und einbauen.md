@@ -59,6 +59,12 @@ Die Seite 17-7 beschreibt den Arbeitsablauf zum Aus- und Einbau der Zusatzlüfte
 | wire plug | Steckverbinder |
 | nuts | Befestigungsmuttern |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-03 — Anzugsdrehmomente Motorölkühler und Luftableitführung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

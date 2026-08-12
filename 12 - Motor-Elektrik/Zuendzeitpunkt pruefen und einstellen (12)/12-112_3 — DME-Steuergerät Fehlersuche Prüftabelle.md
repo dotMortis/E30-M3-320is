@@ -83,6 +83,13 @@ Die Seite 12-112/3 zeigt eine Prüftabelle zur Fehlersuche am DME-Steuergerät. 
 | terminal 1 | Klemme 1 |
 | starting motor | Anlasser |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-03 — Anziehdrehmomente der Zündspule]]
+- [[12-02 — Anzugsdrehmomente für Zündkerzengewinde]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

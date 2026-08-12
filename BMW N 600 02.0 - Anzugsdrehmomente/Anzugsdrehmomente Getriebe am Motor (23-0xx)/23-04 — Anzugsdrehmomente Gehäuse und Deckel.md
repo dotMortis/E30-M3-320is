@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Gehäuse und Deckel"
 seitencode: "23-04"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Case and Covers"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "23-04.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Gehäuse und Deckel
 
 > [!info] BMW-Seite `23-04` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -73,10 +74,15 @@ Die Seite ist eine Drehmomenttabelle für das manuelle BMW-Getriebe, Abschnitt 2
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+- [[23-110 — Getriebe aus- und einbauen]]
+- [[23-04 — Vorderes Getriebegehäuseteil aus- und einbauen und abdichten]]
+- [[23-104 — Getriebegehäuse montieren und Axialspiel der Eingangswelle einstellen]]
+- [[23-169 — Getriebegehäuse Vorderteil aus- und einbauen und abdichten]]
+- [[23-11 — Schaltbetätigung und Rückwärtsgangwelle zusammenbauen]]
+- [[23-119 — Rillenkugellager Radialwellendichtring und Rollenlager aus- und einbauen]]
 
 
 ---

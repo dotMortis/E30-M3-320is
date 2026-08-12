@@ -82,6 +82,12 @@ Werkstattanweisung für den BMW M3/320is zur Einstellung der Motorleerlaufdrehza
 | nominal idle speed | nominale Leerlaufdrehzahl |
 | valve clearance | Ventilspiel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-01 — Anziehdrehmomente am Vergaser]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

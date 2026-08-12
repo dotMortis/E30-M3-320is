@@ -66,6 +66,12 @@ Die Seite 13-781 beschreibt den Aus- und Einbau eines einzelnen Kraftstoff-Einsp
 | manufacturing date | Herstellungsdatum |
 | code number | Kennnummer |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-06 — Anzugsdrehmomente Einspritzdüsen und -leitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

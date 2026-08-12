@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Schaltgetriebe und Stopfen"
 seitencode: "23-02"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Transmission Assembly"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "23-02.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Schaltgetriebe und Stopfen
 
 > [!info] BMW-Seite `23-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -57,10 +58,15 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für das Schaltgetriebe, Abschnitt 2
 | Type | Typ |
 | clutch housing | Kupplungsgehäuse |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+- [[23-121 — Fehlersuchtabelle Schaltgetriebe Ursachen Abhilfen]]
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]]
+- [[23-303 — Schaltgetriebe aus- und einbauen]]
+- [[23-05 — Führungshülse Kupplungsausrücklager aus- und einbauen]]
+- [[23-103 — Getriebegehäusevorderteil aus- und einbauen und abdichten]]
+- [[23-170 — Führungshülse für Kupplungsausrücklager aus- und einbauen]]
 
 
 ---

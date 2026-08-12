@@ -126,6 +126,14 @@ Die Seite 21-7 enthält eine Fehlersuchtabelle für die Kupplung. Sie ordnet vie
 | seal | Dichtring |
 | engine and transmission suspension | Motor- und Getriebeaufhängung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]]
+- [[21-01 — Anzugsdrehmomente Kupplungsgehäuse am Kurbelgehäuse]]
+- [[21-03 — Anzugsdrehmomente hydraulische Kupplungsbetätigung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

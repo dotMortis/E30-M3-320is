@@ -74,5 +74,12 @@ Die Werkstatthandbuchseite beschreibt die Prüfung und Einstellung des Zündzeit
 | BMW digital tester | BMW-Digitalprüfgerät |
 | operating temperature | Betriebstemperatur |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-04 — Anzugsdrehmomente elektronische Schalt- und Steuergeräte]]
+- [[12-12 — Anzugsdrehmomente für Motorkabelbaum-Befestigungen]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

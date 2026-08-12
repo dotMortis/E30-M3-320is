@@ -79,6 +79,12 @@ Die Seite 23-303 zeigt anhand von Montagefotos die Arbeitsschritte zum Absenken,
 | tightening torque | Anzugsdrehmoment |
 | oil level | Ölstand |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

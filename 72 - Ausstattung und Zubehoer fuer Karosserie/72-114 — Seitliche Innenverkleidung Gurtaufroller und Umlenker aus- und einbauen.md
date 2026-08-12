@@ -61,5 +61,11 @@ Die Seite 72-114 zeigt anhand von drei Abbildungen den Ausbau der seitlichen Inn
 | tightening torque | Anzugsdrehmoment |
 | Specifications | Technische Daten |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[72-01 — Anzugsdrehmomente für Sicherheitsgurte]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

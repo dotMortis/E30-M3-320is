@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Getriebe am Motor"
 seitencode: "23-01"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Transmission in General"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "23-01.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Getriebe am Motor
 
 > [!info] BMW-Seite `23-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -59,6 +60,14 @@ Die Seite ist eine Drehmomenttabelle für das Schaltgetriebe im Abschnitt „Get
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[23-03a — Schaltgetriebe aus- und einbauen]]
+- [[23-121 — Fehlersuchtabelle Schaltgetriebe Ursachen Abhilfen]]
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

@@ -84,6 +84,15 @@ Die Seite zeigt das Inhaltsverzeichnis des Kapitels 12 „Elektrische Ausrüstun
 | carbon brushes | Kohlebürsten |
 | troubleshoot | Fehlersuche |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+- [[12-12 — Anzugsdrehmomente für Motorkabelbaum-Befestigungen]]
+- [[12-03 — Anziehdrehmomente der Zündspule]]
+- [[12-04 — Anzugsdrehmomente elektronische Schalt- und Steuergeräte]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

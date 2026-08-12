@@ -63,6 +63,15 @@ Die Seite 11-60 beschreibt den Aus- und Einbau der Riemenscheibe an der Kurbelwe
 | Woodruff key | Woodruff-Passfeder |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-14 — Anzugsdrehmomente Schwungradbefestigung Kurbelwelle]]
+- [[11-13 — Anzugsdrehmomente Inkrementenrad Kurbelwelle]]
+- [[11-15 — Anziehdrehmomente für Schwingungsdämpfer]]
+- [[11-16 — Schwingungsdämpfer Anziehdrehmomente und Anziehwinkel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Kombiinstrument Drehzahlmesser Kraftstoffverbrauchsanzeige"
 seitencode: "6210-03"
-sektion_nr: ""
+sektion_nr: "62"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Tachometer / Fuel Economy"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6210-03.jpg"
 tags:
-  - sektion/
+  - sektion/62
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Kombiinstrument Drehzahlmesser Kraftstoffverbrauchsanzeige
 
 > [!info] BMW-Seite `6210-03` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **62**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

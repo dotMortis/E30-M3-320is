@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan-elektrische-Fensterheber-vordere-Tueren"
 seitencode: "5133-00"
-sektion_nr: ""
+sektion_nr: "51"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Power Windows"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "5133-00.jpg"
 tags:
-  - sektion/
+  - sektion/51
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan-elektrische-Fensterheber-vordere-Tueren
 
 > [!info] BMW-Seite `5133-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **51**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

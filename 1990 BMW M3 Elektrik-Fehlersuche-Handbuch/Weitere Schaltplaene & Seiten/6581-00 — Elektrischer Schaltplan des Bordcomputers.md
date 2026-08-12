@@ -1,14 +1,14 @@
 ---
 titel: "Elektrischer Schaltplan des Bordcomputers"
 seitencode: "6581-00"
-sektion_nr: ""
+sektion_nr: "62"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "On-board Computer"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6581-00.jpg"
 tags:
-  - sektion/
+  - sektion/62
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Elektrischer Schaltplan des Bordcomputers
 
 > [!info] BMW-Seite `6581-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **62**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

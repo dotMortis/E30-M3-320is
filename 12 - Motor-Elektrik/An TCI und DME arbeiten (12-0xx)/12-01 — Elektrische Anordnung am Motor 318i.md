@@ -81,6 +81,13 @@ Die Seite 12–1 zeigt die elektrische Anordnung am Motor des BMW 318i. Mehrere 
 | idle speed stabilization | Leerlaufstabilisierung |
 | plug | Stecker |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-14 — Anzugsdrehmomente Temperaturfühler und Temperaturschalter]]
+- [[12-15 — Temperaturschalter Elektronikbox Anziehdrehmoment]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

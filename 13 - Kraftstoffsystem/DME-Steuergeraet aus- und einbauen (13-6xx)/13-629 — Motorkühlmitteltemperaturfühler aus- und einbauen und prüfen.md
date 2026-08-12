@@ -79,6 +79,12 @@ Die Seite beschreibt den Ausbau, Einbau und die Prüfung des Motorkühlmitteltem
 | water bath | Wasserbad |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-07 — Anzugsdrehmomente der Geber und Sensoren]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

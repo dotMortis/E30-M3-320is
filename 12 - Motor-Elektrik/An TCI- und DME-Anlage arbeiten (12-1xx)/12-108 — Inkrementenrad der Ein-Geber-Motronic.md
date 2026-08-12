@@ -51,5 +51,11 @@ Die Seite 12-108 aus dem Abschnitt „Fehlersuche Motorelektrik und DME“ zeigt
 | sender | Geber |
 | Motronic M 1.1 | Motronic M 1.1 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-04 — Anzugsdrehmomente elektronische Schalt- und Steuergeräte]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

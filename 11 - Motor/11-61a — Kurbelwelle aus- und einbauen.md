@@ -105,6 +105,15 @@ Die Seite 11-61a beschreibt den Einbau und die Maßprüfung der Kurbelwelle sowi
 | BDC position | UT-Stellung |
 | console diameter | Konsolendurchmesser (Pleuellagergehäusedurchmesser) |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-13 — Anzugsdrehmomente Inkrementenrad Kurbelwelle]]
+- [[11-14 — Anzugsdrehmomente Schwungradbefestigung Kurbelwelle]]
+- [[11-15 — Anziehdrehmomente für Schwingungsdämpfer]]
+- [[11-16 — Schwingungsdämpfer Anziehdrehmomente und Anziehwinkel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -80,6 +80,12 @@ Die BMW-Werkstatthandbuchseite 13-626 beschreibt den Temperaturzeitschalter der 
 | connector | Stecker |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-07 — Anzugsdrehmomente der Geber und Sensoren]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

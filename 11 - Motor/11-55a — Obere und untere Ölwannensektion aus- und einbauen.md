@@ -89,6 +89,13 @@ Die Seite 11-55a beschreibt anhand von Montagefotos und Arbeitsschritten den Aus
 | universal sealing compound | Universal-Dichtmittel |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-11 — Anzugsdrehmomente Ölwanne und Ölablassschraube]]
+- [[11-12 — Anzugsdrehmomente Steuergehäuse- und Abschlussdeckel]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

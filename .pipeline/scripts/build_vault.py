@@ -39,6 +39,11 @@ MANIFEST = PIPE / "manifest.json"
 GLOSSARY = PIPE / "glossary.json"
 OBS = REPO / ".obsidian"
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build_techdata  # noqa: E402
+import build_special_tools  # noqa: E402
+import build_safety_notes  # noqa: E402
+
 TYPE_DE = {"diagram": "Diagramm", "table": "Tabelle", "text": "Text"}
 SUBGROUP_THRESHOLD = 60          # only sections larger than this get sub-grouped
 
@@ -256,6 +261,37 @@ def mentioned_block(page: dict) -> str:
             + "\n".join(lines) + "\n")
 
 
+def torque_block(page: dict) -> str:
+    """Render the dedicated torque<->procedure cross-reference block.
+
+    Two distinct directions (see link_torque_specs.py), rendered with two
+    different headings + callouts:
+      - on a TORQUE-SPEC page: page['procedure_refs'] -> which jobs need it
+      - on a PROCEDURE page:   page['torque_refs']    -> which torque tables it needs
+    A page is never both (torque pages live only in the "00 - Torque Specs"
+    folder), so only one of the two ever renders per note.
+    """
+    proc_refs = page.get("procedure_refs")
+    if proc_refs is not None:
+        if not proc_refs:
+            return ""
+        lines = [f"- [[{note_stem(PAGE_BY_ID[pid])}]]" for pid in proc_refs if pid in PAGE_BY_ID]
+        if not lines:
+            return ""
+        return ("## Betrifft folgende Arbeitsschritte\n"
+                "> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.\n\n"
+                + "\n".join(lines) + "\n")
+
+    torque_refs = page.get("torque_refs")
+    if torque_refs:
+        lines = [f"- [[{note_stem(PAGE_BY_ID[tid])}]]" for tid in torque_refs if tid in PAGE_BY_ID]
+        if lines:
+            return ("## Anzugsdrehmomente\n"
+                    "> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.\n\n"
+                    + "\n".join(lines) + "\n")
+    return ""
+
+
 def build_page_note(page: dict, section_de: str, section_no: str,
                     dest_dir: Path) -> str:
     a = page.get("analysis") or {}
@@ -267,7 +303,21 @@ def build_page_note(page: dict, section_de: str, section_no: str,
     code = code_of(page)
     img = page["image_file"]
 
-    tags = [f"sektion/{section_no}", "seite", f"typ/{seitentyp}"]
+    # Reference collections (torque-spec supplement, electrical-troubleshooting
+    # manual) are single manifest section_folders spanning MANY BMW groups, so
+    # the folder-level `section_no` passed in is None. Individual pages there
+    # carry their OWN correct group in page["section_no"] (see
+    # fix_reference_sections.py) -- used for the frontmatter tag/sektion_nr
+    # (so "sektion 34" search also surfaces the matching torque table), but
+    # NOT for the "Abschnittsübersicht" footer link or the info callout below,
+    # which must keep pointing at the MOC that actually exists on disk (built
+    # with the folder-level number).
+    tag_section_no = page.get("section_no") or section_no
+
+    tags = [f"sektion/{tag_section_no}", "seite", f"typ/{seitentyp}"]
+    if page.get("section_no_note"):
+        tags.append("elektrik-referenz" if "Referenzmaterial" in page["section_no_note"]
+                    else "pruefen")
     if konf is not None and konf < 0.6:
         tags.append("pruefen")
 
@@ -275,7 +325,7 @@ def build_page_note(page: dict, section_de: str, section_no: str,
         "---",
         f'titel: "{esc_yaml(titel_de)}"',
         f'seitencode: "{esc_yaml(code)}"',
-        f'sektion_nr: "{esc_yaml(str(section_no))}"',
+        f'sektion_nr: "{esc_yaml(str(tag_section_no))}"',
         f'sektion: "{esc_yaml(section_de)}"',
         f'titel_en: "{esc_yaml(caption)}"',
         f'seitentyp: "{esc_yaml(seitentyp)}"',
@@ -290,6 +340,8 @@ def build_page_note(page: dict, section_de: str, section_no: str,
     parts.append(f"# {titel_de}")
     parts.append("")
     parts.append(f"> [!info] BMW-Seite `{code}` · Abschnitt {section_no} — {section_de}")
+    if tag_section_no and tag_section_no != section_no:
+        parts.append(f"> Betrifft BMW-Gruppe **{tag_section_no}**.")
     parts.append(f"> Typ: **{typ_de}**" + (f" · Konfidenz: **{konf:.2f}**" if konf is not None else ""))
     parts.append("> Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.")
     parts.append("")
@@ -312,6 +364,11 @@ def build_page_note(page: dict, section_de: str, section_no: str,
     if tbl:
         parts.append("## Fachbegriffe (EN → DE)")
         parts.append(tbl)
+        parts.append("")
+
+    tq = torque_block(page)
+    if tq:
+        parts.append(tq)
         parts.append("")
 
     if not RENDER_RELATED_SECTIONS or page.get("section_folder") in RENDER_RELATED_SECTIONS:
@@ -411,6 +468,8 @@ def build_home(section_order: list[tuple], section_pages: dict) -> str:
         "## Nachschlagen",
         "- [[Glossar]] — zweisprachiges Fachwörterbuch (EN ↔ DE)",
         "- [[Technische-Daten]] — technische Daten M3 / 320is",
+        "- [[Sonderwerkzeuge]] — BMW-Spezialwerkzeug-Index mit Seitenverweisen",
+        "- [[Sicherheitshinweise]] — Warnhinweise aus dem ganzen Handbuch, nach Abschnitt",
         "- [[LIESMICH]] — Anleitung (Installation, Suche, Zoom)",
         "",
         "> [!note] Hinweis zur Genauigkeit",
@@ -421,46 +480,112 @@ def build_home(section_order: list[tuple], section_pages: dict) -> str:
     return "\n".join(lines)
 
 
-def build_glossary_note(glossary: dict) -> str:
-    terms = glossary["terms"]
-    lines = [
-        "---",
-        'titel: "Glossar"',
-        "tags:\n  - glossar",
-        "---",
-        "",
-        "# Glossar — Fachbegriffe EN ↔ DE",
-        "",
-        f"> [!abstract] {len(terms)} Begriffe, aus allen Seiten zusammengeführt.",
-        "",
-        "| Englisch | Deutsch | Häufigkeit | Varianten |",
-        "| --- | --- | ---: | --- |",
-    ]
+# A single 5800+ row table in one note is slow to render on Obsidian Mobile.
+# Split into these alphabetic ranges (by first character of the EN term),
+# sized to be roughly balanced against this vault's actual term distribution
+# (heavily skewed toward S/C/R/T/B) rather than a naive even A-Z split.
+GLOSSARY_RANGES = [
+    ("0–9, A–C", "0", "C"),
+    ("D–G", "D", "G"),
+    ("H–O", "H", "O"),
+    ("P–S", "P", "S"),
+    ("T–Z", "T", "Z"),
+]
+
+
+def _glossary_page_stem(label: str) -> str:
+    return f"Glossar ({label})"
+
+
+def _glossary_table_rows(terms: list[dict]) -> list[str]:
+    rows = ["| Englisch | Deutsch | Häufigkeit | Varianten |", "| --- | --- | ---: | --- |"]
     for t in terms:
         en = sanitize(t["en"]).replace("|", "\\|")
         de = sanitize(t["de"]).replace("|", "\\|")
         var = sanitize(", ".join(t.get("variants") or [])).replace("|", "\\|")
         star = " ⭐" if t.get("canonical") else ""
-        lines.append(f"| {en}{star} | {de} | {t['count']} | {var} |")
-    lines += ["", "⭐ = kuratierter Standardbegriff", "", "[[Startseite]]", ""]
-    return "\n".join(lines)
+        rows.append(f"| {en}{star} | {de} | {t['count']} | {var} |")
+    return rows
 
 
-def build_techspec_note(techspecs) -> str:
-    lines = ["---", 'titel: "Technische Daten"', "tags:\n  - technische-daten", "---",
-             "", "# Technische Daten", ""]
-    for spec in techspecs:
-        lines.append(f"## {spec['model']}")
-        lines.append("")
-        for row in spec["rows"]:
-            row = [c.replace("|", "\\|") for c in row]
-            if len(row) == 1:
-                lines.append(f"**{row[0]}**")
-            else:
-                lines.append("| " + " | ".join(row) + " |")
-        lines.append("")
-    lines += ["[[Startseite]]", ""]
-    return "\n".join(lines)
+def write_glossary_notes(glossary: dict) -> None:
+    """Write the Glossar.md landing page plus per-range sub-pages (see
+    GLOSSARY_RANGES). Regenerable; overwrites all glossary pages each run."""
+    terms = sorted(glossary["terms"], key=lambda t: (sanitize(t["en"]).upper(), t["en"]))
+
+    def bucket_of(term: dict) -> int:
+        # ASCII ordering conveniently puts digits ('0'-'9', 48-57) below all
+        # letters, so they fall into the first ("0", "C") range's lo<=ch<=hi
+        # check without any special-casing.
+        ch = (sanitize(term["en"])[:1] or "0").upper()
+        for i, (_, lo, hi) in enumerate(GLOSSARY_RANGES):
+            if lo <= ch <= hi:
+                return i
+        return len(GLOSSARY_RANGES) - 1
+
+    buckets: dict[int, list[dict]] = defaultdict(list)
+    for t in terms:
+        buckets[bucket_of(t)].append(t)
+
+    # top 20 most-frequent terms, for a quick-glance table on the landing page
+    top = sorted(terms, key=lambda t: -t["count"])[:20]
+
+    landing = [
+        "---",
+        'titel: "Glossar"',
+        "tags:\n  - glossar\n  - nachschlagen",
+        "---",
+        "",
+        "# Glossar — Fachbegriffe EN ↔ DE",
+        "",
+        f"> [!abstract] {len(terms)} Begriffe, aus allen Seiten zusammengeführt. Aus "
+        "Rendering-Gründen (v. a. auf dem Handy) nach Anfangsbuchstabe aufgeteilt:",
+        "",
+    ]
+    for i, (label, _, _) in enumerate(GLOSSARY_RANGES):
+        n = len(buckets.get(i, []))
+        landing.append(f"- [[{_glossary_page_stem(label)}|{label}]] — {n} Begriffe")
+    landing += [
+        "",
+        "## Häufigste Begriffe",
+        "",
+        *_glossary_table_rows(top),
+        "",
+        "⭐ = kuratierter Standardbegriff",
+        "",
+        "[[Startseite]]",
+        "",
+    ]
+    (REPO / "Glossar.md").write_text("\n".join(landing), encoding="utf-8")
+
+    for i, (label, _, _) in enumerate(GLOSSARY_RANGES):
+        page_terms = buckets.get(i, [])
+        lines = [
+            "---",
+            f'titel: "Glossar ({label})"',
+            "tags:\n  - glossar",
+            "---",
+            "",
+            f"# Glossar ({label}) — Fachbegriffe EN ↔ DE",
+            "",
+            f"> [!abstract] {len(page_terms)} Begriffe in diesem Bereich.",
+            "",
+            *_glossary_table_rows(page_terms),
+            "",
+            "⭐ = kuratierter Standardbegriff",
+            "",
+            "[[Glossar|Zurück zur Glossar-Übersicht]] · [[Startseite]]",
+            "",
+        ]
+        (REPO / f"{_glossary_page_stem(label)}.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+# NOTE: Technische-Daten.md is generated by build_techdata.generate_markdown()
+# (imported at the top of this file), NOT from manifest["techspecs"]. That
+# flat row-list renderer used to live here but produced invalid markdown
+# tables and silently included HTML-commented-out/unconfirmed source rows
+# (see git history). build_techdata.py re-parses the original _quellen/*.html
+# directly (respecting HTML comments) into proper GFM tables instead.
 
 
 # ---------------------------------------------------------------- obsidian cfg
@@ -481,9 +606,15 @@ def write_obsidian_config():
     # Keep this in sync with the plugins actually vendored under
     # .obsidian/plugins/. A full pipeline rebuild rewrites this file, so any
     # enabled plugin missing here would be silently disabled on rebuild.
+    #
+    # NOTE: "obsidian-image-toolkit" is deliberately NOT listed here (see
+    # eda93c9 "fix(obsidian): disable phantom/image plugins"): its plugin
+    # folder only ships a pre-seeded data.json (see below), not an actual
+    # main.js/manifest.json -- listing it as enabled makes Obsidian try to
+    # load a plugin that isn't there and error on startup. Per LIESMICH.md
+    # step 5, the user installs it themselves from the community catalog.
     (OBS / "community-plugins.json").write_text(
         json.dumps([
-            "obsidian-image-toolkit",
             "hide-image-files",
             "auto-reveal-active-file",
             "show-local-graph",
@@ -621,12 +752,11 @@ def main() -> int:
         (sec_dir / f"{section_moc_stem(no, de)}.md").write_text(
             build_section_moc(de, no, pages, subgroups), encoding="utf-8")
 
-    write_reference_index(
-        REPO / "Bosch Motronic ML 3.1 (Zusatz)",
-        "Bosch Motronic ML 3.1 (Zusatz)",
-        "Diagnosehandbuch der Bosch-Motronic-ML-3.1-Einspritzanlage (Original italienisch, "
-        "gescannte Seiten). Ergänzendes Material, nicht Teil des BMW-Werkstatthandbuchs.",
-    )
+    # NOTE: Bosch Motronic ML 3.1 (Zusatz) is NOT rebuilt via write_reference_index
+    # (raw image-only embeds) -- it was vision-analyzed like every other page in
+    # the vault (see analyze_bosch_motronic.py) and has its own per-spread notes
+    # + index. Re-run `python3 .pipeline/scripts/analyze_bosch_motronic.py --build`
+    # to regenerate those notes/index from the cached analysis if needed.
     write_reference_index(
         REPO / "Referenzbilder",
         "Referenzbilder",
@@ -634,9 +764,10 @@ def main() -> int:
     )
 
     (REPO / "Startseite.md").write_text(build_home(section_order, section_pages), encoding="utf-8")
-    (REPO / "Glossar.md").write_text(build_glossary_note(glossary), encoding="utf-8")
-    (REPO / "Technische-Daten.md").write_text(
-        build_techspec_note(manifest.get("techspecs") or []), encoding="utf-8")
+    write_glossary_notes(glossary)
+    (REPO / "Technische-Daten.md").write_text(build_techdata.generate_markdown(), encoding="utf-8")
+    build_special_tools.main()
+    build_safety_notes.main()
 
     write_obsidian_config()
 

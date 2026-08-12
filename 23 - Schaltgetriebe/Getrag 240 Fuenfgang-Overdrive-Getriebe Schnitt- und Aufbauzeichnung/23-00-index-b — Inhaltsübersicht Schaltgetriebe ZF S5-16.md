@@ -70,6 +70,15 @@ Inhaltsübersicht des Abschnitts 23 „Schaltgetriebe“ für das ZF-S5-16-Fünf
 | Synchronization | Synchronisierung |
 | Troubleshoot | Fehlersuche |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]]
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-09 — Anzugsdrehmomente Schaltgetriebe Befestigung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

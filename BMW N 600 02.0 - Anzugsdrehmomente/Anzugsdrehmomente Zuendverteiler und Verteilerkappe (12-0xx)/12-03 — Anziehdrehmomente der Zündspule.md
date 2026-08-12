@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente der Zündspule"
 seitencode: "12-03"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Ignition Coil"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-03.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente der Zündspule
 
 > [!info] BMW-Seite `12-03` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -63,10 +64,15 @@ Die Seite zeigt eine Drehmomenttabelle aus dem Kapitel „Elektrische Anlage des
 | Dimension | Abmessung |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+- [[12-00 — An TCI und DME arbeiten]]
+- [[12-112_3 — DME-Steuergerät Fehlersuche Prüftabelle]]
+- [[12-22 — Fehlersuche Transistorzündanlage Prüfschritte 3 und 4]]
+- [[12-06 — Zündspule prüfen und aus- und einbauen]]
+- [[12-133 — Zündspule prüfen und aus- und einbauen]]
+- [[12-08 — Anschlussplan transistorisierter Zündsteuergeräte]]
 
 
 ---

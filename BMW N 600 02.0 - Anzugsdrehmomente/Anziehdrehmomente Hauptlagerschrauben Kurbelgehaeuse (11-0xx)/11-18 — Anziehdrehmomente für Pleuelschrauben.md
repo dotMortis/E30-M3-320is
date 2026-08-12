@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente für Pleuelschrauben"
 seitencode: "11-18"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Connecting Rods and Bearings"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-18.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente für Pleuelschrauben
 
 > [!info] BMW-Seite `11-18` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -66,12 +67,6 @@ Die Seite ist eine BMW-Drehmomenttabelle zum Kapitel 11-24 „Pleuelstangen und 
 | Screw | Schraube |
 | Measure | Maß |
 | Unit | Einheit |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
-
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

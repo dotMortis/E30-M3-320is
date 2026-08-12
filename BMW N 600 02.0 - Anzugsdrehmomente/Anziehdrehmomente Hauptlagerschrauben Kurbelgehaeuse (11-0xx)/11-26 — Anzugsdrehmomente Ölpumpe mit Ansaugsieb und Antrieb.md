@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Ölpumpe mit Ansaugsieb und Antrieb"
 seitencode: "11-26"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Oil Pump w/ Strainer and Drive"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-26.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Ölpumpe mit Ansaugsieb und Antrieb
 
 > [!info] BMW-Seite `11-26` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -59,10 +60,14 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle aus dem Kapitel 11 „Motor“ fü
 | crankcase | Kurbelgehäuse |
 | pressure relief valve | Überdruckventil |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-108 — Zylinderkopf aus- und einbauen]]
+- [[11-53c — Zylinderkopf aus- und einbauen]]
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]]
+- [[11-61b — Kurbelwellen-Hauptlagerschalen ersetzen]]
+- [[11-76 — Ölpumpenantriebskette aus- und einbauen]]
 
 
 ---

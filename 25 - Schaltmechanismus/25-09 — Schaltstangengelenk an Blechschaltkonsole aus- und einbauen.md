@@ -99,6 +99,12 @@ Die Seite 25-9 beschreibt den Ausbau und den Einbau des Schaltstangengelenks an 
 | micro-encapsulating adhesive | mikroverkapselter Klebstoff |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-01 — Anzugsdrehmomente Schaltkonsole und Schaltstange]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

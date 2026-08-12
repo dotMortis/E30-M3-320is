@@ -121,6 +121,12 @@ Die Seite 13-900 zeigt eine Fehlersuchtafel für die elektronische Kraftstoffein
 | knock while accelerating | Klopfen beim Beschleunigen |
 | CO/HC values | CO-/HC-Werte |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-07 — Anzugsdrehmomente der Geber und Sensoren]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Elektrischer Schaltplan Klimakompressor-Ansteuerung"
 seitencode: "6452-01"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6452-01.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Elektrischer Schaltplan Klimakompressor-Ansteuerung
 
 > [!info] BMW-Seite `6452-01` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

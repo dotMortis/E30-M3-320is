@@ -66,6 +66,14 @@ Schematische Darstellung der Kraftstoffversorgung bei BMW-Modellen vor 1988. Die
 | Vent for left tank chamber | Entlüftung für die linke Tankkammer |
 | Vent for right tank chamber | Entlüftung für die rechte Tankkammer |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[16-02 — Anzugsdrehmomente für die Kraftstoffversorgung]]
+- [[16-01 — Anzugsdrehmomente Kraftstofftank und Anbauteile]]
+- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

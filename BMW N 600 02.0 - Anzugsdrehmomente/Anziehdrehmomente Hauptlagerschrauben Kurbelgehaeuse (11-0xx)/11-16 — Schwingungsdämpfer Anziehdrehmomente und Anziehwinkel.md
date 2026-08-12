@@ -1,14 +1,14 @@
 ---
 titel: "Schwingungsdämpfer Anziehdrehmomente und Anziehwinkel"
 seitencode: "11-16"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Vibration Damper"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-16.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Schwingungsdämpfer Anziehdrehmomente und Anziehwinkel
 
 > [!info] BMW-Seite `11-16` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -62,6 +63,16 @@ Die Seite ist eine BMW-Drehmomenttabelle für den Schwingungsdämpfer an der Kur
 | torque | Anziehdrehmoment |
 | torque angle | Anzieh-Drehwinkel |
 | Type | Motortyp |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[11-62 — Führungslager der Kurbelwelle aus- und einbauen]]
+- [[11-60 — Kurbelwellen-Riemenscheibe aus- und einbauen]]
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]]
+- [[11-61a — Kurbelwelle aus- und einbauen]]
+- [[11-64 — Pleuel und Pleuellagerschalen erneuern]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

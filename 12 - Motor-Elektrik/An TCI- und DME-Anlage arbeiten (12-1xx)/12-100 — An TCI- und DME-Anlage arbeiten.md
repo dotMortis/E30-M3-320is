@@ -71,6 +71,12 @@ Die Seite 12-100 enthält allgemeine Sicherheits- und Arbeitsanweisungen für Ar
 | battery | Batterie |
 | burglar alarm system | Diebstahlwarnanlage |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

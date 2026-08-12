@@ -107,6 +107,12 @@ Die Seite 18-5 beschreibt unter Arbeitsnummer 18 00 020 den Aus- und Einbau der 
 | right wheel house plug | Stopfen im rechten Radhaus |
 | copper paste | Kupferpaste |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[18-01 — Anzugs- und Montagevorgaben Abgasanlage]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

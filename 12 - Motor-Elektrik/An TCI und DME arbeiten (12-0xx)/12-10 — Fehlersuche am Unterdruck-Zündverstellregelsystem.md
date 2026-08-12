@@ -84,5 +84,11 @@ Die Seite 12-10 beschreibt die Fehlersuche am Unterdruck-Zündverstellregelsyste
 | ignition timing | Zündzeitpunkt |
 | resistance | Widerstand |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-12 — Anzugsdrehmomente für Motorkabelbaum-Befestigungen]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

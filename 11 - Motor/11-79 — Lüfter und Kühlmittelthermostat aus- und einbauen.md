@@ -96,10 +96,18 @@ Die BMW-Werkstatthandbuchseite 11-79 beschreibt Ausbau und Einbau des Lüfters, 
 | switching points | Schaltpunkte |
 | Vibrocard | Vibrocard-Prüfgerät |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-31 — Anzugsdrehmoment Überwurfmutter Lüfterkupplung]]
+- [[11-17 — Anzugsdrehmomente fuer Schwingungsdaempfer]]
+- [[11-29 — Anzugsdrehmomente Ölfilter und Leitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
-- [[11-31 — Anzugsdrehmoment Überwurfmutter Lüfterkupplung]] — gemeinsame Begriffe: coupling nut, fan clutch
+- [[11-31 — Anzugsdrehmoment Überwurfmutter Lüfterkupplung]] — Abschnitt 11: gemeinsame Begriffe: coupling nut, fan clutch
 - [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: coolant thermostat, fan clutch
 
 

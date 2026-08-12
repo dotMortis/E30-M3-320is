@@ -74,6 +74,12 @@ Die Seite zeigt ein Ablaufdiagramm zur Fehlersuche am Kaltstartventil der Jetron
 | ground supply | Masseversorgung |
 | terminal 50 | Klemme 50 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

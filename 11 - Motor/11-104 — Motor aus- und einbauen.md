@@ -84,6 +84,15 @@ Die Seite beschreibt Arbeitsschritte zum Ausbau des Motors beim BMW E30 M3/320is
 | special tool | Spezialwerkzeug |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-11 — Anzugsdrehmomente Ölwanne und Ölablassschraube]]
+- [[11-27 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-29 — Anzugsdrehmomente Ölfilter und Leitungen]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

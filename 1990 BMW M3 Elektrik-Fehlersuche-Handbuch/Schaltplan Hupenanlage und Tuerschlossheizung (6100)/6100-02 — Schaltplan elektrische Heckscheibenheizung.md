@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan elektrische Heckscheibenheizung"
 seitencode: "6100-02"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Rear defogger"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6100-02.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan elektrische Heckscheibenheizung
 
 > [!info] BMW-Seite `6100-02` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

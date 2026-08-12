@@ -129,8 +129,8 @@ Die Seite 65-502 zeigt eine Fehlerdiagnose-Tabelle für das Bordcomputer-System 
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
 - [[65-503 — Fehlersuchtabelle Bordcomputer II]] — gemeinsame Begriffe: fuel level transmitter, ignition lock, relay box
-- [[0670-00 — Stromverteilungskasten Sicherungs- und Relaisanordnung]] — gemeinsame Begriffe: horn relay, relay
-- [[0670-03 — Stromverteilung Sicherungs- und Relaiskasten]] — gemeinsame Begriffe: horn, horn relay
+- [[0670-00 — Stromverteilungskasten Sicherungs- und Relaisanordnung]] — Abschnitt 61: gemeinsame Begriffe: horn relay, relay
+- [[0670-03 — Stromverteilung Sicherungs- und Relaiskasten]] — Abschnitt 61: gemeinsame Begriffe: horn, horn relay
 - [[65-501 — Fehlersuchplan Bordcomputer BC II]] — gemeinsame Begriffe: break in wire, ignition lock
 
 

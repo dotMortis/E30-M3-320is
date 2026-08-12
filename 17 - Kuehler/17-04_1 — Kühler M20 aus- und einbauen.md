@@ -86,6 +86,15 @@ Die Seite 17–4/1 beschreibt den Arbeitsablauf zum Aus- und Einbau des Kühlers
 | radiator mounting bolt | Kühlerbefestigungsschraube |
 | bleed the cooling system | Kühlsystem entlüften |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-01 — Anzugsdrehmomente für das Kühlsystem]]
+- [[17-02 — Kühler und Befestigungsteile]]
+- [[17-03 — Anzugsdrehmomente Motorölkühler und Luftableitführung]]
+- [[17-04 — Anzugsdrehmomente der Ölkühlerleitungen und Halter]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

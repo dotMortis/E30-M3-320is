@@ -68,5 +68,12 @@ Die Seite 12-107/4 zeigt den Verdrahtungsplan der Halteschaltung für die M1.1-M
 | terminal 37 | Klemme 37 |
 | engine control unit | Motronic-Steuergerät |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-05 — Anzugsdrehmomente Vorgluehrelais Anschluesse]]
+- [[12-09 — Anzugsdrehmomente Anlasser und Befestigungsteile]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

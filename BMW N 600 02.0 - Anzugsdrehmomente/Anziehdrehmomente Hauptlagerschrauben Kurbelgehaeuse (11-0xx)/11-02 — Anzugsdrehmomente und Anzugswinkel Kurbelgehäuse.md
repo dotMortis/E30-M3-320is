@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente und Anzugswinkel Kurbelgehäuse"
 seitencode: "11-02"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Crankcase"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "11-02.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente und Anzugswinkel Kurbelgehäuse
 
 > [!info] BMW-Seite `11-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -73,10 +74,14 @@ Die Seite zeigt eine Drehmomenttabelle aus dem Kapitel 11 „Motor“, Unterkapi
 | Oil spray nozzle | Ölspritzdüse |
 | Engine block | Motorblock |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-108 — Zylinderkopf aus- und einbauen]]
+- [[11-53c — Zylinderkopf aus- und einbauen]]
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]]
+- [[11-61b — Kurbelwellen-Hauptlagerschalen ersetzen]]
+- [[11-62 — Führungslager der Kurbelwelle aus- und einbauen]]
 
 
 ---

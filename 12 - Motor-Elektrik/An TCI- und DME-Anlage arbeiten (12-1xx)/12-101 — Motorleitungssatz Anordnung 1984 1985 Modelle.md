@@ -85,6 +85,14 @@ Die Seite 12-101 zeigt anhand mehrerer Motorraumaufnahmen die Anordnung und Zuor
 | ground point | Massepunkt |
 | oxygen sensor heating | Lambdasondenheizung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-14 — Anzugsdrehmomente Temperaturfühler und Temperaturschalter]]
+- [[12-15 — Temperaturschalter Elektronikbox Anziehdrehmoment]]
+- [[12-17 — Anzugsdrehmomente Steuergerätegehäuse DME]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

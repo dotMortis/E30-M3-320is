@@ -1,14 +1,14 @@
 ---
 titel: "Elektrischer Schaltplan Antiblockiersystem"
 seitencode: "3450-00"
-sektion_nr: ""
+sektion_nr: "34"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "ABS"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "3450-00.jpg"
 tags:
-  - sektion/
+  - sektion/34
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Elektrischer Schaltplan Antiblockiersystem
 
 > [!info] BMW-Seite `3450-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **34**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

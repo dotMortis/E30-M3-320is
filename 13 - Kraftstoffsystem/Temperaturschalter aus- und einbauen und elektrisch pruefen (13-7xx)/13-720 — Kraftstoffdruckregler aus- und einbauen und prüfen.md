@@ -80,6 +80,12 @@ Seite 13-720 beschreibt den Ausbau, Einbau und die anschließende Prüfung des K
 | manufacturing date | Herstellungsdatum |
 | terminal | Klemme |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-06 — Anzugsdrehmomente Einspritzdüsen und -leitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

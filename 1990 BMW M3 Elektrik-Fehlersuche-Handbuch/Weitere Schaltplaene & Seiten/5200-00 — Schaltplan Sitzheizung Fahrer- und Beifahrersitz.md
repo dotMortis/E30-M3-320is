@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Sitzheizung Fahrer- und Beifahrersitz"
 seitencode: "5200-00"
-sektion_nr: ""
+sektion_nr: "52"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Heated Seats"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "5200-00.jpg"
 tags:
-  - sektion/
+  - sektion/52
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Sitzheizung Fahrer- und Beifahrersitz
 
 > [!info] BMW-Seite `5200-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **52**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

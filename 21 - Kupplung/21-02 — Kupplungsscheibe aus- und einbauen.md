@@ -89,11 +89,18 @@ Die Seite 21-2 beschreibt den Ausbau und Einbau der Kupplungsscheibe bei BMW-Mot
 | mounting bolts | Befestigungsschrauben |
 | transmission | Getriebe |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]]
+- [[21-03 — Anzugsdrehmomente hydraulische Kupplungsbetätigung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
 - [[21-03 — Kupplungsscheibe aus- und einbauen]] — gemeinsame Begriffe: clutch disc, drive plate, mounting bolts
-- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]] — gemeinsame Begriffe: clutch disc, drive plate
+- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]] — Abschnitt 21: gemeinsame Begriffe: clutch disc, drive plate
 - [[21-00-index-a — Inhaltsverzeichnis Abschnitt Kupplung]] — gemeinsame Begriffe: clutch disc, drive plate
 - [[21-07 — Fehlersuche an der Kupplung]] — gemeinsame Begriffe: drive plate, tangential leaf springs
 

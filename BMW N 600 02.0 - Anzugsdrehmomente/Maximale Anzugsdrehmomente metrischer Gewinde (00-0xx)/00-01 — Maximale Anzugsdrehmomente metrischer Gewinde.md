@@ -1,14 +1,14 @@
 ---
 titel: "Maximale Anzugsdrehmomente metrischer Gewinde"
 seitencode: "00-01"
-sektion_nr: ""
+sektion_nr: "00"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "BMW N 600 02.0: General Instructions"
 seitentyp: "table"
 konfidenz: 0.97
 bilddatei: "00-01.jpg"
 tags:
-  - sektion/
+  - sektion/00
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Maximale Anzugsdrehmomente metrischer Gewinde
 
 > [!info] BMW-Seite `00-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **00**.
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

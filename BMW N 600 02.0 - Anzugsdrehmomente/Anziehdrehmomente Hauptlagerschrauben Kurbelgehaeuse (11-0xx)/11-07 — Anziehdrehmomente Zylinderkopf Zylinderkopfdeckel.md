@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente Zylinderkopf Zylinderkopfdeckel"
 seitencode: "11-07"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Cylinder Head and Cover"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-07.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente Zylinderkopf Zylinderkopfdeckel
 
 > [!info] BMW-Seite `11-07` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -54,10 +55,10 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für den Motorbereich 11–7 und beh
 | Measure | Wert |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-105 — Zylinderkopfdeckel aus- und einbauen]]
 
 
 ## Verwandte Seiten

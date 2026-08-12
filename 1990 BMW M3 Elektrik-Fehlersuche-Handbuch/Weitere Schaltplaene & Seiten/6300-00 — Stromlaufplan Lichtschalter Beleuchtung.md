@@ -1,14 +1,14 @@
 ---
 titel: "Stromlaufplan Lichtschalter Beleuchtung"
 seitencode: "6300-00"
-sektion_nr: ""
+sektion_nr: "63"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Light Switch Details"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "6300-00.jpg"
 tags:
-  - sektion/
+  - sektion/63
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Stromlaufplan Lichtschalter Beleuchtung
 
 > [!info] BMW-Seite `6300-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **63**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für Airbagmodule und Gasgeneratoren"
 seitencode: "72-02"
-sektion_nr: ""
+sektion_nr: "72"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Airbag Generator"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "72-02.jpg"
 tags:
-  - sektion/
+  - sektion/72
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für Airbagmodule und Gasgeneratoren
 
 > [!info] BMW-Seite `72-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **72**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -54,12 +55,6 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle im Abschnitt 72-2 „Ausstattun
 | threaded bolt | Gewindeschraube |
 | torque | Anzugsdrehmoment |
 | body | Karosserie |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnitt 72]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

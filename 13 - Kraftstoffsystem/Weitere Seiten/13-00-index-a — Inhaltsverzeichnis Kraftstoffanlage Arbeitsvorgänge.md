@@ -68,6 +68,15 @@ Seite 14 des BMW-Werkstatthandbuchs, Kapitel 13 „Kraftstoffanlage“, für das
 | remove and install | aus- und einbauen |
 | basic adjustment | Grundeinstellung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-07 — Anzugsdrehmomente der Geber und Sensoren]]
+- [[13-09 — Anzugsdrehmoment Ansauggeräuschdämpfer Befestigung]]
+- [[13-10 — Anzugsdrehmoment Schraubstopfen Niederdruckregler]]
+- [[13-11 — Anzugsdrehmomente für Ansaugluftventile und Niederdruck- und Unterdruckschläuche]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

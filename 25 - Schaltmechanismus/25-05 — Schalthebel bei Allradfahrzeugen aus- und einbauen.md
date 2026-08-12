@@ -94,6 +94,13 @@ Die BMW-Werkstatthandbuchseite 25-5 beschreibt den Ausbau und Einbau des Schalth
 | spherical plate | Kugelplatte |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-02 — Anzugsdrehmomente Schaltkonsole Automatikgetriebe]]
+- [[25-01 — Anzugsdrehmomente Schaltkonsole und Schaltstange]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

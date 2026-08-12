@@ -83,6 +83,15 @@ Die Seite ist das Inhaltsverzeichnis des Kapitels 12 „Elektrische Ausrüstung 
 | Solenoid | Magnetschalter |
 | Starter layshaft | Anlasserzwischenwelle |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+- [[12-02 — Anzugsdrehmomente für Zündkerzengewinde]]
+- [[12-05 — Anzugsdrehmomente Vorgluehrelais Anschluesse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -82,11 +82,17 @@ Werkstatthandbuchseite 26-7 zum Aus- und Einbau der Gelenkwelle beim BMW E30. Di
 | Molykote Longterm 2 | Molykote Longterm 2 |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
 - [[26-04 — Gelenkwelle aus- und einbauen]] — gemeinsame Begriffe: fuel tank connecting line, rubber coupling, slide, stop nuts, transmission output flange
-- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]] — gemeinsame Begriffe: coupling, slide
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]] — Abschnitt 26: gemeinsame Begriffe: coupling, slide
 - [[26-12 — Vordere Kardanwelle Allradantrieb aus- und einbauen]] — gemeinsame Begriffe: flange arms, stop nuts
 - [[26-14 — Vordere Gelenkscheibe der Kardanwelle aus- und einbauen]] — gemeinsame Begriffe: flange arms, stop nuts
 

@@ -77,6 +77,12 @@ Werkstatthandbuchseite 16-11 mit Aus- und Einbauhinweisen für den Aktivkohlebeh
 | empty float position | Leerstellung des Schwimmers |
 | full float position | Vollstellung des Schwimmers |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

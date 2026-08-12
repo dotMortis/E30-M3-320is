@@ -73,5 +73,11 @@ Die Seite 23–171 beschreibt den Ausbau sowie die Montage einer Führungsbuchse
 | play | Spiel |
 | spacer thickness | Distanzringdicke |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-08 — Anziehdrehmomente Schaltarme Getriebegehäuse]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

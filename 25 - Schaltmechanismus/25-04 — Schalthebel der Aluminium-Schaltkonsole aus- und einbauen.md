@@ -80,6 +80,12 @@ Die Seite beschreibt den Ausbau und Einbau des Schalthebels bei einer Schaltkons
 | retaining tabs | Haltenasen |
 | special tool | Sonderwerkzeug |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-02 — Anzugsdrehmomente Schaltkonsole Automatikgetriebe]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

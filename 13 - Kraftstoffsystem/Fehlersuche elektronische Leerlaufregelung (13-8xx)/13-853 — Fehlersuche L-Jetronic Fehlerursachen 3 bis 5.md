@@ -91,6 +91,13 @@ Die Seite zeigt ein Ablaufdiagramm zur Fehlersuche an der L-Jetronic bei den Feh
 | Measuring glass | Messglas |
 | Wiring diagram | Schaltplan |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]]
+- [[13-02 — Anzugsdrehmomente Kraftstoffpumpe mit Antrieb und Leitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

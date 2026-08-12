@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für die Kraftstoffversorgung"
 seitencode: "16-02"
-sektion_nr: ""
+sektion_nr: "16"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fuel Supply"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "16-02.jpg"
 tags:
-  - sektion/
+  - sektion/16
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für die Kraftstoffversorgung
 
 > [!info] BMW-Seite `16-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **16**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -63,10 +64,15 @@ Die Seite gehört zum Kapitel 16-2 „Kraftstoffbehälter und Kraftstoffleitunge
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+- [[16-01 — Kraftstoffversorgung ab Baujahr 1988]]
+- [[16-00 — Kraftstoffversorgung vor 1988]]
+- [[16-02 — Kraftstofftank aus- und einbauen]]
+- [[16-03 — Kraftstofftank aus- und einbauen]]
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]]
+- [[16-09 — Kraftstoffvorratsgeber und Kraftstoffpumpe aus- und zerlegen]]
 
 
 ---

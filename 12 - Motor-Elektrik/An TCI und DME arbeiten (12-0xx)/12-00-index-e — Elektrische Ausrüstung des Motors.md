@@ -51,5 +51,14 @@ Inhaltsübersicht des Kapitels 12 „Elektrische Ausrüstung des Motors“ für 
 | connection plan | Anschlussplan |
 | On-board diagnosis | Borddiagnose |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+- [[12-05 — Anzugsdrehmomente Vorgluehrelais Anschluesse]]
+- [[12-06 — Anzugsdrehmomente Glühkerzen und Glühkerzenleitungen]]
+- [[12-08 — Reglerschalter Anzugsdrehmomente]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Einspritzdüsen und -leitungen"
 seitencode: "13-06"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fuel Injection Nozzles and Pipes"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-06.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Einspritzdüsen und -leitungen
 
 > [!info] BMW-Seite `13-06` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -59,10 +60,13 @@ Die Seite enthält eine Anzugsdrehmomenttabelle zum Abschnitt 13-6 „Kraftstoff
 | Injection panel | Einspritzleiste |
 | Torque | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+- [[13-643 — Kraftstoff-Einspritzventile und Steckerplatte aus- und einbauen]]
+- [[13-720 — Kraftstoffdruckregler aus- und einbauen und prüfen]]
+- [[13-730 — Drosselklappenstutzen aus- und einbauen]]
+- [[13-781 — Kraftstoff-Einspritzventil am Einspritzrohr aus- und einbauen]]
 
 
 ## Verwandte Seiten

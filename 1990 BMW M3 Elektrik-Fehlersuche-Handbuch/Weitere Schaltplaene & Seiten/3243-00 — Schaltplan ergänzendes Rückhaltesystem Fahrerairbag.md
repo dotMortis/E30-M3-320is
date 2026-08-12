@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan ergänzendes Rückhaltesystem Fahrerairbag"
 seitencode: "3243-00"
-sektion_nr: ""
+sektion_nr: "72"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "SRS"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "3243-00.jpg"
 tags:
-  - sektion/
+  - sektion/72
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan ergänzendes Rückhaltesystem Fahrerairbag
 
 > [!info] BMW-Seite `3243-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **72**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

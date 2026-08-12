@@ -80,7 +80,7 @@ Inhaltsübersichtsseite des BMW-Werkstatthandbuchs, Kapitel 64 „Heizung und Kl
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
 - [[64-01-operation — Integrierte Heizungs- und Klimaanlage]] — gemeinsame Begriffe: heater, refrigerant, temperature mixing flap
-- [[6452-01 — Elektrischer Schaltplan Klimakompressor-Ansteuerung]] — gemeinsame Begriffe: heating and air conditioning, refrigerant
+- [[6452-01 — Elektrischer Schaltplan Klimakompressor-Ansteuerung]] — Abschnitt 64: gemeinsame Begriffe: heating and air conditioning, refrigerant
 - [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: refrigerant, refrigerant circuit
 - [[64-06 — Klimaanlage entleeren und befüllen]] — gemeinsame Begriffe: refrigerant, refrigerant circuit
 

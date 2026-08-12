@@ -1,14 +1,14 @@
 ---
 titel: "Aufbau und Verwendung dieses Handbuchs"
 seitencode: "00-03"
-sektion_nr: ""
+sektion_nr: "00"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "How to use this manual"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "00-03.jpg"
 tags:
-  - sektion/
+  - sektion/00
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Aufbau und Verwendung dieses Handbuchs
 
 > [!info] BMW-Seite `00-03` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **00**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

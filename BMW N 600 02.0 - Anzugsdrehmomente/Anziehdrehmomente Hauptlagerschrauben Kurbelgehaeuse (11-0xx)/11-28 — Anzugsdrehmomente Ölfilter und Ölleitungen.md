@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Ölfilter und Ölleitungen"
 seitencode: "11-28"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Oil Filter and Pipes"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "11-28.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Ölfilter und Ölleitungen
 
 > [!info] BMW-Seite `11-28` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -68,6 +69,17 @@ Die Seite zeigt eine Anzugsdrehmomenttabelle aus dem Kapitel Motor (11-28), Absc
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[11-103 — Motor aus- und einbauen]]
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]]
+- [[11-52a — Motor aus- und einbauen]]
+- [[11-100 — Motorübersicht S14 B20 B23]]
+- [[11-104 — Motor aus- und einbauen]]
+- [[11-106 — Zylinderkopf aus- und einbauen]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

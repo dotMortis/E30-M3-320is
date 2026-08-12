@@ -83,6 +83,13 @@ Die Seite beschreibt die Prüfung und Einstellung des Ventilspiels sowie die Dic
 | spark plug | Zündkerze |
 | compressed air | Druckluft |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-21 — Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe]]
+- [[11-22 — Anzugsdrehmomente Nockenwelle und Kettenspanner]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

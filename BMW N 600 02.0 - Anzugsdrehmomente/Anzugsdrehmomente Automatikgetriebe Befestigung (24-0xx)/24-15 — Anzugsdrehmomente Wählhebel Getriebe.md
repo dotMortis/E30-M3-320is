@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Wählhebel Getriebe"
 seitencode: "24-15"
-sektion_nr: ""
+sektion_nr: "24"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "External Shift Linkage"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "24-15.jpg"
 tags:
-  - sektion/
+  - sektion/24
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Wählhebel Getriebe
 
 > [!info] BMW-Seite `24-15` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **24**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -57,6 +57,15 @@ Die Seite zeigt eine perspektivische technische Schnitt- bzw. Explosionsdarstell
 | S14 B20 engine | Motor S14 B20 |
 | S14 B23 engine | Motor S14 B23 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-33 — Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube]]
+- [[11-34 — Anzugsdrehmomente Abgaskrümmer Befestigung]]
+- [[11-35 — Abgaskrümmer Anzugsdrehmomente und Einbaumaße]]
+- [[11-10 — Anzugsdrehmomente Zylinderkopfhaube Ölabscheider Steuergehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

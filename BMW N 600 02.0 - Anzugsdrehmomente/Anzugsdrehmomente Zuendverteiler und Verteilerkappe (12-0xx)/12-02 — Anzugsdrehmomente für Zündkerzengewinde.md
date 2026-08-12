@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für Zündkerzengewinde"
 seitencode: "12-02"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Spark Plugs"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-02.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für Zündkerzengewinde
 
 > [!info] BMW-Seite `12-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -49,6 +50,14 @@ Die Seite stammt aus dem Abschnitt „12 – 2 Motorelektrische Anlage“ und en
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 | All | alle |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[12-110 — DME Fehlersuchtabelle nach Symptomen]]
+- [[12-112_3 — DME-Steuergerät Fehlersuche Prüftabelle]]
+- [[12-23 — Fehlersuche Transistorzündanlage Prüfschritte 5-6]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

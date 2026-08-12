@@ -91,6 +91,13 @@ Die Seite 11-109 beschreibt den Aus- und Einbau des oberen und unteren Abschnitt
 | universal sealing compound | Universal-Dichtmittel |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-11 — Anzugsdrehmomente Ölwanne und Ölablassschraube]]
+- [[11-12 — Anzugsdrehmomente Steuergehäuse- und Abschlussdeckel]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

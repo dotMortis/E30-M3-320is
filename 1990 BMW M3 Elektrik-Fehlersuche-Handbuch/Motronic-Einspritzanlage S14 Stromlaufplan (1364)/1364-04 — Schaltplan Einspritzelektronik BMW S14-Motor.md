@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Einspritzelektronik BMW S14-Motor"
 seitencode: "1364-04"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "1364-04.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Einspritzelektronik BMW S14-Motor
 
 > [!info] BMW-Seite `1364-04` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

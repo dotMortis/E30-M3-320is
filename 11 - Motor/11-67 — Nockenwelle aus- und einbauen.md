@@ -104,6 +104,13 @@ Die BMW-Werkstatthandbuchseite 11-67 beschreibt den Arbeitsvorgang 11 31 000 zum
 | end cover | Enddeckel |
 | gasket | Dichtung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-22 — Anzugsdrehmomente Nockenwelle und Kettenspanner]]
+- [[11-21 — Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

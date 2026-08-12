@@ -63,6 +63,12 @@ Die Seite 12-143/2 beschreibt den Ausbau, die Prüfung und den Einbau beziehungs
 | contact surfaces | Kontaktflächen |
 | gas discharging tank | Gasableitungsbehälter |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-07 — Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -79,6 +79,12 @@ Die Seite 21-4 beschreibt zwei Arbeiten an der Kupplung: links die Prüfung der 
 | lubricating groove | Schmiernut |
 | Molykote Longterm 2 | Molykote Longterm 2 Schmiermittel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

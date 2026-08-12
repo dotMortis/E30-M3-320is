@@ -49,5 +49,11 @@ Die Seite 78 zeigt das Inhaltsverzeichnis des Kapitels 72 „Ausrüstung und Zub
 | wind deflector | Windabweiser |
 | install | einbauen |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[72-01 — Anzugsdrehmomente für Sicherheitsgurte]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

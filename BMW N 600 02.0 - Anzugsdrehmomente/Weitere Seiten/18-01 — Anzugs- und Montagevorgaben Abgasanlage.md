@@ -1,14 +1,14 @@
 ---
 titel: "Anzugs- und Montagevorgaben Abgasanlage"
 seitencode: "18-01"
-sektion_nr: ""
+sektion_nr: "18"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Exhaust Assembly"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "18-01.jpg"
 tags:
-  - sektion/
+  - sektion/18
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugs- und Montagevorgaben Abgasanlage
 
 > [!info] BMW-Seite `18-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **18**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -75,6 +76,17 @@ Die Seite 18-1 aus dem Abschnitt „Abgasanlage“ enthält eine Tabelle mit Anz
 | Clamp | Schelle |
 | Preload | Vorspannung |
 | Tightening torque | Anziehdrehmoment |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[18-01 — Abgasanlage aus- und einbauen]]
+- [[18-05 — Abgasanlage aus- und einbauen]]
+- [[18-02 — Endschalldämpfer 318i aus- und einbauen]]
+- [[18-04 — Katalysator aus- und einbauen]]
+- [[18-06 — Endschalldämpfer aus- und einbauen]]
+- [[18-09 — Abgasanlage Aufhängung Einbau- und Befestigungszeichnungen]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

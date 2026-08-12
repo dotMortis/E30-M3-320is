@@ -1,14 +1,14 @@
 ---
 titel: "Stromlaufplan Klimakompressor-Ansteuerung Heizung Klimaanlage"
 seitencode: "6452-00"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "diagram"
 konfidenz: 0.96
 bilddatei: "6452-00.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Stromlaufplan Klimakompressor-Ansteuerung Heizung Klimaanlage
 
 > [!info] BMW-Seite `6452-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Diagramm** · Konfidenz: **0.96**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

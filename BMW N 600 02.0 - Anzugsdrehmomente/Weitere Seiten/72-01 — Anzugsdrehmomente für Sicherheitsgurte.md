@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für Sicherheitsgurte"
 seitencode: "72-01"
-sektion_nr: ""
+sektion_nr: "72"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Seat Belts"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "72-01.jpg"
 tags:
-  - sektion/
+  - sektion/72
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für Sicherheitsgurte
 
 > [!info] BMW-Seite `72-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **72**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -63,10 +64,12 @@ Die Seite 72-1 aus dem BMW-Werkstatthandbuch enthält eine Drehmomenttabelle fü
 | bolt cement | Schraubensicherungsmittel |
 | torque | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnitt 72]]
+- [[72-113 — Hintere Sicherheitsgurte aus- und einbauen]]
+- [[72-111 — Sicherheitsgurtbefestigungen und Gurtaufroller aus- und einbauen]]
+- [[72-114 — Seitliche Innenverkleidung Gurtaufroller und Umlenker aus- und einbauen]]
 
 
 ---

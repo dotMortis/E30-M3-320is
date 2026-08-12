@@ -81,6 +81,12 @@ Die Seite 13-730 beschreibt den Ausbau und Einbau der vier Drosselklappenstutzen
 | needle bearing | Nadellager |
 | self-locking nut | selbstsichernde Mutter |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-06 — Anzugsdrehmomente Einspritzdüsen und -leitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

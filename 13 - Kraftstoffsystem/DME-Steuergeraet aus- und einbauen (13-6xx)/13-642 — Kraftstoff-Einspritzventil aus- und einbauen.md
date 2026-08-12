@@ -69,6 +69,13 @@ Die Seite beschreibt den Ausbau und Einbau eines einzelnen Kraftstoff-Einspritzv
 | plug receptacle | Steckeraufnahme |
 | fuel injector guard | Einspritzventilschutz |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-01 — Anziehdrehmomente am Vergaser]]
+- [[13-08 — Anzugsdrehmomente der Kraftstoff-Einspritzventile]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

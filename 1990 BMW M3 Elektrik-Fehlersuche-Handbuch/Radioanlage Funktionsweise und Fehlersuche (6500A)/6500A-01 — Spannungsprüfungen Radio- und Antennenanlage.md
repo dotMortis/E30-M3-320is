@@ -1,14 +1,14 @@
 ---
 titel: "Spannungsprüfungen Radio- und Antennenanlage"
 seitencode: "6500A-01"
-sektion_nr: ""
+sektion_nr: "65"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "6500A-01.jpg"
 tags:
-  - sektion/
+  - sektion/65
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Spannungsprüfungen Radio- und Antennenanlage
 
 > [!info] BMW-Seite `6500A-01` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **65**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

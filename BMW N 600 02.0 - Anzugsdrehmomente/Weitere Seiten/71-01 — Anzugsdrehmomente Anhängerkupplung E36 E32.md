@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Anhängerkupplung E36 E32"
 seitencode: "71-01"
-sektion_nr: ""
+sektion_nr: "71"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Trailer Hitch"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "71-01.jpg"
 tags:
-  - sektion/
+  - sektion/71
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Anhängerkupplung E36 E32
 
 > [!info] BMW-Seite `71-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **71**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

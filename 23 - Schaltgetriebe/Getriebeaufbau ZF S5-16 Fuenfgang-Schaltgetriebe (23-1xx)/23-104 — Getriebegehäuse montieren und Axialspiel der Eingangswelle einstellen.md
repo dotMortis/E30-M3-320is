@@ -91,6 +91,13 @@ Die Seite 23-104 beschreibt die Montage des Getriebegehäuses sowie die Einstell
 | bearing inner race | Lagerinnenring |
 | sealing surface | Dichtfläche |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-04 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

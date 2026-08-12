@@ -101,7 +101,7 @@ Die Seite zeigt eine Fehlersuch- und Prüftabelle für Prüfschritt 04 „Dynami
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
-- [[3450-01 — Schaltplan Antiblockiersystem ABS]] — gemeinsame Begriffe: pump motor, valve relay
+- [[3450-01 — Schaltplan Antiblockiersystem ABS]] — Abschnitt 34: gemeinsame Begriffe: pump motor, valve relay
 - [[34-31 — Elektrische Leitungen der ABS-Anlage aus- und einbauen]] — gemeinsame Begriffe: electronic relay, indicator lamp
 - [[34-33 — ABS-Relais und ABS-Kontrollleuchte auswechseln]] — gemeinsame Begriffe: indicator lamp, valve relay
 - [[34-34 — Elektrischer Schaltplan Antiblockiersystem]] — gemeinsame Begriffe: electronic relay, valve relay

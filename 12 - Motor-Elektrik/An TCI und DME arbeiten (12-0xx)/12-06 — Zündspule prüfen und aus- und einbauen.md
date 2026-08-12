@@ -76,6 +76,12 @@ Die Seite 12-6 beschreibt die Prüfung und den Ausbau bzw. Austausch der Zündsp
 | color label | Farbbezeichnung |
 | high voltage | Hochspannung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-03 — Anziehdrehmomente der Zündspule]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

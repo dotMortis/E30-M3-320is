@@ -72,6 +72,12 @@ Die Seite 11-78 beschreibt zwei Arbeitsvorgänge am Motor: den Austausch des Fü
 | special tool | Sonderwerkzeug |
 | Loctite No. 270 | Loctite Nr. 270 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-31 — Anzugsdrehmoment Überwurfmutter Lüfterkupplung]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

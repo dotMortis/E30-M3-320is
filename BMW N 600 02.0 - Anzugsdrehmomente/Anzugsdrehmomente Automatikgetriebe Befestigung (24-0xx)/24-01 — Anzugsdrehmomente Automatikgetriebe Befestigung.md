@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Automatikgetriebe Befestigung"
 seitencode: "24-01"
-sektion_nr: ""
+sektion_nr: "24"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Transmission in General"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "24-01.jpg"
 tags:
-  - sektion/
+  - sektion/24
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Automatikgetriebe Befestigung
 
 > [!info] BMW-Seite `24-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **24**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -92,6 +92,14 @@ Die Seite 13–640 beschreibt den Ausbau, Einbau und die Prüfung des Kaltstartv
 | Jetronic test lead | Jetronic-Prüfleitung |
 | terminals 87b and 30 | Klemmen 87b und 30 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-01 — Anziehdrehmomente am Vergaser]]
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]]
+- [[13-08 — Anzugsdrehmomente der Kraftstoff-Einspritzventile]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -71,8 +71,8 @@ Werkstattseite 65-92 mit der Arbeitsanweisung 65 12 020 zum Aus- und Einbau des 
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
 - [[65-91 — Vorderen Lautsprecher aus- und einbauen]] — gemeinsame Begriffe: self-tapping nut, self-tapping screw, sound system, speaker
-- [[6500-01 — Lautsprecher- und Verstärkeranschlüsse]] — gemeinsame Begriffe: rear speaker, speaker
-- [[6500A-01 — Spannungsprüfungen Radio- und Antennenanlage]] — gemeinsame Begriffe: sound system, speaker
+- [[6500-01 — Lautsprecher- und Verstärkeranschlüsse]] — Abschnitt 65: gemeinsame Begriffe: rear speaker, speaker
+- [[6500A-01 — Spannungsprüfungen Radio- und Antennenanlage]] — Abschnitt 65: gemeinsame Begriffe: sound system, speaker
 
 
 ---

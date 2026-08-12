@@ -55,5 +55,11 @@ Die Seite zeigt eine Übersicht der Relais und des DME-Steuergeräts beim BMW-Mo
 | glove box | Handschuhkasten |
 | M20 | BMW-Motor M20 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-17 — Anzugsdrehmomente Steuergerätegehäuse DME]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

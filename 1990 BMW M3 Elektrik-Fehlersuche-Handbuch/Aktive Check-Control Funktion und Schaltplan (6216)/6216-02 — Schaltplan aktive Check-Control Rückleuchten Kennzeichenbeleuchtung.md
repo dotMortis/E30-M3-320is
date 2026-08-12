@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan aktive Check-Control Rückleuchten Kennzeichenbeleuchtung"
 seitencode: "6216-02"
-sektion_nr: ""
+sektion_nr: "62"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6216-02.jpg"
 tags:
-  - sektion/
+  - sektion/62
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan aktive Check-Control Rückleuchten Kennzeichenbeleuchtung
 
 > [!info] BMW-Seite `6216-02` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **62**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

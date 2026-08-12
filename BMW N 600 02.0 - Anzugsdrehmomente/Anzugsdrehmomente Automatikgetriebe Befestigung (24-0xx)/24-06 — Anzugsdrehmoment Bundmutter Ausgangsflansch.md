@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmoment Bundmutter Ausgangsflansch"
 seitencode: "24-06"
-sektion_nr: ""
+sektion_nr: "24"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Input, Intermediate and Output Shafts"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "24-06.jpg"
 tags:
-  - sektion/
+  - sektion/24
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmoment Bundmutter Ausgangsflansch
 
 > [!info] BMW-Seite `24-06` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **24**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

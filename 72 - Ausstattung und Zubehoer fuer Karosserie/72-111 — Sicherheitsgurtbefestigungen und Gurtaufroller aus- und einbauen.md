@@ -89,6 +89,12 @@ Die Seite 72-111 zeigt anhand von Detailfotos und Montageskizzen den Ausbau und 
 | tightening torque | Anzugsdrehmoment |
 | safety belt | Sicherheitsgurt |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[72-01 — Anzugsdrehmomente für Sicherheitsgurte]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

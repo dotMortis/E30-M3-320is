@@ -72,6 +72,15 @@ Die Seite zeigt den Kühlmittelkreislauf der BMW-Modelle 325e und 325i als schem
 | Heat exchanger return | Rücklauf vom Heizungswärmetauscher |
 | Expansion tank | Ausgleichsbehälter |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-01 — Anzugsdrehmomente für das Kühlsystem]]
+- [[17-02 — Kühler und Befestigungsteile]]
+- [[17-03 — Anzugsdrehmomente Motorölkühler und Luftableitführung]]
+- [[17-04 — Anzugsdrehmomente der Ölkühlerleitungen und Halter]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

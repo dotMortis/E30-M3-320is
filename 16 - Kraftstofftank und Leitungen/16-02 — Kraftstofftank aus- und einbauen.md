@@ -82,6 +82,14 @@ Die Werkstatthandbuchseite beschreibt die Arbeitsschritte zum Ausbau des Kraftst
 | connecting pipe | Verbindungsrohr |
 | propeller shaft | Gelenkwelle |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[16-02 — Anzugsdrehmomente für die Kraftstoffversorgung]]
+- [[16-01 — Anzugsdrehmomente Kraftstofftank und Anbauteile]]
+- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

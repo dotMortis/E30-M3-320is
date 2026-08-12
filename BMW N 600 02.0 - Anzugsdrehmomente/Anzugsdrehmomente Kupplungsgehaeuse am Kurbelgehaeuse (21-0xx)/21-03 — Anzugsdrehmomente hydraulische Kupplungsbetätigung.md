@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente hydraulische Kupplungsbetätigung"
 seitencode: "21-03"
-sektion_nr: ""
+sektion_nr: "21"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Clutch Operation (Hydraulic)"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "21-03.jpg"
 tags:
-  - sektion/
+  - sektion/21
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente hydraulische Kupplungsbetätigung
 
 > [!info] BMW-Seite `21-03` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **21**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -57,6 +58,15 @@ Die Seite enthält eine Drehmomenttabelle zum Abschnitt „Kupplungsbetätigung 
 | Transmission case | Getriebegehäuse |
 | Measure | Anzugsdrehmoment |
 | Nm | Newtonmeter |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[21-01 — Kupplungsbetätigung entlüften und Kupplungsgehäuse aus- und einbauen]]
+- [[21-02 — Kupplungsscheibe aus- und einbauen]]
+- [[21-03 — Kupplungsscheibe aus- und einbauen]]
+- [[21-07 — Fehlersuche an der Kupplung]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

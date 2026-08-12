@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente verschiedener Schalter"
 seitencode: "61-02"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Switch"
 seitentyp: "table"
 konfidenz: 0.97
 bilddatei: "61-02.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente verschiedener Schalter
 
 > [!info] BMW-Seite `61-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -65,6 +65,13 @@ Schnittdarstellung der Schaltbetätigung eines manuellen Getriebes mit Aluminium
 | manual transmission | Schaltgetriebe |
 | aluminum shift console | Aluminium-Schaltkonsole |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-01 — Anzugsdrehmomente Schaltkonsole und Schaltstange]]
+- [[25-02 — Anzugsdrehmomente Schaltkonsole Automatikgetriebe]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

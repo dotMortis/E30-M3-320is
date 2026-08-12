@@ -1,14 +1,14 @@
 ---
 titel: "Anziehvorschriften Zylinderkopfschrauben M21 M30"
 seitencode: "11-05"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Cylinder Head and Cover"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-05.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehvorschriften Zylinderkopfschrauben M21 M30
 
 > [!info] BMW-Seite `11-05` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -73,6 +73,12 @@ Die Seite 12-108/1 enthält eine kurze Prüfliste für die elektrische und elekt
 | 55-pin connecting leads | 55-polige Anschlussleitungen |
 | BMW Diagnosis Tester | BMW-Diagnose-Tester |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-17 — Anzugsdrehmomente Steuergerätegehäuse DME]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

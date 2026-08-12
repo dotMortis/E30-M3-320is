@@ -1,14 +1,14 @@
 ---
 titel: "Sicherungsbelegung Stromverteilung Schutzschalter"
 seitencode: "0670-01"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "' - fuse data chart [fuel pump = 11]"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "0670-01.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Sicherungsbelegung Stromverteilung Schutzschalter
 
 > [!info] BMW-Seite `0670-01` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

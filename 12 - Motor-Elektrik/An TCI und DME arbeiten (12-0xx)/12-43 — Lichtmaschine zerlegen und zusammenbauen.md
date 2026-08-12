@@ -75,6 +75,12 @@ Die Seite 12–43 beschreibt die Zerlegung und den Zusammenbau eines ausgebauten
 | insulating sleeves | Isolierbuchsen |
 | washers | Unterlegscheiben |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-07 — Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

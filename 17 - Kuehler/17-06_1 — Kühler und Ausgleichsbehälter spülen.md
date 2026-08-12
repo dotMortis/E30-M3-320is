@@ -72,5 +72,11 @@ Die Seite 17–6/1 des BMW-Werkstatthandbuchs beschreibt das Spülen des Kühler
 | drained coolant | abgelassenes Kühlmittel |
 | bleed cooling system | Kühlsystem entlüften |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-02 — Kühler und Befestigungsteile]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

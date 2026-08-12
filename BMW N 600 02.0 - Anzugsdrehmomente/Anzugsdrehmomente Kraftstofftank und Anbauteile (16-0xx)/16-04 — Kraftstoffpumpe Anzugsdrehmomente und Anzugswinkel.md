@@ -1,14 +1,14 @@
 ---
 titel: "Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel"
 seitencode: "16-04"
-sektion_nr: ""
+sektion_nr: "16"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fuel Pump"
 seitentyp: "table"
 konfidenz: 0.97
 bilddatei: "16-04.jpg"
 tags:
-  - sektion/
+  - sektion/16
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel
 
 > [!info] BMW-Seite `16-04` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **16**.
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -75,6 +76,17 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Kapitel „Kraftstofftank un
 | Intake pump | Saugpumpe |
 | Fill level sensor | Füllstandgeber |
 | Tighten nuts crosswise | Muttern über Kreuz anziehen |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[16-09 — Kraftstoffvorratsgeber und Kraftstoffpumpe aus- und zerlegen]]
+- [[16-01 — Kraftstoffversorgung ab Baujahr 1988]]
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]]
+- [[16-00 — Kraftstoffversorgung vor 1988]]
+- [[16-02 — Kraftstofftank aus- und einbauen]]
+- [[16-11 — Aktivkohlebehälter aus- und einbauen]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

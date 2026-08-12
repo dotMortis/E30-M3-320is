@@ -84,5 +84,11 @@ Die Seite beschreibt den Ausbau, die Prüfung und den Einbau von Verteilerkappe 
 | tightening torque | Anzugsdrehmoment |
 | high power ignition system | Hochspannungszündanlage |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse"
 seitencode: "11-01"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Crankcase"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "11-01.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse
 
 > [!info] BMW-Seite `11-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -79,6 +80,15 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel Motor, Abschnitt Kurbelgeh�
 | Screw | Schraube |
 | Measure | Maß |
 | Unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[11-108 — Zylinderkopf aus- und einbauen]]
+- [[11-53c — Zylinderkopf aus- und einbauen]]
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]]
+- [[11-61b — Kurbelwellen-Hauptlagerschalen ersetzen]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

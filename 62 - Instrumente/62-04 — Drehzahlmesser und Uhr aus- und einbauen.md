@@ -60,6 +60,12 @@ Die Werkstatthandbuchseite 62-4 beschreibt anhand von Bildfolgen den Ausbau des 
 | plug | Stecker |
 | screws | Befestigungsschrauben |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[62-01 — Anzugsdrehmoment Befestigungsschrauben Geschwindigkeitsgeber]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Kraftstoffpumpe mit Antrieb und Leitungen"
 seitencode: "13-02"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fuel pump with Drive and Pipes"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-02.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Kraftstoffpumpe mit Antrieb und Leitungen
 
 > [!info] BMW-Seite `13-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -58,10 +59,11 @@ Die Seite enthält eine Anzugsdrehmomenttabelle zum Kapitel 13 2 „Kraftstoffzu
 | Measure | Anzugsmaß |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+- [[13-853 — Fehlersuche L-Jetronic Fehlerursachen 3 bis 5]]
+- [[13-902 — Fehlersuche Kraftstoffdruck Einspritzanlage]]
 
 
 ## Verwandte Seiten

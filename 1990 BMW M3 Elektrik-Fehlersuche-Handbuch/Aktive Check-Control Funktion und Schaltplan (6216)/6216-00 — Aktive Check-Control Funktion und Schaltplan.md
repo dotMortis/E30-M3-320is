@@ -1,14 +1,14 @@
 ---
 titel: "Aktive Check-Control Funktion und Schaltplan"
 seitencode: "6216-00"
-sektion_nr: ""
+sektion_nr: "62"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Active Check Control (EN: 62141385263/4, IT: 62141385256)"
 seitentyp: "diagram"
 konfidenz: 0.97
 bilddatei: "6216-00.jpg"
 tags:
-  - sektion/
+  - sektion/62
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Aktive Check-Control Funktion und Schaltplan
 
 > [!info] BMW-Seite `6216-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **62**.
 > Typ: **Diagramm** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

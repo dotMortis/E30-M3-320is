@@ -86,6 +86,12 @@ Die BMW-Werkstatthandbuchseite 12-133 beschreibt die Prüfung und den Austausch 
 | code number | Codenummer |
 | color label | Farbcodierung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-03 — Anziehdrehmomente der Zündspule]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

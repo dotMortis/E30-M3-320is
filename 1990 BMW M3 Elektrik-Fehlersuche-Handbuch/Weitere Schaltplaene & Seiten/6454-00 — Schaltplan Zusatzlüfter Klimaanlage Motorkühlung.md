@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Zusatzlüfter Klimaanlage Motorkühlung"
 seitencode: "6454-00"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Auxillary Fan"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "6454-00.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Zusatzlüfter Klimaanlage Motorkühlung
 
 > [!info] BMW-Seite `6454-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

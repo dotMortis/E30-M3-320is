@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Verschraubungen Heckscheibenwischer"
 seitencode: "61-06"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Tailgate Window Wiper"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "61-06.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Verschraubungen Heckscheibenwischer
 
 > [!info] BMW-Seite `61-06` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

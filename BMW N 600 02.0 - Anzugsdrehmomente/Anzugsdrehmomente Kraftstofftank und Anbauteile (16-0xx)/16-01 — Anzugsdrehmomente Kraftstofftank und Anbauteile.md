@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Kraftstofftank und Anbauteile"
 seitencode: "16-01"
-sektion_nr: ""
+sektion_nr: "16"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fuel Tank and Mounting Parts"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "16-01.jpg"
 tags:
-  - sektion/
+  - sektion/16
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Kraftstofftank und Anbauteile
 
 > [!info] BMW-Seite `16-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **16**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -70,10 +71,15 @@ Die Seite zeigt eine Drehmomenttabelle für Kraftstofftank und Kraftstoffleitung
 | Torque | Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+- [[16-02 — Kraftstofftank aus- und einbauen]]
+- [[16-03 — Kraftstofftank aus- und einbauen]]
+- [[16-00 — Kraftstoffversorgung vor 1988]]
+- [[16-01 — Kraftstoffversorgung ab Baujahr 1988]]
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]]
+- [[16-10 — Kraftstoffrücklaufleitung seit 1988]]
 
 
 ---

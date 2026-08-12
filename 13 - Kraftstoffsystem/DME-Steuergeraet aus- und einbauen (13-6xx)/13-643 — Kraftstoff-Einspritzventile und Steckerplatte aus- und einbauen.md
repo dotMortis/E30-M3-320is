@@ -77,6 +77,15 @@ Die Seite 13-643 beschreibt den Ausbau und Einbau der Kraftstoff-Einspritzventil
 | mounting bolt | Befestigungsschraube |
 | manufacturing date | Herstellungsdatum |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-08 — Anzugsdrehmomente der Kraftstoff-Einspritzventile]]
+- [[13-01 — Anziehdrehmomente am Vergaser]]
+- [[13-06 — Anzugsdrehmomente Einspritzdüsen und -leitungen]]
+- [[13-07 — Anzugsdrehmomente der Geber und Sensoren]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

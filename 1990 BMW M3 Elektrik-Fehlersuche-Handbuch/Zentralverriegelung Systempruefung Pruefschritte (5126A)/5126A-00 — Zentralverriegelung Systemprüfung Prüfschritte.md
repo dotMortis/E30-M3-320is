@@ -1,14 +1,14 @@
 ---
 titel: "Zentralverriegelung Systemprüfung Prüfschritte"
 seitencode: "5126A-00"
-sektion_nr: ""
+sektion_nr: "51"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "5126A-00.jpg"
 tags:
-  - sektion/
+  - sektion/51
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Zentralverriegelung Systemprüfung Prüfschritte
 
 > [!info] BMW-Seite `5126A-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **51**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -118,5 +118,11 @@ Explosionszeichnung des Zahnrad- und Lagersatzes eines BMW-Schaltgetriebes (Seit
 | Seal | Dichtung |
 | Bolt lock | Schraubensicherung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-07 — Drehmomenttabelle Getriebewellen Schaltgetriebe]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

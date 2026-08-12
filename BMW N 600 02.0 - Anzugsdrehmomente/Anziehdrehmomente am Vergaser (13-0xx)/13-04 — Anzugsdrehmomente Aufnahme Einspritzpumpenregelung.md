@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Aufnahme Einspritzpumpenregelung"
 seitencode: "13-04"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Injection Pump Control receptacle"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-04.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Aufnahme Einspritzpumpenregelung
 
 > [!info] BMW-Seite `13-04` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

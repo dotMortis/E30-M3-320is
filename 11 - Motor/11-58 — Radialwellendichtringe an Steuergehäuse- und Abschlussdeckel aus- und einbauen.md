@@ -76,6 +76,13 @@ Die Seite 11-58 beschreibt den Austausch des Radialwellendichtrings am unteren S
 | Three Bond Silicone 1207 B | Three Bond Silicone 1207 B-Dichtmittel |
 | transmission | Getriebe |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-12 — Anzugsdrehmomente Steuergehäuse- und Abschlussdeckel]]
+- [[11-14 — Anzugsdrehmomente Schwungradbefestigung Kurbelwelle]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente komplette Gelenkwelle"
 seitencode: "26-01"
-sektion_nr: ""
+sektion_nr: "26"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Propellor Shaft Complete"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "26-01.jpg"
 tags:
-  - sektion/
+  - sektion/26
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente komplette Gelenkwelle
 
 > [!info] BMW-Seite `26-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **26**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -74,10 +75,15 @@ Die Seite 26-1 enthält eine Anzugsdrehmoment-Tabelle für die komplette Gelenkw
 | Measure | Anzugsdrehmoment |
 | Four Wheel Drive | Allradantrieb |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 26 — Gelenkwelle|Abschnitt 26]]
+- [[26-02 — Schiebestück der Gelenkwelle aus- und einbauen]]
+- [[26-07 — Gelenkwelle aus- und einbauen]]
+- [[26-10 — Gelenkwellenmittellager aus- und einbauen]]
+- [[26-04 — Gelenkwelle aus- und einbauen]]
+- [[26-16 — Fehlersuchtabelle Gelenkwelle Geräusche]]
+- [[26-01a — Knick- und Ablenkwinkel im Antriebsstrang]]
 
 
 ## Verwandte Seiten

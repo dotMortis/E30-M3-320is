@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Motorölkühler und Luftableitführung"
 seitencode: "17-03"
-sektion_nr: ""
+sektion_nr: "17"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Engine Oil Cooler"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "17-03.jpg"
 tags:
-  - sektion/
+  - sektion/17
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Motorölkühler und Luftableitführung
 
 > [!info] BMW-Seite `17-03` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **17**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -51,10 +52,15 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle aus der Baugruppe 17-3 „Kühl
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+- [[17-07 — Zusatzlüftereinheit aus- und einbauen]]
+- [[17-01 — Kühlmittelkreislauf BMW 318i]]
+- [[17-02 — Kühlmittelkreislauf 325e 325i]]
+- [[17-03 — Kühlsystem auf Undichtigkeiten prüfen]]
+- [[17-04 — Kühler aus- und einbauen 318i M3]]
+- [[17-04_1 — Kühler M20 aus- und einbauen]]
 
 
 ---

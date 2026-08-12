@@ -70,6 +70,15 @@ Schematische Darstellung des Kühlmittelkreislaufs beim BMW 318i. Die Schnittzei
 | circuit with closed thermostat | Kreislauf bei geschlossenem Thermostat |
 | circuit with opened thermostat | Kreislauf bei geöffnetem Thermostat |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-01 — Anzugsdrehmomente für das Kühlsystem]]
+- [[17-02 — Kühler und Befestigungsteile]]
+- [[17-03 — Anzugsdrehmomente Motorölkühler und Luftableitführung]]
+- [[17-04 — Anzugsdrehmomente der Ölkühlerleitungen und Halter]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

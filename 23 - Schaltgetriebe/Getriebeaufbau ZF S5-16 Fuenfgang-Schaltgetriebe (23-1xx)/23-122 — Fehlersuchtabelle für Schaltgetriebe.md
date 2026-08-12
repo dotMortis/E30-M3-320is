@@ -114,6 +114,15 @@ Die Seite 23-122 ist eine Fehlersuchtabelle für das Schaltgetriebe. Sie ordnet 
 | needle bearing | Nadellager |
 | gear wheel pair | Zahnradpaar |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]]
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-09 — Anzugsdrehmomente Schaltgetriebe Befestigung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

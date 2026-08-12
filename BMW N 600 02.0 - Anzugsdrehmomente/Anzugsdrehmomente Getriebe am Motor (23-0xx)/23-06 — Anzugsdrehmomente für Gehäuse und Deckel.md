@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für Gehäuse und Deckel"
 seitencode: "23-06"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Case and Covers"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "23-06.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für Gehäuse und Deckel
 
 > [!info] BMW-Seite `23-06` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -57,10 +58,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Kapitel 23-6 „Schaltgetrie
 | housing | Gehäuse |
 | bearings | Lager |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+- [[23-121 — Fehlersuchtabelle Schaltgetriebe Ursachen Abhilfen]]
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]]
 
 
 ---

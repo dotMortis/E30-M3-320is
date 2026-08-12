@@ -60,5 +60,11 @@ Inhaltsverzeichnis von Kapitel 18 „Abgasanlage“ des BMW-Werkstatthandbuchs, 
 | remove and install | aus- und einbauen |
 | replace | ersetzen |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[18-01 — Anzugs- und Montagevorgaben Abgasanlage]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 18 — Abgasanlage|Abschnittsübersicht]] · [[Glossar]]

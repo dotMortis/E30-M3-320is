@@ -92,6 +92,15 @@ Die Seite 11-64 beschreibt zwei Arbeitsgänge am Kurbeltrieb des BMW-Motors: den
 | exhaust side | Auslassseite |
 | bearing cap | Lagerdeckel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-13 — Anzugsdrehmomente Inkrementenrad Kurbelwelle]]
+- [[11-15 — Anziehdrehmomente für Schwingungsdämpfer]]
+- [[11-16 — Schwingungsdämpfer Anziehdrehmomente und Anziehwinkel]]
+- [[11-17 — Anzugsdrehmomente fuer Schwingungsdaempfer]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

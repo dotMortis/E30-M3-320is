@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Warnsummer- und Gurtwarnanlage"
 seitencode: "6131-00"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Ignition Key / Seatbelt Warning"
 seitentyp: "diagram"
 konfidenz: 0.99
 bilddatei: "6131-00.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Warnsummer- und Gurtwarnanlage
 
 > [!info] BMW-Seite `6131-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

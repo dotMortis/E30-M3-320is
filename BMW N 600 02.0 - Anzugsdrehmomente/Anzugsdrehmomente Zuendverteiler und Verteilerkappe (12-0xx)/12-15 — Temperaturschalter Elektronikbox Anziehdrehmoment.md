@@ -1,14 +1,14 @@
 ---
 titel: "Temperaturschalter Elektronikbox Anziehdrehmoment"
 seitencode: "12-15"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Switches and Relays"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-15.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Temperaturschalter Elektronikbox Anziehdrehmoment
 
 > [!info] BMW-Seite `12-15` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -51,6 +52,14 @@ Die Seite ist eine tabellarische Übersicht aus dem Kapitel „Elektrische Ausr�
 | Screw | Schraube |
 | Measure | Anziehdrehmoment |
 | Unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[12-01 — Elektrische Anordnung am Motor 318i]]
+- [[12-101 — Motorleitungssatz Anordnung 1984 1985 Modelle]]
+- [[12-102 — Elektrische Anordnung am Motor 1986]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe"
 seitencode: "11-21"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Camshaft"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "11-21.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe
 
 > [!info] BMW-Seite `11-21` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -81,6 +82,17 @@ Drehmomenttabelle für den Bereich Nockenwelle des Motors. Die Seite führt nach
 | Type | Typ |
 | Measure | Maß |
 | Unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[11-68 — Nockenwellen aus- und einbauen]]
+- [[11-69 — Nockenwellen aus- und einbauen]]
+- [[11-107 — Zylinderkopf aus- und einbauen]]
+- [[11-53b — Zylinderkopf aus- und einbauen]]
+- [[11-67 — Nockenwelle aus- und einbauen]]
+- [[11-73 — Ventilspiel einstellen und Ventile auf Dichtheit prüfen]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

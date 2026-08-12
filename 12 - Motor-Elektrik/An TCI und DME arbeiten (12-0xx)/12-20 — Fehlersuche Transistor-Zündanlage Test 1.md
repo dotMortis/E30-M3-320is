@@ -81,5 +81,12 @@ Die Seite 12-20 zeigt den Fehlersuchablauf für die Transistor-Zündanlage (TCI)
 | starter | Anlasser |
 | DME | Digitale Motor-Elektronik (DME) |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+- [[12-04 — Anzugsdrehmomente elektronische Schalt- und Steuergeräte]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

@@ -77,5 +77,12 @@ Die Seite 12-2 beschreibt den Ausbau und Einbau des Zündverteilers. Dargestellt
 | clamps | Halteklammern |
 | nut | Mutter |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+- [[12-12 — Anzugsdrehmomente für Motorkabelbaum-Befestigungen]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

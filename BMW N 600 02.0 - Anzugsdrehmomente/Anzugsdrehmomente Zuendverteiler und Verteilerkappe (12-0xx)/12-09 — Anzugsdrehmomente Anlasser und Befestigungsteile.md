@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Anlasser und Befestigungsteile"
 seitencode: "12-09"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Starter and Mounting Parts"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "12-09.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Anlasser und Befestigungsteile
 
 > [!info] BMW-Seite `12-09` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -61,10 +62,11 @@ Die Seite ist eine Anzugsdrehmomenttabelle aus dem Kapitel „Motorelektrik“ (
 | Screw | Schraube |
 | Torque | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+- [[12-150 — Fehlersuche am Anlasser]]
+- [[12-107_4 — Verdrahtungsplan Halteschaltung Motronic]]
 
 
 ---

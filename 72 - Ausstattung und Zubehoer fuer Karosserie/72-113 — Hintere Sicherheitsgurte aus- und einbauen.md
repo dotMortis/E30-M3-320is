@@ -83,6 +83,12 @@ Die Seite 72-113 beschreibt den Ausbau, Einbau und gegebenenfalls Austausch der 
 | belt lock | Gurtschloss |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[72-01 — Anzugsdrehmomente für Sicherheitsgurte]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

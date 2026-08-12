@@ -85,6 +85,15 @@ Die Seite zeigt eine Explosionsdarstellung der Kurbelwelle mit den zugehörigen 
 | Woodruff key | Scheibenfeder |
 | lubricating grease | Schmierfett |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-14 — Anzugsdrehmomente Schwungradbefestigung Kurbelwelle]]
+- [[11-15 — Anziehdrehmomente für Schwingungsdämpfer]]
+- [[11-16 — Schwingungsdämpfer Anziehdrehmomente und Anziehwinkel]]
+- [[11-17 — Anzugsdrehmomente fuer Schwingungsdaempfer]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

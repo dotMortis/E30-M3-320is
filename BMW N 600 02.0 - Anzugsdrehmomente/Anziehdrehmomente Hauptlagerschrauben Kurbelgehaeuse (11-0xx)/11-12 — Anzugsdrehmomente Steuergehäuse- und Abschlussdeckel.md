@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Steuergehäuse- und Abschlussdeckel"
 seitencode: "11-12"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Case Covers"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-12.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Steuergehäuse- und Abschlussdeckel
 
 > [!info] BMW-Seite `11-12` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -67,6 +68,17 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel „Motor“ und behandelt d
 | screw | Schraube |
 | measure | Anzugsdrehmoment |
 | unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[11-108 — Zylinderkopf aus- und einbauen]]
+- [[11-53c — Zylinderkopf aus- und einbauen]]
+- [[11-109 — Ober- und Unterteil der Ölwanne aus- und einbauen]]
+- [[11-55a — Obere und untere Ölwannensektion aus- und einbauen]]
+- [[11-57 — Unteren Steuergehäusedeckel aus- und einbauen]]
+- [[11-58 — Radialwellendichtringe an Steuergehäuse- und Abschlussdeckel aus- und einbauen]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

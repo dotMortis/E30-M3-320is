@@ -62,5 +62,12 @@ Die Seite 16-3 zeigt anhand mehrerer Aufnahmen die Arbeitsschritte zum Ausbau de
 | adhesive tape | Klebeband |
 | support tank | Tank abstützen |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[16-02 — Anzugsdrehmomente für die Kraftstoffversorgung]]
+- [[16-01 — Anzugsdrehmomente Kraftstofftank und Anbauteile]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

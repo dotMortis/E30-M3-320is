@@ -35,8 +35,13 @@ Danach die **[[Startseite]]** öffnen — dein Ausgangspunkt zu allen Abschnitte
   Titel** trägt (z. B. `34-01 — Bremsprüfung auf dem Prüfstand`).
 - In jeder Notiz: oben der **Original‑Scan**, darunter **Beschreibung**, aufklappbare
   **Transkription** und eine Tabelle der **Fachbegriffe (EN → DE)**.
+- Anzugsdrehmoment-Tabellen und die zugehörigen Ein-/Ausbauseiten verlinken sich
+  **gegenseitig** (Abschnitt „Anzugsdrehmomente“ bzw. „Betrifft folgende Arbeitsschritte“) —
+  vor einem Arbeitsschritt lohnt sich also ein Blick auf die Seite selbst.
 - Der **Original‑Scan liegt im selben Ordner** wie die Notiz — der Tresor ist eigenständig.
-- **[[Glossar]]**, **[[Technische-Daten]]** sowie Zusatzmaterial
+- **[[Glossar]]** (nach Anfangsbuchstabe aufgeteilt), **[[Technische-Daten]]**,
+  **[[Sonderwerkzeuge]]** (BMW-Spezialwerkzeug-Index) und **[[Sicherheitshinweise]]**
+  (Warnhinweise nach Abschnitt) sowie Zusatzmaterial
   (**[[Bosch Motronic ML 3.1 (Zusatz)]]**, **[[Referenzbilder]]**).
 
 > [!info] Wichtig

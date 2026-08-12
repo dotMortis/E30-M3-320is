@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Rückfahrleuchten Stromkreis 6322-0"
 seitencode: "6322-00"
-sektion_nr: ""
+sektion_nr: "63"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Backup / Reversing lights"
 seitentyp: "diagram"
 konfidenz: 0.98
 bilddatei: "6322-00.jpg"
 tags:
-  - sektion/
+  - sektion/63
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Rückfahrleuchten Stromkreis 6322-0
 
 > [!info] BMW-Seite `6322-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **63**.
 > Typ: **Diagramm** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

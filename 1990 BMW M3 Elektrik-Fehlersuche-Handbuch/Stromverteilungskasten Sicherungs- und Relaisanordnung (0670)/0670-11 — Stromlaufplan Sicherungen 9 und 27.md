@@ -1,14 +1,14 @@
 ---
 titel: "Stromlaufplan Sicherungen 9 und 27"
 seitencode: "0670-11"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "' - Fuse 9, 27"
 seitentyp: "diagram"
 konfidenz: 0.99
 bilddatei: "0670-11.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Stromlaufplan Sicherungen 9 und 27
 
 > [!info] BMW-Seite `0670-11` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -88,6 +88,13 @@ Die Seite 12-102 zeigt die elektrische Anordnung am Motor für BMW-Modelle des B
 | speed sensor | Drehzahlsensor |
 | pressure sensor | Drucksensor |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-14 — Anzugsdrehmomente Temperaturfühler und Temperaturschalter]]
+- [[12-15 — Temperaturschalter Elektronikbox Anziehdrehmoment]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

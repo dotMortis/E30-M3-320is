@@ -63,6 +63,13 @@ Die Seite 13–902 zeigt einen Ablaufplan zur Fehlersuche bei abweichendem Kraft
 | fuel intake | Kraftstoffeinlass |
 | fuel injection | Kraftstoffeinspritzung |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-02 — Anzugsdrehmomente Kraftstoffpumpe mit Antrieb und Leitungen]]
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

@@ -60,5 +60,11 @@ Die Seite 18–9 zeigt Einbau- und Befestigungszeichnungen für die Abgasanlagen
 | preload | Vorspannung |
 | installed position | Einbaulage |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[18-01 — Anzugs- und Montagevorgaben Abgasanlage]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 18 — Abgasanlage|Abschnittsübersicht]] · [[Glossar]]

@@ -107,6 +107,12 @@ Explosionsdarstellung des Schaltgetriebes mit Eingangswelle, Abtriebswelle, Vorg
 | Circlip | Sicherungsring |
 | Bearing holder | Lagerhalter |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-07 — Drehmomenttabelle Getriebewellen Schaltgetriebe]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

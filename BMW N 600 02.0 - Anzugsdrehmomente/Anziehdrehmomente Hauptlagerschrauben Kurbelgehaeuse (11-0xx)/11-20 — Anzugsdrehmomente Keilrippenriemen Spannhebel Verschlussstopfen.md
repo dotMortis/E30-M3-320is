@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Keilrippenriemen Spannhebel Verschlussstopfen"
 seitencode: "11-20"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "V-ribbed Belt w/ Tension and Deflection"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-20.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Keilrippenriemen Spannhebel Verschlussstopfen
 
 > [!info] BMW-Seite `11-20` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -59,12 +60,6 @@ Die Seite zeigt eine Anzugsdrehmomenttabelle aus dem BMW-Werkstatthandbuch für 
 | screw | Schraube |
 | measure | Anzugsdrehmoment |
 | unit | Einheit |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

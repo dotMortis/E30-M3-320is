@@ -80,5 +80,11 @@ Die Seite 11–63 beschreibt den Ausbau, Einbau und die Prüfung des Schwungrads
 | brass mandrel | Messingdorn |
 | thermo-color pencil | Thermofarbstift |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-14 — Anzugsdrehmomente Schwungradbefestigung Kurbelwelle]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

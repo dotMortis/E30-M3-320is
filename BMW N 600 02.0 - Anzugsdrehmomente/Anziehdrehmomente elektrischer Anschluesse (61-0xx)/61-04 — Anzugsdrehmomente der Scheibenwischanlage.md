@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente der Scheibenwischanlage"
 seitencode: "61-04"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Windshield Wipers"
 seitentyp: "table"
 konfidenz: 0.97
 bilddatei: "61-04.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente der Scheibenwischanlage
 
 > [!info] BMW-Seite `61-04` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

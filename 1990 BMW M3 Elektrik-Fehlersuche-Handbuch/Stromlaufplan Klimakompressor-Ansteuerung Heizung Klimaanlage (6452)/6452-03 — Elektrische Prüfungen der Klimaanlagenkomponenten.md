@@ -1,14 +1,14 @@
 ---
 titel: "Elektrische Prüfungen der Klimaanlagenkomponenten"
 seitencode: "6452-03"
-sektion_nr: ""
+sektion_nr: "64"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "6452-03.jpg"
 tags:
-  - sektion/
+  - sektion/64
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Elektrische Prüfungen der Klimaanlagenkomponenten
 
 > [!info] BMW-Seite `6452-03` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **64**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

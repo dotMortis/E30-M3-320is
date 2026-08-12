@@ -85,6 +85,15 @@ Die Seite 17-5 beschreibt den Ausbau und Einbau des Kühlers bei BMW 325e und 32
 | bleed cooling system | Kühlsystem entlüften |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-01 — Anzugsdrehmomente für das Kühlsystem]]
+- [[17-02 — Kühler und Befestigungsteile]]
+- [[17-04 — Anzugsdrehmomente der Ölkühlerleitungen und Halter]]
+- [[17-05 — Anzugsdrehmomente für Ölkühlerleitungen]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

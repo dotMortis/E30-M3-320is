@@ -1,14 +1,14 @@
 ---
 titel: "Kühler und Befestigungsteile"
 seitencode: "17-02"
-sektion_nr: ""
+sektion_nr: "17"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Radiator and Mounting Parts"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "17-02.jpg"
 tags:
-  - sektion/
+  - sektion/17
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Kühler und Befestigungsteile
 
 > [!info] BMW-Seite `17-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **17**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -63,6 +64,17 @@ Die Seite 17-2 behandelt den Kühler und seine Befestigungsteile. Die Tabelle �
 | Measure | Maß |
 | Unit | Einheit |
 | Nm | Newtonmeter |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[17-04 — Kühler aus- und einbauen 318i M3]]
+- [[17-04_1 — Kühler M20 aus- und einbauen]]
+- [[17-05 — Kühler aus- und einbauen]]
+- [[17-06_1 — Kühler und Ausgleichsbehälter spülen]]
+- [[17-01 — Kühlmittelkreislauf BMW 318i]]
+- [[17-02 — Kühlmittelkreislauf 325e 325i]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

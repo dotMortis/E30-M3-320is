@@ -96,6 +96,15 @@ Werkstattanleitung BMW, Seite 17-3, zum Prüfen des Kühlsystems auf Undichtigke
 | fan | Lüfter |
 | pressure drop | Druckabfall |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-01 — Anzugsdrehmomente für das Kühlsystem]]
+- [[17-03 — Anzugsdrehmomente Motorölkühler und Luftableitführung]]
+- [[17-04 — Anzugsdrehmomente der Ölkühlerleitungen und Halter]]
+- [[17-05 — Anzugsdrehmomente für Ölkühlerleitungen]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

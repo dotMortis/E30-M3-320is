@@ -82,6 +82,14 @@ Die Seite 13-641 beschreibt den Ausbau, Einbau und die Prüfung des Kaltstartven
 | special tool | Sonderwerkzeug |
 | terminal | Klemme |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-01 — Anziehdrehmomente am Vergaser]]
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]]
+- [[13-08 — Anzugsdrehmomente der Kraftstoff-Einspritzventile]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

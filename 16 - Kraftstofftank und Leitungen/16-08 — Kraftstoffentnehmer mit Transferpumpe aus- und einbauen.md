@@ -96,12 +96,20 @@ Die Seite 16-8 beschreibt den Ausbau und Einbau des Kraftstoffentnehmers mit int
 | power consumption | Stromaufnahme |
 | delivery pressure | Förderdruck |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]]
+- [[16-01 — Anzugsdrehmomente Kraftstofftank und Anbauteile]]
+- [[16-02 — Anzugsdrehmomente für die Kraftstoffversorgung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
 - [[16-09 — Kraftstoffvorratsgeber und Kraftstoffpumpe aus- und zerlegen]] — gemeinsame Begriffe: fuel intake, fuel level sender, insulation sheet, scavenging pump
 - [[16-11 — Aktivkohlebehälter aus- und einbauen]] — gemeinsame Begriffe: delivery pressure, fuel level sender, fuel transfer pump
-- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]] — gemeinsame Begriffe: fuel intake, fuel level sender
+- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]] — Abschnitt 16: gemeinsame Begriffe: fuel intake, fuel level sender
 - [[16-00-index-a — Kraftstoffbehälter und Leitungen Inhaltsverzeichnis]] — gemeinsame Begriffe: fuel intake, fuel level sender
 
 

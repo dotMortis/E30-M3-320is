@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für Motorkabelbaum-Befestigungen"
 seitencode: "12-12"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Engine Wiring Harness"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "12-12.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für Motorkabelbaum-Befestigungen
 
 > [!info] BMW-Seite `12-12` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -52,6 +53,17 @@ Die Seite gehört zum Abschnitt „Motor-Elektrik“ und behandelt den Motorkabe
 | screw | Schraube |
 | measure | Anzugsdrehmoment |
 | unit | Einheit |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[12-01a — Zündzeitpunkt prüfen und einstellen]]
+- [[12-02 — Zündverteiler aus- und einbauen]]
+- [[12-03 — Impulsgeber im Zündverteiler prüfen und aus- und einbauen]]
+- [[12-04 — Unterdruckverstellung des Zündverteilers aus- und einbauen]]
+- [[12-09 — Unterdruckverstellung der Zündanlage prüfen]]
+- [[12-10 — Fehlersuche am Unterdruck-Zündverstellregelsystem]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

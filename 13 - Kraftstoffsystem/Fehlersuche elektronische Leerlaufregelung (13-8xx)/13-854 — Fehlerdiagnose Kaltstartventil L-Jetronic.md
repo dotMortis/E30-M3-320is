@@ -67,6 +67,12 @@ Die Seite zeigt ein Fehlerdiagnose-Flussdiagramm zur Ursache „Kaltstartventil 
 | fuel injection | Einspritzung |
 | battery positive | Batterieplus (B+) |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

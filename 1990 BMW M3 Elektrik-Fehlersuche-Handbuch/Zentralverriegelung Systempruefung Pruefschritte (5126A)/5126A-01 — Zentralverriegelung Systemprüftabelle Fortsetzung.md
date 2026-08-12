@@ -1,14 +1,14 @@
 ---
 titel: "Zentralverriegelung Systemprüftabelle Fortsetzung"
 seitencode: "5126A-01"
-sektion_nr: ""
+sektion_nr: "51"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "5126A-01.jpg"
 tags:
-  - sektion/
+  - sektion/51
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Zentralverriegelung Systemprüftabelle Fortsetzung
 
 > [!info] BMW-Seite `5126A-01` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **51**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -93,12 +94,6 @@ Fortsetzung der Systemprüftabelle für die Zentralverriegelung (Kapitel 5126A-1
 | LOCK | VERRIEGELN |
 | UNLOCK | ENTRIEGELN |
 | RUN | LAUFEN |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
-
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

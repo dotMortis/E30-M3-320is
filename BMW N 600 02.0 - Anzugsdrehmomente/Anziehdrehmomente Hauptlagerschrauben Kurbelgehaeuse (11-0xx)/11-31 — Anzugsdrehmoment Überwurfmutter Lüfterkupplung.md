@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmoment Überwurfmutter Lüfterkupplung"
 seitencode: "11-31"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Fan"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-31.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmoment Überwurfmutter Lüfterkupplung
 
 > [!info] BMW-Seite `11-31` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -52,10 +53,15 @@ Die Seite ist eine Drehmomenttabelle aus dem BMW-Werkstatthandbuch für den Moto
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-79 — Lüfter und Kühlmittelthermostat aus- und einbauen]]
+- [[11-78 — Ölmessstab-Führungsrohr und Wasserpumpe aus- und einbauen]]
+- [[11-100 — Motorübersicht S14 B20 B23]]
+- [[11-104 — Motor aus- und einbauen]]
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]]
+- [[11-57 — Unteren Steuergehäusedeckel aus- und einbauen]]
 
 
 ## Verwandte Seiten

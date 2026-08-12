@@ -55,6 +55,15 @@ Die Seite zeigt eine perspektivische technische Schnitt- beziehungsweise Explosi
 | alternator | Lichtmaschine |
 | BMW M Power | BMW M Power |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-33 — Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube]]
+- [[11-34 — Anzugsdrehmomente Abgaskrümmer Befestigung]]
+- [[11-35 — Abgaskrümmer Anzugsdrehmomente und Einbaumaße]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

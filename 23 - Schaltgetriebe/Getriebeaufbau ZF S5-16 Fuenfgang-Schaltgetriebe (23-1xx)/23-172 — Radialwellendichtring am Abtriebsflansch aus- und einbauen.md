@@ -84,5 +84,11 @@ Die Seite 23-172 beschreibt den Ausbau und Ersatz des Radialwellendichtrings am 
 | tightening torque | Anziehdrehmoment |
 | bolt cement | Schraubensicherungsmittel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-07 — Drehmomenttabelle Getriebewellen Schaltgetriebe]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

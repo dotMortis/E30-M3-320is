@@ -93,6 +93,12 @@ Die Seite 21-1 enthält zwei Arbeitsanweisungen für den BMW M3 beziehungsweise 
 | breaking-loose torque | Losbrechmoment |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[21-03 — Anzugsdrehmomente hydraulische Kupplungsbetätigung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

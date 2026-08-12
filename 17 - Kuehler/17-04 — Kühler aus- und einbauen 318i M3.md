@@ -97,6 +97,15 @@ Werkstatt-Handbuchseite 17-4 zur Arbeitsanweisung 17 11 000 „Kühler aus- und 
 | rubber mount | Gummilager |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[17-01 — Anzugsdrehmomente für das Kühlsystem]]
+- [[17-02 — Kühler und Befestigungsteile]]
+- [[17-03 — Anzugsdrehmomente Motorölkühler und Luftableitführung]]
+- [[17-04 — Anzugsdrehmomente der Ölkühlerleitungen und Halter]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

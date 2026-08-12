@@ -84,6 +84,13 @@ Werkstatthandbuchseite 12-4 zur Prüfung und zum Ersetzen der Unterdruckverstell
 | TDC (top dead center) | oberer Totpunkt (OT) |
 | BMW service test unit | BMW-Serviceprüfgerät |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-01 — Anzugsdrehmomente Zündverteiler und Verteilerkappe]]
+- [[12-12 — Anzugsdrehmomente für Motorkabelbaum-Befestigungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

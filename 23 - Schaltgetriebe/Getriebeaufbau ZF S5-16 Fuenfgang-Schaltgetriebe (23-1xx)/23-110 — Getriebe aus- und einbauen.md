@@ -93,5 +93,11 @@ Die Seite 23–110 zeigt die Demontage und Montage des Getriebes einschließlich
 | sealing surface | Dichtfläche |
 | special tool | Sonderwerkzeug |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-04 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -84,6 +84,15 @@ Die Seite 11–103 zeigt anhand mehrerer Motorraumfotos die Arbeitsschritte zum 
 | clamp | Schelle |
 | rubber holder | Gummihalter |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-10 — Anzugsdrehmomente Zylinderkopfhaube Ölabscheider Steuergehäuse]]
+- [[11-11 — Anzugsdrehmomente Ölwanne und Ölablassschraube]]
+- [[11-33 — Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -102,6 +102,12 @@ Werkstattanweisung zum Aus- und Einbau der Kolben beim ausgebauten S14-Motor. Di
 | timing chain | Steuerkette |
 | weight class | Gewichtsklasse |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-25 — Anzugsdrehmomente-der-VANOS-Bauteile]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

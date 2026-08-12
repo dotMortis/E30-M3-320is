@@ -1,14 +1,14 @@
 ---
 titel: "Schaltplan Park Schluss und Seitenmarkierungsleuchten"
 seitencode: "6314-00"
-sektion_nr: ""
+sektion_nr: "63"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "Park / Tail / Front marker lights"
 seitentyp: "diagram"
 konfidenz: 0.99
 bilddatei: "6314-00.jpg"
 tags:
-  - sektion/
+  - sektion/63
   - seite
   - typ/diagram
 ---
@@ -16,6 +16,7 @@ tags:
 # Schaltplan Park Schluss und Seitenmarkierungsleuchten
 
 > [!info] BMW-Seite `6314-00` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **63**.
 > Typ: **Diagramm** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

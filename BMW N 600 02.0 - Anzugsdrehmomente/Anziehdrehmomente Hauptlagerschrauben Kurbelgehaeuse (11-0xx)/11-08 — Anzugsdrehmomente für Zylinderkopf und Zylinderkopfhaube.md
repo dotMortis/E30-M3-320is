@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für Zylinderkopf und Zylinderkopfhaube"
 seitencode: "11-08"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Cylinder Head and Cover"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-08.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für Zylinderkopf und Zylinderkopfhaube
 
 > [!info] BMW-Seite `11-08` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -64,6 +65,12 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle für den Zylinderkopf mit Zylin
 | Screw | Schraube |
 | Torx head | Torx-Kopf |
 | coating | Beschichtung |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[11-53 — Zylinderkopfhaube aus- und einbauen]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

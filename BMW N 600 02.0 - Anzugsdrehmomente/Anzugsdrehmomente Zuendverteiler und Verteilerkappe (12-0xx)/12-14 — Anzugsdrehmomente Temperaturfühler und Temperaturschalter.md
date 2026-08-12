@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Temperaturfühler und Temperaturschalter"
 seitencode: "12-14"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Coolant Temperature"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-14.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Temperaturfühler und Temperaturschalter
 
 > [!info] BMW-Seite `12-14` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -75,6 +76,17 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Abschnitt „Motorelektrik�
 | air temperature sensor | Lufttemperatursensor |
 | oil temperature sensor | Öltemperatursensor |
 | tightening torque | Anzugsdrehmoment |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[12-01 — Elektrische Anordnung am Motor 318i]]
+- [[12-101 — Motorleitungssatz Anordnung 1984 1985 Modelle]]
+- [[12-102 — Elektrische Anordnung am Motor 1986]]
+- [[12-105 — Elektrische Anordnung Motor M20 Motronic M1-1 325i]]
+- [[12-106 — Elektrische Anlage Motor M3 S14]]
+- [[12-107_1 — Motorsteckverbindung M20 Anschlussbelegung]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

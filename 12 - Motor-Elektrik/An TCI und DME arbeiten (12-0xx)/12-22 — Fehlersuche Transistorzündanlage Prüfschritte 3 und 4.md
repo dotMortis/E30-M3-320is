@@ -85,6 +85,12 @@ Die Seite 12-22 beschreibt die Fehlersuche an der Transistorzündanlage (TCI) in
 | ground out | Masseschluss |
 | starter | Anlasser |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-03 — Anziehdrehmomente der Zündspule]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

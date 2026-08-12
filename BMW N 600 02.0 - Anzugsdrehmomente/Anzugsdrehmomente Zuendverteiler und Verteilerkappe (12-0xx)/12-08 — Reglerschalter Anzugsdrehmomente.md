@@ -1,14 +1,14 @@
 ---
 titel: "Reglerschalter Anzugsdrehmomente"
 seitencode: "12-08"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Governor"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "12-08.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Reglerschalter Anzugsdrehmomente
 
 > [!info] BMW-Seite `12-08` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -49,12 +50,6 @@ Die Seite ist eine Drehmomenttabelle aus dem Abschnitt „Elektrische Ausrüstun
 | Unit | Einheit |
 | All | Alle |
 | Nm | Newtonmeter |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

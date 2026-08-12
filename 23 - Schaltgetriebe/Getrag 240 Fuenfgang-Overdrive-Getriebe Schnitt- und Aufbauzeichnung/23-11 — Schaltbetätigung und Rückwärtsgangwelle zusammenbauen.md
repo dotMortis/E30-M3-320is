@@ -70,6 +70,12 @@ Die Seite zeigt den Zusammenbau der Schaltbetätigung und der Rückwärtsgangwel
 | special tool | Spezialwerkzeug |
 | Loctite No. 573 | Loctite Nr. 573 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-04 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -82,6 +82,14 @@ Die Seite 11-52b beschreibt die vorbereitenden Arbeitsschritte zum Ausbau des Mo
 | drive belt | Antriebsriemen |
 | Special Tool | Sonderwerkzeug |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-27 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-29 — Anzugsdrehmomente Ölfilter und Leitungen]]
+- [[11-40 — Anzugsdrehmomente der Motoraufhängung]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

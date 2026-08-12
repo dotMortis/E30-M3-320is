@@ -75,5 +75,11 @@ Die Seite 23-6 zeigt in bebilderten Arbeitsschritten den Austausch der Radialwel
 | tightening torque | Anzugsdrehmoment |
 | bolt cement | Schraubensicherungsmittel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-07 — Drehmomenttabelle Getriebewellen Schaltgetriebe]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

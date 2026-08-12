@@ -92,5 +92,11 @@ Die Seite 23-314 zeigt in bebilderten Demontageschritten den weiteren Ausbau ein
 | shim | Ausgleichsscheibe |
 | special tools | Sonderwerkzeuge |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-05 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

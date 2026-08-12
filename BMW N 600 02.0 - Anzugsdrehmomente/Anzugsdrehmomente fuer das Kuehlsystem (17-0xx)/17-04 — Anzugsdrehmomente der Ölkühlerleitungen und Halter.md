@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente der Ölkühlerleitungen und Halter"
 seitencode: "17-04"
-sektion_nr: ""
+sektion_nr: "17"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Oil Cooler Pipes"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "17-04.jpg"
 tags:
-  - sektion/
+  - sektion/17
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente der Ölkühlerleitungen und Halter
 
 > [!info] BMW-Seite `17-04` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **17**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -55,6 +56,17 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle im Abschnitt „17–4 Kühler“ 
 | Unit | Einheit |
 | Torque | Anzugsdrehmoment |
 | Alternator | Lichtmaschine |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[17-01 — Kühlmittelkreislauf BMW 318i]]
+- [[17-02 — Kühlmittelkreislauf 325e 325i]]
+- [[17-03 — Kühlsystem auf Undichtigkeiten prüfen]]
+- [[17-04 — Kühler aus- und einbauen 318i M3]]
+- [[17-04_1 — Kühler M20 aus- und einbauen]]
+- [[17-05 — Kühler aus- und einbauen]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Zündverteiler und Verteilerkappe"
 seitencode: "12-01"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Distributor"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-01.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Zündverteiler und Verteilerkappe
 
 > [!info] BMW-Seite `12-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -61,6 +62,17 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel „Motorelektrische Ausrüs
 | Unit | Einheit |
 | Nm | Newtonmeter |
 | DME | Digitale Motor-Elektronik |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[12-02 — Zündverteiler aus- und einbauen]]
+- [[12-20 — Fehlersuche Transistor-Zündanlage Test 1]]
+- [[12-24 — Fehlersuche transistorisierte Zündanlage Prüfschritt 7]]
+- [[12-03 — Impulsgeber im Zündverteiler prüfen und aus- und einbauen]]
+- [[12-04 — Unterdruckverstellung des Zündverteilers aus- und einbauen]]
+- [[12-131 — Verteilerkappe und Verteilerläufer prüfen und aus- und einbauen]]
+
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -73,6 +73,12 @@ Die Seite 12-8 zeigt den Anschlussplan für transistorisierte Zündsteuergeräte
 | terminal | Klemme |
 | TCI-S control unit | TCI-S-Steuergerät |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-03 — Anziehdrehmomente der Zündspule]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

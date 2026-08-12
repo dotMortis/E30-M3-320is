@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Steuergeräte und Module"
 seitencode: "61-03"
-sektion_nr: ""
+sektion_nr: "61"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Control Units / Modules"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "61-03.jpg"
 tags:
-  - sektion/
+  - sektion/61
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Steuergeräte und Module
 
 > [!info] BMW-Seite `61-03` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **61**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

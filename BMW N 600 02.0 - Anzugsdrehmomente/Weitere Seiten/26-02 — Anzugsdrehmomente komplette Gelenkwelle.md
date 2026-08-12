@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente komplette Gelenkwelle"
 seitencode: "26-02"
-sektion_nr: ""
+sektion_nr: "26"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Propellor Shaft Complete"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "26-02.jpg"
 tags:
-  - sektion/
+  - sektion/26
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente komplette Gelenkwelle
 
 > [!info] BMW-Seite `26-02` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **26**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -81,6 +82,17 @@ Die Seite 26-2 des BMW-Werkstatthandbuchs enthält die Anzugsdrehmomente für di
 | Loctite | Loctite-Schraubensicherung |
 | Sliding joint | Schiebestück |
 | Tightening torque | Anzugsdrehmoment |
+
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
+
+- [[26-02 — Schiebestück der Gelenkwelle aus- und einbauen]]
+- [[26-10 — Gelenkwellenmittellager aus- und einbauen]]
+- [[26-16 — Fehlersuchtabelle Gelenkwelle Geräusche]]
+- [[26-01a — Knick- und Ablenkwinkel im Antriebsstrang]]
+- [[26-15 — Fehlersuche Kardanwelle Geraeusche Vibrationen]]
+- [[26-04 — Gelenkwelle aus- und einbauen]]
+
 
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.

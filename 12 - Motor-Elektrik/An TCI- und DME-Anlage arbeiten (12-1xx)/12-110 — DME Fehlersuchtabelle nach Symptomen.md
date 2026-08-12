@@ -113,6 +113,13 @@ Die Seite 12-110 zeigt eine Übersicht zur Fehlersuche an der Digitalen Motorele
 | misfiring | Zündaussetzer |
 | fuel consumption | Kraftstoffverbrauch |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-02 — Anzugsdrehmomente für Zündkerzengewinde]]
+- [[12-17 — Anzugsdrehmomente Steuergerätegehäuse DME]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

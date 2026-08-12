@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Steckverbinder Klemmen"
 seitencode: "12-11"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Plug Connectors, Terminals"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-11.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Steckverbinder Klemmen
 
 > [!info] BMW-Seite `12-11` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -59,12 +60,6 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Kapitel 12 „Elektrische Au
 | Value | Wert |
 | Unit | Einheit |
 | Torque | Anzugsdrehmoment |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

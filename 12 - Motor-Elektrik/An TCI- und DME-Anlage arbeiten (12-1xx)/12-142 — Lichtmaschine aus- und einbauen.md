@@ -83,6 +83,13 @@ Die Seite 12-142 beschreibt den Ausbau und Einbau der Lichtmaschine sowie die an
 | drive belt tension | Antriebsriemenspannung |
 | fuel tank | Kraftstofftank |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-07 — Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen]]
+- [[12-10 — Anschlussdaten der Anlasserleitungen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

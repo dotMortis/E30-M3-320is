@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Gastank und Befestigung"
 seitencode: "13-13"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Gas tank with attachment"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-13.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Gastank und Befestigung
 
 > [!info] BMW-Seite `13-13` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -60,12 +61,6 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle im Abschnitt 13-13 „Kraftstoffan
 | holder | Halter |
 | Measure | Anzugsdrehmoment |
 | Nm | Newtonmeter |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -92,6 +92,13 @@ Die Werkstattbuchseite 23-169 beschreibt den Ausbau und Einbau beziehungsweise d
 | surface sealing compound | Flächendichtmittel |
 | reverse gear shaft | Welle des Rückwärtsgangs |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-04 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente Pedalwertgeber Befestigung"
 seitencode: "12-16"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Sender for Control Unit (DME)"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-16.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente Pedalwertgeber Befestigung
 
 > [!info] BMW-Seite `12-16` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

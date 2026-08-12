@@ -11,6 +11,7 @@ tags:
   - sektion/
   - seite
   - typ/table
+  - elektrik-referenz
 ---
 
 # Index der Spleißstellen-Ansichten

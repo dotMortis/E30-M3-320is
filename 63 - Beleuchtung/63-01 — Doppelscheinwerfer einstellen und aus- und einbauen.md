@@ -73,9 +73,9 @@ Werkstattseite 63-1 mit zwei Arbeitsanweisungen für den BMW-Doppelscheinwerfer:
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 
-- [[0670-04 — Stromlaufplan Stromverteilung Beleuchtungsanlage]] — gemeinsame Begriffe: high beam, low beam
-- [[0670-13 — Masseverteilungsplan G104 G200]] — gemeinsame Begriffe: high beam, low beam
-- [[6312-01 — Schaltplan Scheinwerfer- und Nebelscheinwerferanlage]] — gemeinsame Begriffe: high beam, low beam
+- [[0670-04 — Stromlaufplan Stromverteilung Beleuchtungsanlage]] — Abschnitt 61: gemeinsame Begriffe: high beam, low beam
+- [[0670-13 — Masseverteilungsplan G104 G200]] — Abschnitt 61: gemeinsame Begriffe: high beam, low beam
+- [[6312-01 — Schaltplan Scheinwerfer- und Nebelscheinwerferanlage]] — Abschnitt 63: gemeinsame Begriffe: high beam, low beam
 
 
 ---

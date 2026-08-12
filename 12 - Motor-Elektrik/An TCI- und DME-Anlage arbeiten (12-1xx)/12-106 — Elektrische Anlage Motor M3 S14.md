@@ -79,6 +79,13 @@ Die Seite 12-106 zeigt die elektrische Anordnung des Motors beim BMW M3/S14. Dar
 | reference mark plug | Bezugsmarkenstecker |
 | speed sender plug | Drehzahlgeberstecker |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-14 — Anzugsdrehmomente Temperaturfühler und Temperaturschalter]]
+- [[12-17 — Anzugsdrehmomente Steuergerätegehäuse DME]]
+
+
 ## Erwähnte Abschnitte
 > [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
 

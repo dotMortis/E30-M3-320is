@@ -56,6 +56,15 @@ Inhaltsverzeichnis des Kapitels 11 „Motor“ für die Motoren M3 / 320is. Die 
 | Oil pan upper section | oberer Abschnitt der Ölwanne |
 | Oil pan lower section | unterer Abschnitt der Ölwanne |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-10 — Anzugsdrehmomente Zylinderkopfhaube Ölabscheider Steuergehäuse]]
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]]
+- [[11-34 — Anzugsdrehmomente Abgaskrümmer Befestigung]]
+- [[11-35 — Abgaskrümmer Anzugsdrehmomente und Einbaumaße]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Alphabetischer Index der elektrischen Stromkreise"
 seitencode: "00-02-index-b"
-sektion_nr: ""
+sektion_nr: "00"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "A-Z listing of electrical circuits"
 seitentyp: "table"
 konfidenz: 0.97
 bilddatei: "00-02-index-b.jpg"
 tags:
-  - sektion/
+  - sektion/00
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Alphabetischer Index der elektrischen Stromkreise
 
 > [!info] BMW-Seite `00-02-index-b` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **00**.
 > Typ: **Tabelle** · Konfidenz: **0.97**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

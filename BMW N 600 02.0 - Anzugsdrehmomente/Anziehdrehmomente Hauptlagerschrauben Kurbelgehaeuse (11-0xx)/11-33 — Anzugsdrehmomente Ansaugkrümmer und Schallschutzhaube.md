@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube"
 seitencode: "11-33"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Intake Manifold"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-33.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Ansaugkrümmer und Schallschutzhaube
 
 > [!info] BMW-Seite `11-33` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -55,10 +56,15 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle für den Motorbereich 11-33, Un
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-100 — Motorübersicht S14 B20 B23]]
+- [[11-106 — Zylinderkopf aus- und einbauen]]
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]]
+- [[11-52a — Motor aus- und einbauen]]
+- [[11-53a — Zylinderkopf aus- und einbauen]]
+- [[11-103 — Motor aus- und einbauen]]
 
 
 ---

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Thermostat und Anschlüsse"
 seitencode: "11-32"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Thermostat and Connections"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-32.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Thermostat und Anschlüsse
 
 > [!info] BMW-Seite `11-32` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -52,12 +53,6 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle für den Motorbereich 11 32, Ab
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

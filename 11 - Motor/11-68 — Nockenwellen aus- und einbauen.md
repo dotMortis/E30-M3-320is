@@ -87,6 +87,13 @@ Die Seite 11-68 beschreibt den Ausbau und Einbau der Nockenwellen am BMW-Motor. 
 | feeler gauge | Fühlerlehre |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-21 — Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe]]
+- [[11-22 — Anzugsdrehmomente Nockenwelle und Kettenspanner]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

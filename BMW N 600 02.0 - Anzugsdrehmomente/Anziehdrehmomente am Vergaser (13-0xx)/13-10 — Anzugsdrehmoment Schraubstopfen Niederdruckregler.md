@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmoment Schraubstopfen Niederdruckregler"
 seitencode: "13-10"
-sektion_nr: ""
+sektion_nr: "13"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Gas-powered units (low-pressure regulator)"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "13-10.jpg"
 tags:
-  - sektion/
+  - sektion/13
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmoment Schraubstopfen Niederdruckregler
 
 > [!info] BMW-Seite `13-10` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **13**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -49,12 +50,6 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel 13-10 „Kraftstoffanlage�
 | Screw | Schraube |
 | Measure | Maß |
 | Unit | Einheit |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

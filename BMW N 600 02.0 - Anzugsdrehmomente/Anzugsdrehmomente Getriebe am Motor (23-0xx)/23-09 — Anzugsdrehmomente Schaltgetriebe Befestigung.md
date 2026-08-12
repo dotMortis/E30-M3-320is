@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Schaltgetriebe Befestigung"
 seitencode: "23-09"
-sektion_nr: ""
+sektion_nr: "23"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Transmission Mounts"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "23-09.jpg"
 tags:
-  - sektion/
+  - sektion/23
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Schaltgetriebe Befestigung
 
 > [!info] BMW-Seite `23-09` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **23**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -52,10 +53,11 @@ Die Seite zeigt eine Drehmomenttabelle für die Befestigung der manuellen Schalt
 | Measure | Anzugsmoment |
 | Type | Typ |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+- [[23-121 — Fehlersuchtabelle Schaltgetriebe Ursachen Abhilfen]]
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]]
 
 
 ---

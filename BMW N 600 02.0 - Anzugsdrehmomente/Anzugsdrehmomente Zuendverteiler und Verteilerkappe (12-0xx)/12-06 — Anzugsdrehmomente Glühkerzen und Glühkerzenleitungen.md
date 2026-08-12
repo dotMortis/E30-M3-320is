@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Glühkerzen und Glühkerzenleitungen"
 seitencode: "12-06"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Glow Plugs"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-06.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Glühkerzen und Glühkerzenleitungen
 
 > [!info] BMW-Seite `12-06` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -52,12 +53,6 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel „Elektrische Ausrüstung 
 | Value | Wert |
 | Unit | Einheit |
 | Torque | Anzugsdrehmoment |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

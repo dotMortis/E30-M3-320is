@@ -88,5 +88,11 @@ Die Seite 12-9 beschreibt die Prüfung der Unterdruckverstellung der Zündanlage
 | resistance values | Widerstandswerte |
 | ground | Masse |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[12-12 — Anzugsdrehmomente für Motorkabelbaum-Befestigungen]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

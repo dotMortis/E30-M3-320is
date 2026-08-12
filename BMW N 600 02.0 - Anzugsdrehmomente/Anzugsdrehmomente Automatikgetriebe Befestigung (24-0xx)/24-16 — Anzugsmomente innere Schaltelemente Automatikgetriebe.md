@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsmomente innere Schaltelemente Automatikgetriebe"
 seitencode: "24-16"
-sektion_nr: ""
+sektion_nr: "24"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Interior Shift Elements"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "24-16.jpg"
 tags:
-  - sektion/
+  - sektion/24
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsmomente innere Schaltelemente Automatikgetriebe
 
 > [!info] BMW-Seite `24-16` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **24**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

@@ -63,6 +63,15 @@ Inhaltsverzeichnisseite des Kapitels 23 „Schaltgetriebe“ für das Getrag-260
 | radial oil seal | Radialwellendichtring |
 | vibration damper | Schwingungsdämpfer |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]]
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-09 — Anzugsdrehmomente Schaltgetriebe Befestigung]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

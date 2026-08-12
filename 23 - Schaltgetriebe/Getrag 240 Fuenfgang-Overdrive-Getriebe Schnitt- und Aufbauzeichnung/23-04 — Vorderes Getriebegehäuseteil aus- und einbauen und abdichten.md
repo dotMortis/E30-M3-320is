@@ -92,6 +92,13 @@ Die BMW-Werkstatthandbuchseite 23-4 beschreibt den Ausbau, die Montage und die A
 | reverse gear shaft | Rückwärtsgangwelle |
 | tightening torque | Anziehdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-03 — Anzugsdrehmomente Schaltgetriebe Gehäuse und Deckel]]
+- [[23-04 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

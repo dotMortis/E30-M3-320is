@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente für das Kühlsystem"
 seitencode: "17-01"
-sektion_nr: ""
+sektion_nr: "17"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Coolant"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "17-01.jpg"
 tags:
-  - sektion/
+  - sektion/17
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente für das Kühlsystem
 
 > [!info] BMW-Seite `17-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **17**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -57,10 +58,15 @@ Die Seite 17-1 des BMW-Werkstatthandbuchs enthält eine Drehmomenttabelle für d
 | Measure | Anzugsdrehmoment |
 | Nm | Newtonmeter |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+- [[17-03 — Kühlsystem auf Undichtigkeiten prüfen]]
+- [[17-02 — Kühlmittelkreislauf 325e 325i]]
+- [[17-04 — Kühler aus- und einbauen 318i M3]]
+- [[17-04_1 — Kühler M20 aus- und einbauen]]
+- [[17-05 — Kühler aus- und einbauen]]
+- [[17-01 — Kühlmittelkreislauf BMW 318i]]
 
 
 ---

@@ -81,6 +81,15 @@ Die Seite 11-53b zeigt anhand mehrerer Werkstattfotos die weiteren Arbeitsschrit
 | upper timing chain | obere Steuerkette |
 | tightening torque | Anzugsdrehmoment |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]]
+- [[11-21 — Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe]]
+- [[11-22 — Anzugsdrehmomente Nockenwelle und Kettenspanner]]
+- [[11-39 — Anzugsdrehmoment Lambdasonde Sauerstoffüberwachungssonde]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

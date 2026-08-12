@@ -81,6 +81,12 @@ Die Seite 23-103 beschreibt den Ausbau und Einbau beziehungsweise das Abdichten 
 | clutch housing | Kupplungsgehäuse |
 | Loctite No. 573 | Loctite Nr. 573 |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-02 — Anzugsdrehmomente Schaltgetriebe und Stopfen]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente-der-VANOS-Bauteile"
 seitencode: "11-25"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Variable Camshaft Control"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "11-25.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente-der-VANOS-Bauteile
 
 > [!info] BMW-Seite `11-25` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -72,10 +73,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Kapitel 11 „Motor“, Absc
 | Loctite | Schraubensicherung Loctite |
 | tightening torque | Anzugsdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-64 — Pleuel und Pleuellagerschalen erneuern]]
+- [[11-65 — Kolben bei ausgebautem Motor aus- und einbauen]]
 
 
 ---

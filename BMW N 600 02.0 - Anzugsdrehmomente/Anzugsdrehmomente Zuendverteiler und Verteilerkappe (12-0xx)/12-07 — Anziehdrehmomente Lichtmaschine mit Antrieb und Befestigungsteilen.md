@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen"
 seitencode: "12-07"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Alternator with Drive and Mounting Parts"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "12-07.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente Lichtmaschine mit Antrieb und Befestigungsteilen
 
 > [!info] BMW-Seite `12-07` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -65,10 +66,15 @@ Die Seite enthält eine Drehmomenttabelle aus dem Kapitel „Elektrische Anlage 
 | bearing block | Lagerbock |
 | torque | Anziehdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+- [[12-142_1 — Bosch-Lichtmaschine zerlegen und zusammenbauen]]
+- [[12-43 — Lichtmaschine zerlegen und zusammenbauen]]
+- [[12-140 — Fehlersuche an der Drehstrom-Lichtmaschine]]
+- [[12-141 — Lichtmaschine und Spannungsregler prüfen]]
+- [[12-142 — Lichtmaschine aus- und einbauen]]
+- [[12-143_2 — Lichtmaschinen-Spannungsregler aus- und einbauen]]
 
 
 ---

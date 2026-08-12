@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomente Verteilergetriebe allgemein"
 seitencode: "27-01"
-sektion_nr: ""
+sektion_nr: "27"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Transfer Box in General"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "27-01.jpg"
 tags:
-  - sektion/
+  - sektion/27
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomente Verteilergetriebe allgemein
 
 > [!info] BMW-Seite `27-01` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **27**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

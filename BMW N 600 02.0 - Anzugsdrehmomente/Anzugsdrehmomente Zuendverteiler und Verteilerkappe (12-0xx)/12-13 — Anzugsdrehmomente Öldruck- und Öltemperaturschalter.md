@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Öldruck- und Öltemperaturschalter"
 seitencode: "12-13"
-sektion_nr: ""
+sektion_nr: "12"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Oil Pressure, Oil Temperature, Oil Level Display"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "12-13.jpg"
 tags:
-  - sektion/
+  - sektion/12
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Öldruck- und Öltemperaturschalter
 
 > [!info] BMW-Seite `12-13` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **12**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -56,12 +57,6 @@ Die Seite zeigt eine Anzugsdrehmomenttabelle aus dem Abschnitt „Elektrische An
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 | Nm | Newtonmeter |
-
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
-
-- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
-
 
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -1,14 +1,14 @@
 ---
 titel: "Maximale Anzugsdrehmomente für M16-Gewinde"
 seitencode: "00-08"
-sektion_nr: ""
+sektion_nr: "00"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "M16 / M16x1.5 Threads"
 seitentyp: "table"
 konfidenz: 0.98
 bilddatei: "00-08.jpg"
 tags:
-  - sektion/
+  - sektion/00
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Maximale Anzugsdrehmomente für M16-Gewinde
 
 > [!info] BMW-Seite `00-08` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **00**.
 > Typ: **Tabelle** · Konfidenz: **0.98**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

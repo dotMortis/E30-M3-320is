@@ -55,6 +55,13 @@ Die Seite 25-6 beschreibt den Einbau eines Schalthebels beziehungsweise der zuge
 | openings | Öffnungen |
 | four-wheel drive | Allradantrieb |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[25-02 — Anzugsdrehmomente Schaltkonsole Automatikgetriebe]]
+- [[25-01 — Anzugsdrehmomente Schaltkonsole und Schaltstange]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Anziehdrehmomenttabelle Turbolader und Regelung"
 seitencode: "11-36"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Turbocharger and Control"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-36.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anziehdrehmomenttabelle Turbolader und Regelung
 
 > [!info] BMW-Seite `11-36` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -66,10 +67,11 @@ Die Seite zeigt eine BMW-Anziehdrehmomenttabelle für den Motorbereich 11-36, Ab
 | screw | Schraube |
 | torque | Anziehdrehmoment |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-100 — Motorübersicht S14 B20 B23]]
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]]
 
 
 ## Verwandte Seiten

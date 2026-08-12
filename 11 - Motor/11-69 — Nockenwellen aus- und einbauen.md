@@ -76,6 +76,13 @@ Die Seite zeigt die Einbauarbeiten für die Nockenwellen und deren Kettenräder 
 | cam distance N | Nockenmaß N |
 | cast boss on bearing cap | angegossener Ansatz am Lagerdeckel |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-21 — Anzugsdrehmomente Nockenwellenbefestigungen nach Motorbaureihe]]
+- [[11-22 — Anzugsdrehmomente Nockenwelle und Kettenspanner]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

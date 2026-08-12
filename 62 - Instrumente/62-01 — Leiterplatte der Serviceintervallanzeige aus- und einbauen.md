@@ -57,6 +57,12 @@ Die Seite 62-1 beschreibt den Ausbau des Instrumententrägers und den Zugang zur
 | bolt | Schraube |
 | light duct | Lichtleiter |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[62-01 — Anzugsdrehmoment Befestigungsschrauben Geschwindigkeitsgeber]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

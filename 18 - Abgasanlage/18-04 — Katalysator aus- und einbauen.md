@@ -89,6 +89,12 @@ Die Seite 18-4 beschreibt den Ausbau und Einbau beziehungsweise Austausch des Ka
 | automatic transmission | Automatikgetriebe |
 | copper paste | Kupferpaste |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[18-01 — Anzugs- und Montagevorgaben Abgasanlage]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

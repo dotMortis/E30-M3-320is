@@ -1,14 +1,14 @@
 ---
 titel: "Anzugsdrehmomente Schwungradbefestigung Kurbelwelle"
 seitencode: "11-14"
-sektion_nr: ""
+sektion_nr: "11"
 sektion: "BMW N 600 02.0 - Anzugsdrehmomente"
 titel_en: "Flywheel"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "11-14.jpg"
 tags:
-  - sektion/
+  - sektion/11
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Anzugsdrehmomente Schwungradbefestigung Kurbelwelle
 
 > [!info] BMW-Seite `11-14` · Abschnitt  — BMW N 600 02.0 - Anzugsdrehmomente
+> Betrifft BMW-Gruppe **11**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 
@@ -63,10 +64,15 @@ Die Seite ist eine BMW-Anzugsdrehmomenttabelle für den Motorbereich 11–14, Un
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
-## Erwähnte Abschnitte
-> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+## Betrifft folgende Arbeitsschritte
+> [!tip] Seiten, für die dieser Anzugsdrehmoment-Wert benötigt wird.
 
-- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[11-60 — Kurbelwellen-Riemenscheibe aus- und einbauen]]
+- [[11-62 — Führungslager der Kurbelwelle aus- und einbauen]]
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]]
+- [[11-61a — Kurbelwelle aus- und einbauen]]
+- [[11-58 — Radialwellendichtringe an Steuergehäuse- und Abschlussdeckel aus- und einbauen]]
+- [[11-63 — Schwungrad und Anlasserzahnkranz ersetzen]]
 
 
 ---

@@ -100,6 +100,15 @@ Werkstattseite 11–61 zum Ersetzen der Kurbelwelle bei bereits ausgebauter Kurb
 | crankcase | Kurbelgehäuse |
 | lubricating grease | Schmierfett |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[11-17 — Anzugsdrehmomente fuer Schwingungsdaempfer]]
+- [[11-13 — Anzugsdrehmomente Inkrementenrad Kurbelwelle]]
+- [[11-14 — Anzugsdrehmomente Schwungradbefestigung Kurbelwelle]]
+- [[11-01 — Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

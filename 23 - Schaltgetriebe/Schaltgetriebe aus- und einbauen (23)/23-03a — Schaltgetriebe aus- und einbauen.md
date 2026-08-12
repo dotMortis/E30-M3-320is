@@ -65,5 +65,11 @@ Die Seite 23-3a zeigt anhand zweier Aufnahmen die Arbeitsschritte zum Ausbau und
 | tightening torque | Anzugsdrehmoment |
 | oil level | Ölstand |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

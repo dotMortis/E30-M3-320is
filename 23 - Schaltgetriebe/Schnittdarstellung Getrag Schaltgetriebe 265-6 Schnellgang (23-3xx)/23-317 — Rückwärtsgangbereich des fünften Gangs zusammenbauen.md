@@ -91,6 +91,12 @@ Montageanleitung für den Zusammenbau des 5. Rückwärtsgangsbereichs eines BMW-
 | special tool | Sonderwerkzeug |
 | pressing force | Aufpresskraft |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[23-05 — Anzugsdrehmomente Gehäuse und Deckel]]
+
+
 ## Verwandte Seiten
 > [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
 

@@ -1,14 +1,14 @@
 ---
 titel: "Fehlersuche Lautsprecher Radio Antenne"
 seitencode: "6500A-02"
-sektion_nr: ""
+sektion_nr: "65"
 sektion: "1990 BMW M3 Elektrik-Fehlersuche-Handbuch"
 titel_en: "'"
 seitentyp: "table"
 konfidenz: 0.99
 bilddatei: "6500A-02.jpg"
 tags:
-  - sektion/
+  - sektion/65
   - seite
   - typ/table
 ---
@@ -16,6 +16,7 @@ tags:
 # Fehlersuche Lautsprecher Radio Antenne
 
 > [!info] BMW-Seite `6500A-02` · Abschnitt  — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch
+> Betrifft BMW-Gruppe **65**.
 > Typ: **Tabelle** · Konfidenz: **0.99**
 > Originalseite oben, deutsche Übersetzung darunter. Die **Originalseite ist maßgeblich**.
 

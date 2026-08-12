@@ -64,5 +64,11 @@ Die Seite zeigt eine schematische Übersicht der Kraftstofftank- und Kraftstoffr
 | Inlet for fuel | Kraftstoffzulauf |
 | Ejector principle | Ejektorprinzip |
 
+## Anzugsdrehmomente
+> [!tip] Passende Drehmoment-Tabelle(n) für diesen Arbeitsschritt.
+
+- [[16-01 — Anzugsdrehmomente Kraftstofftank und Anbauteile]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]
