@@ -1,0 +1,27 @@
+/* Vault Search -- highlight styling for matched query characters.
+ *
+ * Obsidian's core .suggestion-highlight only sets font-weight: bold. These
+ * variables let you tweak the matched-character color and/or background just
+ * for this plugin's results, without touching every other suggester in the app.
+ *
+ * Override them in your own snippet / theme if you want different colors, e.g.:
+ *   .vault-search-suggestion {
+ *     --vault-search-highlight-color: var(--text-normal);
+ *     --vault-search-highlight-bg: rgba(255, 208, 0, 0.35);
+ *   }
+ */
+.vault-search-suggestion {
+    /* text color of matched characters (defaults to Obsidian's accent) */
+    --vault-search-highlight-color: #ffbabe;
+    /* background behind matched characters (default: none) */
+    --vault-search-highlight-bg: transparent;
+    /* weight of matched characters */
+    --vault-search-highlight-weight: var(--font-bold, 600);
+}
+
+.vault-search-suggestion .suggestion-highlight {
+    color: var(--vault-search-highlight-color);
+    background-color: var(--vault-search-highlight-bg);
+    font-weight: var(--vault-search-highlight-weight);
+    border-radius: var(--radius-s, 3px);
+}

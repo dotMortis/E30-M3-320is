@@ -1,6 +1,6 @@
 "use strict";
 
-const { Plugin, SuggestModal, Notice } = require("obsidian");
+const { Plugin, SuggestModal, Notice, renderMatches } = require("obsidian");
 
 // ---------------------------------------------------------------------------
 // Vault Search
@@ -123,6 +123,74 @@ function fold(s) {
     .replace(/ß/g, "ss")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, ""); // strip any other diacritics (é, etc.)
+}
+
+// Character-by-character variant of fold() that also records provenance: for
+// each character in the folded output, map[j] is the index in the ORIGINAL
+// string that produced it. Umlauts/ß expand to two ASCII chars, so both folded
+// chars map back to the single original char (e.g. "ü" -> "ue", both -> same
+// index). Diacritic-only combining marks fold to nothing and contribute no
+// output chars. Kept behaviourally identical to fold() so index/query matching
+// and highlight offsets stay consistent.
+const FOLD_EXPAND = { "ü": "ue", "ö": "oe", "ä": "ae", "ß": "ss" };
+function foldWithMap(s) {
+  s = s || "";
+  let folded = "";
+  const map = [];
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    const lower = ch.toLowerCase();
+    // multi-char lowercase (rare) still handled: each output char maps to i
+    const expanded = FOLD_EXPAND[lower] !== undefined ? FOLD_EXPAND[lower] : lower;
+    // strip diacritics from the expansion the same way fold() does
+    const norm = expanded.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    for (let k = 0; k < norm.length; k++) {
+      folded += norm[k];
+      map.push(i);
+    }
+  }
+  return { folded, map };
+}
+
+// Find highlight ranges in `text` for a set of already-resolved (folded) match
+// terms. Folds `text` via foldWithMap, scans for each term as a substring, maps
+// folded hit offsets back to original-text [start, end] character ranges, then
+// sorts and merges overlaps. Returns a SearchMatches-compatible array suitable
+// for renderMatches(). Only terms of length >= 2 are considered (single chars
+// would bold almost everything).
+function findTermRanges(text, terms) {
+  if (!text || !terms || terms.size === 0) return [];
+  const { folded, map } = foldWithMap(text);
+  if (!folded) return [];
+  const ranges = [];
+  for (const term of terms) {
+    if (!term || term.length < 2) continue;
+    let from = 0;
+    let pos;
+    while ((pos = folded.indexOf(term, from)) !== -1) {
+      const startOrig = map[pos];
+      // end maps to the original index just past the last folded char
+      const lastFolded = pos + term.length - 1;
+      const endOrig = map[lastFolded] + 1;
+      ranges.push([startOrig, endOrig]);
+      from = pos + term.length;
+    }
+  }
+  if (ranges.length === 0) return [];
+  // sort by start, then merge overlapping/adjacent ranges (renderMatches
+  // expects ascending, non-overlapping ranges).
+  ranges.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const merged = [ranges[0]];
+  for (let i = 1; i < ranges.length; i++) {
+    const prev = merged[merged.length - 1];
+    const cur = ranges[i];
+    if (cur[0] <= prev[1]) {
+      if (cur[1] > prev[1]) prev[1] = cur[1];
+    } else {
+      merged.push(cur);
+    }
+  }
+  return merged;
 }
 
 // Split arbitrary text into searchable tokens. Keeps note codes like 16-02
@@ -795,14 +863,35 @@ class VaultSearchModal extends SuggestModal {
 
     results.sort((a, b) => b.score - a.score);
     this._lastCorrection = correctionNote;
+
+    // Collect every resolved (folded) term that drove scoring so the renderer
+    // can bold the matching characters -- including synonyms, typo corrections
+    // and decompound parts, not just the literal query text.
+    const highlightTerms = new Set();
+    for (const t of perToken) {
+      for (const v of t.primary) highlightTerms.add(v.term);
+      for (const alts of t.partGroups) {
+        for (const v of alts) highlightTerms.add(v.term);
+      }
+    }
+    this._lastHighlightTerms = highlightTerms;
+
     return results.slice(0, this.limit).map((r) => r.doc);
   }
 
   renderSuggestion(doc, el) {
     el.addClass("vault-search-suggestion");
     const titleEl = el.createDiv({ cls: "vault-search-title" });
-    const code = doc.code ? doc.code + " · " : "";
-    titleEl.setText(code + (doc.title || doc.file.basename));
+    const terms = this._lastHighlightTerms || new Set();
+
+    // Code prefix (e.g. "16-02"), highlighted where it matches, then a plain
+    // separator, then the title with matching characters bolded.
+    if (doc.code) {
+      renderMatches(titleEl, doc.code, findTermRanges(doc.code, terms));
+      titleEl.appendText(" · ");
+    }
+    const titleText = doc.title || doc.file.basename;
+    renderMatches(titleEl, titleText, findTermRanges(titleText, terms));
 
     const meta = [];
     if (doc.section) meta.push(doc.section);
@@ -816,11 +905,11 @@ class VaultSearchModal extends SuggestModal {
       metaEl.style.fontSize = "0.8em";
     }
 
-    // matched-text snippet from content
+    // matched-text snippet from content, with matching characters bolded.
     const snippet = this._snippetFor(doc);
     if (snippet) {
       const snEl = el.createDiv({ cls: "vault-search-snippet" });
-      snEl.setText(snippet);
+      renderMatches(snEl, snippet, findTermRanges(snippet, terms));
       snEl.style.opacity = "0.85";
       snEl.style.fontSize = "0.85em";
     }
