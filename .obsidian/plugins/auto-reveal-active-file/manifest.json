@@ -1,0 +1,9 @@
+{
+  "id": "auto-reveal-active-file",
+  "name": "Auto Reveal Active File",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Reveals the active file in the file explorer when opening a note, without stealing editor focus.",
+  "author": "E30-M3-320is vault",
+  "isDesktopOnly": false
+}

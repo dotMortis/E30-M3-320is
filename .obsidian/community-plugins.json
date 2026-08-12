@@ -1,4 +1,5 @@
 [
   "obsidian-image-toolkit",
-  "hide-image-files"
+  "hide-image-files",
+  "auto-reveal-active-file"
 ]
