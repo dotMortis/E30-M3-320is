@@ -12,3 +12,4 @@ __pycache__/
 
 # Vault: keep the notes tracked, but not the ~400MB of copied scans
 vault/_attachments/
+.obisdian
