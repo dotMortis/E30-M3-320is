@@ -63,5 +63,17 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für den Abgaskrümmer im Motorberei
 | screw | Schraube |
 | torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-35 — Abgaskrümmer Anzugsdrehmomente und Einbaumaße]] — gemeinsame Begriffe: exhaust manifold, retorque
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -74,5 +74,11 @@ Stromlaufplan der Masseverteilung für die Heizungs- und Sitzkomponenten sowie d
 | red | rot |
 | brown | braun |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5200-00 — Schaltplan Sitzheizung Fahrer- und Beifahrersitz]] — gemeinsame Begriffe: left front seat, right front seat
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

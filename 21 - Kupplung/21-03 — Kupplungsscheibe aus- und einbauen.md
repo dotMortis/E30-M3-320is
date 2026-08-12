@@ -82,5 +82,14 @@ Die Seite 21–3 beschreibt die Sichtprüfung und Montage der Kupplungsscheibe. 
 | dual-mass flywheel | Zweimassenschwungrad |
 | corrosion inhibitor | Korrosionsschutzmittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-03b — Austauschgetriebe vorbereiten und einbauen]] — Abschnitt 23: gemeinsame Begriffe: guide pins, release bearing, splines, transmission input shaft
+- [[23-168a — Austauschgetriebe Getrag 260 einbauen]] — Abschnitt 23: gemeinsame Begriffe: guide pins, release bearing, splines, transmission input shaft
+- [[21-02 — Kupplungsscheibe aus- und einbauen]] — gemeinsame Begriffe: clutch disc, drive plate, mounting bolts
+- [[21-02 — Anzugsdrehmomente Kupplung am Schwungrad]] — gemeinsame Begriffe: clutch disc, drive plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 21 — Kupplung|Abschnittsübersicht]] · [[Glossar]]

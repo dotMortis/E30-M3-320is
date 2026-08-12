@@ -87,5 +87,13 @@ Werkstattanweisung BMW M3/320is, Seite 13-701, zum Prüfen und Einstellen der Mo
 | valve clearance | Ventilspiel |
 | tailpipe | Endrohr |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-700a — Leerlaufdrehzahl und CO-Gehalt einstellen sowie Drosselklappen synchronisieren]] — gemeinsame Begriffe: altitude correction box, co level, engine idle speed, throttle valve switch, valve clearance
+- [[13-702 — Leerlaufdrehzahl CO-Gehalt Drosselklappen synchronisieren]] — gemeinsame Begriffe: altitude correction box, co level, engine idle speed, throttle valve switch
+- [[13-00-index-a — Inhaltsverzeichnis Kraftstoffanlage Arbeitsvorgänge]] — gemeinsame Begriffe: co level, engine idle speed, throttle valve switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

@@ -86,5 +86,12 @@ Flussdiagramm zur Prüfung der Spannungsversorgung und der abgehenden Leitungen 
 | blue instrument cluster plug | blauer Kombiinstrument-Stecker |
 | ground signal | Massesignal |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-74 — BMW E30 Check-Control-Schaltplan]] — gemeinsame Begriffe: central warning lamp, ignition lock
+- [[62-76 — Fehlersuche Bremsleuchten Prüfablauf]] — gemeinsame Begriffe: ignition lock, terminal r
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

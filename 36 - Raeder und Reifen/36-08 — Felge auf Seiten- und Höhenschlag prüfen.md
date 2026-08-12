@@ -84,5 +84,14 @@ Die Seite 36-8 beschreibt die Prüfung einer ausgebauten und vom Reifen befreite
 | balance weights | Auswuchtgewichte |
 | clamping errors | Spannfehler |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-07 — Abgebaute Räder dynamisch auswuchten]] — gemeinsame Begriffe: balancing machine, basic flange, center, radial runout, rim flange, type flange
+- [[36-05 — Rad auf Höhen- und Seitenschlag prüfen]] — gemeinsame Begriffe: balancing machine, basic flange, center, radial runout, type flange
+- [[36-09 — Reifen ab- und aufziehen]] — gemeinsame Begriffe: balance weights, rim flange, rim well
+- [[36-00-index-a — Inhaltsverzeichnis Räder und Reifen]] — gemeinsame Begriffe: radial runout, wheel rim
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

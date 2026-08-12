@@ -77,5 +77,12 @@ Die Seite 13-643 beschreibt den Ausbau und Einbau der Kraftstoff-Einspritzventil
 | mounting bolt | Befestigungsschraube |
 | manufacturing date | Herstellungsdatum |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-781 — Kraftstoff-Einspritzventil am Einspritzrohr aus- und einbauen]] — gemeinsame Begriffe: injection pipe, plastic washer, plug plate
+- [[11-103 — Motor aus- und einbauen]] — Abschnitt 11: gemeinsame Begriffe: injection pipe, plug plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

@@ -98,5 +98,13 @@ Die Seite 18-1 beschreibt im Arbeitsvorgang 18 00 020 den Ausbau und Einbau der 
 | automatic transmission | Automatikgetriebe |
 | preload | Vorspannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[18-04 — Katalysator aus- und einbauen]] — gemeinsame Begriffe: copper paste, exhaust pipe, manifold, oxygen sensor plug, protective tube
+- [[18-05 — Abgasanlage aus- und einbauen]] — gemeinsame Begriffe: copper paste, exhaust pipe, manifold, oxygen sensor plug
+- [[18-07 — Katalysator am M20-Sechszylindermotor aus- und einbauen]] — gemeinsame Begriffe: copper paste, manifold, oxygen sensor plug
+
+
 ---
 [[Startseite]] · [[_Übersicht 18 — Abgasanlage|Abschnittsübersicht]] · [[Glossar]]

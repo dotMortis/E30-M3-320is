@@ -107,5 +107,13 @@ Die Seite 23-3 beschreibt den Ausbau und Einbau des Schaltgetriebes am BMW. Die 
 | washer | Scheibe |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-167 — Getriebe aus- und einbauen]] — gemeinsame Begriffe: self-locking bolts, shift rod, threaded ring
+- [[23-302 — Getriebe aus- und einbauen]] — gemeinsame Begriffe: reverse gear switch, shift rod, threaded ring
+- [[23-168 — Getriebe aus- und einbauen]] — gemeinsame Begriffe: reverse gear switch, shift arm
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

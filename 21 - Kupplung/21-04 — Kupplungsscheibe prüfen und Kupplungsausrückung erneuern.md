@@ -79,5 +79,14 @@ Die Seite 21-4 beschreibt zwei Arbeiten an der Kupplung: links die Prüfung der 
 | lubricating groove | Schmiernut |
 | Molykote Longterm 2 | Molykote Longterm 2 Schmiermittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-106 — Führungshülse der Kupplung aus- und einbauen]] — Abschnitt 23: gemeinsame Begriffe: clutch release, lubricating groove, release bearing
+- [[23-168a — Austauschgetriebe Getrag 260 einbauen]] — Abschnitt 23: gemeinsame Begriffe: lubricating groove, release bearing, release spring
+- [[23-03b — Austauschgetriebe vorbereiten und einbauen]] — Abschnitt 23: gemeinsame Begriffe: lubricating groove, release bearing
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]] — Abschnitt 23: gemeinsame Begriffe: clutch release, drive plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 21 — Kupplung|Abschnittsübersicht]] · [[Glossar]]

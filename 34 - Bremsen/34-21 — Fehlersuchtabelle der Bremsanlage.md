@@ -113,5 +113,13 @@ Die Seite 34–21 enthält eine Fehlersuchtabelle für die Bremsanlage. Sie ordn
 | wheel alignment | Achsvermessung beziehungsweise Radgeometrie |
 | tire inflation pressure | Reifenfülldruck |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-22 — Fehlersuchtabelle für die Bremsanlage]] — gemeinsame Begriffe: caliper, troubleshooting brakes, wheel cylinder
+- [[34-24 — Fehlersuchtabelle Bremsanlage Ursachen Maßnahmen]] — gemeinsame Begriffe: caliper, troubleshooting brakes, wheel cylinder
+- [[34-23 — Fehlersuchtabelle Bremsanlage Ursachen Abhilfemaßnahmen]] — gemeinsame Begriffe: caliper, troubleshooting brakes
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

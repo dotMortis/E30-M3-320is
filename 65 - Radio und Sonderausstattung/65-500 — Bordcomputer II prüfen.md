@@ -116,5 +116,12 @@ Werkstattprüfseite 65–500 für den Bordcomputer II (Generation II) des BMW E3
 | driving range display | Reichweitenanzeige |
 | reserve volume | Reservevolumen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-501 — Fehlersuchplan Bordcomputer BC II]] — gemeinsame Begriffe: coding plug, terminal r
+- [[65-503 — Fehlersuchtabelle Bordcomputer II]] — gemeinsame Begriffe: coding plug, fuel level transmitter
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

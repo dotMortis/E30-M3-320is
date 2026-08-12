@@ -73,5 +73,12 @@ Die Seite 12-8 zeigt den Anschlussplan für transistorisierte Zündsteuergeräte
 | terminal | Klemme |
 | TCI-S control unit | TCI-S-Steuergerät |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-21 — Fehlersuche Transistorzündanlage Prüfschritt 2]] — gemeinsame Begriffe: pulse transmitter, shielding, starter terminal 50
+- [[12-00-index-a — Inhaltsverzeichnis Elektrische Ausrüstung Motor]] — gemeinsame Begriffe: connection plan, pulse transmitter
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

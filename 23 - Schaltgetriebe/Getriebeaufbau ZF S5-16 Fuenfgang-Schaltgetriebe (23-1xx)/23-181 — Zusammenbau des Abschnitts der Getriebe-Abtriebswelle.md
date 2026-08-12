@@ -77,5 +77,12 @@ Die Seite 23-181 zeigt in bebilderten Montageschritten den Zusammenbau eines Abs
 | hot air blower | Heißluftgebläse |
 | Special Tool | Spezialwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-115 — Gangradbaugruppen erster bis dritter Gang zusammenbauen]] — gemeinsame Begriffe: 2nd gear, 3rd gear, brass synchromesh ring
+- [[23-183 — Getriebesatz mit Lagern]] — gemeinsame Begriffe: 2nd gear, 3rd gear
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

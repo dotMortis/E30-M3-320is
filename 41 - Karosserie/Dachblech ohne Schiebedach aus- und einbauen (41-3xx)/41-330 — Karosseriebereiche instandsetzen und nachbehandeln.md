@@ -63,5 +63,13 @@ Die Seite 41-330 zeigt anhand von Fotos und einer Schnittzeichnung die Instandse
 | tinning | Verzinnen |
 | bumper | Stoßfänger |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-317 — Hinteren Radausschnitt und Seitenteil nacharbeiten]] — gemeinsame Begriffe: anti-drumming coat, spot-welded flange, wheel opening
+- [[41-324 — Seitliche Karosserie instandsetzen und abdichten]] — gemeinsame Begriffe: bumper, wheel opening
+- [[41-335 — Blechbearbeitung und Abdichtung im Heckbereich]] — gemeinsame Begriffe: bumper, crimp
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

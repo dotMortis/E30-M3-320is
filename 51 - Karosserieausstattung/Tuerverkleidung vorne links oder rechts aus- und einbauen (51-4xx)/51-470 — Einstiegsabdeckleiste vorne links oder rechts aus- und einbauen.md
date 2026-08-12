@@ -63,5 +63,11 @@ Die Seite 51–470 beschreibt den Ausbau und Einbau beziehungsweise Ersatz der v
 | install | einbauen |
 | replace | erneuern |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-471 — Einstiegsleiste hinten links oder rechts aus- und einbauen]] — gemeinsame Begriffe: entrance cover strip, install, pliers, remove
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

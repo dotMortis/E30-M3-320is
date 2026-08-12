@@ -94,5 +94,11 @@ Die Seite 8500-8 „Steckeransichten“ zeigt die Anschluss- und Steckseiten ver
 | Sunroof Switch | Schiebedachschalter |
 | SRS | Sicherheitsrückhaltesystem |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5413-00 — Schaltplan elektrisches Schiebe-Hubdach]] — gemeinsame Begriffe: sunroof motor, sunroof switch
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

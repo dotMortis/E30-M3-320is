@@ -99,5 +99,13 @@ Werkstatthandbuchseite 36-1 zur dynamischen und elektronischen Feinwuchtung der 
 | adhesive tape | Klebeband |
 | chalk mark | Kreidemarkierung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-04 — Räder fahrzeugseitig feinwuchten]] — gemeinsame Begriffe: balancing machine, stationary balancing, test sender, valve
+- [[36-02 — Vorder- und Hinterräder am Fahrzeug auswuchten]] — gemeinsame Begriffe: balancing machine, finish balancing, test sender
+- [[36-05 — Rad auf Höhen- und Seitenschlag prüfen]] — gemeinsame Begriffe: balancing machine, valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

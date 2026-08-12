@@ -91,5 +91,13 @@ Die Seite 25-13 beschreibt den Ausbau und Einbau der Schaltkonsolenbaugruppe aus
 | clip | Clip |
 | shaft bolt | Wellenbolzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-04 — Schalthebel der Aluminium-Schaltkonsole aus- und einbauen]] — gemeinsame Begriffe: aluminum shift console, backup lights, retaining tabs
+- [[25-12 — Schalthebelkonsole aus Blech aus- und einbauen]] — gemeinsame Begriffe: backup lights, reinforcement carrier, shift lever console
+- [[25-02 — Schaltbetätigung mit Aluminium-Schaltkonsole]] — gemeinsame Begriffe: aluminum shift console, support
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

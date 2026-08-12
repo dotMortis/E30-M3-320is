@@ -78,5 +78,11 @@ Die Seite 25-11 beschreibt den Ausbau und Einbau des Schaltstangengelenks bei al
 | damper | Dämpfer |
 | Molykote Longterm 2 | Molykote Longterm 2 Schmierfett |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-10 — Schaltstangengelenk am Aluminium-Schaltarm aus- und einbauen]] — gemeinsame Begriffe: damper, rubber rings, shift rod, shift rod joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

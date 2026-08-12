@@ -81,5 +81,13 @@ Die Seite 65-307 beschreibt die Montage und Grundeinstellung des Bowdenzugs der 
 | CALL | gespeicherte Geschwindigkeit abrufen |
 | OFF | Aus |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-630 — Drosselklappenschalter pruefen und einstellen]] — Abschnitt 13: gemeinsame Begriffe: throttle, throttle closed
+- [[65-306 — Betätigungsmotor mit Betätigungszug und Kabelbaum einbauen und einstellen]] — gemeinsame Begriffe: operating motor, throttle
+- [[65-351 — Prüfdiagramm zur Fehlersuche an der Geschwindigkeitsregelanlage]] — gemeinsame Begriffe: electronic cruise control, operating motor
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

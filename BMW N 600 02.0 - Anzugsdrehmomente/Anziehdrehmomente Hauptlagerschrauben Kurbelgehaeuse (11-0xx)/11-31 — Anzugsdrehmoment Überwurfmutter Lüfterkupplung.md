@@ -52,5 +52,18 @@ Die Seite ist eine Drehmomenttabelle aus dem BMW-Werkstatthandbuch für den Moto
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — Abschnitt 11: gemeinsame Begriffe: fan clutch, water pump
+- [[11-79 — Lüfter und Kühlmittelthermostat aus- und einbauen]] — Abschnitt 11: gemeinsame Begriffe: coupling nut, fan clutch
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -89,5 +89,18 @@ Die Seite beschreibt den Aus- und Einbau des Kupplungsgeberzylinders sowie des K
 | release lever | Ausrückhebel |
 | bleed the clutch | Kupplung entlüften |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 35 — Pedale|Abschnitt 35]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-06 — Kupplungspedal aus- und einbauen]] — Abschnitt 35: gemeinsame Begriffe: clutch master cylinder, eccentric bolt
+- [[21-01 — Kupplungsbetätigung entlüften und Kupplungsgehäuse aus- und einbauen]] — gemeinsame Begriffe: brake fluid tank, float container
+
+
 ---
 [[Startseite]] · [[_Übersicht 21 — Kupplung|Abschnittsübersicht]] · [[Glossar]]

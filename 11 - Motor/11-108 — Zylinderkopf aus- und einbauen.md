@@ -96,5 +96,11 @@ Die Seite 11-108 behandelt den Ausbau und Einbau des Zylinderkopfs einschließli
 | crankcase | Kurbelgehäuse |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-53c — Zylinderkopf aus- und einbauen]] — gemeinsame Begriffe: cylinder head bolt, cylinder head gasket, internal calipers, micrometer, tensioning rail, timing case
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

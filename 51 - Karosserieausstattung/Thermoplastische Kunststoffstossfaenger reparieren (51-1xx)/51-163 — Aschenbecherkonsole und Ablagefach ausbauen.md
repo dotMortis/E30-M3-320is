@@ -52,5 +52,12 @@ Die Seite 51-163 zeigt anhand von Fotosequenzen den Ausbau der Aschenbecher- bez
 | retainers | Halterungen |
 | tray | Ablagefach |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-451 — Mittelkonsole und Aschenbecherkonsole aus- und einbauen]] — gemeinsame Begriffe: ashtray console, ashtray light, cigar lighter
+- [[65-93 — Kassettenboxen in Mittelkonsole einbauen]] — Abschnitt 65: gemeinsame Begriffe: ashtray, ashtray light
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -89,5 +89,14 @@ Die Seite 64-7 beschreibt anhand von Fotos und nummerierten Anschlüssen das Ent
 | protective cap | Schutzkappe |
 | refrigerant | Kältemittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-05 — Entleerungs- und Füllstation Übersicht]] — gemeinsame Begriffe: charging hose, charging valve, discharging and charging station, pressure gauge, refrigerant
+- [[64-09 — Klimaanlage Druck- und Temperaturprüfung]] — gemeinsame Begriffe: charging valve, compressor, discharging and charging station, low pressure side, pressure gauge
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: compressor, drier, refrigerant
+- [[64-08 — Kältemittel-Füllzylinder und Klimaanlage befüllen]] — gemeinsame Begriffe: charging valve, pressure gauge, refrigerant
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

@@ -24,7 +24,7 @@ tags:
 | `00-08` | [[00-08 — Maximale Anzugsdrehmomente für M16-Gewinde]] | Tabelle |
 | `00-09` | [[00-09 — Maximale Anziehdrehmomente M18 M18x1-5 Gewinde]] | Tabelle |
 
-## Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse (11-0xx)
+## Anziehdrehmomente Hauptlagerschrauben Kurbelgehaeuse (11-0xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -68,7 +68,7 @@ tags:
 | `11-39` | [[11-39 — Anzugsdrehmoment Lambdasonde Sauerstoffüberwachungssonde]] | Tabelle |
 | `11-40` | [[11-40 — Anzugsdrehmomente der Motoraufhängung]] | Tabelle |
 
-## Anzugsdrehmomente Zündverteiler und Verteilerkappe (12-0xx)
+## Anzugsdrehmomente Zuendverteiler und Verteilerkappe (12-0xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -117,7 +117,7 @@ tags:
 | `16-03` | [[16-03 — Anzugsdrehmomente Kraftstoffdampf-Entlüftungstank Karosserie]] | Tabelle |
 | `16-04` | [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]] | Tabelle |
 
-## Anzugsdrehmomente für das Kühlsystem (17-0xx)
+## Anzugsdrehmomente fuer das Kuehlsystem (17-0xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -143,7 +143,7 @@ tags:
 | `72-01` | [[72-01 — Anzugsdrehmomente für Sicherheitsgurte]] | Tabelle |
 | `72-02` | [[72-02 — Anzugsdrehmomente für Airbagmodule und Gasgeneratoren]] | Tabelle |
 
-## Anzugsdrehmomente Kupplungsgehäuse am Kurbelgehäuse (21-0xx)
+## Anzugsdrehmomente Kupplungsgehaeuse am Kurbelgehaeuse (21-0xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -187,7 +187,7 @@ tags:
 | `24-16` | [[24-16 — Anzugsmomente innere Schaltelemente Automatikgetriebe]] | Tabelle |
 | `24-17` | [[24-17 — Anzugsdrehmomente der Getriebeaufhängung]] | Tabelle |
 
-## Anziehdrehmomente elektrischer Anschlüsse (61-0xx)
+## Anziehdrehmomente elektrischer Anschluesse (61-0xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |

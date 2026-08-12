@@ -65,5 +65,12 @@ Schnitt- und Anordnungszeichnung der Schaltbetätigungsteile im Getrag-260-Fünf
 | reverse gear | Rückwärtsgang |
 | overdrive | überdrehender Gang |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-165 — Getrag-260-Fünfgang-Schaltgetriebe Schnittzeichnung und Gangstufen]] — gemeinsame Begriffe: assembly drawing, getrag 260 five speed overdrive manual transmission, overdrive
+- [[23-02 — Schaltmechanismus Schnitt- und Montagezeichnung]] — gemeinsame Begriffe: assembly drawing, shift parts
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -98,5 +98,13 @@ Explosionsdarstellung der Schaltbetätigung eines Automatikgetriebes in der Ausf
 | transmission lever | Getriebehebel |
 | clamping bolt | Klemmschraube |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-15 — Schaltbetätigung Automatikgetriebe mit Schaltstange]] — gemeinsame Begriffe: pull rod, shift gate, shift layout drawing, transmission switch
+- [[25-19 — Schalthebel mit Schaltstange aus- und einbauen]] — gemeinsame Begriffe: handle, pull rod, transmission switch
+- [[25-20 — Schalthebel mit Grundplatte aus- und einbauen]] — gemeinsame Begriffe: shift gate, transmission switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

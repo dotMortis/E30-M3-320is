@@ -74,5 +74,14 @@ Die Seite zeigt ein Ablaufdiagramm zur Fehlersuche am Kaltstartventil der Jetron
 | ground supply | Masseversorgung |
 | terminal 50 | Klemme 50 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-640 — Kaltstartventil aus- und einbauen und prüfen]] — gemeinsame Begriffe: fuel line, jetronic test lead, measuring glass, spray angle
+- [[13-641 — Kaltstartventil aus- und einbauen und prüfen]] — gemeinsame Begriffe: fuel line, jetronic test lead, measuring glass, spray angle
+- [[13-853 — Fehlersuche L-Jetronic Fehlerursachen 3 bis 5]] — gemeinsame Begriffe: fuel line, jetronic test lead, measuring glass, temperature time switch
+- [[13-854 — Fehlerdiagnose Kaltstartventil L-Jetronic]] — gemeinsame Begriffe: fuel line, jetronic test lead, measuring glass
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

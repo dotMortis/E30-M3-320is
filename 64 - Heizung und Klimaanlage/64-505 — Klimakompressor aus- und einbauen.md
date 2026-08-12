@@ -97,5 +97,11 @@ Die Seite 64-505 beschreibt für den BMW 318i den Ausbau und Einbau des Klimakom
 | oil grade | Ölsorte |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-505a — Klimakompressor aus- und einbauen]] — gemeinsame Begriffe: a/c compressor, compressor oil, pulling hook
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

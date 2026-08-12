@@ -79,5 +79,11 @@ Die Seite 23-16 zeigt anhand zweier schematischer Längsschnitte des Getriebes d
 | ball and spring | Kugel und Feder |
 | transmission | Getriebe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-182 — Geänderte Synchronisierung Getriebe 260-5]] — gemeinsame Begriffe: gear wheel, slide
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

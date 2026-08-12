@@ -63,5 +63,13 @@ Die Seite ist eine Drehmomenttabelle des Motor-Kapitels 11–29 zum Abschnitt �
 | measure | Anzugsdrehmoment |
 | Nm | Newtonmeter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-36 — Anziehdrehmomenttabelle Turbolader und Regelung]] — gemeinsame Begriffe: engine block, hollow bolt, turbocharger
+- [[11-27 — Anzugsdrehmomente Ölfilter und Ölleitungen]] — gemeinsame Begriffe: oil filter and pipes, oil filter housing
+- [[11-28 — Anzugsdrehmomente Ölfilter und Ölleitungen]] — gemeinsame Begriffe: hollow bolt, oil filter and pipes
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -75,5 +75,11 @@ Die Seite 51-431 zeigt anhand von Bildfolgen den Ausbau der hinteren Seitenverkl
 | door weatherstrip | Türdichtung |
 | speaker wires | Lautsprecherkabel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[72-112 — Sicherheitsgurt hinten aus- und einbauen oder ersetzen]] — Abschnitt 72: gemeinsame Begriffe: plate, speaker wires
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

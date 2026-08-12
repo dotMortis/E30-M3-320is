@@ -62,5 +62,13 @@ Schnittdarstellung des manuellen Getrag-265/6-Schaltgetriebes mit Schnellgang. D
 | Output shaft | Abtriebswelle |
 | Layshaft | Vorgelegewelle |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-01 — Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung]] — gemeinsame Begriffe: fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-101 — Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe]] — gemeinsame Begriffe: fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-165 — Getrag-260-Fünfgang-Schaltgetriebe Schnittzeichnung und Gangstufen]] — gemeinsame Begriffe: fifth gear, first gear, fourth gear, second gear, third gear
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

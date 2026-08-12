@@ -79,5 +79,19 @@ Die Seite 12-106 zeigt die elektrische Anordnung des Motors beim BMW M3/S14. Dar
 | reference mark plug | Bezugsmarkenstecker |
 | speed sender plug | Drehzahlgeberstecker |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-105 — Elektrische Anordnung Motor M20 Motronic M1-1 325i]] — gemeinsame Begriffe: 20-pin engine wire harness plug, engine electric layout, temperature gauge
+- [[12-101 — Motorleitungssatz Anordnung 1984 1985 Modelle]] — gemeinsame Begriffe: air conditioner plug, engine electric layout
+- [[12-102 — Elektrische Anordnung am Motor 1986]] — gemeinsame Begriffe: air conditioner plug, engine electric layout
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

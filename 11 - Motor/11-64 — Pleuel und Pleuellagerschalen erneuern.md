@@ -92,5 +92,14 @@ Die Seite 11-64 beschreibt zwei Arbeitsgänge am Kurbeltrieb des BMW-Motors: den
 | exhaust side | Auslassseite |
 | bearing cap | Lagerdeckel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-65 — Kolben bei ausgebautem Motor aus- und einbauen]] — gemeinsame Begriffe: connecting rod, exhaust side, piston pin, weight class
+- [[11-61a — Kurbelwelle aus- und einbauen]] — gemeinsame Begriffe: bearing cap, conrod bearing cap, plastigage
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]] — gemeinsame Begriffe: bearing cap, conrod bearing journal
+- [[11-61b — Kurbelwellen-Hauptlagerschalen ersetzen]] — gemeinsame Begriffe: bearing cap, plastigage
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

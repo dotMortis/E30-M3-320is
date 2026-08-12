@@ -58,5 +58,11 @@ Die Seite 26-13 beschreibt den Arbeitsvorgang 26 20 020 zum Ersetzen der vordere
 | pull off | abziehen |
 | installation | Einbau |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-14 — Vordere Gelenkscheibe der Kardanwelle aus- und einbauen]] — gemeinsame Begriffe: front propeller shaft, power divider
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

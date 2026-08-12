@@ -90,5 +90,11 @@ Schaltplan der Sitzheizung für den linken und rechten Vordersitz. Dargestellt s
 | Right Front Seat | rechter Vordersitz |
 | Seat Heater Switch Assembly | Sitzheizungsschalter-Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[0670-15 — Masseverteilung G200 G202 G300]] — gemeinsame Begriffe: left front seat, right front seat
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

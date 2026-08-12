@@ -53,5 +53,12 @@ Die Seite 41-210 zeigt anhand von drei Fotoabbildungen Nacharbeiten an instand g
 | wheel house | Radhaus |
 | joint | Fuge |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-106c — Hinteres Seitenteil aus- und einbauen]] — Abschnitt 41: gemeinsame Begriffe: entrance, grind
+- [[41-317 — Hinteren Radausschnitt und Seitenteil nacharbeiten]] — gemeinsame Begriffe: anti-drumming coat, joint sealing compound
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

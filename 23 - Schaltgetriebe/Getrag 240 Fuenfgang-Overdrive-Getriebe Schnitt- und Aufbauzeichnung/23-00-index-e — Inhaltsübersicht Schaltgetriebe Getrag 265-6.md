@@ -67,5 +67,13 @@ Inhaltsübersicht des Kapitels 23 „Schaltgetriebe“ für das Getrag-265/6-Fü
 | input shaft | Eingangswelle |
 | Overdrive | Overdrive |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-00-index-a — Inhaltsverzeichnis Fünfgang-Schaltgetriebe Getrag 240]] — gemeinsame Begriffe: guide sleeve for clutch release, overdrive, shift mechanism
+- [[23-00-index-b — Inhaltsübersicht Schaltgetriebe ZF S5-16]] — gemeinsame Begriffe: guide sleeve for clutch release, layout drawing, shift mechanism
+- [[23-00-index-c — Inhaltsverzeichnis Getrag 260 Schaltgetriebe]] — gemeinsame Begriffe: overdrive, shift mechanism
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -93,5 +93,13 @@ Die Seite 26-8 beschreibt den Ausbau und Einbau der Gelenkscheibe (Hardyscheibe)
 | fuel tank connecting line | Verbindungsleitung des Kraftstofftanks |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-05 — Hintere Gelenkwelle Allrad aus- und einbauen]] — gemeinsame Begriffe: fuel tank connecting line, rear propeller shaft, stop nut
+- [[26-06 — Gelenkscheibe der hinteren Kardanwelle ersetzen]] — gemeinsame Begriffe: joint disc, rear propeller shaft
+- [[26-14 — Vordere Gelenkscheibe der Kardanwelle aus- und einbauen]] — gemeinsame Begriffe: joint disc, power divider
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

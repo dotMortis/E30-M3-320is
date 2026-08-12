@@ -74,5 +74,12 @@ Die Seite 34-31b beschreibt den Ausbau und Einbau beziehungsweise Ersatz des Bes
 | ohmmeter | Ohmmeter |
 | nominal value | Sollwert |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-31a — Beschleunigungsaufnehmer Aufbau Funktion und Überwachung]] — gemeinsame Begriffe: abs control unit, acceleration pick-up
+- [[34-31c — ABS-Beschleunigungsaufnehmer mit Ausgleichsscheiben einstellen]] — gemeinsame Begriffe: acceleration pick-up, shear-off screw
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

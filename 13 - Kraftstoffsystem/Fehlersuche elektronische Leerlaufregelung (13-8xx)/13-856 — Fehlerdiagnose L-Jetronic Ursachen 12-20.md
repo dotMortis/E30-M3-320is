@@ -75,5 +75,11 @@ Die Seite 13–856 zeigt ein Fehlerdiagnose- und Korrekturschema für die L-Jetr
 | oil dipstick | Ölpeilstab |
 | guide tube | Führungsrohr |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-850 — L-Jetronic Fehlersuche Symptom-Ursache-Tabelle]] — gemeinsame Begriffe: basic mixture setting, intake system, oil dipstick, oil filler cap, throttle
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

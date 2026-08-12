@@ -69,5 +69,11 @@ Die Seite 13-621 beschreibt den Ausbau und Einbau des Luftmengenmessers bei Fahr
 | engine idle speed | Leerlaufdrehzahl |
 | idle speed CO level | CO-Gehalt im Leerlauf |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-622 — Luftmengenmesser ab 1985 aus- und einbauen]] — gemeinsame Begriffe: engine idle speed, idle speed co level
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

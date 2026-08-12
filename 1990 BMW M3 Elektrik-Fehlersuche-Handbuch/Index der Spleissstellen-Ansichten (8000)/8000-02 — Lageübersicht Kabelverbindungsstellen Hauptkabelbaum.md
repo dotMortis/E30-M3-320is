@@ -90,5 +90,14 @@ Die Seite 8000-2 zeigt Übersichtsdiagramme zur Lage der Kabelverbindungsstellen
 | ground point | Massepunkt |
 | vehicle top view | Fahrzeug-Draufsicht |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[8000-00 — Verzeichnis der Kabelbaumverbindungsstellen]] — gemeinsame Begriffe: main harness, splice location views
+- [[8000-03 — Lage der Spleißverbindungen im Motorkabelbaum]] — gemeinsame Begriffe: splice location views, vehicle top view
+- [[8000-05 — Instrumententafel-Kabelbaum Verbindungsstellen Übersicht]] — gemeinsame Begriffe: splice location, splice location views
+- [[8000-06 — Lage der Spleißstellen im Bordcomputer-Kabelbaum]] — gemeinsame Begriffe: splice location, splice location views
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

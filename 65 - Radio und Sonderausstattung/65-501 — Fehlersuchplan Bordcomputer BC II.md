@@ -126,5 +126,13 @@ Die Seite 65-501 zeigt einen Fehlersuchplan für die Multifunktions- bzw. Bordco
 | battery voltage | Batteriespannung |
 | break in wire | Leitungsunterbrechung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-503 — Fehlersuchtabelle Bordcomputer II]] — gemeinsame Begriffe: bc ii, coding plug, consumption signal, ignition lock
+- [[65-500 — Bordcomputer II prüfen]] — gemeinsame Begriffe: coding plug, terminal r
+- [[65-502 — Fehlerdiagnose Bordcomputer BC II]] — gemeinsame Begriffe: break in wire, ignition lock
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

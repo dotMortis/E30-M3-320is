@@ -82,5 +82,20 @@ Die Seite zeigt eine Drehmoment- und Anzugswinkeltabelle für den Zylinderkopf m
 | warm-running time | Warmlaufzeit |
 | coating | Beschichtung |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-01 — Anziehdrehmomente Hauptlagerschrauben Kurbelgehäuse]] — gemeinsame Begriffe: cast aluminium engine block, cast iron engine block, coating
+- [[11-04 — Anziehdaten der Zylinderkopfschrauben]] — gemeinsame Begriffe: cylinder head bolts, warm-running time
+- [[11-05 — Anziehvorschriften Zylinderkopfschrauben M21 M30]] — gemeinsame Begriffe: cylinder head bolts, warm-running time
+- [[11-08 — Anzugsdrehmomente für Zylinderkopf und Zylinderkopfhaube]] — gemeinsame Begriffe: coating, cylinder head bolts
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

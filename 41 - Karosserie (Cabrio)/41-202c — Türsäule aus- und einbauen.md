@@ -67,5 +67,11 @@ Die Seite 41-202 C zeigt anhand von Fotos und einer Bauteildarstellung den Austa
 | rear side panel | hinteres Seitenteil |
 | workshop spot welder | Werkstatt-Punktschweißgerät |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-302c — Vorbereitende Karosseriearbeiten an Seitenteil und Schweller]] — gemeinsame Begriffe: resistance spot welding, sheet metal panels
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

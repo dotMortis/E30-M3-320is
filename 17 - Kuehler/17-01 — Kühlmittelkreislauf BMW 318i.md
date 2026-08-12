@@ -70,5 +70,11 @@ Schematische Darstellung des Kühlmittelkreislaufs beim BMW 318i. Die Schnittzei
 | circuit with closed thermostat | Kreislauf bei geschlossenem Thermostat |
 | circuit with opened thermostat | Kreislauf bei geöffnetem Thermostat |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[17-02 — Kühlmittelkreislauf 325e 325i]] — gemeinsame Begriffe: coolant circuit, thermostat, water pump
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

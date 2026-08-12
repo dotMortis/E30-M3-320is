@@ -105,5 +105,13 @@ Die Seite 11-61a beschreibt den Einbau und die Maßprüfung der Kurbelwelle sowi
 | BDC position | UT-Stellung |
 | console diameter | Konsolendurchmesser (Pleuellagergehäusedurchmesser) |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-61b — Kurbelwellen-Hauptlagerschalen ersetzen]] — gemeinsame Begriffe: bearing cap, bearing play, color code, console diameter, plastigage
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]] — gemeinsame Begriffe: bearing cap, color code, conrod bearing, main bearing
+- [[11-64 — Pleuel und Pleuellagerschalen erneuern]] — gemeinsame Begriffe: bearing cap, conrod bearing cap, plastigage
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

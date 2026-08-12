@@ -94,5 +94,11 @@ Die Seite 62–61 behandelt die Fehlersuche an der Kraftstoffverbrauchsanzeige (
 | diode relay | Diodenrelais |
 | headlight flasher | Lichthupe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-86 — Kombiinstrumente mit Prüfadapter prüfen]] — gemeinsame Begriffe: coding plug, economy control (ec)
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

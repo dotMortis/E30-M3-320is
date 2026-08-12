@@ -61,5 +61,20 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle im Kapitel 13-3 „Kraftstoffzufuhr-
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-01 — Ablieferungsinspektion Prüfumfang und Arbeitsanweisungen]] — Abschnitt 00: gemeinsame Begriffe: fuel filter, fuel line
+- [[13-853 — Fehlersuche L-Jetronic Fehlerursachen 3 bis 5]] — Abschnitt 13: gemeinsame Begriffe: fuel filter, fuel line
+- [[13-04 — Anzugsdrehmomente Aufnahme Einspritzpumpenregelung]] — gemeinsame Begriffe: fuel delivery and metering system, injection pump
+- [[13-06 — Anzugsdrehmomente Einspritzdüsen und -leitungen]] — gemeinsame Begriffe: coupling nut, injection pump
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

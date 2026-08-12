@@ -54,5 +54,11 @@ Die Seite gehört zum Abschnitt 12-10 „Elektrische Ausrüstung des Motors“ u
 | Unit | Einheit |
 | starter | Anlasser |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

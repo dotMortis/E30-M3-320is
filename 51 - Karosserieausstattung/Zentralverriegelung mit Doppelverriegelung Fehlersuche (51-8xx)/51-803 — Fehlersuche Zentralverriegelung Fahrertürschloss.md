@@ -78,5 +78,13 @@ Flussdiagramm zur Fehlersuche bei fehlender Funktion der Zentralverriegelung bei
 | unlocking | Entriegeln |
 | locking | Verriegeln |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-806 — Kofferraumschloss ohne Funktion beim Entriegeln und Verriegeln]] — gemeinsame Begriffe: linkage, socket, switch through ground, wire break
+- [[51-807 — Fehlersuche Verriegelungsfunktion Hintertüren]] — gemeinsame Begriffe: linkage, locking, unlocking, wire break
+- [[51-804 — Diagnoseablauf Beifahrertürschloss keine Entriegelung]] — gemeinsame Begriffe: linkage, switch through ground, unlocking
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

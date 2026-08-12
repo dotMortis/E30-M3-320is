@@ -63,5 +63,12 @@ Die Seite 34-7 zeigt anhand von Fotografien die Einstellung der Grundluft an den
 | syringe | Spritze |
 | bleed brakes | Bremsen entlüften |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-14 — Bremsleitungen und Bremsschläuche ersetzen]] — gemeinsame Begriffe: bleed brakes, syringe
+- [[34-18 — Bremskraftregler aus- und einbauen]] — gemeinsame Begriffe: bleed brakes, syringe
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

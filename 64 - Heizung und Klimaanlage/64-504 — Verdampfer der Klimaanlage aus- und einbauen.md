@@ -71,5 +71,14 @@ Die Seite 64–504 zeigt in einer bebilderten Arbeitsanleitung den Ausbau des Ve
 | special comb | Spezialkamm |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-503 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: condenser, cooling fins, evaporator, expansion valve, special comb
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: condenser, evaporator, expansion valve, freezing prevention switch
+- [[64-501 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: evaporator, expansion valve, foam rubber cover, special comb
+- [[64-507 — Klimaanlagen-Kondensator aus- und einbauen]] — gemeinsame Begriffe: condenser, cooling fins, pipe, special comb
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

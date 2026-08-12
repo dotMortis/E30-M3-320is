@@ -88,5 +88,11 @@ Flussdiagramm zur Prüfung des Geschwindigkeitssignals und des Leerlaufsignals f
 | cable | Seilzug |
 | wiring diagram | Schaltplan |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-811 — Prüfung von Drehzahl- und Leerlaufsignal]] — gemeinsame Begriffe: idle control unit, idle signal
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

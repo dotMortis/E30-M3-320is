@@ -87,5 +87,13 @@ Die Seite 35-6 beschreibt den Ausbau und Einbau des Kupplungspedals (Arbeitsnumm
 | dashboard trim panel | Armaturenbrettverkleidung |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-03 — Pedalträger aus- und einbauen]] — gemeinsame Begriffe: brake pedal return spring, clutch pedal return spring, eccentric
+- [[21-05 — Kupplungsgeber- und Kupplungsnehmerzylinder aus- und einbauen]] — Abschnitt 21: gemeinsame Begriffe: clutch master cylinder, eccentric bolt
+- [[35-05 — Bremspedal aus- und einbauen]] — gemeinsame Begriffe: dashboard trim panel, over-center helper spring
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

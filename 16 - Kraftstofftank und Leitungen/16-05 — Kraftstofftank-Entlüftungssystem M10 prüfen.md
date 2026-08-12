@@ -67,5 +67,12 @@ Die Seite 16-5 beschreibt die Prüfung des Kraftstofftank-Entlüftungssystems am
 | catalytic converter | Katalysator |
 | side member area | Bereich des Längsträgers |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-06 — Tankentlüftung Bauteilanordnung Motorraum M20]] — gemeinsame Begriffe: carbon canister, tank venting valve
+- [[16-07 — Tankentlüftungssystem und Tankentlüftungsventil prüfen]] — gemeinsame Begriffe: carbon canister, tank venting valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

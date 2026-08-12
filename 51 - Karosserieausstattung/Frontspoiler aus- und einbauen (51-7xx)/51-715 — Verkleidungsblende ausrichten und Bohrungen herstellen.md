@@ -50,5 +50,11 @@ Die Seite zeigt eine Montageanweisung für eine Verkleidungsblende. Die Blende w
 | zinc dust paint | Zinkstaubfarbe |
 | edges of holes | Bohrungskanten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-713 — Seitenteil einsetzen und Befestigungsbohrungen herstellen]] — gemeinsame Begriffe: deburr, drill holes, punch mark
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

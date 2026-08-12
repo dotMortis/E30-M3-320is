@@ -77,5 +77,11 @@ Werkstattbuchseite 33-4 mit der Arbeitsanweisung zum Aus- und Einbau der Ausgang
 | wheel bolts | Radschrauben |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 36 — Räder und Reifen|Abschnitt 36]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 33 — Hinterachse|Abschnittsübersicht]] · [[Glossar]]

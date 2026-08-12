@@ -76,5 +76,14 @@ Die Seite 41-015 zeigt die Arbeitsschritte zur Reparatur eines beschädigten GFK
 | foil | Folie |
 | grind | schleifen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-013 — Beschädigtes GFK-Bauteil mit UV-Laminat reparieren]] — gemeinsame Begriffe: foil, glass fiber putty, hardening, laminate, repair material, ultraviolet lamp
+- [[41-012 — Eckbereich am Kofferraumdeckel reparieren]] — gemeinsame Begriffe: hardening, laminate, repair bandage
+- [[51-111 — Kunststoffschäden mit Reparaturmaterial instand setzen]] — Abschnitt 51: gemeinsame Begriffe: damaged surface, repair material
+- [[41-014 — Laminatschäden an GFK-Teilen reparieren]] — gemeinsame Begriffe: laminate, repair bandage
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

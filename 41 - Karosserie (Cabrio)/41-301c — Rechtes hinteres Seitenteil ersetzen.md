@@ -67,5 +67,11 @@ Die Seite 41-301 C beschreibt den Karosserie-Reparaturarbeitsgang 41 35 110 zum 
 | cut off | abtrennen |
 | heat, sparks and dust | Wärme, Funken und Staub |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-331 — Seitenwand hinten rechts bis Radhaus teilweise erneuern]] — Abschnitt 41: gemeinsame Begriffe: cut off, trunk side section
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

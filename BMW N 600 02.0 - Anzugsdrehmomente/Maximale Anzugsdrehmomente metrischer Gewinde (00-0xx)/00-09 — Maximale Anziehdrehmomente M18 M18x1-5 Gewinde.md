@@ -65,5 +65,14 @@ Die Seite aus dem Abschnitt „Allgemeine Anweisungen“ enthält eine Tabelle m
 | unit | Einheit |
 | company standard | Werksnorm |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-08 — Maximale Anzugsdrehmomente für M16-Gewinde]] — gemeinsame Begriffe: company standard, maximum tightening torques, strength class
+- [[00-02 — Maximale Anziehdrehmomente für M4 und M5]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-03 — Anziehdrehmomente für M6- und M7-Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-05 — Anzugsdrehmomente M10 M10x1 Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

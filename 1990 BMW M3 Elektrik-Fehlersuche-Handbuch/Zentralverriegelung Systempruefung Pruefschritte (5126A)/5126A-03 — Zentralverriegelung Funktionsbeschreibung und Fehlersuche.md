@@ -109,5 +109,13 @@ Die Seite 5126A-3 beschreibt die Funktionsweise und Fehlersuche der Zentralverri
 | ground | Masse |
 | fuse | Sicherung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5126-00 — Elektrischer Stromlaufplan Zentralverriegelung]] — gemeinsame Begriffe: safety catch button, unlock inhibit switch
+- [[5126A-00 — Zentralverriegelung Systemprüfung Prüfschritte]] — gemeinsame Begriffe: safety catch button, unlock inhibit
+- [[5126A-02 — Zentralverriegelung Systemdiagnose und Prüftabellen]] — gemeinsame Begriffe: control unit connector, fused jumper
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

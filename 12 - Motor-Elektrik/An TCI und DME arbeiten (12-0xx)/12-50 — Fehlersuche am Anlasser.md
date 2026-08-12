@@ -104,5 +104,13 @@ Die Seite 12-50 zeigt ein Diagnose- und Fehlersuchdiagramm für den Anlasser. Au
 | engaging mechanism | Einrückmechanismus |
 | carbon brushes | Kohlebürsten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-150 — Fehlersuche am Anlasser]] — gemeinsame Begriffe: armature, bearings, coils, engaging mechanism, gear ring teeth, one-way clutch, starter switch, troubleshooting starter
+- [[12-153 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, one-way clutch
+- [[12-52 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, one-way clutch
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

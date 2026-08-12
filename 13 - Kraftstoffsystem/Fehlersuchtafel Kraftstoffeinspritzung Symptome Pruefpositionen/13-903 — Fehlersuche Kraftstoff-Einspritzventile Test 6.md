@@ -76,5 +76,13 @@ Flussdiagramm zur Fehlersuche an den Kraftstoff-Einspritzventilen, Testposition 
 | fuel flow rate | Kraftstoff-Fördermenge |
 | cold start valve | Kaltstartventil |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-640 — Kaltstartventil aus- und einbauen und prüfen]] — gemeinsame Begriffe: fuel flow rate, spray angle
+- [[13-641 — Kaltstartventil aus- und einbauen und prüfen]] — gemeinsame Begriffe: fuel flow rate, spray angle
+- [[13-904 — Fehlersuche Kaltstartventil Jetronic]] — gemeinsame Begriffe: leak rate, spray angle
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

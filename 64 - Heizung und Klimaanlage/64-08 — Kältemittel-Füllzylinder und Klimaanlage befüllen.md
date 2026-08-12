@@ -81,5 +81,14 @@ Die Seite 64-8 zeigt in bebilderten Arbeitsschritten das Befüllen und Entleeren
 | protective cap | Schutzkappe |
 | air conditioner | Klimaanlage |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-05 — Entleerungs- und Füllstation Übersicht]] — gemeinsame Begriffe: charging cylinder, charging valve, pressure gauge, refrigerant, vacuum pump, vacuum valve, volume scale
+- [[64-07 — Klimaanlage mit Füllstation entleeren und befüllen]] — gemeinsame Begriffe: charging valve, pressure gauge, refrigerant
+- [[64-00-index-a — Inhaltsübersicht Heizung und Klimaanlage]] — gemeinsame Begriffe: heater, refrigerant
+- [[64-01-operation — Integrierte Heizungs- und Klimaanlage]] — gemeinsame Begriffe: heater, refrigerant
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

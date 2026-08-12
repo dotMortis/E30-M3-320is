@@ -67,5 +67,12 @@ Seite 41–205 zeigt anhand mehrerer Fotodarstellungen die Arbeitsschritte beim 
 | roof panel paint finish | Lackierung des Dachblechs |
 | grind down joints | Verbindungen verschleifen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-203 — Fügestellen an Dachrahmen und Seitenträgern bearbeiten und abdichten]] — gemeinsame Begriffe: braze joint, grind down joints, heat protection paste
+- [[41-117 — Hinteres Seitenteil an Türsäule einpassen und verbinden]] — gemeinsame Begriffe: braze joint, plug spot weld joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

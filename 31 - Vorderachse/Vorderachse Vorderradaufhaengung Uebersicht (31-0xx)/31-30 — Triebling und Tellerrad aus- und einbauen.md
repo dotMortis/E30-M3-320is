@@ -69,5 +69,14 @@ Die Seite 31–30 beschreibt den Austausch von Triebling und Tellerrad am ausgeb
 | aluminum jaws | Aluminiumbacken |
 | tapped bores | Gewindebohrungen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-23 — Wellendichtring am Eingangswellenflansch des Vorderachsgetriebes erneuern]] — gemeinsame Begriffe: drive set, friction torque
+- [[31-33 — Differenzial aus- und einbauen]] — gemeinsame Begriffe: differential, drive set
+- [[31-37 — Differentiallager aus- und einbauen]] — gemeinsame Begriffe: aluminum jaws, differential
+- [[31-39 — Einstellarbeiten am Vorderachsgetriebe]] — gemeinsame Begriffe: differential, friction torque
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

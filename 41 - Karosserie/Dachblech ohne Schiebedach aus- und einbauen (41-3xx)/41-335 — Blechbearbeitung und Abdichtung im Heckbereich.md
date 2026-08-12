@@ -58,5 +58,11 @@ Die Seite 41-335 beschreibt Karosseriearbeiten am hinteren Fahrzeugbereich, insb
 | crimp | umbördeln |
 | tin | verzinnen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-330 — Karosseriebereiche instandsetzen und nachbehandeln]] — gemeinsame Begriffe: bumper, crimp
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

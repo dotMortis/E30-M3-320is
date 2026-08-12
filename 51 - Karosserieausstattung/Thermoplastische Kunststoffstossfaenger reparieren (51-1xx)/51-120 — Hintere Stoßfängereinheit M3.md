@@ -57,5 +57,12 @@ Explosionsdarstellung der hinteren Stoßfängereinheit für das BMW M3-Modell. D
 | bracket on side panel | Halter am Seitenteil |
 | side panel | Seitenteil |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-113 — Stoßfänger vorn M3 massive Kunststoffausführung]] — gemeinsame Begriffe: bracket on side panel, bracket with mounting parts, bumper carrier, bumper trim panel, foam rubber inlet
+- [[51-112 — Vorderer Stoßfänger Vollkunststoffausführung]] — gemeinsame Begriffe: bracket on side panel, bumper carrier
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -58,5 +58,14 @@ Die Seite 41-328 zeigt anhand mehrerer Werkstattaufnahmen die Anpassung und Befe
 | braze | hartlöten |
 | outside edge | Außenkante |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-322 — Seitenblech ausrichten und befestigen]] — gemeinsame Begriffe: entrance, inert gas plug weld, rear window frame, tack welding, trunk lid gap, wheel opening
+- [[41-303c — Seitenteil einpassen und einschweißen]] — Abschnitt 41: gemeinsame Begriffe: door gaps, tack welding
+- [[41-315 — Karosserie-Seitenwand Füge- und Schweißstellen]] — gemeinsame Begriffe: outside edge, wheel opening
+- [[41-324 — Seitliche Karosserie instandsetzen und abdichten]] — gemeinsame Begriffe: entrance, wheel opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

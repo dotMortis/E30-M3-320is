@@ -62,5 +62,11 @@ Schnittdarstellung der Schaltmechanik des GETRAG-265/6-Getriebes mit Schnellgang
 | Reversing lever | Rückwärtsganghebel |
 | Transmission housing | Getriebegehäuse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-102 — Längsschnitt Schaltmechanismus ZF-S5-16-Fünfgang-Schaltgetriebe]] — gemeinsame Begriffe: 1st/2nd gear, 3rd/4th gear
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

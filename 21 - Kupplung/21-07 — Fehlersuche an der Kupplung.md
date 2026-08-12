@@ -126,5 +126,13 @@ Die Seite 21-7 enthält eine Fehlersuchtabelle für die Kupplung. Sie ordnet vie
 | seal | Dichtring |
 | engine and transmission suspension | Motor- und Getriebeaufhängung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-122 — Fehlersuchtabelle für Schaltgetriebe]] — Abschnitt 23: gemeinsame Begriffe: clutch hydraulic system, drive plate, transmission input shaft
+- [[21-02 — Kupplungsscheibe aus- und einbauen]] — gemeinsame Begriffe: drive plate, tangential leaf springs
+- [[21-03 — Kupplungsscheibe aus- und einbauen]] — gemeinsame Begriffe: drive plate, transmission input shaft
+
+
 ---
 [[Startseite]] · [[_Übersicht 21 — Kupplung|Abschnittsübersicht]] · [[Glossar]]

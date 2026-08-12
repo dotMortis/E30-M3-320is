@@ -60,5 +60,11 @@ Die Seite 31–38 zeigt schematisch das Aufpressen der Kegelrollenlager auf die 
 | ring gear | Tellerrad |
 | differential unit | Differentialeinheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-29 — Antriebsflansch und Ritzel einbauen und einstellen]] — gemeinsame Begriffe: friction torque, tooth contact pattern
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

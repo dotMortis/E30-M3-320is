@@ -91,5 +91,11 @@ Die Seite 23-104 beschreibt die Montage des Getriebegehäuses sowie die Einstell
 | bearing inner race | Lagerinnenring |
 | sealing surface | Dichtfläche |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-118 — Lager sämtlicher Getriebewellen aus- und einbauen]] — gemeinsame Begriffe: case front section, case rear section
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

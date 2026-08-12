@@ -123,5 +123,11 @@ Die Seite 13-912 beschreibt die Fehlersuche am DME-Motorsteuergerät mit dem BMW
 | air flow sensor | Luftmengenmesser |
 | catalytic converter | Katalysator |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-200 — On-Board-Diagnose Blinkimpulse Fehlercodes]] — Abschnitt 12: gemeinsame Begriffe: fault memory, idle speed switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

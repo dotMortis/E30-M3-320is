@@ -89,5 +89,12 @@ Die Seite 34-5 beschreibt die Demontage und Montage der vorderen Bremsscheiben s
 | wear limit | Verschleißgrenze |
 | fine grinding | Feinschleifen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-10 — Hintere Bremsscheiben aus- und einbauen]] — gemeinsame Begriffe: micrometer, minimum thickness, thickness difference, wear limit
+- [[34-04 — Vordere Bremsbeläge und Bremssättel aus- und einbauen]] — gemeinsame Begriffe: brake pad wear indicator, caliper mounting bolts
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

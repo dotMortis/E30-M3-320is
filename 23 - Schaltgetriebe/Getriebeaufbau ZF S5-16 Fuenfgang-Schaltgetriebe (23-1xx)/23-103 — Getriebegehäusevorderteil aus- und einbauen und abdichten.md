@@ -81,5 +81,12 @@ Die Seite 23-103 beschreibt den Ausbau und Einbau beziehungsweise das Abdichten 
 | clutch housing | Kupplungsgehäuse |
 | Loctite No. 573 | Loctite Nr. 573 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-177 — Schaltbetätigung Schaltstange und Rückwärtsgangwelle einbauen]] — gemeinsame Begriffe: end cap, loctite no. 573
+- [[23-305 — Getriebegehäusevorderteil aus- und einbauen und abdichten]] — gemeinsame Begriffe: cylindrical pin, end cap
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

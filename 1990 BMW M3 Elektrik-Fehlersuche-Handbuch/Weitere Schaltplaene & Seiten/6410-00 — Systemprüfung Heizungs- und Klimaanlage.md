@@ -80,5 +80,13 @@ Die Seite 6410-0 beschreibt eine Systemprüfung der Heizungs- und Klimaanlage. D
 | Auxiliary Cooling Fan | Zusatzkühlgebläse |
 | Outside air | Außenluft |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6413-00 — Schaltplan Gebläsesteuerung Heizung Klimaanlage]] — gemeinsame Begriffe: blower speed control, fresh/recirculating air switch
+- [[6413-01 — Gebläse- und Klimaanlagensteuerung Fehlersuche]] — gemeinsame Begriffe: blower speed control, fresh/recirculating air switch
+- [[6421-01 — Frischluft-Umluftklappensteuerung Schaltungsfunktion und Fehlersuche]] — gemeinsame Begriffe: blower, fresh/recirculating air switch
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

@@ -115,5 +115,12 @@ Werkstatthandbuchseite 33-6 zur Arbeitsanweisung 33 31 000 „Aus- und Einbau de
 | self-locking nut | selbstsichernde Mutter |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-20 — Feststellbremsseil und Feststellbremsbacken aus- und einbauen]] — Abschnitt 34: gemeinsame Begriffe: parking brake cable, parking brake lever, protective tube, rear disc brakes
+- [[34-19 — Handbremshebel und Handbremsseile aus- und einbauen]] — Abschnitt 34: gemeinsame Begriffe: parking brake cable, parking brake lever
+
+
 ---
 [[Startseite]] · [[_Übersicht 33 — Hinterachse|Abschnittsübersicht]] · [[Glossar]]

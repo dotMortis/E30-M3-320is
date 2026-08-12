@@ -92,5 +92,13 @@ Elektrischer Schaltplan zur Beleuchtung der Instrumententafel und weiterer Schal
 | Headlights | Fahrlicht |
 | Parking lights | Standlicht |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6300-00 — Stromlaufplan Lichtschalter Beleuchtung]] — gemeinsame Begriffe: dash plate light, front ashtray light, hazard switch, rear ashtray light
+- [[6100-02 — Schaltplan elektrische Heckscheibenheizung]] — gemeinsame Begriffe: dimmer, rear defogger
+- [[7000-08 — Bauteillagebilder Heizungs- und Klimaanlage]] — gemeinsame Begriffe: hazard switch, on-board computer module
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

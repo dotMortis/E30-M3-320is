@@ -62,5 +62,11 @@ Die Seite zeigt den Prüfablauf für den Lufttemperaturschalter beziehungsweise 
 | Manual transmission | Schaltgetriebe |
 | Air temperature | Lufttemperatur |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-815 — Prüfablauf des Lufttemperaturschalters]] — gemeinsame Begriffe: air temperature, air temperature switch, wire break
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

@@ -98,5 +98,14 @@ Die Seite 64-4 zeigt den Aufbau und die Funktionsweise des Kältemittelkreislauf
 | bypass circulation air | Umluft |
 | transmission tunnel | Getriebetunnel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-00-index-b — Inhaltsverzeichnis der Klimaanlage]] — gemeinsame Begriffe: compressor, condenser, drier, evaporator, expansion valve
+- [[64-504 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: condenser, evaporator, expansion valve, freezing prevention switch
+- [[64-01-operation — Integrierte Heizungs- und Klimaanlage]] — gemeinsame Begriffe: drier, expansion valve, refrigerant
+- [[64-07 — Klimaanlage mit Füllstation entleeren und befüllen]] — gemeinsame Begriffe: compressor, drier, refrigerant
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

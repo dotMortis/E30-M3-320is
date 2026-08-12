@@ -59,5 +59,17 @@ Die Seite 35–9 beschreibt den Ausbau des Fahrpedal- bzw. Gaszugs beim BMW E30.
 | holder | Halterung |
 | cable nipple | Zugnippel |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-08 — Gaspedal und Gaspedalhebel aus- und einbauen]] — gemeinsame Begriffe: accelerator cable, dashboard trim panel
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

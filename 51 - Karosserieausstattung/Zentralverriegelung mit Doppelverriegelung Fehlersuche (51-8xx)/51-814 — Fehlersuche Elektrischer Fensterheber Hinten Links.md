@@ -74,5 +74,11 @@ Die Seite 51-814 zeigt den unteren Abschnitt eines Diagnoseflussdiagramms zur Fe
 | voltage | Spannung |
 | power flow | Stromfluss |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-813 — Fehlersuche Fensterheber links hinten]] — gemeinsame Begriffe: power window, socket
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

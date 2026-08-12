@@ -91,5 +91,13 @@ Flussdiagramm zur systematischen Fehlersuche an den Bremsleuchten des BMW. Ausge
 | terminal R | Klemme R |
 | resistance | Widerstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-73 — Prüftabelle Eingangsleitungen Lampen- und Ölstandsüberwachung]] — gemeinsame Begriffe: bulb tester, stop lights
+- [[62-74 — BMW E30 Check-Control-Schaltplan]] — gemeinsame Begriffe: bulb tester, ignition lock
+- [[62-80 — Prüfung Spannungsversorgung und Leitungen Check-Control]] — gemeinsame Begriffe: ignition lock, terminal r
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

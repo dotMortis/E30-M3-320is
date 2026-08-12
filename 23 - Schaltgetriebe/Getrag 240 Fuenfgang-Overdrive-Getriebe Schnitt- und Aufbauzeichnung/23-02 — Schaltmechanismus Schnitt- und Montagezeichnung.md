@@ -64,5 +64,13 @@ Die Seite zeigt eine Schnitt- und Montagezeichnung der Schaltteile eines 240-Fü
 | operating lever | Betätigungshebel |
 | reverse gear | Rückwärtsgang |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-01 — Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung]] — gemeinsame Begriffe: assembly drawing, five-speed overdrive manual transmission
+- [[23-102 — Längsschnitt Schaltmechanismus ZF-S5-16-Fünfgang-Schaltgetriebe]] — gemeinsame Begriffe: assembly drawing, shift parts
+- [[23-166 — Schaltbetätigung Getrag-260-Getriebe]] — gemeinsame Begriffe: assembly drawing, shift parts
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -61,5 +61,12 @@ Die Seite 41-117 zeigt anhand mehrerer Fotodarstellungen die Arbeitsschritte bei
 | anti-drumming compound | Antidröhnmasse |
 | clamp | festspannen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-205 — B-Säule einsetzen und verschweißen]] — gemeinsame Begriffe: braze joint, plug spot weld joint
+- [[41-329 — Schweiß- und Lötstellen an Seitenwand und Heckabschlussblech]] — gemeinsame Begriffe: braze joint, grind down
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

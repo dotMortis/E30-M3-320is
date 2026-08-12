@@ -94,5 +94,12 @@ Die Seite zeigt eine Fehlerdiagnosetabelle für die L-Jetronic. Zehn typische Mo
 | oil dipstick | Ölpeilstab |
 | coolant level | Kühlmittelstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-856 — Fehlerdiagnose L-Jetronic Ursachen 12-20]] — gemeinsame Begriffe: basic mixture setting, intake system, oil dipstick, oil filler cap, throttle
+- [[12-114_1 — DME-Fehlersuche Kraftstoffversorgung und Ansaugsystem]] — Abschnitt 12: gemeinsame Begriffe: fuel pressure, intake system
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

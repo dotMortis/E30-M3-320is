@@ -89,5 +89,14 @@ Die Seite 34–24 enthält eine Fehlersuchtabelle für die Bremsanlage. Sie ordn
 | parking brake cable | Seilzug der Feststellbremse |
 | spreader lock | Spreizschloss |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-22 — Fehlersuchtabelle für die Bremsanlage]] — gemeinsame Begriffe: caliper, troubleshooting brakes, wheel bearing, wheel cylinder
+- [[34-23 — Fehlersuchtabelle Bremsanlage Ursachen Abhilfemaßnahmen]] — gemeinsame Begriffe: brake disc runout, brake drum, caliper, troubleshooting brakes
+- [[34-21 — Fehlersuchtabelle der Bremsanlage]] — gemeinsame Begriffe: caliper, troubleshooting brakes, wheel cylinder
+- [[34-03 — Feststellbremse prüfen und einstellen]] — gemeinsame Begriffe: brake drum, parking brake cable
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

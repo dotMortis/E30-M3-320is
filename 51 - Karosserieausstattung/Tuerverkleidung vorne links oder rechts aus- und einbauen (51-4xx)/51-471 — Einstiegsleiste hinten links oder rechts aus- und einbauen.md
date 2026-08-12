@@ -63,5 +63,11 @@ Die Seite 51-471 beschreibt die Arbeit 51 47 030 zum Ausbauen, Einbauen oder Ers
 | install | einbauen |
 | replace | ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-470 — Einstiegsabdeckleiste vorne links oder rechts aus- und einbauen]] — gemeinsame Begriffe: entrance cover strip, install, pliers, remove
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

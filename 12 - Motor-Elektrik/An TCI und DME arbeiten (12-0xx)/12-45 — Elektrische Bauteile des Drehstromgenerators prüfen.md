@@ -88,5 +88,11 @@ Die Seite 12-45 beschreibt die Prüfung der elektrischen Bauteile einer Lichtmas
 | service tester | Serviceprüfgerät |
 | slip rings | Schleifringe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-143 — Elektrische Pruefung Drehstromgenerator]] — gemeinsame Begriffe: coil carrier, ground contact, heat sink, negative diode, positive diode, rotor coil, rotor shaft, slip ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

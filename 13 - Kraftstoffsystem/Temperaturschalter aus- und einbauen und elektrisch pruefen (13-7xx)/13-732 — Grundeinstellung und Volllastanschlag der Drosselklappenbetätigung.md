@@ -66,5 +66,12 @@ Die Seite 13-732 beschreibt die Grundeinstellung und die Volllastanschlag-Einste
 | direction of flow | Strömungsrichtung |
 | preload | Vorspannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-702 — Leerlaufdrehzahl CO-Gehalt Drosselklappen synchronisieren]] — gemeinsame Begriffe: push rod, throttle valve neck
+- [[13-731 — Drosselklappenbetätigung aus- und einbauen und Drosselklappenstutzen einstellen]] — gemeinsame Begriffe: throttle valve, throttle valve neck
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

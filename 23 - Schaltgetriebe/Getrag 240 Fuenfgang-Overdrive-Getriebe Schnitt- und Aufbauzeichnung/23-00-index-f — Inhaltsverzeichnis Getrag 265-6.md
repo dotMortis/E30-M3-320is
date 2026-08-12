@@ -55,5 +55,11 @@ Die Seite ist ein Inhaltsverzeichnis des Kapitels 23 „Schaltgetriebe“ und f�
 | Bearing | Lager |
 | Synchronization | Synchronisierung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-00-index-c — Inhaltsverzeichnis Getrag 260 Schaltgetriebe]] — gemeinsame Begriffe: five speed manual transmission, overdrive
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

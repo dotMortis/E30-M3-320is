@@ -66,5 +66,11 @@ Die Seite beschreibt den Einbau des Heckspoilers am Kofferraumdeckel. Eine Maßs
 | zinc dust paint | Zinkstaubfarbe |
 | painting procedures | Lackierverfahren |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-758 — M-Technik-Heckspoiler mit Blende montieren]] — gemeinsame Begriffe: adhesive tape, rear spoiler
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

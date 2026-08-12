@@ -66,5 +66,20 @@ Inhaltsverzeichnis der BMW-Werkstattunterlage für die Instrumente im Kapitel 62
 | Troubleshooting | Fehlersuche |
 | Economy control | Verbrauchsanzeige |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-01 — Leiterplatte der Serviceintervallanzeige aus- und einbauen]] — gemeinsame Begriffe: instrument carrier assembly, instruments
+- [[62-02 — Kühlmitteltemperaturanzeige und Kraftstoffanzeige aus- und einbauen]] — gemeinsame Begriffe: instrument carrier assembly, instruments
+- [[62-03 — Geschwindigkeitsmesser aus- und einbauen]] — gemeinsame Begriffe: instrument carrier assembly, instruments
+- [[62-04 — Drehzahlmesser und Uhr aus- und einbauen]] — gemeinsame Begriffe: clock, instrument carrier assembly
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

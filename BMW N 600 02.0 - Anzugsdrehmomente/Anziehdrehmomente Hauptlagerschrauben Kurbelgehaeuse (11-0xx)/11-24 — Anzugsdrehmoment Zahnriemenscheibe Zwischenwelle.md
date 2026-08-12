@@ -51,5 +51,12 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel 11 „Motor“, Abschnitt 3
 | Unit | Einheit |
 | Type | Typ |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[_Übersicht 35 — Pedale|Abschnitt 35]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -10,7 +10,7 @@ tags:
 
 > [!abstract] 63 Seiten in diesem Abschnitt
 
-## Vorderachse Vorderradaufhängung Übersicht (31-0xx)
+## Vorderachse Vorderradaufhaengung Uebersicht (31-0xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -66,7 +66,7 @@ tags:
 | `31-47` | [[31-47 — Inneres und äußeres Gleichlaufgelenk der Abtriebswelle]] | Diagramm |
 | `31-48` | [[31-48 — Staubschutzmanschette Abtriebswelle links rechts ersetzen]] | Text |
 
-## Vorderachsträger bei Allradantrieb ersetzen (31)
+## Vorderachstraeger bei Allradantrieb ersetzen (31)
 
 | Code | Seite | Typ |
 | --- | --- | --- |

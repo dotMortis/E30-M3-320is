@@ -65,5 +65,11 @@ Schnittdarstellung der Schaltbetätigung eines manuellen Getriebes mit Aluminium
 | manual transmission | Schaltgetriebe |
 | aluminum shift console | Aluminium-Schaltkonsole |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-13 — Aluminium-Schaltkonsole aus- und einbauen]] — gemeinsame Begriffe: aluminum shift console, support
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

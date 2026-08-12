@@ -80,5 +80,11 @@ Die Seite 54-14/2 beschreibt die Arbeitsfolge zur Reparatur einer beschädigten 
 | hardtop | Hartdach |
 | clear lacquer | Klarlack |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-14_1 — Hardtop reparieren und einbauen]] — gemeinsame Begriffe: clear lacquer, glass rod, hardener, hardtop, honeycomb structure, repair patches, rubber roller
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

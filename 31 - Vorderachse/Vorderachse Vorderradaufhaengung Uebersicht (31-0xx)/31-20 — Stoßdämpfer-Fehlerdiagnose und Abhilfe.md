@@ -76,5 +76,12 @@ Die Seite 31-20 enthält eine Fehlerdiagnose-Tabelle für Stoßdämpfer. Sie ord
 | tire treads | Reifenprofil |
 | flat spots | abgeflachte Stellen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-13 — Stoßdämpfer des vorderen Federbeins ersetzen]] — gemeinsame Begriffe: piston rod, shock tester
+- [[31-14 — Vorderes Federbein aus- und einbauen]] — gemeinsame Begriffe: piston rod, rubber damper
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

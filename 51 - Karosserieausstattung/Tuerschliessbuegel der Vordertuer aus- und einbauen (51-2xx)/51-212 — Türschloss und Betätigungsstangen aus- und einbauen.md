@@ -67,5 +67,12 @@ Die Seite 51–212 zeigt die Anordnung und Zuordnung der Betätigungsstangen am 
 | bolts | Befestigungsschrauben |
 | grease | Fett |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-260 — Schalter für Vordertürschloss aus- und einbauen]] — gemeinsame Begriffe: door remote control linkage, locking linkage
+- [[51-261 — Schalter am Antrieb des hinteren Türschlosses aus- und einbauen]] — gemeinsame Begriffe: door remote control linkage, locking linkage
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

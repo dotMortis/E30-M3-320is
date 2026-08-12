@@ -60,5 +60,11 @@ Die Seite ist eine Drehmomenttabelle für das Schaltgetriebe im Abschnitt „Get
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[24-01 — Anzugsdrehmomente Automatikgetriebe Befestigung]] — gemeinsame Begriffe: hex screws, torx bolts, transmission in general, transmission to engine
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

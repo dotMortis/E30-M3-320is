@@ -54,5 +54,11 @@ Die Seite 41–305 C zeigt im Rahmen einer Karosserie-Instandsetzung die Bearbei
 | trunk | Kofferraum |
 | flange | Flansch |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-317 — Hinteren Radausschnitt und Seitenteil nacharbeiten]] — Abschnitt 41: gemeinsame Begriffe: spot-welded flange, trunk
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

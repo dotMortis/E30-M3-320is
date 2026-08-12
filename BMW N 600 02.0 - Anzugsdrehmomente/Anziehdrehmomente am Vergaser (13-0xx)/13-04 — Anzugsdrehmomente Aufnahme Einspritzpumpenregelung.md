@@ -66,5 +66,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle des Kapitels 13-4 „Kraftstoffzufuh
 | fuel cutout device | Kraftstoffabsperrvorrichtung |
 | torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]] — gemeinsame Begriffe: fuel delivery and metering system, injection pump
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

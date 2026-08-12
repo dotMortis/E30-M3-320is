@@ -75,5 +75,11 @@ Die Seite beschreibt den Ausbau und Einbau des Steuergeräts der Transistorzünd
 | ignition timing | Zündzeitpunkt |
 | Curil K 2 | Curil K 2-Dichtmittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-22 — Fehlersuche Transistorzündanlage Prüfschritte 3 und 4]] — gemeinsame Begriffe: tci control unit, transistor coil ignition (tci)
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

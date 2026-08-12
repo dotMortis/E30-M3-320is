@@ -77,5 +77,12 @@ Die Seite 12–105 zeigt die elektrische Anordnung des M20-Motors mit Motronic M
 | electric fuel pumps | Elektrische Kraftstoffpumpen |
 | oxygen sensor | Lambdasonde |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-106 — Elektrische Anlage Motor M3 S14]] — gemeinsame Begriffe: 20-pin engine wire harness plug, engine electric layout, temperature gauge
+- [[12-102 — Elektrische Anordnung am Motor 1986]] — gemeinsame Begriffe: engine electric layout, engine wire harness plug
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

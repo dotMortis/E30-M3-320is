@@ -45,5 +45,12 @@ Die Seite 16–6 zeigt beim Motor M20 die Einbaulage der Bauteile des Kraftstoff
 | fuel tank venting system | Kraftstofftank-Entlüftungssystem |
 | engine compartment | Motorraum |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-05 — Kraftstofftank-Entlüftungssystem M10 prüfen]] — gemeinsame Begriffe: carbon canister, tank venting valve
+- [[16-07 — Tankentlüftungssystem und Tankentlüftungsventil prüfen]] — gemeinsame Begriffe: carbon canister, tank venting valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

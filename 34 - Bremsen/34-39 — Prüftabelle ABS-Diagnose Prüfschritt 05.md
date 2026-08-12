@@ -92,5 +92,11 @@ Die Seite 34-39 zeigt eine Prüftabelle für Prüfschritt 05 des ABS-Diagnosever
 | continuity | Durchgang |
 | ignition | Zündung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-38 — Fehlersuchtabelle Dynamische Spannung ABS Hydrauliksystem]] — gemeinsame Begriffe: electronic relay, overvoltage protection relay
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

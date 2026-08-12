@@ -80,5 +80,13 @@ Die Seite 26-12 beschreibt den Ausbau und Einbau der vorderen Kardanwelle bei Fa
 | seal | Dichtring |
 | cap | Kappe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-14 — Vordere Gelenkscheibe der Kardanwelle aus- und einbauen]] — gemeinsame Begriffe: centering disc, flange arms, front propeller shaft, joint disc, stop nuts
+- [[23-167 — Getriebe aus- und einbauen]] — Abschnitt 23: gemeinsame Begriffe: joint disc, stop nuts
+- [[26-07 — Gelenkwelle aus- und einbauen]] — gemeinsame Begriffe: flange arms, stop nuts
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

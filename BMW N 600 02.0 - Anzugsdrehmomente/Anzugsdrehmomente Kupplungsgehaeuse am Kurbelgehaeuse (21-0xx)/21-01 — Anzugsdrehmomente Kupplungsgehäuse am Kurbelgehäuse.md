@@ -53,5 +53,11 @@ Die Seite ist eine BMW-Drehmomenttabelle aus dem Kapitel 21-1 „Kupplung“. Si
 | Unit | Einheit |
 | Crankcase | Kurbelgehäuse |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 21 — Kupplung|Abschnitt 21]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

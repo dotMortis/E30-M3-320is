@@ -61,5 +61,11 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle im Abschnitt 13-13 „Kraftstoffan
 | Measure | Anzugsdrehmoment |
 | Nm | Newtonmeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

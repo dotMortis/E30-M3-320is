@@ -61,5 +61,11 @@ Die Seite 54–19 zeigt anhand einer fotografischen Arbeitsschrittfolge die Mont
 | hoopsticks | Verdeckspriegel |
 | cement | verkleben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-17 — Cabrioverdeckbezug vom Verdeckrahmen ausbauen]] — gemeinsame Begriffe: frame, hoopsticks, rail, window guide
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

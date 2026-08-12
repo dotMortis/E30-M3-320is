@@ -74,5 +74,13 @@ Die BMW-Werkstatthandbuchseite 51-116 beschreibt den Ausbau und Einbau der beide
 | clearance | Spiel |
 | accident damage | Unfallschaden |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-00-index-a — Inhaltsverzeichnis Reparaturarbeiten Karosserieausstattung]] — gemeinsame Begriffe: impact absorber, rubber guard
+- [[51-114 — Stoßfänger vorn aus- und einbauen]] — gemeinsame Begriffe: clearance, rubber guard
+- [[51-123 — Obere Abdeckplatte hinteren Stoßfängers aus- und einbauen]] — gemeinsame Begriffe: impact absorber, pipe flange
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

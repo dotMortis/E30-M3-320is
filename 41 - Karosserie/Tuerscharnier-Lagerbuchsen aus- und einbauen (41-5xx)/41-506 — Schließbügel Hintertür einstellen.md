@@ -58,5 +58,13 @@ Die Seite 41-506 beschreibt die Einstellung des Türschlosses beziehungsweise de
 | wind noise | Windgeräusche |
 | stone damage | Steinschäden |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-502 — Türschließbügel ausrichten und einstellen]] — gemeinsame Begriffe: door lock, second catch, stone damage, striker, torx bolts, wind noise
+- [[41-501 — Vordertür an Türscharnieren einstellen]] — gemeinsame Begriffe: door lock, stone damage, striker, wind noise
+- [[41-505 — Hintertür an den Scharnieren einstellen]] — gemeinsame Begriffe: stone damage, wind noise
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

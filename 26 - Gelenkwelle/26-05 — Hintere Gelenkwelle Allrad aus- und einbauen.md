@@ -96,5 +96,11 @@ Die Seite 26-5 beschreibt den Ausbau und Einbau der hinteren Gelenkwelle bei Fah
 | special tool | Sonderwerkzeug |
 | Molykote Longterm 2 | Molykote Longterm 2 Schmiermittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-08 — Gelenkscheibe an hinterer Gelenkwelle aus- und einbauen]] — gemeinsame Begriffe: fuel tank connecting line, rear propeller shaft, stop nut
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

@@ -97,5 +97,14 @@ Elektrischer Schaltplan des Bordcomputers (On-Board Computer) mit den zugehörig
 | ground distribution | Masseverteilung |
 | solid state | Halbleiterschaltung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6210-01 — Schaltplan Service-Intervallanzeige Kombiinstrument]] — gemeinsame Begriffe: service interval indicator, service interval processor, vehicle speed input
+- [[6210-02 — Stromlaufplan Instrumentenkombination Öltemperatur Kraftstoff Bordcomputer]] — gemeinsame Begriffe: fuel gauge, fuel tank sender, low fuel warning indicator
+- [[6210-03 — Schaltplan Kombiinstrument Drehzahlmesser Kraftstoffverbrauchsanzeige]] — gemeinsame Begriffe: service interval processor, vehicle speed input, vehicle speed output
+- [[1364-03 — Schaltplan Einspritz- und Bordcomputerelektronik S14]] — gemeinsame Begriffe: on-board computer module, service interval indicator
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

@@ -63,5 +63,11 @@ Die Seite gehört zum Kapitel 16-2 „Kraftstoffbehälter und Kraftstoffleitunge
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -80,5 +80,13 @@ Die Seite 34-42 zeigt eine Prüftabelle für Prüfschritt 08 der ABS-Diagnose am
 | central lock | Mittelsperre |
 | brake test dynamometer | Bremsenprüfstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-43 — Fehlersuch- und Prüftabelle Druckabfall Hydraulikeinheit ABS]] — gemeinsame Begriffe: brake pads, central lock, conventional brake system
+- [[34-44 — Druckaufbau- und Druckhalteprüfung ABS-Hydraulikaggregat]] — gemeinsame Begriffe: brake pads, central lock, conventional brake system
+- [[34-28 — Allgemeine Hinweise zu ABS und Bremsanlage]] — gemeinsame Begriffe: brake lines, brake test dynamometer
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

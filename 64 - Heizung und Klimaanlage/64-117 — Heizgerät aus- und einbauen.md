@@ -58,5 +58,11 @@ Die Seite 64–117 zeigt anhand mehrerer Montagefotos den Ausbau und den Einbau 
 | rubber mount | Gummilager |
 | rear area heater duct | Heizluftkanal für den Fondbereich |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-116 — Heizungsgehäuse aus- und einbauen]] — gemeinsame Begriffe: heater, rear area heater duct
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

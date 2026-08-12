@@ -74,5 +74,13 @@ Tabelle zur Prüfung der Belegung der Pins 10 bis 19 eines elektrischen Anschlus
 | Bulb tester | Lampentest |
 | UB | Bordnetzspannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-73 — Prüftabelle Eingangsleitungen Lampen- und Ölstandsüberwachung]] — gemeinsame Begriffe: bulb tester, function on car, input signals, pin no. designation, test results with multimeter, wire colors
+- [[62-74 — BMW E30 Check-Control-Schaltplan]] — gemeinsame Begriffe: bulb tester, coolant level, washing fluid level
+- [[62-77 — Fehlersuche an den Rueckleuchten]] — gemeinsame Begriffe: bulb tester, tail lights
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

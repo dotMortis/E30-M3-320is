@@ -86,5 +86,14 @@ Die Seite zeigt den elektrischen Schaltplan der Check-Control-Anlage für BMW E3
 | Terminal 15 | Klemme 15, geschaltetes Zündungsplus |
 | Terminal 31 | Klemme 31, Masse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-71 — Fehlersuche Check-Control Eingangssignale]] — gemeinsame Begriffe: air bag, central warning lamp, fasten seat belts
+- [[62-72 — Prüftabelle Anschlussbelegung Pins 10 bis 19]] — gemeinsame Begriffe: bulb tester, coolant level, washing fluid level
+- [[62-73 — Prüftabelle Eingangsleitungen Lampen- und Ölstandsüberwachung]] — gemeinsame Begriffe: bulb tester, low beams
+- [[62-76 — Fehlersuche Bremsleuchten Prüfablauf]] — gemeinsame Begriffe: bulb tester, ignition lock
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

@@ -114,5 +114,14 @@ Die Seite 34–23 enthält eine Fehlersuchtabelle für die Bremsanlage. Sie ordn
 | brake system leak | Undichtigkeit der Bremsanlage |
 | automatic brake shoe slack control | automatische Nachstelleinrichtung der Bremsbacken |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-24 — Fehlersuchtabelle Bremsanlage Ursachen Maßnahmen]] — gemeinsame Begriffe: brake disc runout, brake drum, caliper, troubleshooting brakes
+- [[34-03 — Feststellbremse prüfen und einstellen]] — gemeinsame Begriffe: brake drum, brake lining, brake shoe
+- [[34-22 — Fehlersuchtabelle für die Bremsanlage]] — gemeinsame Begriffe: brake pad, caliper, troubleshooting brakes
+- [[34-21 — Fehlersuchtabelle der Bremsanlage]] — gemeinsame Begriffe: caliper, troubleshooting brakes
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

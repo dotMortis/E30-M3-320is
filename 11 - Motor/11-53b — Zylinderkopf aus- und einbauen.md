@@ -81,5 +81,12 @@ Die Seite 11-53b zeigt anhand mehrerer Werkstattfotos die weiteren Arbeitsschrit
 | upper timing chain | obere Steuerkette |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-107 — Zylinderkopf aus- und einbauen]] — gemeinsame Begriffe: heater hose, idle speed control, radiator hose
+- [[11-52a — Motor aus- und einbauen]] — gemeinsame Begriffe: bleeder hose, heater hose, idle speed control
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

@@ -94,5 +94,13 @@ Die Seite 13-731 beschreibt am Drosselklappengehäuse der Zylinder 3 und 4 die D
 | circlip | Sicherungsring |
 | preload spring | Feder vorspannen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-10 — Wartungsumfang BMW Inspektion I]] — Abschnitt 00: gemeinsame Begriffe: throttle lever, throttle valve
+- [[13-700a — Leerlaufdrehzahl und CO-Gehalt einstellen sowie Drosselklappen synchronisieren]] — gemeinsame Begriffe: throttle valve housing, throttle valve neck
+- [[13-732 — Grundeinstellung und Volllastanschlag der Drosselklappenbetätigung]] — gemeinsame Begriffe: throttle valve, throttle valve neck
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

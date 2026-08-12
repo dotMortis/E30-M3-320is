@@ -73,5 +73,12 @@ Die Seite zeigt einen Komponenten-Lageplan (Component Location Chart) für Steck
 | windshield header | Windschutzscheibenrahmen |
 | sunroof motor | Schiebedachmotor |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[7000-09 — Einbauorte elektrischer und elektronischer Bauteile]] — gemeinsame Begriffe: dash, sunroof motor, windshield header
+- [[9005-04 — Lokalisierung elektrischer Steckverbinder]] — gemeinsame Begriffe: dash, kick panel
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

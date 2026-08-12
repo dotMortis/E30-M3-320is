@@ -75,5 +75,13 @@ Die Werkstatthandbuchseite 34–19 zeigt anhand von Fotografien und Arbeitshinwe
 | locking clamp | Sicherungsklammer |
 | brake backplate | Bremsankerplatte |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[33-06 — Hinterachsträger aus- und einbauen]] — Abschnitt 33: gemeinsame Begriffe: parking brake cable, parking brake lever
+- [[34-03 — Feststellbremse prüfen und einstellen]] — gemeinsame Begriffe: brake shoe, parking brake cable
+- [[34-20 — Feststellbremsseil und Feststellbremsbacken aus- und einbauen]] — gemeinsame Begriffe: parking brake cable, parking brake lever
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

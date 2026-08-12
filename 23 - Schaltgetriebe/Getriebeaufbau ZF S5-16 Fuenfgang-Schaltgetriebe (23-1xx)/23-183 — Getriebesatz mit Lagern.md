@@ -109,5 +109,13 @@ Explosionsdarstellung des Getriebesatzes mit Lagern eines BMW-Schaltgetriebes. D
 | lockplate | Sicherungsblech |
 | layshaft | Vorgelegewelle |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-115 — Gangradbaugruppen erster bis dritter Gang zusammenbauen]] — gemeinsame Begriffe: 1st gear, 2nd gear, 3rd gear
+- [[23-181 — Zusammenbau des Abschnitts der Getriebe-Abtriebswelle]] — gemeinsame Begriffe: 2nd gear, 3rd gear
+- [[23-320 — Explosionsdarstellung Schaltgetriebe Bauteile]] — gemeinsame Begriffe: speedometer drive gear, synchro ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

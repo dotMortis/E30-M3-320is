@@ -77,5 +77,17 @@ Flussdiagramm zur Fehlersuche an der Steuerung des Selectorhebels mit Prüfung d
 | wire | Leitung |
 | selector lever | Selectorhebel |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 35 — Pedale|Abschnitt 35]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-352 — Elektrische-Prüfung-Steuergerät-Wählhebelschalter]] — gemeinsame Begriffe: control unit plug, operating voltage, selector lever switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

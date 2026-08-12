@@ -70,5 +70,12 @@ Die Seite 31-12 zeigt als Layout- bzw. Schnittzeichnung den Aufbau eines Federbe
 | lower rubber ring | unterer Gummiring |
 | screw-on ring | Verschraubring |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-14 — Vorderes Federbein aus- und einbauen]] — gemeinsame Begriffe: mount, protective tube, rubber damper, spring strut tube
+- [[31-16 — Schraubenfeder am vorderen Federbein aus- und einbauen]] — gemeinsame Begriffe: protective tube, rubber damper, upper spring retainer
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

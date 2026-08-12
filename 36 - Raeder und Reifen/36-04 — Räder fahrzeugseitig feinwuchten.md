@@ -65,5 +65,13 @@ Die Seite 36-4 beschreibt das fahrzeugseitige Feinwuchten der Räder mit einem a
 | tail panel | Heckabschlussblech |
 | stationary balancing | stationäres Auswuchten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-01 — Vorder- und Hinterräder am Fahrzeug feinwuchten]] — gemeinsame Begriffe: balancing machine, stationary balancing, test sender, valve
+- [[36-02 — Vorder- und Hinterräder am Fahrzeug auswuchten]] — gemeinsame Begriffe: balancing machine, exhaust extraction hose, test sender
+- [[36-05 — Rad auf Höhen- und Seitenschlag prüfen]] — gemeinsame Begriffe: balancing machine, valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

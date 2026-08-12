@@ -92,5 +92,14 @@ Die Seite 13–640 beschreibt den Ausbau, Einbau und die Prüfung des Kaltstartv
 | Jetronic test lead | Jetronic-Prüfleitung |
 | terminals 87b and 30 | Klemmen 87b und 30 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-641 — Kaltstartventil aus- und einbauen und prüfen]] — gemeinsame Begriffe: fuel flow rate, fuel line, jetronic test lead, leak test, measuring glass, permissible leak rate, spray angle
+- [[13-904 — Fehlersuche Kaltstartventil Jetronic]] — gemeinsame Begriffe: fuel line, jetronic test lead, measuring glass, spray angle
+- [[13-853 — Fehlersuche L-Jetronic Fehlerursachen 3 bis 5]] — gemeinsame Begriffe: fuel line, jetronic test lead, measuring glass
+- [[13-854 — Fehlerdiagnose Kaltstartventil L-Jetronic]] — gemeinsame Begriffe: fuel line, jetronic test lead, measuring glass
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

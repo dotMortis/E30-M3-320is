@@ -58,5 +58,13 @@ Die Seite aus dem Kapitel „Kupplung“ enthält die Anzugsdrehmomente für die
 | Measure | Drehmomentwert |
 | Unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[21-00-index-a — Inhaltsverzeichnis Abschnitt Kupplung]] — Abschnitt 21: gemeinsame Begriffe: clutch disc, drive plate
+- [[21-02 — Kupplungsscheibe aus- und einbauen]] — Abschnitt 21: gemeinsame Begriffe: clutch disc, drive plate
+- [[21-03 — Kupplungsscheibe aus- und einbauen]] — Abschnitt 21: gemeinsame Begriffe: clutch disc, drive plate
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

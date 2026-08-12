@@ -67,5 +67,21 @@ Die Seite 12-114/1 zeigt zwei Prüfabschnitte der DME-Fehlersuche: Test 15 zur K
 | tight fit | fester Sitz |
 | leaks | Undichtigkeiten |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-902 — Fehlersuche Kraftstoffdruck Einspritzanlage]] — Abschnitt 13: gemeinsame Begriffe: filter screen, fuel intake, fuel pressure
+- [[16-00 — Kraftstoffversorgung vor 1988]] — Abschnitt 16: gemeinsame Begriffe: electric fuel pump, fuel intake, fuel supply
+- [[13-850 — L-Jetronic Fehlersuche Symptom-Ursache-Tabelle]] — Abschnitt 13: gemeinsame Begriffe: fuel pressure, intake system
+- [[13-901 — Fehlersuche Kraftstoff-Einspritzanlage Kraftstoffdruck Prüfungen 1 bis 3]] — Abschnitt 13: gemeinsame Begriffe: electric fuel pump, fuel pressure
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

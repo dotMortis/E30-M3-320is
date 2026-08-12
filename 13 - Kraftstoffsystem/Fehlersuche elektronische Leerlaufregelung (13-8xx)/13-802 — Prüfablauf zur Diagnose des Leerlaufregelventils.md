@@ -83,5 +83,11 @@ Die Seite zeigt ein Prüfablaufdiagramm zur Diagnose des Leerlaufregelventils. G
 | idle speed | Leerlaufdrehzahl |
 | nominal speed | Nenndrehzahl |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-812 — Prüfung des Leerlaufregelventils]] — gemeinsame Begriffe: ammeter, color code, idle control valve, idle speed, nominal speed, operating temperature, wire plug
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

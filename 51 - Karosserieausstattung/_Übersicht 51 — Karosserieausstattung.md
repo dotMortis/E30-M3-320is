@@ -20,7 +20,7 @@ tags:
 | `51-00-index-d` | [[51-00-index-d — Inhaltsverzeichnis Karosserieausstattung]] | Tabelle |
 | `51-00-index-e` | [[51-00-index-e — Inhaltsverzeichnis der Karosserieausstattung]] | Tabelle |
 
-## Thermoplastische Kunststoffstoßfänger reparieren (51-1xx)
+## Thermoplastische Kunststoffstossfaenger reparieren (51-1xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -48,7 +48,7 @@ tags:
 | `51-163` | [[51-163 — Aschenbecherkonsole und Ablagefach ausbauen]] | Text |
 | `51-164` | [[51-164 — Handschuhkasten rechts aus- und einbauen Haltegriff ausbauen]] | Text |
 
-## Türschließbügel der Vordertür aus- und einbauen (51-2xx)
+## Tuerschliessbuegel der Vordertuer aus- und einbauen (51-2xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -111,7 +111,7 @@ tags:
 | --- | --- | --- |
 | `51-319a` | [[51-319a — Voraussetzungen und Grenzen der Steinschadenreparatur an Verbundglas-Windschutzscheiben]] | Diagramm |
 
-## Türverkleidung vorne links oder rechts aus- und einbauen (51-4xx)
+## Tuerverkleidung vorne links oder rechts aus- und einbauen (51-4xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |

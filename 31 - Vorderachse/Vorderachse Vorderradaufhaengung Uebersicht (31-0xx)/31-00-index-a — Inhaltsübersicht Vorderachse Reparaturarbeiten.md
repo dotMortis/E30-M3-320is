@@ -68,5 +68,11 @@ Inhaltsübersicht des Kapitels 31 „Vorderachse“ eines BMW-Werkstatthandbuchs
 | All wheel drive | Allradantrieb |
 | Layout drawing | Übersichtszeichnung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-01 — Vorderachse Vorderradaufhängung Übersicht]] — gemeinsame Begriffe: front wheel suspension, layout drawing
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

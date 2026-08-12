@@ -89,5 +89,14 @@ Die Seite 23-168a beschreibt den Einbau eines Austauschgetriebes Getrag 260 am B
 | backup light switch | Rückfahrlichtschalter |
 | oil level | Ölstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-03b — Austauschgetriebe vorbereiten und einbauen]] — gemeinsame Begriffe: exchange transmission, guide pins, lubricating groove, oil level, release bearing, shift rod joint, splines, transmission input shaft
+- [[21-03 — Kupplungsscheibe aus- und einbauen]] — Abschnitt 21: gemeinsame Begriffe: guide pins, release bearing, splines, transmission input shaft
+- [[23-304 — Austauschgetriebe mit Anbauteilen einbauen]] — gemeinsame Begriffe: exchange transmission, lubricating groove, oil level, shift rod joint
+- [[21-04 — Kupplungsscheibe prüfen und Kupplungsausrückung erneuern]] — Abschnitt 21: gemeinsame Begriffe: lubricating groove, release bearing, release spring
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

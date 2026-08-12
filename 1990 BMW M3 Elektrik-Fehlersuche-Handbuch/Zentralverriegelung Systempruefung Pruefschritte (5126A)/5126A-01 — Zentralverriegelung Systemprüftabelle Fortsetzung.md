@@ -94,5 +94,17 @@ Fortsetzung der Systemprüftabelle für die Zentralverriegelung (Kapitel 5126A-1
 | UNLOCK | ENTRIEGELN |
 | RUN | LAUFEN |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5126A-00 — Zentralverriegelung Systemprüfung Prüfschritte]] — gemeinsame Begriffe: door lock motor, door lock motor circuit, short to ground, system check table
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

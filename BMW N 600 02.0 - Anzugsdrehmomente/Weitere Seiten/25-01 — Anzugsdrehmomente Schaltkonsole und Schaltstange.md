@@ -68,5 +68,11 @@ Die Seite ist eine Anzugsdrehmomenttabelle aus dem Kapitel 25-1 „Schaltmechani
 | screw | Schraube |
 | measure | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 25 — Schaltmechanismus|Abschnitt 25]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

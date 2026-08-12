@@ -80,5 +80,12 @@ Seite 13-720 beschreibt den Ausbau, Einbau und die anschließende Prüfung des K
 | manufacturing date | Herstellungsdatum |
 | terminal | Klemme |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-103 — Motor aus- und einbauen]] — Abschnitt 11: gemeinsame Begriffe: fuel hose, injection pipe
+- [[13-730 — Drosselklappenstutzen aus- und einbauen]] — gemeinsame Begriffe: fuel pressure regulator, injection pipe
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

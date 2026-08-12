@@ -70,5 +70,13 @@ Werkstattseite 63-1 mit zwei Arbeitsanweisungen für den BMW-Doppelscheinwerfer:
 | screws | Schrauben |
 | plugs on headlight | Scheinwerferstecker |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[0670-04 — Stromlaufplan Stromverteilung Beleuchtungsanlage]] — gemeinsame Begriffe: high beam, low beam
+- [[0670-13 — Masseverteilungsplan G104 G200]] — gemeinsame Begriffe: high beam, low beam
+- [[6312-01 — Schaltplan Scheinwerfer- und Nebelscheinwerferanlage]] — gemeinsame Begriffe: high beam, low beam
+
+
 ---
 [[Startseite]] · [[_Übersicht 63 — Beleuchtung|Abschnittsübersicht]] · [[Glossar]]

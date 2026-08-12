@@ -79,5 +79,13 @@ Die Seite 51-262 beschreibt den Ausbau und Einbau des Schalters beziehungsweise 
 | LOCKED position | Stellung „VERRIEGELT“ |
 | linkage play | Spiel des Gestänges |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-260 — Schalter für Vordertürschloss aus- und einbauen]] — gemeinsame Begriffe: connecting link, linkage play, locked position
+- [[51-261 — Schalter am Antrieb des hinteren Türschlosses aus- und einbauen]] — gemeinsame Begriffe: connecting link, linkage play, locked position
+- [[51-806 — Kofferraumschloss ohne Funktion beim Entriegeln und Verriegeln]] — gemeinsame Begriffe: linkage, trunk lid lock
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

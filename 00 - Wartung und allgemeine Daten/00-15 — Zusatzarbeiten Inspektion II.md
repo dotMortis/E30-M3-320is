@@ -91,5 +91,14 @@ Die Seite 00 15 aus dem BMW-Wartungssystem beschreibt die zusätzlichen Arbeiten
 | red lamp | rote Kontrolllampe |
 | diode | Leuchtdiode |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-06 — Abnahmeinspektion nach Probefahrt]] — gemeinsame Begriffe: dust covers, inspection button, output shafts, service indicator (si)
+- [[00-17 — Motorölservice und Service-Intervallanzeige zurücksetzen]] — gemeinsame Begriffe: green lamp, operating temperature, service indicator (si)
+- [[00-08 — Einfahrkontrolle 1200 Meilen Prüfliste]] — gemeinsame Begriffe: front axle oil, operating temperature
+- [[00-13 — Arbeitsumfang BMW Inspektion I]] — gemeinsame Begriffe: inspection button, service indicator (si)
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

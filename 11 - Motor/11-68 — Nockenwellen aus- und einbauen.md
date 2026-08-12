@@ -87,5 +87,11 @@ Die Seite 11-68 beschreibt den Ausbau und Einbau der Nockenwellen am BMW-Motor. 
 | feeler gauge | Fühlerlehre |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-69 — Nockenwellen aus- und einbauen]] — gemeinsame Begriffe: camshaft bearing cap, chain tensioner, sprocket, timing case, top dead center (tdc)
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

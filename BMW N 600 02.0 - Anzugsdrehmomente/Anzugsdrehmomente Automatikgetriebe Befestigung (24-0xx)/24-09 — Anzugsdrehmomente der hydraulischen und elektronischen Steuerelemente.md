@@ -69,5 +69,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Abschnitt 24 „Automatikget
 | Unit | Einheit |
 | Nm | Newtonmeter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[24-12 — Anziehdrehmomente Schaltventile Parksperre]] — gemeinsame Begriffe: shift unit, valve housing
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

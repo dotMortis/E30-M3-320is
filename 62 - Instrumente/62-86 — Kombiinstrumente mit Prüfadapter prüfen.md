@@ -94,5 +94,13 @@ Die Seite beschreibt die getrennte Prüfung der Kombiinstrumente mit einem Prüf
 | clock | Uhr |
 | coding plug | Kodierstecker |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-81 — Simulator zum Prüfen von Instrumentenkombinationen]] — gemeinsame Begriffe: control lamp, lead, power supply lead
+- [[62-61 — Fehlersuche Kraftstoffverbrauchsanzeige Kombiinstrument]] — gemeinsame Begriffe: coding plug, economy control (ec)
+- [[62-82 — Anschluss und Prüfung des Tachosimulators]] — gemeinsame Begriffe: control lamp, power supply lead
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

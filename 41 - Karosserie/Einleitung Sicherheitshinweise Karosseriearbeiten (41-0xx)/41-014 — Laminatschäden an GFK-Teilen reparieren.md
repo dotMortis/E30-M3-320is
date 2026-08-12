@@ -83,5 +83,13 @@ Die Seite 41-014 beschreibt anhand einer bebilderten Arbeitsfolge die Reparatur 
 | rubber roller | Gummirolle |
 | non-fibrous laminate | faserfreies Laminat |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-012 — Eckbereich am Kofferraumdeckel reparieren]] — gemeinsame Begriffe: adhesion agent, aluminum foil, glass fiber reinforced plastic parts, graphite coat, laminate, repair bandage, rubber roller, transparent plastic sheet
+- [[41-00-index-a — Inhaltsverzeichnis Karosserie und Reparaturen]] — gemeinsame Begriffe: laminate, reinforcement ribs
+- [[41-015 — GFK-Karosserieteil mit lichthärtendem Laminat reparieren]] — gemeinsame Begriffe: laminate, repair bandage
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

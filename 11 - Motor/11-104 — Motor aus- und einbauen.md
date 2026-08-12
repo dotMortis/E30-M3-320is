@@ -84,5 +84,17 @@ Die Seite beschreibt Arbeitsschritte zum Ausbau des Motors beim BMW E30 M3/320is
 | special tool | Spezialwerkzeug |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-52b — Motor aus- und einbauen]] — gemeinsame Begriffe: engine mounts, oil filter housing, power steering pump, refrigerant hoses
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

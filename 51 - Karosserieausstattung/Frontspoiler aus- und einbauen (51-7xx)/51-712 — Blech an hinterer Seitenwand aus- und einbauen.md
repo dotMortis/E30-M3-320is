@@ -84,5 +84,12 @@ Die Seite 51-712 beschreibt den Ausbau und Einbau des Blechs an der hinteren Sei
 | side member | Seitenträger |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-711 — Platte am vorderen Seitenteil aus- und einbauen]] — gemeinsame Begriffe: grommet, plate, sealing cord, self-tapping nut
+- [[51-716 — Hinteren Steinschlagschutz aus- und einbauen]] — gemeinsame Begriffe: grommet, plastic rivet, sealing cord
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

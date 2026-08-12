@@ -92,5 +92,13 @@ Werkstatthandbuchseite 34–8 mit bebilderten Arbeitsanweisungen zum Aus- und Ei
 | tightening torque | Anzugsdrehmoment |
 | bleed brakes | Bremsanlage entlüften |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-09 — Hintere Bremssättel mit Reparatursatz überholen]] — gemeinsame Begriffe: brake pad, piston, rear brake caliper
+- [[34-04 — Vordere Bremsbeläge und Bremssättel aus- und einbauen]] — gemeinsame Begriffe: bleed brakes, brake pad wear indicator
+- [[34-22 — Fehlersuchtabelle für die Bremsanlage]] — gemeinsame Begriffe: bleed brakes, brake pad
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

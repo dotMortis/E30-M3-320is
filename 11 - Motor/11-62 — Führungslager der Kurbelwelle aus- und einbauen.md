@@ -85,5 +85,11 @@ Die Seite zeigt eine Explosionsdarstellung der Kurbelwelle mit den zugehörigen 
 | Woodruff key | Scheibenfeder |
 | lubricating grease | Schmierfett |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]] — gemeinsame Begriffe: capsule, felt ring, lubricating grease, pilot bearing, woodruff key
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

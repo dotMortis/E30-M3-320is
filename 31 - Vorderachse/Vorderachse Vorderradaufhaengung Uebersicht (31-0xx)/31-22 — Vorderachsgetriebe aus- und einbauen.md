@@ -92,5 +92,20 @@ Werkstattseite 31–22 mit der Arbeitsanweisung zum Aus- und Einbau beziehungswe
 | splash guard | Spritzschutz |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 26 — Gelenkwelle|Abschnitt 26]]
+- [[_Übersicht 36 — Räder und Reifen|Abschnitt 36]]
+- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-45 — Abtriebswelle links oder rechts aus- und einbauen]] — gemeinsame Begriffe: cotter pin, pressure spindle, tie rod
+- [[31-05_1 — Vorderachsträger bei Allradantrieb ersetzen]] — gemeinsame Begriffe: cotter pin, tie rod
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

@@ -98,5 +98,12 @@ Die Seite 34-31c beschreibt die Einstellung des ABS-Beschleunigungsaufnehmers am
 | nominal value table | Sollwerttabelle |
 | distance A | Abstand A |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-31a — Beschleunigungsaufnehmer Aufbau Funktion und Überwachung]] — gemeinsame Begriffe: acceleration pick-up, switching point
+- [[34-31b — Beschleunigungsaufnehmer aus- und einbauen oder ersetzen]] — gemeinsame Begriffe: acceleration pick-up, shear-off screw
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

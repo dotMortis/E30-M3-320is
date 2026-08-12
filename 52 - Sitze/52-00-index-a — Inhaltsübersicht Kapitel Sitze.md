@@ -52,5 +52,12 @@ Inhaltsübersicht des Kapitels 52 „Sitze“ auf Seite 70. Die Seite listet die
 | remove and install | aus- und einbauen |
 | replace | ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[52-102 — Lehnenverstellmechanismus am Vordersitz aus- und einbauen oder ersetzen]] — gemeinsame Begriffe: front seat, reclining mechanism, seat rails
+- [[52-103 — Rückwand der Vordersitzlehne aus- und einbauen]] — gemeinsame Begriffe: back panel, front seat backrest
+
+
 ---
 [[Startseite]] · [[_Übersicht 52 — Sitze|Abschnittsübersicht]] · [[Glossar]]

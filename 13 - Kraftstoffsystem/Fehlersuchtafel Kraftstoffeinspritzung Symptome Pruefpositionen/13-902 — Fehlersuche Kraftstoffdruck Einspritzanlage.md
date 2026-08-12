@@ -63,5 +63,20 @@ Die Seite 13–902 zeigt einen Ablaufplan zur Fehlersuche bei abweichendem Kraft
 | fuel intake | Kraftstoffeinlass |
 | fuel injection | Kraftstoffeinspritzung |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-114_1 — DME-Fehlersuche Kraftstoffversorgung und Ansaugsystem]] — Abschnitt 12: gemeinsame Begriffe: filter screen, fuel intake, fuel pressure
+- [[16-09 — Kraftstoffvorratsgeber und Kraftstoffpumpe aus- und zerlegen]] — Abschnitt 16: gemeinsame Begriffe: fuel intake, fuel pressure
+- [[13-853 — Fehlersuche L-Jetronic Fehlerursachen 3 bis 5]] — gemeinsame Begriffe: fuel filter, fuel pressure
+- [[13-901 — Fehlersuche Kraftstoff-Einspritzanlage Kraftstoffdruck Prüfungen 1 bis 3]] — gemeinsame Begriffe: fuel injection, fuel pressure
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

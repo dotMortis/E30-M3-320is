@@ -48,5 +48,11 @@ Die Seite 51-713 zeigt anhand einer Detailaufnahme des Seitenteils im Bereich de
 | zinc dust paint | Zinkstaubfarbe |
 | wheel arch | Radhaus |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-715 — Verkleidungsblende ausrichten und Bohrungen herstellen]] — gemeinsame Begriffe: deburr, drill holes, punch mark
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

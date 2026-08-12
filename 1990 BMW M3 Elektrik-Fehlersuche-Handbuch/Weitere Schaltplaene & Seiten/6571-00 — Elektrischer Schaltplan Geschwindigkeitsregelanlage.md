@@ -114,5 +114,11 @@ Elektrischer Schaltplan der Geschwindigkeitsregelanlage (Cruise Control) für di
 | Decelerate/Set | Verzögern/Einstellen |
 | Accelerate/Set | Beschleunigen/Einstellen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[0670-14 — Stromlaufplan Masseverteilung G200 G201]] — gemeinsame Begriffe: cruise control actuator, cruise control unit
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

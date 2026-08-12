@@ -40,7 +40,7 @@ tags:
 | `41-601` | [[41-601 — Motorhaube an Karosserieöffnung ausrichten]] | Text |
 | `41-602` | [[41-602 — Kofferraumdeckel ausrichten und einstellen]] | Diagramm |
 
-## Vorderen Motorträger mit Radhaus teilweise erneuern (41-1xx)
+## Vorderen Motortraeger mit Radhaus teilweise erneuern (41-1xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -75,7 +75,7 @@ tags:
 | `41-129` | [[41-129 — Rechtes hinteres Radhaus mit Seitenwand ersetzen]] | Text |
 | `41-130` | [[41-130 — Radhaus ersetzen und einschweißen]] | Diagramm |
 
-## B-Säule links oder rechts erneuern (41-2xx)
+## B-Saeule links oder rechts erneuern (41-2xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -137,7 +137,7 @@ tags:
 | `41-334` | [[41-334 — Verbindungs- und Verstärkungsarbeiten hintere Karosserie]] | Diagramm |
 | `41-335` | [[41-335 — Blechbearbeitung und Abdichtung im Heckbereich]] | Diagramm |
 
-## Türscharnier-Lagerbuchsen aus- und einbauen (41-5xx)
+## Tuerscharnier-Lagerbuchsen aus- und einbauen (41-5xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |

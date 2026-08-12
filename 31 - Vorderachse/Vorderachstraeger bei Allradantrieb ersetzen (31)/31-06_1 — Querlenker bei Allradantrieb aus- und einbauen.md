@@ -69,5 +69,18 @@ Die Seite 31-6.1 beschreibt den Ausbau und Einbau des linken oder rechten Querle
 | tightening torque | Anzugsdrehmoment |
 | cotter pin | Splint |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 36 — Räder und Reifen|Abschnitt 36]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-05_1 — Vorderachsträger bei Allradantrieb ersetzen]] — gemeinsame Begriffe: control arm bracket, cotter pin
+- [[31-45 — Abtriebswelle links oder rechts aus- und einbauen]] — gemeinsame Begriffe: cotter pin, front wheel
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

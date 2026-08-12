@@ -67,5 +67,11 @@ Die Seite beschreibt den Ausbau und die Vorbereitung zum Ersatz der Diodenplatte
 | washer | Scheibe |
 | screw | Schraube |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-44 — Drehstromgenerator Kugellager und Diodenplatte ersetzen]] — gemeinsame Begriffe: insulating sleeve, soldering iron
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

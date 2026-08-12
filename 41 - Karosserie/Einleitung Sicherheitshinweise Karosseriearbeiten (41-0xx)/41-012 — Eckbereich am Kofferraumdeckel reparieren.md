@@ -78,5 +78,14 @@ Die Seite 41-012 beschreibt anhand von Arbeitsschritten und Bildfolgen die Repar
 | rubber roller | Gummiwalze |
 | hardening | Aushärtung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-014 — Laminatschäden an GFK-Teilen reparieren]] — gemeinsame Begriffe: adhesion agent, aluminum foil, glass fiber reinforced plastic parts, graphite coat, laminate, repair bandage, rubber roller, transparent plastic sheet
+- [[41-015 — GFK-Karosserieteil mit lichthärtendem Laminat reparieren]] — gemeinsame Begriffe: hardening, laminate, repair bandage
+- [[41-011 — Sicherheitsvorschriften für glasfaserverstärkte Kunststoffteile]] — gemeinsame Begriffe: glass fiber reinforced plastic parts, hardening
+- [[41-013 — Beschädigtes GFK-Bauteil mit UV-Laminat reparieren]] — gemeinsame Begriffe: hardening, laminate
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

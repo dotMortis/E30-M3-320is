@@ -82,5 +82,11 @@ Illustrierte BMW-Arbeitsanweisung zum Ersetzen des Schaltstangengelenks am Alumi
 | rubber rings | Gummiringe |
 | pin | Stift |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-11 — Schaltstangengelenk bei Allradfahrzeugen aus- und einbauen]] — gemeinsame Begriffe: damper, rubber rings, shift rod, shift rod joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

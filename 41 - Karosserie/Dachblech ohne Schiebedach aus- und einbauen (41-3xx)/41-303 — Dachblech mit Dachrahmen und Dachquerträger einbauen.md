@@ -66,5 +66,11 @@ Die Seite 41-303 zeigt anhand von Fotografien die Arbeitsschritte zum Einbau bez
 | inert gas welder | Schutzgasschweißgerät |
 | body sealing compound | Karosseriedichtmasse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-301 — Dachblech ohne Schiebedach aus- und einbauen]] — gemeinsame Begriffe: rain molding, roof brace
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

@@ -47,7 +47,7 @@ tags:
 | `12-52` | [[12-52 — Anlasser zerlegen und zusammenbauen]] | Text |
 | `12-53` | [[12-53 — Kohlebürsten am Anlasser aus- und einbauen]] | Text |
 
-## Zündzeitpunkt prüfen und einstellen (12)
+## Zuendzeitpunkt pruefen und einstellen (12)
 
 | Code | Seite | Typ |
 | --- | --- | --- |

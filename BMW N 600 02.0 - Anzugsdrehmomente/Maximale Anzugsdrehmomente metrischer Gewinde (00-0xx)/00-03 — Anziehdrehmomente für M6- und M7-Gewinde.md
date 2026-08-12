@@ -59,5 +59,14 @@ Die Seite 00–3 „Allgemeine Anweisungen“ enthält die maximal zulässigen A
 | Measure | Messwert |
 | Unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-02 — Maximale Anziehdrehmomente für M4 und M5]] — gemeinsame Begriffe: bmw standard, maximum tightening torques, strength class
+- [[00-05 — Anzugsdrehmomente M10 M10x1 Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-07 — Maximale Anzugsdrehmomente M14 Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-08 — Maximale Anzugsdrehmomente für M16-Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

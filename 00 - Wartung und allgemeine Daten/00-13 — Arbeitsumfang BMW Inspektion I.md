@@ -105,5 +105,21 @@ Die Seite 00–13 aus dem BMW-Wartungssystem beschreibt den Arbeitsumfang der BM
 | PoliteX brake linings | PoliteX-Bremsbeläge |
 | parking brake | Feststellbremse |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 63 — Beleuchtung|Abschnitt 63]]
+- [[_Übersicht 34 — Bremsen|Abschnitt 34]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-03 — Übergabeinspektion Prüfungen und Ausstattungen]] — gemeinsame Begriffe: intensive washer fluid, rear window defogger, seat belts, windshield washing system
+- [[00-06 — Abnahmeinspektion nach Probefahrt]] — gemeinsame Begriffe: inspection button, service indicator (si)
+- [[00-08 — Einfahrkontrolle 1200 Meilen Prüfliste]] — gemeinsame Begriffe: intensive washer fluid, windshield washing system
+- [[00-09 — Prüfliste Einfahrkontrolle 1200 Meilen]] — gemeinsame Begriffe: headlight flasher, rear window defogger
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

@@ -80,5 +80,12 @@ Die Seite 65-152 beschreibt die Verlegung und den Anschluss der Antennenleitung 
 | trim panel | Verkleidung |
 | special equipment connection | Anschluss für Sonderausstattung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-102 — Innenverkleidungen ausbauen und Lautsprecher- und Antennenleitungen verlegen]] — gemeinsame Begriffe: antenna wire, carpet, cover strip, door beam, radio antenna jack, sliding belt holder, standard wire harness
+- [[65-153 — Anschluss und Funktionsprüfung der Motorantenne]] — gemeinsame Begriffe: antenna wire, automatic antenna
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

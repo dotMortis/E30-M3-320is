@@ -112,5 +112,13 @@ Die Seite zeigt das elektrische Blockschaltbild der Einspritz- und Motronic-Elek
 | tachometer | Drehzahlmesser |
 | fuel economy gauge | Verbrauchsanzeige |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[1364-05 — Motronic Schaltplan Einspritz- und Sensorelektronik]] — gemeinsame Begriffe: air flow input, air flow meter, barometric pressure sensor, coding plug input, reference output
+- [[1364-04 — Schaltplan Einspritzelektronik BMW S14-Motor]] — gemeinsame Begriffe: primary, secondary, timing control
+- [[7000-00 — Bauteil-Lageansichten im Motorraum]] — gemeinsame Begriffe: air flow meter, barometric pressure sensor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

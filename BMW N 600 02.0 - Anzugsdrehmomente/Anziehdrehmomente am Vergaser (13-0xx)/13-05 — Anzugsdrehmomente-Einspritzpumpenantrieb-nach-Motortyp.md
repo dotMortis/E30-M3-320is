@@ -50,5 +50,11 @@ Die Seite zeigt eine Drehmomenttabelle aus dem Kapitel 13-5 „Kraftstoffförder
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

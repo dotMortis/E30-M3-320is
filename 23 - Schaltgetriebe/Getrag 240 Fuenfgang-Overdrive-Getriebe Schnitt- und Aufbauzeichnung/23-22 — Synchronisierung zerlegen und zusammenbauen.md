@@ -88,5 +88,11 @@ Die Seite 23–22 beschreibt das Zerlegen und Montieren der vollständigen Synch
 | groove | Nut |
 | stop | Anschlag |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-188 — Synchronisierung zerlegen und zusammenbauen]] — gemeinsame Begriffe: clutch body, thrust piece
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

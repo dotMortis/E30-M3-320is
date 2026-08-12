@@ -57,5 +57,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für das Schaltgetriebe, Abschnitt 2
 | Type | Typ |
 | clutch housing | Kupplungsgehäuse |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

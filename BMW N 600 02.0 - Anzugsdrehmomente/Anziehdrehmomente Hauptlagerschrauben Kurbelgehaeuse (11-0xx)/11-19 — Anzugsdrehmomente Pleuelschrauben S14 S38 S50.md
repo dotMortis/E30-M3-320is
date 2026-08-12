@@ -61,5 +61,17 @@ Die Seite ist eine BMW-Drehmomenttabelle für den Motorbereich 11-19, Untergrupp
 | Measure | Wert / Maß |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-18 — Anziehdrehmomente für Pleuelschrauben]] — gemeinsame Begriffe: application torque, connecting rod bolts, connecting rods and bearings
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

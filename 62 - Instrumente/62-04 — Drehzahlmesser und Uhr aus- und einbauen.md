@@ -60,5 +60,11 @@ Die Werkstatthandbuchseite 62-4 beschreibt anhand von Bildfolgen den Ausbau des 
 | plug | Stecker |
 | screws | Befestigungsschrauben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-00-index-a — Inhaltsverzeichnis Instrumente Reparatur- und Prüfarbeiten]] — gemeinsame Begriffe: clock, instrument carrier assembly
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

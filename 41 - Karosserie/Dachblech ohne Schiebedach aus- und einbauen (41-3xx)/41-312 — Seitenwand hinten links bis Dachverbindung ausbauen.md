@@ -75,5 +75,12 @@ Die Seite 41–312 beschreibt den Ausbau der linken hinteren Seitenwand bis zur 
 | wire harness | Kabelstrang |
 | grind down edge | Kante abschleifen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-116 — Seitenschwellerabdeckung aus- und einbauen]] — gemeinsame Begriffe: trunk lid seal, two-door model
+- [[41-325 — Seitenteil hinten rechts teilweise erneuern]] — gemeinsame Begriffe: tail light assembly, trunk lid seal
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

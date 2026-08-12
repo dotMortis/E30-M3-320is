@@ -84,5 +84,13 @@ Die Seite 11-54 beschreibt die Prüfung des Kippspiels zwischen Ventilschaft und
 | combustion chamber | Brennraum |
 | grinding paste | Einschleifpaste |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-67 — Nockenwelle aus- und einbauen]] — gemeinsame Begriffe: exhaust valve, intake valve
+- [[11-73 — Ventilspiel einstellen und Ventile auf Dichtheit prüfen]] — gemeinsame Begriffe: combustion chamber, valve seat
+- [[11-74 — Ventile aus- und einbauen]] — gemeinsame Begriffe: valve guide, valve stem
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

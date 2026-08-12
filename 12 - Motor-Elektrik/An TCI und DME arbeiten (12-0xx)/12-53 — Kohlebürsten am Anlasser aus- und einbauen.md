@@ -87,5 +87,14 @@ Die Seite beschreibt den Ausbau und Austausch der Kohlebürsten am ausgebauten A
 | ground contact | Massekontakt |
 | standard tester | handelsübliches Prüfgerät |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-52 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, brush holder, commutator, dust cap, pole housing, shims, solenoid switch
+- [[12-152 — Anlasser-Magnetschalter aus- und einbauen und Anlasser elektrisch prüfen]] — gemeinsame Begriffe: armature, exciter coil, ground contact, holding coil, shorted turns, standard tester
+- [[12-153 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, brush holder, commutator, dust cap, pole housing
+- [[12-155 — Kohlebürsten am Anlasser ersetzen]] — gemeinsame Begriffe: brush holder, commutator, pole housing, shorted turns
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

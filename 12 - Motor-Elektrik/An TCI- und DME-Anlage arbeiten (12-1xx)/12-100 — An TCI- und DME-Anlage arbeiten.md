@@ -71,5 +71,11 @@ Die Seite 12-100 enthält allgemeine Sicherheits- und Arbeitsanweisungen für Ar
 | battery | Batterie |
 | burglar alarm system | Diebstahlwarnanlage |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-00 — An TCI und DME arbeiten]] — gemeinsame Begriffe: burglar alarm system, digital motor electronics (dme), ignition control unit, transistorized coil-type ignition (tci)
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

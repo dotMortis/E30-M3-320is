@@ -89,5 +89,11 @@ Die Seite 25-18 beschreibt den Ausbau und Einbau des kompletten Wählhebels mit 
 | cable rod | Seilstange |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-21 — Wählhebel-Seilzug aus- und einbauen]] — gemeinsame Begriffe: cable rod, cable sleeve, steel wire
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

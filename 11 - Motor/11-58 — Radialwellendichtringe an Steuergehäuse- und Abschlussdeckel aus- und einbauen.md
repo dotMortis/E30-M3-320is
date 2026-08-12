@@ -76,5 +76,17 @@ Die Seite 11-58 beschreibt den Austausch des Radialwellendichtrings am unteren S
 | Three Bond Silicone 1207 B | Three Bond Silicone 1207 B-Dichtmittel |
 | transmission | Getriebe |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-57 — Unteren Steuergehäusedeckel aus- und einbauen]] — gemeinsame Begriffe: crankshaft pulley, lower timing case cover
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

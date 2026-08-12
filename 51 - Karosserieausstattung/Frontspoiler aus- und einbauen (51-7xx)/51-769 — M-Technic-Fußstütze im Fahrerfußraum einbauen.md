@@ -81,5 +81,12 @@ Die Seite beschreibt den Einbau der M-Technic-Fußstütze im Fahrerfußraum für
 | engine hood release grip | Griff der Motorhaubenentriegelung |
 | mandrel | Dorn |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-770 — Seitliche Fußraumverkleidung bearbeiten und einbauen]] — gemeinsame Begriffe: footrest, mandrel, mounting tab, side trim panel, turnlock
+- [[65-91 — Vorderen Lautsprecher aus- und einbauen]] — Abschnitt 65: gemeinsame Begriffe: front speaker, self-tapping nut
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

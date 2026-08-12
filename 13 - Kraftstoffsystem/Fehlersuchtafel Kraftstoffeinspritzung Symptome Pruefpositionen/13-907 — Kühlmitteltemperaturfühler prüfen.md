@@ -66,5 +66,11 @@ Die Seite 13–907 zeigt die Prüfanweisung „Testposition 10 – Kühlmittelte
 | wires | Leitungen |
 | wiring diagram | Schaltplan |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-906 — Fehlersuche Temperaturzeitschaltuhr Kraftstoff-Einspritzanlage]] — gemeinsame Begriffe: coolant level, plug contact, resistance values, water bath
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

@@ -70,5 +70,11 @@ Die Seite zeigt eine Drehmomenttabelle für Kraftstofftank und Kraftstoffleitung
 | Torque | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

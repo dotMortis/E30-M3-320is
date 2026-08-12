@@ -74,5 +74,11 @@ Die Seite 64-500 beschreibt den Ausbau und Einbau des Expansionsventils der Klim
 | tightening torque | Anzugsdrehmoment |
 | counterhold | Gegenhalten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-501 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: expansion valve, seals
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

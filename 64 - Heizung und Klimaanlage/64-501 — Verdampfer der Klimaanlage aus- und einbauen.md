@@ -66,5 +66,14 @@ Die Seite 64-501 zeigt in mehreren Arbeitsschritten den Ausbau des Verdampfers d
 | cover | Abdeckung |
 | bolts | Schrauben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-504 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: evaporator, expansion valve, foam rubber cover, special comb
+- [[64-503 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: evaporator, expansion valve, special comb
+- [[64-00-index-b — Inhaltsverzeichnis der Klimaanlage]] — gemeinsame Begriffe: evaporator, expansion valve
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: evaporator, expansion valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

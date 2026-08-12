@@ -55,5 +55,11 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle im Abschnitt 72-2 „Ausstattun
 | torque | Anzugsdrehmoment |
 | body | Karosserie |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnitt 72]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

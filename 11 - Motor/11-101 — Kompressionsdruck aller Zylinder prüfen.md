@@ -68,5 +68,11 @@ Die Seite 11-101 beschreibt die Prüfung des Kompressionsdrucks in allen Zylinde
 | tightening torque | Anzugsdrehmoment |
 | specification | Sollwert |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-51 — Kompressionsdruck aller Zylinder prüfen]] — gemeinsame Begriffe: compression tester, spark plug, spark plug connector
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

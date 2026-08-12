@@ -76,5 +76,12 @@ Die Seite beschreibt den Ausbau und Einbau des Wasserventils am Heizungsgehäuse
 | bleed cooling system | Kühlsystem entlüften |
 | check coolant | Kühlmittelstand prüfen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-00-index-a — Inhaltsübersicht Heizung und Klimaanlage]] — gemeinsame Begriffe: heater, heater housing
+- [[64-116 — Heizungsgehäuse aus- und einbauen]] — gemeinsame Begriffe: heater, heater housing
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

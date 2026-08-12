@@ -57,5 +57,11 @@ Die Seite zeigt ein Prüfablaufdiagramm für den Lufttemperaturschalter. Mithilf
 | air temperature | Lufttemperatur |
 | replace air temperature switch | Lufttemperaturschalter ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-805 — Lufttemperaturschalter und Lufttemperaturfühler prüfen]] — gemeinsame Begriffe: air temperature, air temperature switch, wire break
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

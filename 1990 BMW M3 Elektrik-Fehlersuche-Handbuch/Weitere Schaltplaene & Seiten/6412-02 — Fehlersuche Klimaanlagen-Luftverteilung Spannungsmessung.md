@@ -72,5 +72,11 @@ Die Seite 6421-2 des Prüfkapitels „A/C Air Delivery Control“ setzt die Fehl
 | LH | links |
 | RH | rechts |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6421-01 — Frischluft-Umluftklappensteuerung Schaltungsfunktion und Fehlersuche]] — gemeinsame Begriffe: a/c air delivery control, fresh/recirculating air relay
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

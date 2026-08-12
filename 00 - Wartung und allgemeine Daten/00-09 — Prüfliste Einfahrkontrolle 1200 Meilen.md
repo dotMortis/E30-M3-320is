@@ -86,5 +86,11 @@ Die Seite ist eine Prüfliste des BMW-Wartungssystems für die 1200-Meilen-Inspe
 | Pol(i)tex brake linings | Pol(i)tex-Bremsbeläge |
 | breaking in | Einbremsen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-13 — Arbeitsumfang BMW Inspektion I]] — gemeinsame Begriffe: headlight flasher, rear window defogger
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

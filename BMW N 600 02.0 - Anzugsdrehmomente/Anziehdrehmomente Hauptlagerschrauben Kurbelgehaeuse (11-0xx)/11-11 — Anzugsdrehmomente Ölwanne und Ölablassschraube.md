@@ -56,5 +56,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für den Motorbereich 11-11, Untergr
 | Thread | Gewinde |
 | Strength class | Festigkeitsklasse |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

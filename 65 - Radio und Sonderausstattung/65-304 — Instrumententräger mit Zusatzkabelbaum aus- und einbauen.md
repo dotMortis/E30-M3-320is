@@ -78,5 +78,11 @@ Die Seite 65-304 zeigt in bebilderten Arbeitsschritten den Ausbau des Instrument
 | manual transmission | Schaltgetriebe |
 | automatic transmission | Automatikgetriebe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-452 — Instrumententräger aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: combination plug, instrument carrier, slider
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

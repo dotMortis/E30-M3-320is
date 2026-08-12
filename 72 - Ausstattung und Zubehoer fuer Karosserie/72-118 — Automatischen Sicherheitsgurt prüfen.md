@@ -87,5 +87,14 @@ Die Seite 72-118 zeigt ein Prüf- und Entscheidungsdiagramm zur Funktions- und Z
 | switch in seat belt lock | Schalter im Gurtschloss |
 | resistance | Widerstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[72-116 — Sicherheitsgurte prüfen reinigen und ersetzen]] — gemeinsame Begriffe: automatic seat belt, belt reversing holder, seat belt lock
+- [[72-110 — Vorderen Sicherheitsgurt aus- und einbauen]] — gemeinsame Begriffe: belt reversing holder, belt strap
+- [[72-113 — Hintere Sicherheitsgurte aus- und einbauen]] — gemeinsame Begriffe: belt reversing holder, belt strap
+- [[72-115 — Sicherheitsgurtaufroller und Gurtumlenker prüfen]] — gemeinsame Begriffe: belt reversing holder, mounting tab
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

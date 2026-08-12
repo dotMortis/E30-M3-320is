@@ -59,5 +59,12 @@ Explosionsdarstellung der vorderen Stoßfängereinheit für den BMW M3 in der Au
 | ornamental strip | Zierleiste |
 | solid plastic version | Ausführung mit massivem Kunststoff |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-120 — Hintere Stoßfängereinheit M3]] — gemeinsame Begriffe: bracket on side panel, bracket with mounting parts, bumper carrier, bumper trim panel, foam rubber inlet
+- [[51-112 — Vorderer Stoßfänger Vollkunststoffausführung]] — gemeinsame Begriffe: bracket on side panel, bumper carrier, solid plastic version
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

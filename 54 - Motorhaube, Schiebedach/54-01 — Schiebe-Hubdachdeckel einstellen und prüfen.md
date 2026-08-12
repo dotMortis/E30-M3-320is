@@ -98,5 +98,14 @@ Die Seite 54-1 beschreibt die Einstellung des Schiebe-/Hubdachdeckels. Sie zeigt
 | self-locking screws | selbstsichernde Schrauben |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-03 — Schiebedachdeckel Dichtung Dachhimmelrahmen aus- und einbauen]] — gemeinsame Begriffe: guide pin, roof liner frame, sun roof lid
+- [[54-06 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: gate, guide pin, sun roof lid
+- [[54-07 — Schiebedach-Gate links oder rechts aus- und einbauen]] — gemeinsame Begriffe: gate, sun roof, sun roof lid
+- [[54-10 — Fehlersuche und Abhilfe Elektrisches Schiebedach]] — gemeinsame Begriffe: control switch, sun roof, sun roof lid
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

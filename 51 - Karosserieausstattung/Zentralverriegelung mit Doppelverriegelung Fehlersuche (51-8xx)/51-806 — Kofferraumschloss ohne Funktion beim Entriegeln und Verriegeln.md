@@ -69,5 +69,14 @@ Die Seite 51-806 zeigt einen Diagnoseablauf für den Fall, dass das Kofferraumsc
 | resistance | Widerstand |
 | switch through ground | gegen Masse durchschalten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-803 — Fehlersuche Zentralverriegelung Fahrertürschloss]] — gemeinsame Begriffe: linkage, socket, switch through ground, wire break
+- [[51-804 — Diagnoseablauf Beifahrertürschloss keine Entriegelung]] — gemeinsame Begriffe: linkage, switch through ground, vehicle ground
+- [[51-262 — Antrieb Kofferraumdeckelschloss aus- und einbauen]] — gemeinsame Begriffe: linkage, trunk lid lock
+- [[51-805 — Fehlersuche Verriegelungsfunktion Beifahrertür]] — gemeinsame Begriffe: socket, vehicle ground
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

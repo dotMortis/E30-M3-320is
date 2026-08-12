@@ -81,5 +81,12 @@ Die Seite 51-420 beschreibt den Aus- und Einbau der linken oder rechten hinteren
 | window recess seal | Fensterschachtabdichtung |
 | ornamental strip | Zierleiste |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-410 — Türverkleidung vorne links oder rechts aus- und einbauen]] — gemeinsame Begriffe: armrest, door window, mask
+- [[51-411 — Türverkleidung aus- und einbauen]] — gemeinsame Begriffe: door window, window recess seal
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

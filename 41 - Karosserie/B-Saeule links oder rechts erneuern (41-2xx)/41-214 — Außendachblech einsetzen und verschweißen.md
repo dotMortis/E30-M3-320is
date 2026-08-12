@@ -63,5 +63,11 @@ Die Seite 41-214 zeigt anhand mehrerer Karosserieaufnahmen die Arbeitsschritte z
 | end plate | Abschlussblech |
 | inert gas weld | Schutzgasschweißen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-211 — Linken oder rechten Dachrahmen erneuern]] — gemeinsame Begriffe: cowl, roof brace
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

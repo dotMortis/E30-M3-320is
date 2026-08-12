@@ -62,5 +62,13 @@ Die Seite beschreibt die Prüfung und Einstellung des Drosselklappenschalters am
 | screw | Befestigungsschraube |
 | adjusting | Einstellen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-632 — Drosselklappenschalter prüfen und einstellen aus- und einbauen]] — gemeinsame Begriffe: connection, full load, idle
+- [[65-307 — Geschwindigkeitsregelanlage montieren einstellen und bedienen]] — Abschnitt 65: gemeinsame Begriffe: throttle, throttle closed
+- [[13-771 — Drosselklappenschalter prüfen aus- und einbauen]] — gemeinsame Begriffe: connection, full load
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

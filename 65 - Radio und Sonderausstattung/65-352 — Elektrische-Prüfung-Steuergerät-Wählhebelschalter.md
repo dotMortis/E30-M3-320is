@@ -78,5 +78,11 @@ Flussdiagramm zur elektrischen Prüfung eines Steuergeräts und des Wählhebelsc
 | wiring diagram | Schaltplan |
 | power supply | Stromversorgung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-353 — Fehlersuche der Wählhebelsteuerung]] — gemeinsame Begriffe: control unit plug, operating voltage, selector lever switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

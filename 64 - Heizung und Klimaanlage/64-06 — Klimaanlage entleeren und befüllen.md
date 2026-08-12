@@ -88,5 +88,13 @@ Die Seite 64–6 des BMW-Werkstatthandbuchs beschreibt das Entleeren und Befüll
 | open flame | offene Flamme |
 | function check | Funktionsprüfung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-00-index-a — Inhaltsübersicht Heizung und Klimaanlage]] — gemeinsame Begriffe: refrigerant, refrigerant circuit
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: refrigerant, refrigerant circuit
+- [[64-07 — Klimaanlage mit Füllstation entleeren und befüllen]] — gemeinsame Begriffe: refrigerant, refrigerant cylinder
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

@@ -75,5 +75,11 @@ Die Seite 51-240 beschreibt den Ausbau, Einbau und Ersatz des Kofferraumdeckelsc
 | clips | Clips |
 | screws | Schrauben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-800 — Zentralverriegelung mit Doppelverriegelung Fehlersuche]] — gemeinsame Begriffe: lock cylinder, trunk lid lock
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

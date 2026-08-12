@@ -85,5 +85,12 @@ Die Seite 12-22 beschreibt die Fehlersuche an der Transistorzündanlage (TCI) in
 | ground out | Masseschluss |
 | starter | Anlasser |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-07 — Steuergerät der Transistorzündung aus- und einbauen]] — gemeinsame Begriffe: tci control unit, transistor coil ignition (tci)
+- [[12-24 — Fehlersuche transistorisierte Zündanlage Prüfschritt 7]] — gemeinsame Begriffe: ignition voltage, transistor coil ignition (tci)
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

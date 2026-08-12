@@ -79,5 +79,12 @@ Die Seite 23-9 zeigt anhand mehrerer Montage- und Demontagefotos die Zerlegung u
 | sealing surface | Dichtfläche |
 | Special Tool 23 1 050 | Sonderwerkzeug 23 1 050 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-175 — Schaltstangen und Getriebewellen aus- und einbauen]] — gemeinsame Begriffe: 3rd/4th gear selector fork, detent and locking balls, locking lever
+- [[23-176 — Getriebewellen und Schaltstangen einbauen]] — gemeinsame Begriffe: case rear section, locking lever, locking pin
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

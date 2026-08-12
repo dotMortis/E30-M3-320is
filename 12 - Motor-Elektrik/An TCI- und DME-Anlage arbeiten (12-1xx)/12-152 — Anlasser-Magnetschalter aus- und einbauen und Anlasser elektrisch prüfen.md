@@ -81,5 +81,11 @@ Die Seite beschreibt links den Ausbau und Austausch des Magnetschalters am Anlas
 | permanent magnets | Dauermagnete |
 | standard tester | handelsübliches Prüfgerät |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-53 — Kohlebürsten am Anlasser aus- und einbauen]] — gemeinsame Begriffe: armature, exciter coil, ground contact, holding coil, shorted turns, standard tester
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

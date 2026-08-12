@@ -93,5 +93,11 @@ Die Seite zeigt den Stromlauf der Heizungs- und Klimaanlage für die Heißwasser
 | A/C control panel | A/C-Bedienfeld |
 | coldest position | kälteste Stellung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6411-01 — Prüfung der Temperaturregelung Klimaanlage]] — gemeinsame Begriffe: a/c temperature control, heater core, hot water cut-off switch, water shut-off solenoid
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

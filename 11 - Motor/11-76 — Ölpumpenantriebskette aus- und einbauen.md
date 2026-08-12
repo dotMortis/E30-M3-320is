@@ -91,5 +91,12 @@ Die Seite 11-76 beschreibt die Prüfung, Reinigung und Zerlegung der Ölpumpe ei
 | oil pan | Ölwanne |
 | chain tightness | Kettenspannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: oil pump, oil pump drive chain, piston
+- [[11-75 — Motoröldruck prüfen Ölpumpe aus- und einbauen und einstellen]] — gemeinsame Begriffe: chain tightness, oil pump, sprocket
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

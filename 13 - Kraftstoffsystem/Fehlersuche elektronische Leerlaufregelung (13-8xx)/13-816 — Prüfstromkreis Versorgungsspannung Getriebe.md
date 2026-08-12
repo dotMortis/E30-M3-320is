@@ -69,5 +69,11 @@ Die Seite 13–816 zeigt unter Punkt 6 den bevorzugten Prüfstromkreis für Fahr
 | blue/brown wire | blau/braune Leitung |
 | blue/yellow wire | blau/gelbe Leitung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-806 — Spannung im Startfreigabe- und Wählhebelschalterkreis prüfen]] — gemeinsame Begriffe: drive range, preferred circuit, selector lever switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

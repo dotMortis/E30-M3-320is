@@ -87,5 +87,11 @@ Die BMW-Werkstatthandbuchseite 25-21 beschreibt den Ausbau und den Einbau bezieh
 | tightening torque | Anzugsdrehmoment |
 | shift lever position P | Wählhebelstellung P |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-18 — Wählhebel mit Grundplatte und Seilzug aus- und einbauen]] — gemeinsame Begriffe: cable rod, cable sleeve, steel wire
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

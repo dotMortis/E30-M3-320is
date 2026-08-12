@@ -96,5 +96,11 @@ Die Seite zeigt die Demontage und Montage des Antriebs- bzw. Planetengetriebes e
 | suitable puller | geeigneter Abzieher |
 | wear | Verschleiß |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-150 — Fehlersuche am Anlasser]] — gemeinsame Begriffe: one-way clutch, planet gears
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

@@ -72,5 +72,11 @@ Die Seite 23-113 beschreibt den Ausbau der abtriebswellenseitigen Zahnräder, Sy
 | sliding sleeve | Schiebehülse |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-115 — Gangradbaugruppen erster bis dritter Gang zusammenbauen]] — gemeinsame Begriffe: brass synchromesh ring, sintered steel synchromesh ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

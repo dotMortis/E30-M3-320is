@@ -69,5 +69,12 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle aus dem Kapitel 61-5 „Allgemeine
 | screw | Schraube |
 | WCPC | WCPC; Abkürzung gemäß Originalunterlage |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[61-04 — Anzugsdrehmomente der Scheibenwischanlage]] — gemeinsame Begriffe: firewall, general electrical system, windshield wipers, wiper console
+- [[61-06 — Anzugsdrehmomente Verschraubungen Heckscheibenwischer]] — gemeinsame Begriffe: general electrical system, wiper console
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

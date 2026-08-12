@@ -71,5 +71,12 @@ Inhaltsübersicht des Kapitels 33 „Hinterachse“ eines BMW-Werkstatthandbuchs
 | Barrel spring | Tonnenfeder |
 | Troubleshoot | Fehlersuche |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[33-18 — Fehlersuchtabelle Hinterachse Ursachen Abhilfe]] — gemeinsame Begriffe: rear axle, shock absorbers, wheel bearings
+- [[33-00 — Hinterachse 15-Grad-Absenkung Anordnungszeichnung]] — gemeinsame Begriffe: rear axle, rear axle layout drawing
+
+
 ---
 [[Startseite]] · [[_Übersicht 33 — Hinterachse|Abschnittsübersicht]] · [[Glossar]]

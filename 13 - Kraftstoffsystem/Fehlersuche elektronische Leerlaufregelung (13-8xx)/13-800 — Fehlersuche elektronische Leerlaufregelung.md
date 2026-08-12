@@ -76,5 +76,12 @@ Die Seite 13–800 zeigt ein Ablaufdiagramm zur Fehlersuche an der elektronische
 | break | Leitungsunterbrechung |
 | ignition | Zündung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-810 — Prüfablauf elektronische Leerlaufregelung]] — gemeinsame Begriffe: break, brown wire, car ground, electronic idle control, green/yellow wire, idle control unit, ignition, voltage supply
+- [[13-804 — Prüfablauf Kühlmitteltemperaturfühler Warmlaufdrehzahl]] — gemeinsame Begriffe: car ground, ignition
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

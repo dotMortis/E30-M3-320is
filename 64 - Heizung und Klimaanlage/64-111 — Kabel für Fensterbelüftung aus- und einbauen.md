@@ -85,5 +85,14 @@ Werkstattseite 64–111 zur Arbeitsanweisung 64 11 081 „Kabel für Fensterbel�
 | sleeve | Hülse |
 | stop | Anschlag |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-110 — Bowdenzug für Fußraumlüftung aus- und einbauen]] — gemeinsame Begriffe: air flap, control panel, lever, radio opening mask, sleeve
+- [[64-113 — Bowdenzug für Frischluftklappe aus- und einbauen]] — gemeinsame Begriffe: control panel, lever, radio opening mask, sliding control
+- [[64-112 — Bowdenzug Temperaturmischklappe aus- und einbauen]] — gemeinsame Begriffe: control panel, lever, radio opening mask
+- [[51-453 — Heizungs- und Lüftungsbedienung aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: control panel, radio opening mask
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

@@ -74,5 +74,20 @@ Die Seite 26-1 enthält eine Anzugsdrehmoment-Tabelle für die komplette Gelenkw
 | Measure | Anzugsdrehmoment |
 | Four Wheel Drive | Allradantrieb |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 26 — Gelenkwelle|Abschnitt 26]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-02 — Schiebestück der Gelenkwelle aus- und einbauen]] — Abschnitt 26: gemeinsame Begriffe: slide, universal joint
+- [[26-07 — Gelenkwelle aus- und einbauen]] — Abschnitt 26: gemeinsame Begriffe: coupling, slide
+- [[26-10 — Gelenkwellenmittellager aus- und einbauen]] — Abschnitt 26: gemeinsame Begriffe: slide, universal joint
+- [[26-02 — Anzugsdrehmomente komplette Gelenkwelle]] — gemeinsame Begriffe: propeller shaft complete, universal joint
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -92,5 +92,13 @@ Die Seite 12–132 beschreibt für BMW M3/M5/M6-Modelle der Baujahre 1988 den Au
 | lubricant | Schmiermittel |
 | tear out test | Ausreißprüfung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-05 — Zündkerzenstecker am Zündkabel ersetzen]] — gemeinsame Begriffe: lubricant, spark plug connector, stripping pliers
+- [[12-113 — Fehlersuche DME-Zündanlage Prüfungen 4 und 5]] — gemeinsame Begriffe: shielded connector, spark plug connector
+- [[12-132_2 — Zündkerzenstecker am 30-kV-Zündsystem ersetzen]] — gemeinsame Begriffe: spark plug connector, stripping pliers
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

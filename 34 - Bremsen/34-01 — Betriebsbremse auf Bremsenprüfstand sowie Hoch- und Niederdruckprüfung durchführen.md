@@ -97,5 +97,13 @@ Die Seite beschreibt die Prüfung der Betriebsbremse auf einem Bremsenprüfstand
 | pulse wheel period | Impulsraddauer |
 | four-wheel drive | Allradantrieb |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-06 — Bremsbacken der Hinterradbremse aus- und einbauen]] — gemeinsame Begriffe: brake drum, wheel brake cylinder
+- [[34-26 — Antiblockiersystem Aufbau und Funktion]] — gemeinsame Begriffe: wheel brake cylinder, wheel speed
+- [[34-28 — Allgemeine Hinweise zu ABS und Bremsanlage]] — gemeinsame Begriffe: brake test dynamometer, four-wheel drive
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

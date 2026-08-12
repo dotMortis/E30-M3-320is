@@ -83,5 +83,18 @@ Die Seite 51-321 beschreibt die Einstellung der linken oder rechten vorderen Tü
 | top | Verdeck |
 | slots | Langlöcher |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 41 — Karosserie|Abschnitt 41]]
+- [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnitt 54]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-341 — Hintere Seitenscheibe links oder rechts einstellen]] — gemeinsame Begriffe: slots, window frame
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

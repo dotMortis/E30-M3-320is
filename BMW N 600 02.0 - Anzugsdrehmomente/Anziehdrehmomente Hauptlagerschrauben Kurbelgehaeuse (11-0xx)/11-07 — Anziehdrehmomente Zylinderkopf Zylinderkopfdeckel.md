@@ -54,5 +54,17 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle für den Motorbereich 11–7 und beh
 | Measure | Wert |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-08 — Anzugsdrehmomente für Zylinderkopf und Zylinderkopfhaube]] — gemeinsame Begriffe: cylinder head bolts, cylinder head with cover
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

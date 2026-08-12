@@ -81,5 +81,20 @@ Die Seite 00–17 des BMW-Wartungssystems beschreibt den BMW-Motorölservice 00 
 | diode | Leuchtdiode |
 | Operating temperature | Betriebstemperatur |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 62 — Instrumente|Abschnitt 62]]
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-10 — Wartungsumfang BMW Inspektion I]] — gemeinsame Begriffe: engine oil, oil filter, operating temperature
+- [[00-15 — Zusatzarbeiten Inspektion II]] — gemeinsame Begriffe: green lamp, operating temperature, service indicator (si)
+- [[00-07 — Wartungsplan Einfahrkontrolle 2000 km]] — gemeinsame Begriffe: engine oil, oil filter
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

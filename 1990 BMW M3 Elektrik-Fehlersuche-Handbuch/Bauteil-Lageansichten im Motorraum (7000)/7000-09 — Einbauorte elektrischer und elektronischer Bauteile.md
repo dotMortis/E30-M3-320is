@@ -79,5 +79,12 @@ Die Seite „Bauteile-Einbauorte“ zeigt anhand von sechs fotografischen Ansich
 | Ground Point | Massepunkt |
 | Connector | Steckverbinder |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[9005-05 — Lageplan Steckverbinder und Massepunkte]] — gemeinsame Begriffe: dash, sunroof motor, windshield header
+- [[0670-14 — Stromlaufplan Masseverteilung G200 G201]] — gemeinsame Begriffe: cruise control unit, glove box light switch
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

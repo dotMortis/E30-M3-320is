@@ -120,5 +120,11 @@ Die Seite beschreibt die Funktionsweise und den Anzeigeablauf der Service-Interv
 | distance counter | Wegstreckenzähler |
 | run-off | Ablauf beziehungsweise Durchlauf der Anzeige |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-53 — Funktionsweise der Service-Intervallanzeige]] — gemeinsame Begriffe: green leds, oil service
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

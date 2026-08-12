@@ -71,5 +71,12 @@ Die Seite beschreibt den Austausch eines einzelnen Zündkerzensteckers am 30-kV-
 | tear-out test | Ausreißprüfung |
 | tearing-out force | Ausreißkraft |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-05 — Zündkerzenstecker am Zündkabel ersetzen]] — gemeinsame Begriffe: 30 kv system, clamping jaws, guiding sleeve, non-disconnectable version, plug receptacle, spark plug connector, stripping pliers, tear-out test
+- [[12-132 — Zündkerzenstecker prüfen und erneuern]] — gemeinsame Begriffe: spark plug connector, stripping pliers
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

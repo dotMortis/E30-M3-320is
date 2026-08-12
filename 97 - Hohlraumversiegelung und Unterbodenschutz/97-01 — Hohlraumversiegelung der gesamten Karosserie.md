@@ -104,5 +104,11 @@ Die Seite 97-1 des BMW-Karosseriehandbuchs beschreibt die Hohlraumversiegelung d
 | flat spray pattern nozzle | Flachdüse mit Flachsprühbild |
 | Tectyl | Tectyl-Konservierungsmittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[97-00-index-a — Abdichtung von Hohlräumen der Karosserie und Unterbodenschutz]] — gemeinsame Begriffe: body cavity sealing, undercoating
+
+
 ---
 [[Startseite]] · [[_Übersicht 97 — Hohlraumversiegelung und Unterbodenschutz|Abschnittsübersicht]] · [[Glossar]]

@@ -63,5 +63,11 @@ Die Seite 64-10 beschreibt den Ausbau und Einbau eines Ventileinsatzes im Kälte
 | refrigerant-resistant valve core | kältemittelbeständiger Ventileinsatz |
 | transparent seal | transparente Dichtung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-08 — Kältemittel-Füllzylinder und Klimaanlage befüllen]] — gemeinsame Begriffe: shutoff valve, valve core
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

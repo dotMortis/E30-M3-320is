@@ -97,5 +97,12 @@ Elektrischer Schaltplan der Zentralverriegelung, Seite 5126-1. Dargestellt sind 
 | ground | Masse |
 | wire color code | Leitungsfarbcode |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5126-00 — Elektrischer Stromlaufplan Zentralverriegelung]] — gemeinsame Begriffe: lock request input, unlock request input
+- [[7000-12 — Bauteillageansichten Kofferraum und Kofferraumdeckel]] — gemeinsame Begriffe: gas filler lock motor, trunk lid lock motor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

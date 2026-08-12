@@ -82,5 +82,14 @@ Die Seite 00-8 des BMW-Wartungssystems zeigt eine tabellarische Prüfliste für 
 | approved brake fluid | freigegebene Bremsflüssigkeit |
 | Operating-Fluids-File | Betriebsstoff-Datei |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-03 — Übergabeinspektion Prüfungen und Ausstattungen]] — gemeinsame Begriffe: intensive washer fluid, windshield washing system
+- [[00-12 — BMW Inspektion I Wartungsübersicht]] — gemeinsame Begriffe: spare wheel, tire inflation pressure
+- [[00-13 — Arbeitsumfang BMW Inspektion I]] — gemeinsame Begriffe: intensive washer fluid, windshield washing system
+- [[00-14 — Inspektion II Zusätzliche Wartungsarbeiten]] — gemeinsame Begriffe: approved oil, operating temperature
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

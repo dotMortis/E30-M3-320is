@@ -67,5 +67,11 @@ Seite 41-004 zeigt die Kontrollmaße zur Rahmen- bzw. Karosserieflucht für BMW 
 | reference point | Kontrollpunkt |
 | diagonal dimension | Diagonalmaß |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-005 — Karosserie-Richt-und-Kontrollmaße Allradfahrzeuge]] — gemeinsame Begriffe: approved set of attachments, frame alignment control dimensions, front axle take-up, rear axle take-up
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

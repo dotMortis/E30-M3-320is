@@ -88,5 +88,11 @@ Die Seite 31–18 enthält eine Fehlersuchtabelle für die Vorderachse. Sie ordn
 | vent | Entlüftung |
 | front axle final drive oil | Vorderachsgetriebeöl |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

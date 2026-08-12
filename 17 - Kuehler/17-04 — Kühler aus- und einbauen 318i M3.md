@@ -97,5 +97,18 @@ Werkstatt-Handbuchseite 17-4 zur Arbeitsanweisung 17 11 000 „Kühler aus- und 
 | rubber mount | Gummilager |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[17-04_1 — Kühler M20 aus- und einbauen]] — gemeinsame Begriffe: coolant hose, fan cowl, radiator cap
+- [[17-05 — Kühler aus- und einbauen]] — gemeinsame Begriffe: fan cowl, oil cooler line
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

@@ -50,5 +50,11 @@ Die Seite ist eine Drehmomenttabelle aus dem Abschnitt „Elektrische Ausrüstun
 | All | Alle |
 | Nm | Newtonmeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

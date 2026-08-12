@@ -69,5 +69,12 @@ Werkstattverfahren 25 11 003 zum Zerlegen und Zusammenbauen des Schalthebels an 
 | lower ribbed plate | untere gerippte Platte |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-01 — Schaltbetätigung mit Blechschaltkonsole]] — gemeinsame Begriffe: sheet metal shift console, shift lever upper section
+- [[25-08 — Schalthebel an Aluminium-Schaltkulisse zerlegen und zusammenbauen]] — gemeinsame Begriffe: snap ring, wire snap ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

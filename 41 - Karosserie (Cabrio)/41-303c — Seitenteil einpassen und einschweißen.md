@@ -65,5 +65,11 @@ Die Seite 41–303 C zeigt anhand von Werkstattfotos die Einpass- und Schweißar
 | B pillar | B-Säule |
 | trunk floor plate | Kofferraumbodenblech |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-328 — Hinteres Seitenteil anpassen und befestigen]] — Abschnitt 41: gemeinsame Begriffe: door gaps, tack welding
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

@@ -89,5 +89,13 @@ BMW-Werkstatthandbuchseite 5126A-0 zum Zentralverriegelungssystem. Die Seite ent
 | Safety Catch Button | Sicherungsknopf |
 | Driver’s door | Fahrertür |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5126A-01 — Zentralverriegelung Systemprüftabelle Fortsetzung]] — gemeinsame Begriffe: door lock motor, door lock motor circuit, short to ground, system check table
+- [[5126-00 — Elektrischer Stromlaufplan Zentralverriegelung]] — gemeinsame Begriffe: door lock motor, safety catch button
+- [[5126A-03 — Zentralverriegelung Funktionsbeschreibung und Fehlersuche]] — gemeinsame Begriffe: safety catch button, unlock inhibit
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

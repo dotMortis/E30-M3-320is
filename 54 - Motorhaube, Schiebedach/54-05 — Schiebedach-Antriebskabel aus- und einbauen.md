@@ -69,5 +69,14 @@ Die Seite 54-5 beschreibt den Ausbau und Einbau beider Antriebskabel des manuell
 | pressure point | Druckpunkt |
 | 4 mm hexagon key | 4-mm-Sechskantschlüssel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-06 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: 4 mm hexagon key, cover rail, drive cable, gate, guide pin, guide rail, guide tube
+- [[54-04 — Zahnrad am manuellen Schiebedach aus- und einbauen]] — gemeinsame Begriffe: gear, manual sun roof, pressure point
+- [[54-01 — Schiebe-Hubdachdeckel einstellen und prüfen]] — gemeinsame Begriffe: gate, guide pin
+- [[54-03 — Schiebedachdeckel Dichtung Dachhimmelrahmen aus- und einbauen]] — gemeinsame Begriffe: cover rail, guide pin
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

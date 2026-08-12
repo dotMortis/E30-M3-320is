@@ -64,5 +64,14 @@ Die Seite 54-6 beschreibt den Ausbau und Einbau beider Antriebskabel des elektri
 | operating lever | Betätigungshebel |
 | 4 mm hexagon key | 4-mm-Innensechskantschlüssel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-05 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: 4 mm hexagon key, cover rail, drive cable, gate, guide pin, guide rail, guide tube
+- [[54-01 — Schiebe-Hubdachdeckel einstellen und prüfen]] — gemeinsame Begriffe: gate, guide pin, sun roof lid
+- [[54-03 — Schiebedachdeckel Dichtung Dachhimmelrahmen aus- und einbauen]] — gemeinsame Begriffe: cover rail, guide pin, sun roof lid
+- [[54-07 — Schiebedach-Gate links oder rechts aus- und einbauen]] — gemeinsame Begriffe: drive cable, gate, sun roof lid
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

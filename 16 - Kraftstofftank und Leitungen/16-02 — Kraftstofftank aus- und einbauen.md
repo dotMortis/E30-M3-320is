@@ -82,5 +82,12 @@ Die Werkstatthandbuchseite beschreibt die Arbeitsschritte zum Ausbau des Kraftst
 | connecting pipe | Verbindungsrohr |
 | propeller shaft | Gelenkwelle |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]] — gemeinsame Begriffe: insulation sheet, scavenging pump
+- [[16-09 — Kraftstoffvorratsgeber und Kraftstoffpumpe aus- und zerlegen]] — gemeinsame Begriffe: insulation sheet, scavenging pump
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

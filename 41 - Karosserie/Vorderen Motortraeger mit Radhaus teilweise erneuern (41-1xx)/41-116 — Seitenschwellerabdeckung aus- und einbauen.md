@@ -72,5 +72,12 @@ BMW-Karosserie-Reparaturseite 41–116 zur Arbeitsposition 41 11 510. Dargestell
 | door striker | Türschließkeil |
 | clamp | Klemme beziehungsweise festklemmen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-312 — Seitenwand hinten links bis Dachverbindung ausbauen]] — gemeinsame Begriffe: trunk lid seal, two-door model
+- [[41-318 — Seitenwand hinten rechts Teilersatz aus- und einbauen]] — gemeinsame Begriffe: door striker, two-door model
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

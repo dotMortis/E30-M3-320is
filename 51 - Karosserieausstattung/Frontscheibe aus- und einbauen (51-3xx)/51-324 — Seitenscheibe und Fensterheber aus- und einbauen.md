@@ -80,5 +80,11 @@ Die Seite 51–324 beschreibt anhand von Fotosequenzen den Ausbau und Einbau der
 | plug | Stecker |
 | mounting hole | Befestigungsbohrung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-330 — Fensterheber Vordertür aus- und einbauen]] — gemeinsame Begriffe: guiding roller, mounting hole, rail
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

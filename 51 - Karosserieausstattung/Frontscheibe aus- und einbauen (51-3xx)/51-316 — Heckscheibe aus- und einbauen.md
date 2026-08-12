@@ -79,5 +79,12 @@ Die Seite beschreibt den Ausbau der Heckscheibe beim BMW M3. Dargestellt sind da
 | tool | Werkzeug |
 | window opening edge | Kante der Scheibenöffnung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-311 — Heckscheibe aus- und einbauen]] — gemeinsame Begriffe: rear window, rear window defogger
+- [[51-312 — Windschutzscheibe und Heckscheibe aus- und einbauen]] — gemeinsame Begriffe: ornamental frame, rear window
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -73,5 +73,12 @@ Die Seite zeigt den Anschlussplan und die Pinbelegung des Diagnose-Steckers. Die
 | Battery + | Batterie-Plus |
 | Power with ignition turned on | Spannung bei eingeschalteter Zündung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-160 — Anschlussbelegung Diagnosestecker und Diagnosesteckdose]] — gemeinsame Begriffe: alternator charge indicator, diagnosis plug, oxygen sensor signal, service indicator
+- [[12-103 — Anschlussplan Motor-Kabelbaumstecker bis 1985 und ab 1986]] — gemeinsame Begriffe: alternator charge indicator, diagnosis lead for airbag, power while starting
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

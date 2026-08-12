@@ -58,5 +58,11 @@ Die Seite ist eine Drehmomenttabelle für das Automatikgetriebe, Abschnitt 24 11
 | Measure | Anziehdrehmoment |
 | Unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[24-04 — Anzugsdrehmomente Getriebegehäuse und Ölwanne]] — gemeinsame Begriffe: converter bell housing, oil sump
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

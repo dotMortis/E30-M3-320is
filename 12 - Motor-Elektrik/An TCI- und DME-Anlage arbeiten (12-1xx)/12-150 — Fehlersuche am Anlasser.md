@@ -108,5 +108,14 @@ Die Seite 12-150 zeigt ein Fehlersuch-Flussdiagramm für den Anlasser. Ausgehend
 | planet gears | Planetenräder |
 | short | Kurzschluss |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-50 — Fehlersuche am Anlasser]] — gemeinsame Begriffe: armature, bearings, coils, engaging mechanism, gear ring teeth, one-way clutch, starter switch, troubleshooting starter
+- [[12-153 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, one-way clutch
+- [[12-154_1 — Anlasser-Planetengetriebe aus- und einbauen]] — gemeinsame Begriffe: one-way clutch, planet gears
+- [[12-52 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, one-way clutch
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

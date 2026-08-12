@@ -67,5 +67,11 @@ Die Seite 41–334 zeigt anhand von Reparaturfotos die Verbindungs- und Verstär
 | tin | verzinnen |
 | partial reinforcement sections | Teilbereiche der Verstärkung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-329 — Schweiß- und Lötstellen an Seitenwand und Heckabschlussblech]] — gemeinsame Begriffe: grind down, trunk lid opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

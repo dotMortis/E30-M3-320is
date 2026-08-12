@@ -77,5 +77,11 @@ Seite 66 zeigt das Inhaltsverzeichnis des Abschnitts 51 „Karosserieausstattung
 | windshield | Windschutzscheibe |
 | rear window | Heckscheibe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-00-index-c — Inhaltsverzeichnis Karosserieausstattung Fenster]] — gemeinsame Begriffe: body equipment, rear window
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

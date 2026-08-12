@@ -95,5 +95,18 @@ Die Seite 31-45 beschreibt den Ausbau und Einbau beziehungsweise Austausch der l
 | cotter pin | Splint |
 | gear oil | Getriebeöl |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 36 — Räder und Reifen|Abschnitt 36]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-22 — Vorderachsgetriebe aus- und einbauen]] — gemeinsame Begriffe: cotter pin, pressure spindle, tie rod
+- [[31-06_1 — Querlenker bei Allradantrieb aus- und einbauen]] — gemeinsame Begriffe: cotter pin, front wheel
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

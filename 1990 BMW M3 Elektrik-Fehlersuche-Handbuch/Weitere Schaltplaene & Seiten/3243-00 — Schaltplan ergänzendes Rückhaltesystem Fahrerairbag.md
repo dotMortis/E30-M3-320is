@@ -97,5 +97,11 @@ Schaltplan des ergänzenden Rückhaltesystems (SRS) für die Ansteuerung und Üb
 | test lead | Prüfkabel |
 | igniter | Zünder |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[7000-07 — Bauteilansichten elektrischer und sicherheitsrelevanter Komponenten]] — gemeinsame Begriffe: air bag gas generator, loop contact rings
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

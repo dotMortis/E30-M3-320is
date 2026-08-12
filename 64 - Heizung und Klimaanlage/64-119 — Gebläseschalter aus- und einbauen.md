@@ -70,5 +70,11 @@ Die Seite 64–119 beschreibt den Ausbau und Einbau des Gebläseschalters (Gebl�
 | trim panel | Verkleidungsblende |
 | remove and install | aus- und einbauen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-453 — Heizungs- und Lüftungsbedienung aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: blower switch, radio opening mask
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

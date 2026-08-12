@@ -93,5 +93,11 @@ Die Seite 34-2 beschreibt das Entlüften der Bremsanlage einschließlich der Aus
 | gasket | Dichtung |
 | ABS | Antiblockiersystem (ABS) |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

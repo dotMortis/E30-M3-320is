@@ -79,5 +79,12 @@ Die Werkstattbuchseite 25-12 beschreibt den Ausbau und Einbau der Schalthebelkon
 | mounting bracket | Befestigungsbügel |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-13 — Aluminium-Schaltkonsole aus- und einbauen]] — gemeinsame Begriffe: backup lights, reinforcement carrier, shift lever console
+- [[25-09 — Schaltstangengelenk an Blechschaltkonsole aus- und einbauen]] — gemeinsame Begriffe: reinforcement carrier, sheet metal shift console
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

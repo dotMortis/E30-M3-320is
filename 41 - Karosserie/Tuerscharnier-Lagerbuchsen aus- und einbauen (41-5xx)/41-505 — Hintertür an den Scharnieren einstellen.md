@@ -80,5 +80,13 @@ Die Seite 41-505 beschreibt die Einstellung der linken oder rechten hinteren Tü
 | wind noise | Windgeräusch |
 | stone damage | Steinschaden |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-501 — Vordertür an Türscharnieren einstellen]] — gemeinsame Begriffe: embossed edge, stone damage, unfinished body shell, wind noise
+- [[41-502 — Türschließbügel ausrichten und einstellen]] — gemeinsame Begriffe: stone damage, wind noise
+- [[41-506 — Schließbügel Hintertür einstellen]] — gemeinsame Begriffe: stone damage, wind noise
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

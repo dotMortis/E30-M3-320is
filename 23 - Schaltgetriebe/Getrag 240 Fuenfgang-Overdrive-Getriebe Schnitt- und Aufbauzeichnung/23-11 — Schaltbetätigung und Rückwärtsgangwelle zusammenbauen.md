@@ -70,5 +70,11 @@ Die Seite zeigt den Zusammenbau der Schaltbetätigung und der Rückwärtsgangwel
 | special tool | Spezialwerkzeug |
 | Loctite No. 573 | Loctite Nr. 573 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-177 — Schaltbetätigung Schaltstange und Rückwärtsgangwelle einbauen]] — gemeinsame Begriffe: end cover, loctite no. 573, roller
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

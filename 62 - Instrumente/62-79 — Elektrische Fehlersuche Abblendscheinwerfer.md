@@ -95,5 +95,11 @@ Die Seite zeigt ein elektrisches Diagnose-Flussdiagramm zur Fehlersuche bei ausg
 | terminal 85 | Klemme 85 |
 | terminal 87 | Klemme 87 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-74 — BMW E30 Check-Control-Schaltplan]] — gemeinsame Begriffe: bulb tester, low beam relay
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

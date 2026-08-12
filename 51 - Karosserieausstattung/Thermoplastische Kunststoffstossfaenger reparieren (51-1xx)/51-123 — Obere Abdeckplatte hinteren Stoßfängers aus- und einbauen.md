@@ -66,5 +66,13 @@ Die Seite 51-123 beschreibt den Ausbau und Einbau der oberen Abdeckplatte des hi
 | panel | Verkleidung |
 | distance A | Maß A |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-00-index-a — Inhaltsverzeichnis Reparaturarbeiten Karosserieausstattung]] — gemeinsame Begriffe: impact absorber, upper cover plate
+- [[51-116 — Aufpralldämpfer und Gummischutzleiste am Stoßfänger aus- und einbauen]] — gemeinsame Begriffe: impact absorber, pipe flange
+- [[51-122 — Hinteren Stoßfänger und Prallabsorber aus- und einbauen]] — gemeinsame Begriffe: impact absorber, panel
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

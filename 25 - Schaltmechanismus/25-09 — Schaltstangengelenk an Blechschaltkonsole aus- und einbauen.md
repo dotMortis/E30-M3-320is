@@ -99,5 +99,12 @@ Die Seite 25-9 beschreibt den Ausbau und den Einbau des Schaltstangengelenks an 
 | micro-encapsulating adhesive | mikroverkapselter Klebstoff |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-01 — Schaltbetätigung mit Blechschaltkonsole]] — gemeinsame Begriffe: selector rod joint, sheet metal shift console
+- [[25-12 — Schalthebelkonsole aus Blech aus- und einbauen]] — gemeinsame Begriffe: reinforcement carrier, sheet metal shift console
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

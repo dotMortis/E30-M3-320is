@@ -85,5 +85,13 @@ Die Seite zeigt eine Prüftabelle für die Eingangsleitungen des Lampen- und Öl
 | voltmeter | Voltmeter |
 | test value | Prüfwert |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-72 — Prüftabelle Anschlussbelegung Pins 10 bis 19]] — gemeinsame Begriffe: bulb tester, function on car, input signals, pin no. designation, test results with multimeter, wire colors
+- [[62-74 — BMW E30 Check-Control-Schaltplan]] — gemeinsame Begriffe: bulb tester, low beams
+- [[62-76 — Fehlersuche Bremsleuchten Prüfablauf]] — gemeinsame Begriffe: bulb tester, stop lights
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

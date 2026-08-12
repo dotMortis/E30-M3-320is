@@ -82,5 +82,12 @@ Die Werkstatthandbuchseite 12–42 beschreibt den Aus- und Einbau der Lichtmasch
 | B+ terminal | Anschluss B+ |
 | D+ terminal | Anschluss D+ |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-142 — Lichtmaschine aus- und einbauen]] — gemeinsame Begriffe: alternator drive belt, drive belt tension, mounting bolts, tensioning wheel
+- [[12-43 — Lichtmaschine zerlegen und zusammenbauen]] — gemeinsame Begriffe: b+ terminal, d+ terminal
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

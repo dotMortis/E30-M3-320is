@@ -53,5 +53,11 @@ Die Seite ist eine tabellarische Anzugsdrehmoment- bzw. Einstellwertübersicht i
 | measure | Anzugsmaß |
 | Nm | Newtonmeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -80,5 +80,12 @@ Die Seite 31-16.3 zeigt zwei Zuordnungstabellen zur Auswahl und Abstimmung von S
 | table | Tabelle |
 | red paint stripes | rote Farbstreifen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-16_2 — Zuordnungstabellen für Teilenummern]] — gemeinsame Begriffe: part number, table
+- [[31-16_4 — Zuordnungstabelle M-Technic-Sportfahrwerk]] — gemeinsame Begriffe: part number, table
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

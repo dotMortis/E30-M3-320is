@@ -87,5 +87,11 @@ Die Seite 65-101 beschreibt den Einbau einer ausfahrbaren Antenne am hinteren li
 | zinc dust paint | Zinkstaubfarbe |
 | floor panel | Bodenwanne |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-151 — Elektrische Antenne einbauen]] — gemeinsame Begriffe: antenna, brass ring, deburr
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

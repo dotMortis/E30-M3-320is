@@ -107,5 +107,13 @@ Die Seite 18-5 beschreibt unter Arbeitsnummer 18 00 020 den Aus- und Einbau der 
 | right wheel house plug | Stopfen im rechten Radhaus |
 | copper paste | Kupferpaste |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[18-01 — Abgasanlage aus- und einbauen]] — gemeinsame Begriffe: copper paste, exhaust pipe, manifold, oxygen sensor plug
+- [[18-04 — Katalysator aus- und einbauen]] — gemeinsame Begriffe: copper paste, exhaust pipe, manifold, oxygen sensor plug
+- [[18-07 — Katalysator am M20-Sechszylindermotor aus- und einbauen]] — gemeinsame Begriffe: copper paste, manifold, oxygen sensor plug
+
+
 ---
 [[Startseite]] · [[_Übersicht 18 — Abgasanlage|Abschnittsübersicht]] · [[Glossar]]

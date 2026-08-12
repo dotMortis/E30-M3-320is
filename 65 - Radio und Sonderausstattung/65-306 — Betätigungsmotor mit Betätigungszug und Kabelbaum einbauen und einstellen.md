@@ -69,5 +69,13 @@ Die Seite 65-306 beschreibt den Einbau und die Einstellung des Betätigungsmotor
 | spring washer | Federring |
 | cable nipple | Zugnippel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-303 — Steuereinheit mit Halter und Zusatzkabelsatz einbauen]] — gemeinsame Begriffe: extra wire harness, operating motor
+- [[65-305 — Zusatzkabelbaum und Halter montieren]] — gemeinsame Begriffe: extra wire harness, spring washer
+- [[65-307 — Geschwindigkeitsregelanlage montieren einstellen und bedienen]] — gemeinsame Begriffe: operating motor, throttle
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

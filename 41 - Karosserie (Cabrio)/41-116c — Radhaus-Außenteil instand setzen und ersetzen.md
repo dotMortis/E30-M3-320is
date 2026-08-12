@@ -56,5 +56,13 @@ Die Seite 41–116C zeigt in einer bebilderten Arbeitsfolge die Instandsetzung u
 | door gap | Türspalt |
 | tack welding | Heften |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-314 — Seitenteil und Fensterrahmen ersetzen und anpassen]] — Abschnitt 41: gemeinsame Begriffe: door gap, plug weld, tack welding
+- [[41-002_1 — Arbeitsverfahren und Werkzeuge für Karosserie-Instandsetzung]] — Abschnitt 41: gemeinsame Begriffe: plug weld, spot welding tongs
+- [[41-322 — Seitenblech ausrichten und befestigen]] — Abschnitt 41: gemeinsame Begriffe: door gap, tack welding
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

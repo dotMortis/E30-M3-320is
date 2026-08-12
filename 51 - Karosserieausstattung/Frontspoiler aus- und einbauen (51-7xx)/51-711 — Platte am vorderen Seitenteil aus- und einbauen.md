@@ -87,5 +87,12 @@ Die Seite beschreibt den Ausbau und Einbau der Platte am vorderen Seitenteil ein
 | drilling template | Bohrschablone |
 | zinc dust paint | Zinkstaubfarbe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-712 — Blech an hinterer Seitenwand aus- und einbauen]] — gemeinsame Begriffe: grommet, plate, sealing cord, self-tapping nut
+- [[51-716 — Hinteren Steinschlagschutz aus- und einbauen]] — gemeinsame Begriffe: drilling template, expansion rivet, grommet, sealing cord
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

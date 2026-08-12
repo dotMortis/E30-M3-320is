@@ -85,5 +85,18 @@ Die Seite 35-3 beschreibt den Ausbau und Einbau der Pedalträger- beziehungsweis
 | bearing surfaces | Lagerflächen |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-06 — Kupplungspedal aus- und einbauen]] — gemeinsame Begriffe: brake pedal return spring, clutch pedal return spring, eccentric
+- [[35-05 — Bremspedal aus- und einbauen]] — gemeinsame Begriffe: bearing surfaces, brake linkage
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

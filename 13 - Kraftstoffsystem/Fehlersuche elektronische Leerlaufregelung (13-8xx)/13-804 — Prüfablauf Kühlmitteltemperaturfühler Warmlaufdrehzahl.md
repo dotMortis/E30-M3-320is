@@ -67,5 +67,13 @@ Die Seite zeigt ein Ablaufdiagramm zur Prüfung der Peripherie für die Warmlauf
 | ignition | Zündung |
 | code number | Codenummer |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-814 — Prüfung Kühlmitteltemperaturschalter Warmlaufdrehzahl]] — gemeinsame Begriffe: car ground, checking periphery for warm-up speed, coolant temperature switch, white wire
+- [[13-800 — Fehlersuche elektronische Leerlaufregelung]] — gemeinsame Begriffe: car ground, ignition
+- [[13-810 — Prüfablauf elektronische Leerlaufregelung]] — gemeinsame Begriffe: car ground, ignition
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

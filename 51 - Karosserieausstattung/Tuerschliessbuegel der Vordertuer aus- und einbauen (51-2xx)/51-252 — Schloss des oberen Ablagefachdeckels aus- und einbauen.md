@@ -63,5 +63,11 @@ Die Seite 51-252 beschreibt den Ausbau sowie den Einbau oder Austausch des Schlo
 | preload | vorspannen |
 | adjusting | einstellen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-251 — Seilzüge der Verdeckkastendeckelschlösser aus- und einbauen]] — gemeinsame Begriffe: long cable, remote control, short cable, top storage box lid
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

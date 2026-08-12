@@ -94,5 +94,11 @@ Die BMW-Werkstatthandbuchseite 25-5 beschreibt den Ausbau und Einbau des Schalth
 | spherical plate | Kugelplatte |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-04 — Schalthebel der Aluminium-Schaltkonsole aus- und einbauen]] — gemeinsame Begriffe: backup lights, shift lever knob, spherical plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

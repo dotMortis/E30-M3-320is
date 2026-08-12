@@ -87,5 +87,11 @@ Die Seite 00-5 zeigt eine tabellarische Checkliste der BMW-Übergabeinspektion (
 | wheel balance | Radwuchtung |
 | Poltex brake linings | Poltex-Bremsbeläge |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-06 — Abnahmeinspektion nach Probefahrt]] — gemeinsame Begriffe: idle rpm, steering
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

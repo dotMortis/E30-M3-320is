@@ -71,5 +71,11 @@ Die Seite 26–1a beschreibt die Messung und gegebenenfalls Korrektur der Knick-
 | universal joint | Kreuzgelenk |
 | shims | Ausgleichsscheiben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-01 — Vibrationen und Geräusche der Kardanwelle beseitigen]] — gemeinsame Begriffe: deflection angle, gage
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

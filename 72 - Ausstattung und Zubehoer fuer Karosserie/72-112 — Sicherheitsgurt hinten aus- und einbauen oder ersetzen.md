@@ -78,5 +78,12 @@ Die Seite 72-112 beschreibt anhand von Bildfolgen den Ausbau und Einbau beziehun
 | spring | Feder |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-431 — Seitenverkleidung hinten links oder rechts aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: plate, speaker wires
+- [[72-113 — Hintere Sicherheitsgurte aus- und einbauen]] — gemeinsame Begriffe: automatic reel, rear seat belt
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

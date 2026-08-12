@@ -95,5 +95,14 @@ Die Seite 00-6 aus dem BMW-Wartungssystem beschreibt die Abnahme- bzw. Übergabe
 | INSPECTION button | INSPECTION-Knopf |
 | green diode lights | grüne Leuchtdioden |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-15 — Zusatzarbeiten Inspektion II]] — gemeinsame Begriffe: dust covers, inspection button, output shafts, service indicator (si)
+- [[00-05 — Prüfliste Übergabeinspektion Probefahrt Funktionsprüfung]] — gemeinsame Begriffe: idle rpm, steering
+- [[00-07 — Wartungsplan Einfahrkontrolle 2000 km]] — gemeinsame Begriffe: diagnostic system, steering
+- [[00-13 — Arbeitsumfang BMW Inspektion I]] — gemeinsame Begriffe: inspection button, service indicator (si)
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

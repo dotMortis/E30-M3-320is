@@ -75,5 +75,11 @@ Die Seite 12-114 beschreibt Test 6 zur Fehlersuche an DME-Steuergerät und Strom
 | periphery test | Peripherieprüfung |
 | ignition timing | Zündzeitpunkt |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

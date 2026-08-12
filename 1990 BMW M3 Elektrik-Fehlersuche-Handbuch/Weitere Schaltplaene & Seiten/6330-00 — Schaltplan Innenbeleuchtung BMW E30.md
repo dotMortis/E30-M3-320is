@@ -108,5 +108,12 @@ Elektrischer Schaltplan der Innenbeleuchtung für BMW E30. Dargestellt sind die 
 | hot at all times | ständig unter Spannung |
 | hot in run only | nur bei eingeschalteter Zündung unter Spannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[0670-11 — Stromlaufplan Sicherungen 9 und 27]] — gemeinsame Begriffe: hot at all times, interior light timer control
+- [[0670-16 — Masseverteilungs-Schaltplan G200 G300]] — gemeinsame Begriffe: dome light, interior light timer control
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

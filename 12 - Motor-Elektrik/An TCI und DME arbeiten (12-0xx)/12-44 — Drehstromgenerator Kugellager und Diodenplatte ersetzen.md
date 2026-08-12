@@ -76,5 +76,11 @@ Die Seite 12-44 beschreibt bei ausgebautem und zerlegtem Drehstromgenerator den 
 | insulator | Isolierteil |
 | soldering iron | Lötkolben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-143_1 — Diodenplatte aus- und einbauen]] — gemeinsame Begriffe: insulating sleeve, soldering iron
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

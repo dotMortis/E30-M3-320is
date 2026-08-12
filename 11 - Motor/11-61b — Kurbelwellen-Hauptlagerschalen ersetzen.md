@@ -94,5 +94,14 @@ Werkstattanweisung zum Ersetzen der Kurbelwellen-Hauptlagerschalen bei ausgebaut
 | color code | Farbkennzeichnung |
 | correct torque | vorgeschriebenes Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-61a — Kurbelwelle aus- und einbauen]] — gemeinsame Begriffe: bearing cap, bearing play, color code, console diameter, plastigage
+- [[11-61 — Ausgebaute Kurbelwelle ersetzen]] — gemeinsame Begriffe: bearing cap, color code, main bearing journal, pilot bearing
+- [[11-00-index-a — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: crankshaft main bearing shells, pilot bearing
+- [[11-64 — Pleuel und Pleuellagerschalen erneuern]] — gemeinsame Begriffe: bearing cap, plastigage
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

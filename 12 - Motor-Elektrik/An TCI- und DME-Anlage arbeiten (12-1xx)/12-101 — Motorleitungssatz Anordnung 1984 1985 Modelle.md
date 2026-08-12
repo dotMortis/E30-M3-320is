@@ -85,5 +85,19 @@ Die Seite 12-101 zeigt anhand mehrerer Motorraumaufnahmen die Anordnung und Zuor
 | ground point | Massepunkt |
 | oxygen sensor heating | Lambdasondenheizung |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-102 — Elektrische Anordnung am Motor 1986]] — gemeinsame Begriffe: air conditioner plug, engine electric layout, idle speed control unit, pressure sensor, reference mark sensor, temperature time switch, temperature transmitter
+- [[12-01 — Elektrische Anordnung am Motor 318i]] — gemeinsame Begriffe: idle speed control unit, oxygen sensor heating, temperature transmitter
+- [[12-106 — Elektrische Anlage Motor M3 S14]] — gemeinsame Begriffe: air conditioner plug, engine electric layout
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

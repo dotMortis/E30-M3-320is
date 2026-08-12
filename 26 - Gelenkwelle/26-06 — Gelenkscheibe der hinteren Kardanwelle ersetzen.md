@@ -85,5 +85,12 @@ Die Seite 26-6 beschreibt den Ausbau der Abgasanlage und des Getriebes als vorbe
 | automatic transmission | Automatikgetriebe |
 | manual transmission | Schaltgetriebe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-03 — Kardanwelle aus- und einbauen]] — gemeinsame Begriffe: oxygen sensor plug, primary muffler, transmission suspension
+- [[26-08 — Gelenkscheibe an hinterer Gelenkwelle aus- und einbauen]] — gemeinsame Begriffe: joint disc, rear propeller shaft
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

@@ -65,5 +65,12 @@ Die Seite 23–21 beschreibt die Montage und Einstellung eines Getriebegehäuses
 | circlip | Sicherungsring |
 | guide sleeve | Führungshülse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-186 — Schaltgetriebe mit Lagern bestücken und zusammenbauen]] — gemeinsame Begriffe: dowel pins, front case section, oil filler plug
+- [[23-187 — Axialspiele einstellen und Zahnradsatz montieren]] — gemeinsame Begriffe: gear wheel set, oil filler plug
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

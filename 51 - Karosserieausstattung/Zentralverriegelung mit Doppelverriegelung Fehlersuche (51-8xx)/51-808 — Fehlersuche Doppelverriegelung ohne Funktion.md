@@ -82,5 +82,11 @@ Diagnose-Flussdiagramm zur Fehlersuche, wenn die Entriegelungssperre beziehungsw
 | open circuit | Unterbrechung |
 | corrosion | Korrosion |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-214 — Mikroschalterbetätigung am Türschließzylinder]] — gemeinsame Begriffe: driver's door, unlocking arrest
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -72,5 +72,11 @@ Die Seite 41-304 beschreibt den Karosserie-Instandsetzungsablauf zum Ersetzen de
 | tack welding | Heftschweißen |
 | front side panel | vorderes Seitenblech |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-301 — Dachblech ohne Schiebedach aus- und einbauen]] — gemeinsame Begriffe: welded spots, window opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

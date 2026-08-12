@@ -67,5 +67,13 @@ Die Seite 41-318 beschreibt den Austausch der rechten hinteren Seitenwand beim z
 | door striker | Türschließbügel |
 | C-pillar air extraction plate | Entlüftungsblech der C-Säule |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-325 — Seitenteil hinten rechts teilweise erneuern]] — gemeinsame Begriffe: door striker, rear window with frame, right rear side panel
+- [[41-331 — Seitenwand hinten rechts bis Radhaus teilweise erneuern]] — gemeinsame Begriffe: fuel filler neck, right rear side panel, trunk side section
+- [[41-116 — Seitenschwellerabdeckung aus- und einbauen]] — gemeinsame Begriffe: door striker, two-door model
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

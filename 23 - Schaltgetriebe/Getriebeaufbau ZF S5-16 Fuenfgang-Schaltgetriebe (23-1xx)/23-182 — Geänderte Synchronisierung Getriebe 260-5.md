@@ -83,5 +83,11 @@ Die Seite beschreibt die seit 5.85 geänderte Synchronisierung des 5-Gang-Getrie
 | reverse gear | Rückwärtsgang |
 | drawing number | Zeichnungsnummer |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-16 — Identifizierung und Einbaulage der Schaltmuffen]] — gemeinsame Begriffe: gear wheel, slide
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -88,5 +88,13 @@ Werkstatt-Handbuchseite 41-301 zum Ersetzen des Dachblechs bei Fahrzeugen ohne S
 | roll welded seam | Rollschweißnaht |
 | roof brace | Dachverstrebung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-204 — Äußeren Abschnitt der B-Säule ersetzen]] — gemeinsame Begriffe: rain molding, roof liner
+- [[41-303 — Dachblech mit Dachrahmen und Dachquerträger einbauen]] — gemeinsame Begriffe: rain molding, roof brace
+- [[41-304 — Linkes oder rechtes Windlaufblech ersetzen]] — gemeinsame Begriffe: welded spots, window opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

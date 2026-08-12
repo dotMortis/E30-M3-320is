@@ -63,5 +63,12 @@ Die Seite 16-7 beschreibt die Prüfung des Tankentlüftungssystems am BMW-Motor 
 | plug | Verschlussstopfen |
 | hoses | Schläuche |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-05 — Kraftstofftank-Entlüftungssystem M10 prüfen]] — gemeinsame Begriffe: carbon canister, tank venting valve
+- [[16-06 — Tankentlüftung Bauteilanordnung Motorraum M20]] — gemeinsame Begriffe: carbon canister, tank venting valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

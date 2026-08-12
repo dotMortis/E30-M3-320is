@@ -76,5 +76,12 @@ Die Seite 36-11 beschreibt die Montage eines schlauchlosen Reifens auf einer Fel
 | valve insert | Ventileinsatz |
 | seating pressure | Setzdruck |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-10 — Reifen mit moderner Reifenmontiermaschine ab- und aufziehen]] — gemeinsame Begriffe: mounting finger, mounting head, mounting pillar, rim flange, tire bead
+- [[36-09 — Reifen ab- und aufziehen]] — gemeinsame Begriffe: rim flange, tire bead, valve insert
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

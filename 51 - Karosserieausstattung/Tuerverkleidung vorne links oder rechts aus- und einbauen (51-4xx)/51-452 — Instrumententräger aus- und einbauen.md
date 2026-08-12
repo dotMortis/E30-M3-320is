@@ -69,5 +69,11 @@ Die Seite 51–452 zeigt in bebilderten Arbeitsschritten den Ausbau des Instrume
 | pins | Stifte |
 | plugs | Stecker |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-304 — Instrumententräger mit Zusatzkabelbaum aus- und einbauen]] — Abschnitt 65: gemeinsame Begriffe: combination plug, instrument carrier, slider
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -67,5 +67,11 @@ Flussdiagramm zur Prüfung der Peripherie für die Warmlaufdrehzahl, Abschnitt �
 | coolant temperature | Kühlmitteltemperatur |
 | warm-up speed | Warmlaufdrehzahl |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-804 — Prüfablauf Kühlmitteltemperaturfühler Warmlaufdrehzahl]] — gemeinsame Begriffe: car ground, checking periphery for warm-up speed, coolant temperature switch, white wire
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

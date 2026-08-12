@@ -89,5 +89,12 @@ Die Seite beschreibt das dynamische Auswuchten eines vom Fahrzeug abgenommenen R
 | rim flange | Felgenhorn |
 | clamping error | Einspannfehler |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-08 — Felge auf Seiten- und Höhenschlag prüfen]] — gemeinsame Begriffe: balancing machine, basic flange, center, radial runout, rim flange, type flange
+- [[36-05 — Rad auf Höhen- und Seitenschlag prüfen]] — gemeinsame Begriffe: balancing machine, basic flange, center, radial runout, type flange
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

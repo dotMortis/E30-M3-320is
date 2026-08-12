@@ -83,5 +83,11 @@ Die Seite 12-112/3 zeigt eine Prüftabelle zur Fehlersuche am DME-Steuergerät. 
 | terminal 1 | Klemme 1 |
 | starting motor | Anlasser |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-108_1 — Kurzprüfung Motorelektronik ohne Eigendiagnose]] — gemeinsame Begriffe: starting motor, universal adapter
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

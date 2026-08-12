@@ -86,5 +86,18 @@ Die Seite 17–4/1 beschreibt den Arbeitsablauf zum Aus- und Einbau des Kühlers
 | radiator mounting bolt | Kühlerbefestigungsschraube |
 | bleed the cooling system | Kühlsystem entlüften |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[17-04 — Kühler aus- und einbauen 318i M3]] — gemeinsame Begriffe: coolant hose, fan cowl, radiator cap
+- [[17-05 — Kühler aus- und einbauen]] — gemeinsame Begriffe: drain plug, fan cowl
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

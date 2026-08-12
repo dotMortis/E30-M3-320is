@@ -89,5 +89,13 @@ Die Seite 72-111 zeigt anhand von Detailfotos und Montageskizzen den Ausbau und 
 | tightening torque | Anzugsdrehmoment |
 | safety belt | Sicherheitsgurt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[72-110 — Vorderen Sicherheitsgurt aus- und einbauen]] — gemeinsame Begriffe: automatic reel, b-pillar trim, belt reversing holder, plastic washer
+- [[72-113 — Hintere Sicherheitsgurte aus- und einbauen]] — gemeinsame Begriffe: automatic reel, belt reversing holder
+- [[72-115 — Sicherheitsgurtaufroller und Gurtumlenker prüfen]] — gemeinsame Begriffe: belt reversing holder, belt stopper
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

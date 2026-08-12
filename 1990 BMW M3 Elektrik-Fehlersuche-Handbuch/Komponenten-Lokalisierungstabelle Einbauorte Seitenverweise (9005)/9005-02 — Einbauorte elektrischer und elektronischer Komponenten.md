@@ -95,5 +95,12 @@ Die Seite 9000-2 ist eine Komponenten-Lokalisierungstabelle für das Fahrzeug. S
 | brake housing | Bremsgehäuse |
 | LH/RH | links/rechts |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[1364-01 — Blockschaltbild Motronic-Einspritzanlage S14]] — gemeinsame Begriffe: main fuel pump, tdc sensor
+- [[7000-01 — Einbauorte elektrischer und elektronischer Komponenten]] — gemeinsame Begriffe: oil pressure switch, oil temperature sensor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

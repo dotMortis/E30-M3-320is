@@ -90,5 +90,11 @@ Die Seite 11-74 beschreibt den Ausbau und Einbau der Ventile bei ausgebautem Zyl
 | wear | Verschleiß |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-54 — Ventilführungen und Ventilsitze]] — gemeinsame Begriffe: valve guide, valve stem
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

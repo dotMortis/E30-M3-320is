@@ -61,5 +61,11 @@ Die Seite zeigt einen elektrischen Diagnoseablauf zur Prüfung von Steuergerät 
 | clutch switching | Kupplung schaltet |
 | replace | ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-354 — Elektrische Fehlersuche an Steuergerät und Stellmotor]] — gemeinsame Begriffe: 7-pin plug, connection, operating motor
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

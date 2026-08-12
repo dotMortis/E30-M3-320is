@@ -85,5 +85,14 @@ Die Seite zeigt in bebilderten Montageschritten den Zusammenbau der Baugruppen f
 | pressure pieces | Druckstücke |
 | Special Tool 23 1 290 | Sonderwerkzeug 23 1 290 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-181 — Zusammenbau des Abschnitts der Getriebe-Abtriebswelle]] — gemeinsame Begriffe: 2nd gear, 3rd gear, brass synchromesh ring
+- [[23-183 — Getriebesatz mit Lagern]] — gemeinsame Begriffe: 1st gear, 2nd gear, 3rd gear
+- [[23-113 — Abtriebswelle vollständig zerlegen]] — gemeinsame Begriffe: brass synchromesh ring, sintered steel synchromesh ring
+- [[23-114 — Synchronisierung und Zahnräder der Abtriebswelle aus- und einbauen]] — gemeinsame Begriffe: brass synchromesh ring, pressure pieces
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

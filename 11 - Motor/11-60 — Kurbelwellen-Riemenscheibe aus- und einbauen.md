@@ -63,5 +63,11 @@ Die Seite 11-60 beschreibt den Aus- und Einbau der Riemenscheibe an der Kurbelwe
 | Woodruff key | Woodruff-Passfeder |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-57 — Unteren Steuergehäusedeckel aus- und einbauen]] — gemeinsame Begriffe: crankshaft pulley, reinforcement plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

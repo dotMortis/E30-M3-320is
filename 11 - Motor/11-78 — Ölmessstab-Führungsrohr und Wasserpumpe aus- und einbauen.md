@@ -72,5 +72,18 @@ Die Seite 11-78 beschreibt zwei Arbeitsvorgänge am Motor: den Austausch des Fü
 | special tool | Sonderwerkzeug |
 | Loctite No. 270 | Loctite Nr. 270 |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: oil dipstick, water pump
+- [[11-57 — Unteren Steuergehäusedeckel aus- und einbauen]] — gemeinsame Begriffe: loctite no. 270, water pump
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

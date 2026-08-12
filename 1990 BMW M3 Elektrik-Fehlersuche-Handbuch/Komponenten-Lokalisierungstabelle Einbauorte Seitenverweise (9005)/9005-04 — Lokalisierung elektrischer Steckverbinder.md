@@ -87,5 +87,11 @@ Die Seite 9000-4 ist eine Komponenten-Lokalisierungstabelle für elektrische Ste
 | door jamb switch | Türkontaktschalter |
 | gear shift lever | Schalthebel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[9005-05 — Lageplan Steckverbinder und Massepunkte]] — gemeinsame Begriffe: dash, kick panel
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

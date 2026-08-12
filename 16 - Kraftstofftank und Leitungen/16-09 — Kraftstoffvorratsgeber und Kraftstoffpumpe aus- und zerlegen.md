@@ -86,5 +86,21 @@ Die Seite beschreibt für BMW-Modelle ab Baujahr 1988 den Ausbau und die Zerlegu
 | insulation sheet | Dämmmatte |
 | scavenging pump | Absaugpumpe |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+- [[_Übersicht 52 — Sitze|Abschnitt 52]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]] — gemeinsame Begriffe: fuel intake, fuel level sender, insulation sheet, scavenging pump
+- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]] — gemeinsame Begriffe: fuel intake, fuel level sender
+- [[12-114_1 — DME-Fehlersuche Kraftstoffversorgung und Ansaugsystem]] — Abschnitt 12: gemeinsame Begriffe: fuel intake, fuel pressure
+- [[13-902 — Fehlersuche Kraftstoffdruck Einspritzanlage]] — Abschnitt 13: gemeinsame Begriffe: fuel intake, fuel pressure
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

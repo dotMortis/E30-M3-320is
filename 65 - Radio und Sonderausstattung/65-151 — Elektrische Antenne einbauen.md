@@ -89,5 +89,11 @@ Die Seite 65-151 beschreibt den Einbau einer automatischen beziehungsweise elekt
 | zinc dust paint | Zinkstaubfarbe |
 | wrench | Schlüssel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-101 — Teleskopantenne hinten links einbauen]] — gemeinsame Begriffe: antenna, brass ring, deburr
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

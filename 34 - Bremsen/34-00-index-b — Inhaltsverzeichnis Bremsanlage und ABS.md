@@ -70,5 +70,11 @@ Inhaltsverzeichnis der Kapitelgruppe 34 „Bremsen“ auf Seite 55 eines BMW-Wer
 | ABS hydraulic control unit relay | Relais der ABS-Hydraulikeinheit |
 | wiring diagram | Schaltplan |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-28 — Allgemeine Hinweise zu ABS und Bremsanlage]] — gemeinsame Begriffe: abs indicator lamp, brake system
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

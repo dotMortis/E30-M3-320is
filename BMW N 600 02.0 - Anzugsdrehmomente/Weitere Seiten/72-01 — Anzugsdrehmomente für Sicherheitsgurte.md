@@ -63,5 +63,11 @@ Die Seite 72-1 aus dem BMW-Werkstatthandbuch enthält eine Drehmomenttabelle fü
 | bolt cement | Schraubensicherungsmittel |
 | torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnitt 72]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

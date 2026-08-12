@@ -69,5 +69,11 @@ Die Seite 41-333 zeigt in einer Folge von Karosserie-Reparaturfotos die Arbeitss
 | autogen weld | autogen verschweißen |
 | web | Steg |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-332 — Seitenteil und Radhaus für Teilreparatur vorbereiten]] — gemeinsame Begriffe: partial replacement section, spot welding paint
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

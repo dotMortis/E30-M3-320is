@@ -84,5 +84,13 @@ Die Seite zeigt das Inhaltsverzeichnis des Kapitels 12 „Elektrische Ausrüstun
 | carbon brushes | Kohlebürsten |
 | troubleshoot | Fehlersuche |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-04 — Unterdruckverstellung des Zündverteilers aus- und einbauen]] — gemeinsame Begriffe: pulse transmitter, vacuum control
+- [[12-08 — Anschlussplan transistorisierter Zündsteuergeräte]] — gemeinsame Begriffe: connection plan, pulse transmitter
+- [[12-21 — Fehlersuche Transistorzündanlage Prüfschritt 2]] — gemeinsame Begriffe: pulse transmitter, tci control unit
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

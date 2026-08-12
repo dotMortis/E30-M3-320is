@@ -64,5 +64,14 @@ Die Seite „00–2 Allgemeine Hinweise“ enthält eine Tabelle mit den maximal
 | BMW standard | BMW-Werksnorm |
 | Nm | Newtonmeter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-03 — Anziehdrehmomente für M6- und M7-Gewinde]] — gemeinsame Begriffe: bmw standard, maximum tightening torques, strength class
+- [[00-04 — Maximale Anziehdrehmomente für M8- und M8x1-Gewinde]] — gemeinsame Begriffe: applicable range, strength class
+- [[00-05 — Anzugsdrehmomente M10 M10x1 Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-07 — Maximale Anzugsdrehmomente M14 Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -82,5 +82,13 @@ Die Seite 25-19 beschreibt den Ausbau und Einbau des Schalthebels in der Ausfüh
 | pin | Bolzen |
 | Molykote Longterm 2 | Molykote Longterm 2 Schmierfett |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-15 — Schaltbetätigung Automatikgetriebe mit Schaltstange]] — gemeinsame Begriffe: pull rod, push button, transmission switch
+- [[25-16 — Schaltbetätigung Automatikgetriebe mit Schaltseil]] — gemeinsame Begriffe: handle, pull rod, transmission switch
+- [[25-20 — Schalthebel mit Grundplatte aus- und einbauen]] — gemeinsame Begriffe: bearing sleeves, selector lever base, transmission switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

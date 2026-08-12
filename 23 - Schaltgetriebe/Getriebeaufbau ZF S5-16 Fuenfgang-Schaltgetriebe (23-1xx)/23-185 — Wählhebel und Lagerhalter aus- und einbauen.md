@@ -93,5 +93,11 @@ Werkstattarbeitsanweisung zur Demontage und Montage des Wählhebels beziehungswe
 | special tool | Sonderwerkzeug |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-19 — Schaltwählhebel aus- und einbauen]] — gemeinsame Begriffe: bearing holder, locking lever, roller, socket head bolt, thrust pin
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

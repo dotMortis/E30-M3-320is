@@ -71,5 +71,11 @@ Die Seite 64-114 beschreibt den Ausbau und Einbau des Stellmotors für die Frisc
 | ball head | Kugelkopf |
 | battery ground lead | Massekabel der Batterie |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-113 — Bowdenzug für Frischluftklappe aus- und einbauen]] — gemeinsame Begriffe: control panel, fresh air flap
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

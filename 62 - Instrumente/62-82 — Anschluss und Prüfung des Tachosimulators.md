@@ -86,5 +86,14 @@ Die Seite beschreibt den Anschluss und die Prüfung eines BMW-Tacho-Simulators f
 | oil service | Ölservice |
 | inspection | Inspektion |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-81 — Simulator zum Prüfen von Instrumentenkombinationen]] — gemeinsame Begriffe: control lamp, power supply lead, selector switch
+- [[62-83 — Service-Tester und Simulator prüfen und einstellen]] — gemeinsame Begriffe: display range, frequency, selector switch
+- [[62-84 — Funktionsprüfung Testgerät Kombiinstrumente]] — gemeinsame Begriffe: display range, selector switch
+- [[62-86 — Kombiinstrumente mit Prüfadapter prüfen]] — gemeinsame Begriffe: control lamp, power supply lead
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

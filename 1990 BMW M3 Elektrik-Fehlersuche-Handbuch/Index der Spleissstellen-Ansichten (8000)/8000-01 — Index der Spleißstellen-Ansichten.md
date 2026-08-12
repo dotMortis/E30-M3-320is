@@ -84,5 +84,11 @@ Die Seite zeigt den Index der Spleißstellen-Ansichten des Fahrzeug-Kabelbaums. 
 | page number | Seitennummer |
 | not shown | nicht dargestellt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[8000-00 — Verzeichnis der Kabelbaumverbindungsstellen]] — gemeinsame Begriffe: harness, main harness, not shown, page number
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

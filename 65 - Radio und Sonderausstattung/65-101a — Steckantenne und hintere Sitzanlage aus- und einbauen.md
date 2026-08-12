@@ -63,5 +63,11 @@ Die Seite 65-101a zeigt anhand von Montagefotos die Arbeiten an einer Steckanten
 | backrest | Rückenlehne |
 | upper holder | oberer Halter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-151a — Steckantenne mit Halter einbauen]] — gemeinsame Begriffe: bolted version, plug-in antenna, sealing grommet, seat cushion, upper holder
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

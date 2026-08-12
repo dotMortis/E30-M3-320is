@@ -69,5 +69,11 @@ Die Seite 51-361 beschreibt den Austausch sämtlicher Zierleisten am ausgebauten
 | lubricant | Schmiermittel |
 | upper window edge | obere Scheibenkante |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-360 — Hintere Seitenscheibe links oder rechts aus- und einbauen]] — gemeinsame Begriffe: lubricant, rear side window
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

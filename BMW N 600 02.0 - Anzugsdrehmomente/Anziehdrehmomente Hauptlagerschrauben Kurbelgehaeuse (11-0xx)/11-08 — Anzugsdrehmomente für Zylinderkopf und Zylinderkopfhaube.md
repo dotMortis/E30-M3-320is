@@ -65,5 +65,13 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle für den Zylinderkopf mit Zylin
 | Torx head | Torx-Kopf |
 | coating | Beschichtung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-04 — Anziehdaten der Zylinderkopfschrauben]] — gemeinsame Begriffe: cylinder head bolts, torx head
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]] — gemeinsame Begriffe: coating, cylinder head bolts
+- [[11-07 — Anziehdrehmomente Zylinderkopf Zylinderkopfdeckel]] — gemeinsame Begriffe: cylinder head bolts, cylinder head with cover
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

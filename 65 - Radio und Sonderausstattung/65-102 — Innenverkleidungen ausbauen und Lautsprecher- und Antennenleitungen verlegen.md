@@ -81,5 +81,11 @@ Die Seite beschreibt die Demontage von Abdeckleisten, Teppich- und B-Säulenverk
 | side panel | Seitenwand |
 | installation kit | Einbausatz |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-152 — Antennenleitung verlegen und anschließen]] — gemeinsame Begriffe: antenna wire, carpet, cover strip, door beam, radio antenna jack, sliding belt holder, standard wire harness
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -86,5 +86,13 @@ Explosionszeichnung der Schaltbetätigung eines Automatikgetriebes in der Ausfü
 | shaft pin | Wellenstift |
 | insulator | Isolierstück |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-16 — Schaltbetätigung Automatikgetriebe mit Schaltseil]] — gemeinsame Begriffe: pull rod, shift gate, shift layout drawing, transmission switch
+- [[25-19 — Schalthebel mit Schaltstange aus- und einbauen]] — gemeinsame Begriffe: pull rod, push button, transmission switch
+- [[25-20 — Schalthebel mit Grundplatte aus- und einbauen]] — gemeinsame Begriffe: shift gate, transmission switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

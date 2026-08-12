@@ -60,5 +60,14 @@ Die Seite 00-5 „Allgemeine Anweisungen“ enthält eine Tabelle mit den maxima
 | Nm | Newtonmeter |
 | ft. lbs. | Fuß-Pfund (lb-ft) |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-02 — Maximale Anziehdrehmomente für M4 und M5]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-03 — Anziehdrehmomente für M6- und M7-Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-07 — Maximale Anzugsdrehmomente M14 Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+- [[00-08 — Maximale Anzugsdrehmomente für M16-Gewinde]] — gemeinsame Begriffe: maximum tightening torques, strength class
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

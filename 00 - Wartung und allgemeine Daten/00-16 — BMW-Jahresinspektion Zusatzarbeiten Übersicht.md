@@ -85,5 +85,11 @@ Die Seite 00–16 zeigt eine tabellarische Arbeitsübersicht des BMW-Wartungssys
 | oxygen sensor | Sauerstoffsensor |
 | Operating-Fluids-File | Betriebsstoffdatei |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-08 — Einfahrkontrolle 1200 Meilen Prüfliste]] — gemeinsame Begriffe: antifreeze protection, operating-fluids-file
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

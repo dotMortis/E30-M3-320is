@@ -83,5 +83,14 @@ Die Seite 72-113 beschreibt den Ausbau, Einbau und gegebenenfalls Austausch der 
 | belt lock | Gurtschloss |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[72-110 — Vorderen Sicherheitsgurt aus- und einbauen]] — gemeinsame Begriffe: automatic reel, belt reversing holder, belt strap, lower strap
+- [[72-111 — Sicherheitsgurtbefestigungen und Gurtaufroller aus- und einbauen]] — gemeinsame Begriffe: automatic reel, belt reversing holder
+- [[72-112 — Sicherheitsgurt hinten aus- und einbauen oder ersetzen]] — gemeinsame Begriffe: automatic reel, rear seat belt
+- [[72-116 — Sicherheitsgurte prüfen reinigen und ersetzen]] — gemeinsame Begriffe: belt reversing holder, lower strap
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

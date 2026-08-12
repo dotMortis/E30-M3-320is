@@ -114,5 +114,14 @@ Die Seite 23-122 ist eine Fehlersuchtabelle für das Schaltgetriebe. Sie ordnet 
 | needle bearing | Nadellager |
 | gear wheel pair | Zahnradpaar |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[21-07 — Fehlersuche an der Kupplung]] — Abschnitt 21: gemeinsame Begriffe: clutch hydraulic system, drive plate, transmission input shaft
+- [[21-00-index-a — Inhaltsverzeichnis Abschnitt Kupplung]] — Abschnitt 21: gemeinsame Begriffe: clutch release, drive plate
+- [[21-03 — Kupplungsscheibe aus- und einbauen]] — Abschnitt 21: gemeinsame Begriffe: drive plate, transmission input shaft
+- [[21-04 — Kupplungsscheibe prüfen und Kupplungsausrückung erneuern]] — Abschnitt 21: gemeinsame Begriffe: clutch release, drive plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -81,5 +81,12 @@ Die Seite 25-8 beschreibt das Zerlegen und Zusammenbauen des Schalthebels an der
 | shift diagram | Schaltschema |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-04 — Schalthebel der Aluminium-Schaltkonsole aus- und einbauen]] — gemeinsame Begriffe: aluminum shift console, shift lever knob
+- [[25-07 — Schalthebel an Blech-Schaltkonsole zerlegen und zusammenbauen]] — gemeinsame Begriffe: snap ring, wire snap ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

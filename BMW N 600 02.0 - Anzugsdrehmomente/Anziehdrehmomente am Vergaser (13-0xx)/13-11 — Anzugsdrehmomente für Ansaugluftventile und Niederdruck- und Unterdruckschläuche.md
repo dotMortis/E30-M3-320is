@@ -53,5 +53,11 @@ Die Seite ist eine Drehmomenttabelle aus dem Abschnitt 13-11 „Kraftstoffanlage
 | Unit | Einheit |
 | Nm | Newtonmeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

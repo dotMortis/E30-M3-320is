@@ -83,5 +83,12 @@ Die Seite beschreibt die Prüfung und Einstellung des Ventilspiels sowie die Dic
 | spark plug | Zündkerze |
 | compressed air | Druckluft |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-54 — Ventilführungen und Ventilsitze]] — gemeinsame Begriffe: combustion chamber, valve seat
+- [[11-67 — Nockenwelle aus- und einbauen]] — gemeinsame Begriffe: cylinder head cover, tappet
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

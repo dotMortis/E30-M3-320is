@@ -83,5 +83,11 @@ Die Seite 12-142 beschreibt den Ausbau und Einbau der Lichtmaschine sowie die an
 | drive belt tension | Antriebsriemenspannung |
 | fuel tank | Kraftstofftank |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-42 — Generator aus- und einbauen]] — gemeinsame Begriffe: alternator drive belt, drive belt tension, mounting bolts, tensioning wheel
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

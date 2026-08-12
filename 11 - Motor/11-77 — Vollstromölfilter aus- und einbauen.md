@@ -61,5 +61,11 @@ Die Seite beschreibt den Ausbau und Einbau des Vollstromölfilters am Motor. Sie
 | bleeding procedure | Entlüftungsvorgang |
 | oil filter housing | Ölfiltergehäuse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-27 — Anzugsdrehmomente Ölfilter und Ölleitungen]] — gemeinsame Begriffe: full flow oil filter, oil filter housing
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

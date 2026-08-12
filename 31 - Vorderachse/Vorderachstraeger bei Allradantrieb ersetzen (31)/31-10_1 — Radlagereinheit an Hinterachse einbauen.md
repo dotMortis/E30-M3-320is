@@ -68,5 +68,11 @@ Die Seite 31-10.1 beschreibt den Einbau einer neuen Radlagereinheit an der Hinte
 | collar nut | Bundmutter |
 | cover | Deckel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-10 — Vorderes Radlager aus- und einbauen]] — gemeinsame Begriffe: bearing unit, dust guard, stub axle
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

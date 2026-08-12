@@ -66,5 +66,11 @@ Werkstattanweisung zum Einstellen des linken oder rechten hinteren Seitenfenster
 | gap | Spalt |
 | window frame | Fensterrahmen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-360 — Hintere Seitenscheibe links oder rechts aus- und einbauen]] — gemeinsame Begriffe: rear side trim panel, rear side window
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

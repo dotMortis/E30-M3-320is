@@ -87,5 +87,12 @@ Die Seite 34-9 beschreibt die Überholung der hinteren Bremssättel unter Verwen
 | dowel sleeve | Führungsbuchse |
 | brake cylinder paste | Bremszylinderpaste |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-08 — Hintere Bremsbeläge und Bremssattel aus- und einbauen]] — gemeinsame Begriffe: brake pad, piston, rear brake caliper
+- [[34-22 — Fehlersuchtabelle für die Bremsanlage]] — gemeinsame Begriffe: brake pad, guide bolt
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

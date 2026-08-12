@@ -111,5 +111,14 @@ Die Seite 64-01 beschreibt Aufbau, Funktionsweise und Bedienung der integrierten
 | A/C compressor push button switch | Druckschalter für den Klimakompressor |
 | heater blower motor | Heizungsgebläsemotor |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-00-index-a — Inhaltsübersicht Heizung und Klimaanlage]] — gemeinsame Begriffe: heater, refrigerant, temperature mixing flap
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: drier, expansion valve, refrigerant
+- [[64-00-index-b — Inhaltsverzeichnis der Klimaanlage]] — gemeinsame Begriffe: drier, expansion valve
+- [[64-07 — Klimaanlage mit Füllstation entleeren und befüllen]] — gemeinsame Begriffe: drier, refrigerant
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

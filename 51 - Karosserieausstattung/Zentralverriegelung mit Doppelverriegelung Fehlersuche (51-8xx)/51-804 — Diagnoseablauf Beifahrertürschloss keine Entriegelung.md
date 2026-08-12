@@ -76,5 +76,14 @@ Die Seite 51-804 zeigt ein Diagnose-Flussdiagramm für den Fehlerfall „keine F
 | switch through ground | gegen Masse schalten |
 | unlocking | Entriegeln |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-803 — Fehlersuche Zentralverriegelung Fahrertürschloss]] — gemeinsame Begriffe: linkage, switch through ground, unlocking
+- [[51-806 — Kofferraumschloss ohne Funktion beim Entriegeln und Verriegeln]] — gemeinsame Begriffe: linkage, switch through ground, vehicle ground
+- [[51-805 — Fehlersuche Verriegelungsfunktion Beifahrertür]] — gemeinsame Begriffe: door/body plug, vehicle ground
+- [[51-807 — Fehlersuche Verriegelungsfunktion Hintertüren]] — gemeinsame Begriffe: linkage, unlocking
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

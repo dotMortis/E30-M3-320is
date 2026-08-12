@@ -80,5 +80,11 @@ Werkstattanleitung BMW, Seite 12-151, zum Aus- und Einbau des Anlassers. Die beb
 | bleed | entlüften |
 | starter wrench | Anlasserschlüssel |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

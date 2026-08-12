@@ -78,5 +78,11 @@ Die Seite 31-3 zeigt anhand von Detailfotografien und Pfeilmarkierungen den Ausb
 | self-locking nut | selbstsichernde Mutter |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

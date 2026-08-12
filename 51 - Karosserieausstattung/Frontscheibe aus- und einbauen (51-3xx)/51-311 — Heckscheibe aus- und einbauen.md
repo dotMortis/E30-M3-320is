@@ -58,5 +58,11 @@ Die Seite 51-311 beschreibt den Arbeitsabschnitt „Heckscheibe ersetzen“ (Arb
 | glass splitters | Glassplitter |
 | replacing rear window | Heckscheibe ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-316 — Heckscheibe aus- und einbauen]] — gemeinsame Begriffe: rear window, rear window defogger
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

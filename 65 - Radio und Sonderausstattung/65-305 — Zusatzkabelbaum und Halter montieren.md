@@ -71,5 +71,12 @@ Die Seite 65–305 beschreibt die Montage eines Zusatzkabelbaums und eines Halte
 | nut | Mutter |
 | zinc dust paint | Zinkstaubfarbe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-303 — Steuereinheit mit Halter und Zusatzkabelsatz einbauen]] — gemeinsame Begriffe: extra wire harness, special equipment plug
+- [[65-306 — Betätigungsmotor mit Betätigungszug und Kabelbaum einbauen und einstellen]] — gemeinsame Begriffe: extra wire harness, spring washer
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -68,5 +68,12 @@ Die Seite 31–26 beschreibt den Aus- und Einbau des Antriebssatzes am ausgebaut
 | flat surface | ebene Anlagefläche |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-23 — Wellendichtring am Eingangswellenflansch des Vorderachsgetriebes erneuern]] — gemeinsame Begriffe: case, drive set
+- [[31-33 — Differenzial aus- und einbauen]] — gemeinsame Begriffe: case, drive set
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

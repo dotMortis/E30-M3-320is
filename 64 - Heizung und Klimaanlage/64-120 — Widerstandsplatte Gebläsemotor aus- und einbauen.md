@@ -60,5 +60,12 @@ Die Seite 64-120 zeigt in einer bebilderten Arbeitsfolge den Ausbau der Widersta
 | cover | Abdeckung |
 | retaining strap | Halteband |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-116 — Heizungsgehäuse aus- und einbauen]] — gemeinsame Begriffe: rubber strip, wire strap
+- [[64-118 — Heizungsgebläsemotor aus- und einbauen]] — gemeinsame Begriffe: rubber strip, wire strap
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

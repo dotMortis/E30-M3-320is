@@ -81,5 +81,14 @@ Die Seite 72–116 behandelt die Prüfung, Reinigung und den Austausch von Siche
 | plastic sleeve | Kunststoffhülse |
 | deformed slide | verformter Schieber |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[72-118 — Automatischen Sicherheitsgurt prüfen]] — gemeinsame Begriffe: automatic seat belt, belt reversing holder, seat belt lock
+- [[72-110 — Vorderen Sicherheitsgurt aus- und einbauen]] — gemeinsame Begriffe: belt reversing holder, lower strap
+- [[72-113 — Hintere Sicherheitsgurte aus- und einbauen]] — gemeinsame Begriffe: belt reversing holder, lower strap
+- [[72-117 — Prüf- und Entscheidungsübersicht Automatikgurte]] — gemeinsame Begriffe: lower strap, plastic sleeve
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

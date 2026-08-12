@@ -72,5 +72,11 @@ Werkstattseite 31-32 zum Arbeitsvorgang 31 53 050: Ersetzen des in der Konsole s
 | drive in against stop | bis zum Anschlag eintreiben |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-25 — Wellendichtringe der linken und rechten Abtriebswelle ersetzen]] — gemeinsame Begriffe: gear lube, right output shaft
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

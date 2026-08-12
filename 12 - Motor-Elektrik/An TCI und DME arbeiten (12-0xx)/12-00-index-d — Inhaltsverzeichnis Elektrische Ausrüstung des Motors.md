@@ -83,5 +83,11 @@ Die Seite ist das Inhaltsverzeichnis des Kapitels 12 „Elektrische Ausrüstung 
 | Solenoid | Magnetschalter |
 | Starter layshaft | Anlasserzwischenwelle |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-23 — Fehlersuche Transistorzündanlage Prüfschritte 5-6]] — gemeinsame Begriffe: spark plug connectors, spark plugs
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

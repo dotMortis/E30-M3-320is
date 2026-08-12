@@ -68,5 +68,11 @@ Seite 58 ist das Inhaltsverzeichnis des Kapitels 41 „Karosserie“ eines BMW-W
 | wheel house | Radhaus |
 | partial replacement | Teilaustausch |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-014 — Laminatschäden an GFK-Teilen reparieren]] — gemeinsame Begriffe: laminate, reinforcement ribs
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

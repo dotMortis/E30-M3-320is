@@ -86,5 +86,11 @@ Die Seite 41-002 behandelt Karosserie-Reparaturarbeiten an Fahrzeugbereichen mit
 | brazing | Löten |
 | tin out | Verzinnen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-001 — Einleitung Sicherheitshinweise Karosseriearbeiten]] — gemeinsame Begriffe: inert gas welding, resistance spot welding
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

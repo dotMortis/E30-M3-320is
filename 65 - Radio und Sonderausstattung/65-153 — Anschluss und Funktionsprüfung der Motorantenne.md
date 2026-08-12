@@ -59,5 +59,11 @@ Die Seite beschreibt den elektrischen Anschluss und die Funktionsprüfung einer 
 | mounting bracket | Montagehalter |
 | ignition key | Zündschlüssel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-152 — Antennenleitung verlegen und anschließen]] — gemeinsame Begriffe: antenna wire, automatic antenna
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

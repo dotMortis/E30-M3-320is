@@ -58,5 +58,11 @@ Die Seite ist das Inhaltsverzeichnis des Kapitels 17 „Kühler“ eines BMW-Wer
 | Flush | Spülen |
 | Remove and install | Aus- und einbauen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[17-03 — Kühlsystem auf Undichtigkeiten prüfen]] — gemeinsame Begriffe: combustion chamber, tester
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

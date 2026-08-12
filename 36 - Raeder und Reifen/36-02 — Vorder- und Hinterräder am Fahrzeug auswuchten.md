@@ -77,5 +77,13 @@ Die Seite 36-2 beschreibt das dynamische und elektronische Auswuchten der Vorder
 | deflection angle | Ablenkwinkel |
 | wheel centering | Radzentrierung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-01 — Vorder- und Hinterräder am Fahrzeug feinwuchten]] — gemeinsame Begriffe: balancing machine, finish balancing, test sender
+- [[36-04 — Räder fahrzeugseitig feinwuchten]] — gemeinsame Begriffe: balancing machine, exhaust extraction hose, test sender
+- [[36-00-index-a — Inhaltsverzeichnis Räder und Reifen]] — gemeinsame Begriffe: dynamic balancing, electronic balancing
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

@@ -100,5 +100,11 @@ Die Werkstatthandbuchseite 23–118 beschreibt den Austausch der Lager sämtlich
 | special tool | Sonderwerkzeug |
 | hot air blower | Heißluftgebläse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-104 — Getriebegehäuse montieren und Axialspiel der Eingangswelle einstellen]] — gemeinsame Begriffe: case front section, case rear section
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

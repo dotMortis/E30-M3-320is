@@ -60,5 +60,11 @@ Seite 73 enthält das Inhaltsverzeichnis des Kapitels 63 „Lights“ (Beleuchtu
 | replace | erneuern |
 | aim | einstellen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[63-02a — Halogen-Glühlampe für Fern- und Abblendlicht aus- und einbauen]] — gemeinsame Begriffe: halogen light bulb, high beam headlight, low beam headlight
+
+
 ---
 [[Startseite]] · [[_Übersicht 63 — Beleuchtung|Abschnittsübersicht]] · [[Glossar]]

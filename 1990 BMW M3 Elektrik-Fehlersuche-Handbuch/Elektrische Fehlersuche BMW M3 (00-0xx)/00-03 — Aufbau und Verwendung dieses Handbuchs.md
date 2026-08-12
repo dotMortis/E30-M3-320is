@@ -98,5 +98,11 @@ Die Seite „So verwenden Sie dieses Handbuch“ erläutert den Aufbau und die L
 | wire insulation | Leitungsisolierung |
 | solid state | Halbleiter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-04 — Legende-elektrischer-Schaltplaene]] — gemeinsame Begriffe: wire insulation, wire size
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

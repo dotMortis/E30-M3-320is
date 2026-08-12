@@ -81,5 +81,18 @@ Die Seite 12–1 zeigt die elektrische Anordnung am Motor des BMW 318i. Mehrere 
 | idle speed stabilization | Leerlaufstabilisierung |
 | plug | Stecker |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-101 — Motorleitungssatz Anordnung 1984 1985 Modelle]] — gemeinsame Begriffe: idle speed control unit, oxygen sensor heating, temperature transmitter
+- [[12-102 — Elektrische Anordnung am Motor 1986]] — gemeinsame Begriffe: idle speed control unit, temperature transmitter
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

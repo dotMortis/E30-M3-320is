@@ -83,5 +83,14 @@ Die Seite 34-6 beschreibt anhand von Bildfolgen den Aus- und Einbau der hinteren
 | right-hand threads | Rechtsgewinde |
 | left-hand threads | Linksgewinde |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-03 — Feststellbremse prüfen und einstellen]] — gemeinsame Begriffe: automatic slack control, brake drum, parking brake cable
+- [[34-01 — Betriebsbremse auf Bremsenprüfstand sowie Hoch- und Niederdruckprüfung durchführen]] — gemeinsame Begriffe: brake drum, wheel brake cylinder
+- [[34-20 — Feststellbremsseil und Feststellbremsbacken aus- und einbauen]] — gemeinsame Begriffe: parking brake cable, return spring
+- [[34-24 — Fehlersuchtabelle Bremsanlage Ursachen Maßnahmen]] — gemeinsame Begriffe: brake drum, parking brake cable
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

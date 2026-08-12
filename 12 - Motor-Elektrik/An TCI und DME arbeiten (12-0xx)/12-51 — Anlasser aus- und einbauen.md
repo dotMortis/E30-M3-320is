@@ -81,5 +81,18 @@ Die Seite 12–51 beschreibt den Aus- und Einbau des Anlassers am BMW-Motor sowi
 | scoring | Riefenbildung |
 | grease | Fett |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-52 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, solenoid switch
+- [[12-53 — Kohlebürsten am Anlasser aus- und einbauen]] — gemeinsame Begriffe: armature, solenoid switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

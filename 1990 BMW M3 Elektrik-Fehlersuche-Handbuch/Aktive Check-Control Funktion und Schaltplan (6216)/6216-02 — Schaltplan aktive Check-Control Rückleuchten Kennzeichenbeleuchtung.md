@@ -83,5 +83,12 @@ Schaltplan der aktiven Check-Control für die Überwachung der Rück- und Kennze
 | Head | Fahrlicht |
 | Park | Standlicht |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6216-00 — Aktive Check-Control Funktion und Schaltplan]] — gemeinsame Begriffe: license plate lights, rear lights
+- [[6300-00 — Stromlaufplan Lichtschalter Beleuchtung]] — gemeinsame Begriffe: head, park
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

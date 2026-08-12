@@ -85,5 +85,11 @@ Die Seite 26-4 zeigt anhand mehrerer Montagefotos den Aus- und Einbau der Gelenk
 | fuel tank connecting line | Verbindungsleitung des Kraftstofftanks |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-07 — Gelenkwelle aus- und einbauen]] — gemeinsame Begriffe: fuel tank connecting line, rubber coupling, slide, stop nuts, transmission output flange
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

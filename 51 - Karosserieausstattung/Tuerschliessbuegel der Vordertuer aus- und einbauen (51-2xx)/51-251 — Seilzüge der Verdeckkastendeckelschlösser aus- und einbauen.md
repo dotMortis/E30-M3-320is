@@ -69,5 +69,11 @@ Die Seite 51-251 zeigt in bebilderten Arbeitsschritten den Aus- und Einbau bezie
 | long cable | langer Seilzug |
 | preload | vorspannen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-252 — Schloss des oberen Ablagefachdeckels aus- und einbauen]] — gemeinsame Begriffe: long cable, remote control, short cable, top storage box lid
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

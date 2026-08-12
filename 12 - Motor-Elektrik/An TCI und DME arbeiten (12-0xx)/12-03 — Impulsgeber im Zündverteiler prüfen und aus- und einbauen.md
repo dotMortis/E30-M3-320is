@@ -92,5 +92,11 @@ Die Seite 12-3 beschreibt die Prüfung und den Austausch des Impulsgebers im Zü
 | multimeter | Multimeter |
 | coil resistance | Spulenwiderstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-04 — Unterdruckverstellung des Zündverteilers aus- und einbauen]] — gemeinsame Begriffe: carrier plate, pulse transmitter
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

@@ -98,5 +98,13 @@ Schaltplanseite der Motronic-Einspritz- und Sensorelektronik des S14-Motors. Dar
 | terminal | Klemme beziehungsweise Anschluss |
 | barometric pressure input | Eingang barometrischer Druck |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[1364-00 — Motronic-Einspritzanlage S14 Stromlaufplan]] — gemeinsame Begriffe: air flow input, air flow meter, barometric pressure sensor, coding plug input, reference output
+- [[1364-01 — Blockschaltbild Motronic-Einspritzanlage S14]] — gemeinsame Begriffe: closed throttle input, wide open throttle input
+- [[7000-00 — Bauteil-Lageansichten im Motorraum]] — gemeinsame Begriffe: air flow meter, barometric pressure sensor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

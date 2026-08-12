@@ -53,5 +53,11 @@ Seite 41-315 zeigt anhand mehrerer Reparaturfotos die Montage- und Fügeverfahre
 | roof joint | Dachstoß |
 | braze | hartlöten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-328 — Hinteres Seitenteil anpassen und befestigen]] — gemeinsame Begriffe: outside edge, wheel opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

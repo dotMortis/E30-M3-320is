@@ -73,5 +73,11 @@ Die Seite zeigt eine Drehmomenttabelle aus dem Kapitel 11 „Motor“, Unterkapi
 | Oil spray nozzle | Ölspritzdüse |
 | Engine block | Motorblock |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

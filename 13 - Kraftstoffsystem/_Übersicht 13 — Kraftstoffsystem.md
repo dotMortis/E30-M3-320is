@@ -17,7 +17,7 @@ tags:
 | `13-00-index-a` | [[13-00-index-a — Inhaltsverzeichnis Kraftstoffanlage Arbeitsvorgänge]] | Text |
 | `13-700a` | [[13-700a — Leerlaufdrehzahl und CO-Gehalt einstellen sowie Drosselklappen synchronisieren]] | Text |
 
-## DME-Steuergerät aus- und einbauen (13-6xx)
+## DME-Steuergeraet aus- und einbauen (13-6xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -36,7 +36,7 @@ tags:
 | `13-642` | [[13-642 — Kraftstoff-Einspritzventil aus- und einbauen]] | Text |
 | `13-643` | [[13-643 — Kraftstoff-Einspritzventile und Steckerplatte aus- und einbauen]] | Diagramm |
 
-## Temperaturschalter aus- und einbauen und elektrisch prüfen (13-7xx)
+## Temperaturschalter aus- und einbauen und elektrisch pruefen (13-7xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -82,7 +82,7 @@ tags:
 | `13-855` | [[13-855 — Fehlersuchdiagramm L-Jetronic Fehlerursachen 8 bis 11]] | Diagramm |
 | `13-856` | [[13-856 — Fehlerdiagnose L-Jetronic Ursachen 12-20]] | Diagramm |
 
-## Fehlersuchtafel Kraftstoffeinspritzung Symptome Prüfpositionen
+## Fehlersuchtafel Kraftstoffeinspritzung Symptome Pruefpositionen
 
 | Code | Seite | Typ |
 | --- | --- | --- |

@@ -89,5 +89,18 @@ Die Seite 65-351 zeigt ein Entscheidungs- und Prüfdiagramm zur Fehlersuche an d
 | wiring diagram | Schaltplan |
 | multimeter | Multimeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 35 — Pedale|Abschnitt 35]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-307 — Geschwindigkeitsregelanlage montieren einstellen und bedienen]] — gemeinsame Begriffe: electronic cruise control, operating motor
+- [[65-354 — Elektrische Fehlersuche an Steuergerät und Stellmotor]] — gemeinsame Begriffe: operating motor, wires
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

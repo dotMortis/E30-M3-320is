@@ -56,5 +56,11 @@ Tabellarische Übersichtsseite aus dem Kapitel „Instrumente“, Untergruppe 62
 | Unit | Einheit |
 | Nm | Newtonmeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 62 — Instrumente|Abschnitt 62]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

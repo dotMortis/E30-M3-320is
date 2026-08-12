@@ -83,5 +83,14 @@ Die Seite 23-20 beschreibt den Aus- und Einbau der Lagerbuchse beziehungsweise d
 | drain plug | Ablassschraube |
 | closed cage | geschlossener Käfig |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-186 — Schaltgetriebe mit Lagern bestücken und zusammenbauen]] — gemeinsame Begriffe: front case section, oil groove, rear case section, roller bearings
+- [[23-18 — Lager aller Getriebewellen erneuern]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-184 — Lager aller Getriebewellen ersetzen]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-321 — Lager aller Getriebewellen ersetzen]] — gemeinsame Begriffe: front case section, rear case section
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

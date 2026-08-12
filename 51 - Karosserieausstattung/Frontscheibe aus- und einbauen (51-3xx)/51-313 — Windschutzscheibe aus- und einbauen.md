@@ -79,5 +79,12 @@ Die Seite 51-313 beschreibt für den BMW M3 den Ausbau der Windschutzscheibe. In
 | zinc dust paint | Zinkstaubfarbe |
 | enamel | Lack |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-317 — Eingeklebte Scheibe aus- und einbauen]] — gemeinsame Begriffe: cement bead, enamel, knife, residual cement, window
+- [[51-314 — Heckscheibe vorbereiten und einkleben]] — gemeinsame Begriffe: cement bead, residual cement
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

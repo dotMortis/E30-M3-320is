@@ -57,5 +57,11 @@ Die Seite 17-1 des BMW-Werkstatthandbuchs enthält eine Drehmomenttabelle für d
 | Measure | Anzugsdrehmoment |
 | Nm | Newtonmeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

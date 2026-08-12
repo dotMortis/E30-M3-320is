@@ -89,5 +89,13 @@ Schaltplan der Radio-/Antennenanlage mit Lautsprecher- und Verstärkeranschlüss
 | wire color | Kabelfarbe |
 | connector | Steckverbinder |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-91 — Vorderen Lautsprecher aus- und einbauen]] — Abschnitt 65: gemeinsame Begriffe: front speaker, speaker
+- [[65-92 — Hinteren Radiolautsprecher aus- und einbauen]] — Abschnitt 65: gemeinsame Begriffe: rear speaker, speaker
+- [[6500A-00 — Radioanlage Funktionsweise und Fehlersuche]] — gemeinsame Begriffe: radio/antenna, speaker
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

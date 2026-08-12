@@ -76,5 +76,17 @@ Die Seite 13-762 beschreibt den Ausbau, Einbau und die elektrische Prüfung des 
 | tightening torque | Anzugsdrehmoment |
 | cooling system | Kühlsystem |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-629 — Motorkühlmitteltemperaturfühler aus- und einbauen und prüfen]] — gemeinsame Begriffe: ntc resistor, water bath
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

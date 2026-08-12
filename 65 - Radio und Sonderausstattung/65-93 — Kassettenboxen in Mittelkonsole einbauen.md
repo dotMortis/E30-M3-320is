@@ -71,5 +71,13 @@ Die Seite 65-93 zeigt die Arbeitsanweisung 65 14 000 für den Service-Einbau ein
 | guide | Führung |
 | opening | Öffnung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-162 — Mittelkonsole aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: ashtray, parking brake lever
+- [[51-163 — Aschenbecherkonsole und Ablagefach ausbauen]] — Abschnitt 51: gemeinsame Begriffe: ashtray, ashtray light
+- [[51-450 — Instrumententafelverkleidung aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: ashtray, parking brake lever
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

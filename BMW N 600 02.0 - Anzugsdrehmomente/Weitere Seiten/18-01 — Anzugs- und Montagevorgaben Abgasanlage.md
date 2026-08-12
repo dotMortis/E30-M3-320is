@@ -76,5 +76,11 @@ Die Seite 18-1 aus dem Abschnitt „Abgasanlage“ enthält eine Tabelle mit Anz
 | Preload | Vorspannung |
 | Tightening torque | Anziehdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-36 — Anziehdrehmomenttabelle Turbolader und Regelung]] — gemeinsame Begriffe: exhaust manifold, flow section, turbocharger
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

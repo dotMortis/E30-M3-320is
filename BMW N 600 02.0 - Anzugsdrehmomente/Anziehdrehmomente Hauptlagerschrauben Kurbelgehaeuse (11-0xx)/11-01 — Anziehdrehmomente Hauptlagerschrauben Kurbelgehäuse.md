@@ -80,5 +80,11 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel Motor, Abschnitt Kurbelgeh�
 | Measure | Maß |
 | Unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]] — gemeinsame Begriffe: cast aluminium engine block, cast iron engine block, coating
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

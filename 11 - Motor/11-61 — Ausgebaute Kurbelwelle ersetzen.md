@@ -100,5 +100,14 @@ Werkstattseite 11–61 zum Ersetzen der Kurbelwelle bei bereits ausgebauter Kurb
 | crankcase | Kurbelgehäuse |
 | lubricating grease | Schmierfett |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-62 — Führungslager der Kurbelwelle aus- und einbauen]] — gemeinsame Begriffe: capsule, felt ring, lubricating grease, pilot bearing, woodruff key
+- [[11-61a — Kurbelwelle aus- und einbauen]] — gemeinsame Begriffe: bearing cap, color code, conrod bearing, main bearing
+- [[11-61b — Kurbelwellen-Hauptlagerschalen ersetzen]] — gemeinsame Begriffe: bearing cap, color code, main bearing journal, pilot bearing
+- [[11-64 — Pleuel und Pleuellagerschalen erneuern]] — gemeinsame Begriffe: bearing cap, conrod bearing journal
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

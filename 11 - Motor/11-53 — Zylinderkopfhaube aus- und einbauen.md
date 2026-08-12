@@ -58,5 +58,11 @@ Die Seite 11-53 beschreibt den Ausbau und Einbau der Zylinderkopfhaube am BMW-Mo
 | bleeder hose | Entlüftungsschlauch |
 | gaskets | Dichtungen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-105 — Zylinderkopfdeckel aus- und einbauen]] — gemeinsame Begriffe: cylinder head cover, gaskets, nuts, spark plug connectors
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

@@ -67,5 +67,17 @@ Die Seite ist eine BMW-Drehmomenttabelle zum Kapitel 11-24 „Pleuelstangen und 
 | Measure | Maß |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-19 — Anzugsdrehmomente Pleuelschrauben S14 S38 S50]] — gemeinsame Begriffe: application torque, connecting rod bolts, connecting rods and bearings
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

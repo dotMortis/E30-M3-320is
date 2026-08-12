@@ -59,5 +59,11 @@ Die Seite 17-7 beschreibt den Arbeitsablauf zum Aus- und Einbau der Zusatzlüfte
 | wire plug | Steckverbinder |
 | nuts | Befestigungsmuttern |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-507 — Klimaanlagen-Kondensator aus- und einbauen]] — Abschnitt 64: gemeinsame Begriffe: condenser, extra fan
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

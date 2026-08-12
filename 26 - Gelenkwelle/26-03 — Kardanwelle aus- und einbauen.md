@@ -86,5 +86,11 @@ Die Werkstatthandbuchseite 26-3 beschreibt den Ausbau und Einbau der Kardanwelle
 | output flange | Abtriebsflansch |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-06 — Gelenkscheibe der hinteren Kardanwelle ersetzen]] — gemeinsame Begriffe: oxygen sensor plug, primary muffler, transmission suspension
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

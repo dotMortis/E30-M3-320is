@@ -92,5 +92,13 @@ Die Seite beschreibt den Simulator zum Prüfen von BMW-Instrumentenkombinationen
 | 12 V battery | 12-Volt-Batterie |
 | battery voltage | Batteriespannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-82 — Anschluss und Prüfung des Tachosimulators]] — gemeinsame Begriffe: control lamp, power supply lead, selector switch
+- [[62-86 — Kombiinstrumente mit Prüfadapter prüfen]] — gemeinsame Begriffe: control lamp, lead, power supply lead
+- [[62-84 — Funktionsprüfung Testgerät Kombiinstrumente]] — gemeinsame Begriffe: selector switch, service indicator
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

@@ -63,5 +63,12 @@ Die Seite 13-813 beschreibt den vierten Prüfschritt zur Kontrolle der Peripheri
 | nominal idle speed | Nennleerlaufdrehzahl |
 | preferred circuit | Vorrangschaltung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-806 — Spannung im Startfreigabe- und Wählhebelschalterkreis prüfen]] — gemeinsame Begriffe: breaks, drive range, ignition, nominal idle speed, preferred circuit
+- [[13-803 — Prüfung Peripherieschaltung Leerlaufanhebung Klimaanlage]] — gemeinsame Begriffe: air conditioner speed, blue/white wire, periphery
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

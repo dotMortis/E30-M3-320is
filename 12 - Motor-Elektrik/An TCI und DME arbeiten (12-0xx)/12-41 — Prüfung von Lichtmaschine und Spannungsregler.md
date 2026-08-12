@@ -82,5 +82,13 @@ Die Seite 12–41 beschreibt die Prüfung von Lichtmaschine und Spannungsregler.
 | harmonic wave ratio | Welligkeitsverhältnis |
 | starter | Anlasser |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-141 — Lichtmaschine und Spannungsregler prüfen]] — gemeinsame Begriffe: battery charge indicator lamp, charging current, exciter diode, oscillograph, power diode, regulating voltage, slip rings
+- [[12-40 — Fehlersuche Lichtmaschine und Ladesystem]] — gemeinsame Begriffe: charging current, harmonic wave ratio, oscillograph, regulating voltage, slip rings
+- [[12-140 — Fehlersuche an der Drehstrom-Lichtmaschine]] — gemeinsame Begriffe: charging current, harmonic wave ratio, regulating voltage, slip rings
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

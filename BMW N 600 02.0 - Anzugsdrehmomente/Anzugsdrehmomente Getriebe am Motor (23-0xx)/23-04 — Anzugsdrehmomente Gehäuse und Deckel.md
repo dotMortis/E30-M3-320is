@@ -73,5 +73,11 @@ Die Seite ist eine Drehmomenttabelle für das manuelle BMW-Getriebe, Abschnitt 2
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

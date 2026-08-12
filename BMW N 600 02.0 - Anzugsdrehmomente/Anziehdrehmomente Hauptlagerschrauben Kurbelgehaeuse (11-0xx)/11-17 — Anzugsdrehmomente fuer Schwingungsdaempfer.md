@@ -62,5 +62,11 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel „Motor“, Abschnitt 11 2
 | screw grade | Schraubengüte |
 | torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

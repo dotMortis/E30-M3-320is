@@ -76,5 +76,13 @@ Die Seite „Component Locations Views“ (7000-1) zeigt anhand von sechs fotogr
 | splash guard | Spritzschutz |
 | engine compartment | Motorraum |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6581-01 — Stromlaufplan des Bordcomputers]] — gemeinsame Begriffe: horn diode, outside temperature sensor
+- [[9005-01 — Bauteilübersicht mit Einbauorten]] — gemeinsame Begriffe: cruise control actuator, left front crash sensor
+- [[9005-02 — Einbauorte elektrischer und elektronischer Komponenten]] — gemeinsame Begriffe: oil pressure switch, oil temperature sensor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

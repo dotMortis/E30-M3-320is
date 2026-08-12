@@ -80,5 +80,11 @@ Die Seite 8000-4 zeigt in einer Draufsicht die Lage der Kabelbaum-Verbindungsste
 | RH | rechts / rechte Seite |
 | LH | links / linke Seite |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[7000-10 — Bauteil-Übersichten Zentralverriegelung Fensterheberanlage]] — gemeinsame Begriffe: door lock motor, window motor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

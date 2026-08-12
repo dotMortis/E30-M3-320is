@@ -87,5 +87,11 @@ Die Seite 35-4 beschreibt den Ausbau und Einbau des Bremspedals beziehungsweise 
 | grease | Fett |
 | distance | Maß |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-05_1 — Bremspedal und Bremslichtschalter einstellen]] — gemeinsame Begriffe: brake master cylinder push rod, stop lights
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

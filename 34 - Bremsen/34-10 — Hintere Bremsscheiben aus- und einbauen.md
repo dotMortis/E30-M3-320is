@@ -93,5 +93,11 @@ Die Seite 34–10 beschreibt den Ausbau und Einbau der hinteren Bremsscheiben so
 | grinding | Schleifen beziehungsweise Nachschleifen |
 | bedding-in | Einbremsen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-05 — Vordere Bremsscheiben aus- und einbauen]] — gemeinsame Begriffe: micrometer, minimum thickness, thickness difference, wear limit
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

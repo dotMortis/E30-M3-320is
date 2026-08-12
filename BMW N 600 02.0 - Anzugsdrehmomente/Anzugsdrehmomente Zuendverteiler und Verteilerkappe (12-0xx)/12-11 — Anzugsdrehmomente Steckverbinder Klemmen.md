@@ -60,5 +60,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Kapitel 12 „Elektrische Au
 | Unit | Einheit |
 | Torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

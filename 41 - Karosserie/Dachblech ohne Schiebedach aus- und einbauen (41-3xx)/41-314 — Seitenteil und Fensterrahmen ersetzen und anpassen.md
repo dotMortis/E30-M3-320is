@@ -64,5 +64,12 @@ Die Seite 41-314 zeigt anhand mehrerer Karosserieabbildungen die Arbeitsschritte
 | door gap | Türspalt |
 | tack welding | Heftschweißen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-116c — Radhaus-Außenteil instand setzen und ersetzen]] — Abschnitt 41: gemeinsame Begriffe: door gap, plug weld, tack welding
+- [[41-322 — Seitenblech ausrichten und befestigen]] — gemeinsame Begriffe: door gap, tack welding
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

@@ -84,5 +84,11 @@ Die Seite 63–2a behandelt den Ausbau und Austausch von Lampen am BMW. Rechts s
 | tail lights | Heckleuchten |
 | tail panel | Heckabschlussblech |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[63-00-index-a — Inhaltsverzeichnis Arbeitsgruppe Beleuchtung]] — gemeinsame Begriffe: halogen light bulb, high beam headlight, low beam headlight
+
+
 ---
 [[Startseite]] · [[_Übersicht 63 — Beleuchtung|Abschnittsübersicht]] · [[Glossar]]

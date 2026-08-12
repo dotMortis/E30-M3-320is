@@ -63,5 +63,13 @@ Inhaltsverzeichnisseite des Kapitels 23 „Schaltgetriebe“ für das Getrag-260
 | radial oil seal | Radialwellendichtring |
 | vibration damper | Schwingungsdämpfer |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-00-index-a — Inhaltsverzeichnis Fünfgang-Schaltgetriebe Getrag 240]] — gemeinsame Begriffe: overdrive, shift mechanism
+- [[23-00-index-e — Inhaltsübersicht Schaltgetriebe Getrag 265-6]] — gemeinsame Begriffe: overdrive, shift mechanism
+- [[23-00-index-f — Inhaltsverzeichnis Getrag 265-6]] — gemeinsame Begriffe: five speed manual transmission, overdrive
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -85,5 +85,11 @@ Die Seite beschreibt die Ermittlung der erforderlichen Ausgleichsscheibendicke f
 | special tool | Sonderwerkzeug |
 | maximum deflection | maximaler Ausschlag |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-35 — Ausgleichskegelräder aus- und einbauen]] — gemeinsame Begriffe: differential gear, differential gear shaft, shaft gear
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

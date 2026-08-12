@@ -117,5 +117,13 @@ Schaltplanseite 6210-3 des Kombiinstruments für Drehzahlmesser und Kraftstoffve
 | Connector | Steckverbinder |
 | Splice | Spleißverbindung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6581-00 — Elektrischer Schaltplan des Bordcomputers]] — gemeinsame Begriffe: service interval processor, vehicle speed input, vehicle speed output
+- [[6210-01 — Schaltplan Service-Intervallanzeige Kombiinstrument]] — gemeinsame Begriffe: service interval processor, vehicle speed input
+- [[6210-04 — Schaltplan Instrumentenkombination Öldruck Kühlmitteltemperatur]] — gemeinsame Begriffe: gauges/indicators, service interval processor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

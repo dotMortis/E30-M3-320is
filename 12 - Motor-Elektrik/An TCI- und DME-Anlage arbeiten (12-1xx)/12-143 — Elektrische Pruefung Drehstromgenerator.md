@@ -96,5 +96,11 @@ Die Seite 12-143 beschreibt die elektrische Prüfung eines ausgebauten Bosch-Dre
 | B+ stud | B+-Anschlussbolzen |
 | D− terminal | D−-Anschluss |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-45 — Elektrische Bauteile des Drehstromgenerators prüfen]] — gemeinsame Begriffe: coil carrier, ground contact, heat sink, negative diode, positive diode, rotor coil, rotor shaft, slip ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

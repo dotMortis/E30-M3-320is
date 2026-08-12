@@ -85,5 +85,13 @@ Die Seite 64–5 zeigt eine beschriftete Übersicht einer Entleerungs- und Füll
 | Refrigerant | Kältemittel |
 | Charging cylinder | Füllzylinder |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-08 — Kältemittel-Füllzylinder und Klimaanlage befüllen]] — gemeinsame Begriffe: charging cylinder, charging valve, pressure gauge, refrigerant, vacuum pump, vacuum valve, volume scale
+- [[64-07 — Klimaanlage mit Füllstation entleeren und befüllen]] — gemeinsame Begriffe: charging hose, charging valve, discharging and charging station, pressure gauge, refrigerant
+- [[64-09 — Klimaanlage Druck- und Temperaturprüfung]] — gemeinsame Begriffe: charging valve, discharging and charging station, pressure gauge
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

@@ -81,5 +81,12 @@ Die Seite 12–5 beschreibt den Austausch eines einzelnen Zündkerzensteckers am
 | tear-out force | Ausreißkraft |
 | lubricant | Schmiermittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-132_2 — Zündkerzenstecker am 30-kV-Zündsystem ersetzen]] — gemeinsame Begriffe: 30 kv system, clamping jaws, guiding sleeve, non-disconnectable version, plug receptacle, spark plug connector, stripping pliers, tear-out test
+- [[12-132 — Zündkerzenstecker prüfen und erneuern]] — gemeinsame Begriffe: lubricant, spark plug connector, stripping pliers
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

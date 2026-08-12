@@ -52,5 +52,13 @@ Die Seite zeigt eine schematische Vorderansicht der Instrumententafel mit den Ve
 | instrument cluster | Kombiinstrument |
 | center console | Mittelkonsole |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[8000-00 — Verzeichnis der Kabelbaumverbindungsstellen]] — gemeinsame Begriffe: harness, instrument panel harness, splice location views
+- [[8000-06 — Lage der Spleißstellen im Bordcomputer-Kabelbaum]] — gemeinsame Begriffe: harness, splice location, splice location views
+- [[8000-02 — Lageübersicht Kabelverbindungsstellen Hauptkabelbaum]] — gemeinsame Begriffe: splice location, splice location views
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

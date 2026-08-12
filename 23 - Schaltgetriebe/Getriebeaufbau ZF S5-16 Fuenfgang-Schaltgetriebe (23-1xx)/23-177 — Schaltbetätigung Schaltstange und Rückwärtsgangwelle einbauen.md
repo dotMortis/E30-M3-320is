@@ -78,5 +78,12 @@ Montageseite 23-177 für das BMW-Schaltgetriebe mit Bildfolgen zum Einbau der Sc
 | needle bearing | Nadellager |
 | reverse gear | Rückwärtsgang |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-11 — Schaltbetätigung und Rückwärtsgangwelle zusammenbauen]] — gemeinsame Begriffe: end cover, loctite no. 573, roller
+- [[23-103 — Getriebegehäusevorderteil aus- und einbauen und abdichten]] — gemeinsame Begriffe: end cap, loctite no. 573
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

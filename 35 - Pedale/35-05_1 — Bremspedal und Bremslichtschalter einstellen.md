@@ -61,5 +61,11 @@ Die Seite 35–5.1 beschreibt die Einstellung des Bremspedals sowie des Bremslic
 | distance A | Maß A |
 | distance B | Maß B |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-04 — Bremspedal und Hauptbremszylinder aus- und einbauen]] — gemeinsame Begriffe: brake master cylinder push rod, stop lights
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

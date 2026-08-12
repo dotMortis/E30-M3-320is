@@ -68,5 +68,11 @@ Die Seite 7000-12 „Bauteillageansichten“ zeigt anhand von vier Fotografien d
 | LH Side | linke Seite |
 | RH Side | rechte Seite |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5126-01 — Elektrischer Schaltplan Zentralverriegelung]] — gemeinsame Begriffe: gas filler lock motor, trunk lid lock motor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

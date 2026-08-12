@@ -94,5 +94,11 @@ Die Seite 31-15 beschreibt den Ausbau und Einbau des Federbeinlagers am Federbei
 | correction mount | Korrekturlager |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-16 — Schraubenfeder am vorderen Federbein aus- und einbauen]] — gemeinsame Begriffe: spring retainer, spring strut mount, upper spring retainer
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

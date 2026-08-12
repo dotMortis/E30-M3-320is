@@ -102,5 +102,14 @@ Werkstattanleitung, Seite 23-18, zum Ersetzen der Lager sämtlicher Getriebewell
 | special tool | Spezialwerkzeug |
 | feeler gauge blade | Fühlerlehre |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-184 — Lager aller Getriebewellen ersetzen]] — gemeinsame Begriffe: front case section, rear case section, socket head bolt, transmission shafts
+- [[23-186 — Schaltgetriebe mit Lagern bestücken und zusammenbauen]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-20 — Lager der Vorgelegewelle aus- und einbauen]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-321 — Lager aller Getriebewellen ersetzen]] — gemeinsame Begriffe: front case section, rear case section
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

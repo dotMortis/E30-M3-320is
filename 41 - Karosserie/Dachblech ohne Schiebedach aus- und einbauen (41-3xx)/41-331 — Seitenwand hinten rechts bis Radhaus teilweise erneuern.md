@@ -68,5 +68,12 @@ Werkstattanleitung zur partiellen Erneuerung des rechten hinteren Seitenteils bi
 | fuel filler neck | Tankstutzeneinfüllrohr |
 | expansion tank | Ausgleichsbehälter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-318 — Seitenwand hinten rechts Teilersatz aus- und einbauen]] — gemeinsame Begriffe: fuel filler neck, right rear side panel, trunk side section
+- [[41-301c — Rechtes hinteres Seitenteil ersetzen]] — Abschnitt 41: gemeinsame Begriffe: cut off, trunk side section
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

@@ -61,5 +61,11 @@ Die Seite aus dem Abschnitt „Allgemeine Anweisungen“ enthält eine Tabelle m
 | standard | Norm |
 | applicable range | Anwendungsbereich |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-04 — Maximale Anziehdrehmomente für M8- und M8x1-Gewinde]] — gemeinsame Begriffe: applicable range, maximum tightening torque, standard
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

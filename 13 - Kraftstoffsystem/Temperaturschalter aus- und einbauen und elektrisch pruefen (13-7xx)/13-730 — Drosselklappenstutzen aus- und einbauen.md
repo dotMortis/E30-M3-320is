@@ -81,5 +81,14 @@ Die Seite 13-730 beschreibt den Ausbau und Einbau der vier Drosselklappenstutzen
 | needle bearing | Nadellager |
 | self-locking nut | selbstsichernde Mutter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-713 — Leerlaufregelventil aus- und einbauen und prüfen]] — gemeinsame Begriffe: air intake manifold, hose strap, mounting nut, throttle cable, throttle valve neck
+- [[11-102 — Motor aus- und einbauen]] — Abschnitt 11: gemeinsame Begriffe: air intake manifold, throttle cable
+- [[13-00-index-a — Inhaltsverzeichnis Kraftstoffanlage Arbeitsvorgänge]] — gemeinsame Begriffe: fuel pressure regulator, throttle valve switch
+- [[13-700a — Leerlaufdrehzahl und CO-Gehalt einstellen sowie Drosselklappen synchronisieren]] — gemeinsame Begriffe: throttle valve neck, throttle valve switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

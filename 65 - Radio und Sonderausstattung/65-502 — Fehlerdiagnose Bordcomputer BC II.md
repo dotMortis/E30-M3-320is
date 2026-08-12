@@ -125,5 +125,14 @@ Die Seite 65-502 zeigt eine Fehlerdiagnose-Tabelle für das Bordcomputer-System 
 | short circuit | Kurzschluss |
 | break in wire | Leitungsunterbrechung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-503 — Fehlersuchtabelle Bordcomputer II]] — gemeinsame Begriffe: fuel level transmitter, ignition lock, relay box
+- [[0670-00 — Stromverteilungskasten Sicherungs- und Relaisanordnung]] — gemeinsame Begriffe: horn relay, relay
+- [[0670-03 — Stromverteilung Sicherungs- und Relaiskasten]] — gemeinsame Begriffe: horn, horn relay
+- [[65-501 — Fehlersuchplan Bordcomputer BC II]] — gemeinsame Begriffe: break in wire, ignition lock
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

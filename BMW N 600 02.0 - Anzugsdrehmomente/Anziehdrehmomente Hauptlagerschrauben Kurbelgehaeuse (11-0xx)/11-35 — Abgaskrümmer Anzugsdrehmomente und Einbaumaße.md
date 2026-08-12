@@ -65,5 +65,11 @@ Die Seite ist eine Drehmoment- und Einbaumaßtabelle für den Abgaskrümmer am Z
 | subsequent mounting | erneute Montage |
 | retorque | nachziehen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-34 — Anzugsdrehmomente Abgaskrümmer Befestigung]] — gemeinsame Begriffe: exhaust manifold, retorque
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -89,5 +89,11 @@ Die Seite 23-179 beschreibt den Ausbau beziehungsweise das Ersetzen der Getriebe
 | special tool | Sonderwerkzeug |
 | pressing-off force | Abpresskraft |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-13 — Getriebe-Abtriebswelle zerlegen und zusammenbauen]] — gemeinsame Begriffe: gear, pressing-off force
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

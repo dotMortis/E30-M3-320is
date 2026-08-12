@@ -76,5 +76,12 @@ Die Seite 12-6 beschreibt die Prüfung und den Ausbau bzw. Austausch der Zündsp
 | color label | Farbbezeichnung |
 | high voltage | Hochspannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-133 — Zündspule prüfen und aus- und einbauen]] — gemeinsame Begriffe: color label, ignition system, ignition voltage, multimeter test, primary coil, secondary coil
+- [[12-112 — DME-Fehlersuche Zündanlage Prüfungen 2 und 3]] — gemeinsame Begriffe: primary coil, secondary coil
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

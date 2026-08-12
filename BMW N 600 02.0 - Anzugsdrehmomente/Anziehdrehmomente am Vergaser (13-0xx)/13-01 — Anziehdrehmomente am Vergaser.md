@@ -61,5 +61,11 @@ Die Seite zeigt eine Anziehdrehmomenttabelle für das Kraftstoffzufuhr- und Gemi
 | warm-up regulator | Warmlaufregler |
 | torque | Anziehdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -81,5 +81,11 @@ Die Seite 12-200 beschreibt die On-Board-Diagnose der Motorsteuerung und die Aus
 | lamp ON | Lampe ein |
 | lamp OFF | Lampe aus |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-912 — DME-Fehlersuche mit BMW-Diagnosesystem]] — Abschnitt 13: gemeinsame Begriffe: fault memory, idle speed switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

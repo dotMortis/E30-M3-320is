@@ -78,5 +78,11 @@ BMW-Werkstatthandbuch-Seite 51-330 zur Aus- und Einbauanleitung des elektrischen
 | mounting hole | Befestigungsbohrung |
 | nut | Mutter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-324 — Seitenscheibe und Fensterheber aus- und einbauen]] — gemeinsame Begriffe: guiding roller, mounting hole, rail
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -61,5 +61,11 @@ Inhaltsverzeichnis der Werkstatthandbuchgruppe 35 „Pedale“, Seite 57. Die Se
 | kickdown switch | Kickdown-Schalter |
 | EH transmission | EH-Getriebe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-10 — Gaszug einstellen und Kickdownschalter aus- und einbauen]] — gemeinsame Begriffe: accelerator cable, eh transmission, kickdown switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

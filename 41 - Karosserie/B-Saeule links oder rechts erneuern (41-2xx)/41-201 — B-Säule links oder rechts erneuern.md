@@ -69,5 +69,12 @@ Die Seite 41-201 beschreibt den Austausch der linken oder rechten mittleren Tür
 | seat belt | Sicherheitsgurt |
 | door opening edge guard | Türöffnungs-Kantenschutz |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-204 — Äußeren Abschnitt der B-Säule ersetzen]] — gemeinsame Begriffe: door opening edge guard, heat protection paste, rain molding
+- [[41-203 — Fügestellen an Dachrahmen und Seitenträgern bearbeiten und abdichten]] — gemeinsame Begriffe: heat protection paste, rain molding
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

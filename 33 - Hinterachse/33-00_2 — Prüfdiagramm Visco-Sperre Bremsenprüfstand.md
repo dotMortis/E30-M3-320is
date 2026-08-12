@@ -91,5 +91,11 @@ Die Seite zeigt ein Prüfdiagramm zur Beurteilung der Visco-Sperre an einem BMW 
 | speed range | Geschwindigkeitsbereich |
 | tire size | Reifengröße |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[33-00_1 — Viskose-Hinterachsensperre im eingebauten Zustand prüfen]] — gemeinsame Begriffe: brake test stand, braking force, wheel speed
+
+
 ---
 [[Startseite]] · [[_Übersicht 33 — Hinterachse|Abschnittsübersicht]] · [[Glossar]]

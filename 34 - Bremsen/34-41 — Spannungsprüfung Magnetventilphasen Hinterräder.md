@@ -78,5 +78,13 @@ Die Seite 34-41 ist ein tabellarischer Prüfschritt zur Prüfung des Steuergerä
 | switching phase | Schaltphase |
 | switching-on power | Einschaltstrom |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-40 — ABS-Hydrauliksteuerung Testschritt 06 Vorderradsimulation]] — gemeinsame Begriffe: adapter b, pressure build-up, pressure drop, pressure hold, switching-on power
+- [[34-26 — Antiblockiersystem Aufbau und Funktion]] — gemeinsame Begriffe: pressure build-up, pressure drop
+- [[34-44 — Druckaufbau- und Druckhalteprüfung ABS-Hydraulikaggregat]] — gemeinsame Begriffe: pressure build-up, pressure hold
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

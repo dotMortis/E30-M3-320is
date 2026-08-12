@@ -48,5 +48,13 @@ Die Seite zeigt eine Einbauansicht des Armaturenbretts mit den Lagepunkten der K
 | dashboard | Armaturenbrett |
 | harness | Kabelbaum |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[8000-00 — Verzeichnis der Kabelbaumverbindungsstellen]] — gemeinsame Begriffe: harness, on-board computer harness, splice location views
+- [[8000-05 — Instrumententafel-Kabelbaum Verbindungsstellen Übersicht]] — gemeinsame Begriffe: harness, splice location, splice location views
+- [[8000-02 — Lageübersicht Kabelverbindungsstellen Hauptkabelbaum]] — gemeinsame Begriffe: splice location, splice location views
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

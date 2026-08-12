@@ -73,5 +73,11 @@ Die Seite 51-122 beschreibt den Ausbau des hinteren Stoßfängers am BMW M3 sowi
 | remove | ausbauen |
 | lift out | abheben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-123 — Obere Abdeckplatte hinteren Stoßfängers aus- und einbauen]] — gemeinsame Begriffe: impact absorber, panel
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

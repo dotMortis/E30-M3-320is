@@ -99,5 +99,19 @@ Die Seite beschreibt den Ausbau und Einbau des linken oder rechten vorderen Fede
 | splines | Verzahnung |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 36 — Räder und Reifen|Abschnitt 36]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-11 — Vorderes Federbein aus- und einbauen]] — gemeinsame Begriffe: front spring strut, guide joint, push rod, spring strut assembly, tie rod joint
+- [[31-06 — Querlenker Vorderachse aus- und einbauen]] — gemeinsame Begriffe: guide joint, push rod
+- [[31-13 — Stoßdämpfer des vorderen Federbeins ersetzen]] — gemeinsame Begriffe: front spring strut, spring strut assembly
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

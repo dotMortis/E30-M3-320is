@@ -75,5 +75,14 @@ Die Seite 65-91 beschreibt unter Arbeitsnummer 65 12 000 den Ausbau und Einbau d
 | edge guard | Kantenschutz |
 | sound system | Soundsystem |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-92 — Hinteren Radiolautsprecher aus- und einbauen]] — gemeinsame Begriffe: self-tapping nut, self-tapping screw, sound system, speaker
+- [[6500-01 — Lautsprecher- und Verstärkeranschlüsse]] — gemeinsame Begriffe: front speaker, speaker
+- [[6500A-01 — Spannungsprüfungen Radio- und Antennenanlage]] — gemeinsame Begriffe: sound system, speaker
+- [[51-769 — M-Technic-Fußstütze im Fahrerfußraum einbauen]] — Abschnitt 51: gemeinsame Begriffe: front speaker, self-tapping nut
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

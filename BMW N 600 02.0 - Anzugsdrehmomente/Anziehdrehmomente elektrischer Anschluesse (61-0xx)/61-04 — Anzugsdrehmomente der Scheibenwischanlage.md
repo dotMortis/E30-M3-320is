@@ -79,5 +79,12 @@ Die Seite zeigt eine Anzugsdrehmomenttabelle aus dem Kapitel 61-4 „Allgemeine 
 | Bosch | Bosch |
 | Magnet Marelli | Magneti Marelli |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[61-05 — Anzugsdrehmomente der Scheibenwischeranlage]] — gemeinsame Begriffe: firewall, general electrical system, windshield wipers, wiper console
+- [[61-06 — Anzugsdrehmomente Verschraubungen Heckscheibenwischer]] — gemeinsame Begriffe: general electrical system, motor crank, wiper console, wiper motor
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

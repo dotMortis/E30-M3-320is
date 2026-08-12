@@ -57,5 +57,11 @@ Die Seite zeigt eine perspektivische technische Schnitt- bzw. Explosionsdarstell
 | S14 B20 engine | Motor S14 B20 |
 | S14 B23 engine | Motor S14 B23 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-50 — S14-Motor Bauteilübersicht und Schnittdarstellung]] — gemeinsame Begriffe: bmw m power, exhaust manifold, valve train
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

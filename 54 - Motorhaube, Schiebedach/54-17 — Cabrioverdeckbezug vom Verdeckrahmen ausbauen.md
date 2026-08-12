@@ -79,5 +79,11 @@ Die Seite beschreibt den Ausbau eines Cabrioverdeckbezugs (Canvas-Top) am BMW. I
 | residual adhesive | Klebstoffreste |
 | solvent | Lösemittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-19 — Führungsschiene und Fensterführung am Verdeckrahmen einbauen]] — gemeinsame Begriffe: frame, hoopsticks, rail, window guide
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

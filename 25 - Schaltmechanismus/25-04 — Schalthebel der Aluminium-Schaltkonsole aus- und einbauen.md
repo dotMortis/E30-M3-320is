@@ -80,5 +80,14 @@ Die Seite beschreibt den Ausbau und Einbau des Schalthebels bei einer Schaltkons
 | retaining tabs | Haltenasen |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-05 — Schalthebel bei Allradfahrzeugen aus- und einbauen]] — gemeinsame Begriffe: backup lights, shift lever knob, spherical plate
+- [[25-13 — Aluminium-Schaltkonsole aus- und einbauen]] — gemeinsame Begriffe: aluminum shift console, backup lights, retaining tabs
+- [[25-06 — Schalthebel und Kugelplatte einbauen]] — gemeinsame Begriffe: retaining tabs, spherical plate
+- [[25-08 — Schalthebel an Aluminium-Schaltkulisse zerlegen und zusammenbauen]] — gemeinsame Begriffe: aluminum shift console, shift lever knob
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

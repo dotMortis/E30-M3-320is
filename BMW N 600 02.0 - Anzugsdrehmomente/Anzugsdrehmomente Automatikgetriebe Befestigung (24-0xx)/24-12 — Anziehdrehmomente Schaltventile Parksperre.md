@@ -83,5 +83,11 @@ Die Seite ist eine Drehmomenttabelle für das Automatikgetriebe-Kapitel 24-12, A
 | Screw | Schraube |
 | Measure | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[24-09 — Anzugsdrehmomente der hydraulischen und elektronischen Steuerelemente]] — gemeinsame Begriffe: shift unit, valve housing
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -103,5 +103,14 @@ Indexseite 8000-0 zum Kapitel „Ansichten der Verbindungsstellen“ (Splice Loc
 | page number | Seitennummer |
 | not shown | Nicht dargestellt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[8000-01 — Index der Spleißstellen-Ansichten]] — gemeinsame Begriffe: harness, main harness, not shown, page number
+- [[8000-05 — Instrumententafel-Kabelbaum Verbindungsstellen Übersicht]] — gemeinsame Begriffe: harness, instrument panel harness, splice location views
+- [[8000-06 — Lage der Spleißstellen im Bordcomputer-Kabelbaum]] — gemeinsame Begriffe: harness, on-board computer harness, splice location views
+- [[8000-02 — Lageübersicht Kabelverbindungsstellen Hauptkabelbaum]] — gemeinsame Begriffe: main harness, splice location views
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

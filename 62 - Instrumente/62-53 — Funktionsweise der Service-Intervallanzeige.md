@@ -48,5 +48,12 @@ Die Seite erklärt die Anzeige- und Rückstelllogik der Service-Intervallanzeige
 | inspection symbol lamp | Lampe mit dem INSPECTION-Symbol |
 | yellow lamp | gelbe Warnlampe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-84 — Funktionsprüfung Testgerät Kombiinstrumente]] — gemeinsame Begriffe: green leds, service indicator
+- [[62-85 — Service-Intervallanzeige Zweite Generation]] — gemeinsame Begriffe: green leds, oil service
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

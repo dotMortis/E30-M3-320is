@@ -73,5 +73,14 @@ Inhaltsübersicht des Kapitels 54 „Motorhaube, Schiebedach“ eines BMW-Werkst
 | Convertible top | Verdeck |
 | Canvas | Stoff |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-01 — Schiebe-Hubdachdeckel einstellen und prüfen]] — gemeinsame Begriffe: sun roof, sun roof lid
+- [[54-02 — Schiebedachkurbel und Rosette aus- und einbauen]] — gemeinsame Begriffe: sun roof lid, sun roof winder
+- [[54-07 — Schiebedach-Gate links oder rechts aus- und einbauen]] — gemeinsame Begriffe: sun roof, sun roof lid
+- [[54-10 — Fehlersuche und Abhilfe Elektrisches Schiebedach]] — gemeinsame Begriffe: sun roof, sun roof lid
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

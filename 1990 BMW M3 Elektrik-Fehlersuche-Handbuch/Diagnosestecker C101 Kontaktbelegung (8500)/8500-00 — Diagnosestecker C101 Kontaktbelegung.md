@@ -75,5 +75,11 @@ Die Seite zeigt die Ansicht der Kontaktseite des runden BMW-Diagnosesteckers sow
 | RXD | Empfangsdatenleitung |
 | TXD | Sendedatenleitung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6210-01 — Schaltplan Service-Intervallanzeige Kombiinstrument]] — gemeinsame Begriffe: service interval indicator, service interval processor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

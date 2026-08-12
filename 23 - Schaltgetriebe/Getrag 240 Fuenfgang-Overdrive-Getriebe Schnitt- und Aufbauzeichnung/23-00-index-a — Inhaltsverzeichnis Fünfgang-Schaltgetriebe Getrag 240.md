@@ -66,5 +66,13 @@ Die Seite 29 ist das Inhaltsverzeichnis des Abschnitts 23 „Schaltgetriebe“ f
 | synchronization | Synchronisierung |
 | overdrive | Overdrive beziehungsweise Schnellgang |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-00-index-e — Inhaltsübersicht Schaltgetriebe Getrag 265-6]] — gemeinsame Begriffe: guide sleeve for clutch release, overdrive, shift mechanism
+- [[23-00-index-b — Inhaltsübersicht Schaltgetriebe ZF S5-16]] — gemeinsame Begriffe: guide sleeve for clutch release, shift mechanism
+- [[23-00-index-c — Inhaltsverzeichnis Getrag 260 Schaltgetriebe]] — gemeinsame Begriffe: overdrive, shift mechanism
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

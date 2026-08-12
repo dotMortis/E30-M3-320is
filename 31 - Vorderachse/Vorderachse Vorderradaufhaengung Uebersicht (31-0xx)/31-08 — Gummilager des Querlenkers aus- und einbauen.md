@@ -71,5 +71,11 @@ Die Seite 31-8 beschreibt den Ausbau, die Einbaulage und die Prüfung des Gummil
 | gap | Spaltmaß |
 | orange paint dot | oranger Farbpunkt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-07 — Querlenker-Lagerbock aus- und einbauen]] — gemeinsame Begriffe: control arm bracket, normal position
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

@@ -53,5 +53,11 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle für den Motorbereich 11 32, Ab
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

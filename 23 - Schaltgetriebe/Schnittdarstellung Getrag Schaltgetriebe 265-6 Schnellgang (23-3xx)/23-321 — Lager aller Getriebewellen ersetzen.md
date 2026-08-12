@@ -90,5 +90,14 @@ Werkstattanweisung BMW, Seite 23-321, zum Ersetzen der Lager aller Getriebewelle
 | hot air blower | Heißluftgebläse |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-18 — Lager aller Getriebewellen erneuern]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-184 — Lager aller Getriebewellen ersetzen]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-186 — Schaltgetriebe mit Lagern bestücken und zusammenbauen]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-20 — Lager der Vorgelegewelle aus- und einbauen]] — gemeinsame Begriffe: front case section, rear case section
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

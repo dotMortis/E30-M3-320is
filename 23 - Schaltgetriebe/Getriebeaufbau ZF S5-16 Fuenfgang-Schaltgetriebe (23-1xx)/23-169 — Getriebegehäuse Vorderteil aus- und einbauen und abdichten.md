@@ -92,5 +92,11 @@ Die Werkstattbuchseite 23-169 beschreibt den Ausbau und Einbau beziehungsweise d
 | surface sealing compound | Flächendichtmittel |
 | reverse gear shaft | Welle des Rückwärtsgangs |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-04 — Vorderes Getriebegehäuseteil aus- und einbauen und abdichten]] — gemeinsame Begriffe: cylindrical pin, snap ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

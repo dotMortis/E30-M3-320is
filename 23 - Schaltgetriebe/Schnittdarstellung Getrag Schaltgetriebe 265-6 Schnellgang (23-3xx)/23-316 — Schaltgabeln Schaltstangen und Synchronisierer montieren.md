@@ -78,5 +78,14 @@ Die Seite 23-316 beschreibt anhand von Fotos und einer Schnittdarstellung die Mo
 | operating sleeve | Schiebemuffe |
 | pin | Bolzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-10 — Hinteres Getriebegehäuse zusammenbauen]] — gemeinsame Begriffe: detent ball, locking ball
+- [[23-175 — Schaltstangen und Getriebewellen aus- und einbauen]] — gemeinsame Begriffe: 1st/2nd gear selector rod, 3rd/4th gear selector fork
+- [[23-176 — Getriebewellen und Schaltstangen einbauen]] — gemeinsame Begriffe: detent ball, locking ball
+- [[23-317 — Rückwärtsgangbereich des fünften Gangs zusammenbauen]] — gemeinsame Begriffe: detent ball, locking ball
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

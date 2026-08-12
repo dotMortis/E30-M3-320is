@@ -84,5 +84,13 @@ Werkstattanleitung zur teilweisen Erneuerung des rechten hinteren Seitenteils be
 | fuel tank | Kraftstofftank |
 | thrust strut mountings | Befestigungen der Zugstreben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-318 — Seitenwand hinten rechts Teilersatz aus- und einbauen]] — gemeinsame Begriffe: door striker, rear window with frame, right rear side panel
+- [[41-111 — Seitenschwellerabdeckung links oder rechts ersetzen]] — gemeinsame Begriffe: entrance cover strip, thrust strut mountings
+- [[41-312 — Seitenwand hinten links bis Dachverbindung ausbauen]] — gemeinsame Begriffe: tail light assembly, trunk lid seal
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

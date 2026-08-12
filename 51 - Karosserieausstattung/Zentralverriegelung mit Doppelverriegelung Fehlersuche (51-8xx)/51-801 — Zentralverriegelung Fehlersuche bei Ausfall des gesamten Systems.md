@@ -70,5 +70,11 @@ Flussdiagramm zur Fehlersuche an der Zentralverriegelung, Abschnitt „Ausfall d
 | digital tester II | Digitaltester II |
 | fuse | Sicherung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-800 — Zentralverriegelung mit Doppelverriegelung Fehlersuche]] — gemeinsame Begriffe: impact switch, lock cylinder
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

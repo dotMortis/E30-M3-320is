@@ -64,5 +64,11 @@ Die Seite 52-103 beschreibt den Arbeitsablauf zum Aus- und Einbau der Rückwand 
 | plate | Abdeckplatte |
 | holder | Halter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[52-00-index-a — Inhaltsübersicht Kapitel Sitze]] — gemeinsame Begriffe: back panel, front seat backrest
+
+
 ---
 [[Startseite]] · [[_Übersicht 52 — Sitze|Abschnittsübersicht]] · [[Glossar]]

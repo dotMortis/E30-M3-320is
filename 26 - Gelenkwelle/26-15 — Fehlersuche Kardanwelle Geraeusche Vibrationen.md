@@ -81,5 +81,11 @@ Seite 26-15 aus dem Abschnitt zur Fehlersuche an der Kardanwelle. Die Tabelle or
 | engine/transmission suspension | Motor-/Getriebeaufhängung |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-16 — Fehlersuchtabelle Gelenkwelle Geräusche]] — gemeinsame Begriffe: final drive flange, runout, transmission flange, universal joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

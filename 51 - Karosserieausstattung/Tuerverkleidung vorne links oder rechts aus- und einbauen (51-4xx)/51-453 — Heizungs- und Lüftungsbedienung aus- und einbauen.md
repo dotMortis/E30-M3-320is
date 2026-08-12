@@ -75,5 +75,14 @@ Die Seite 51-453 zeigt in mehreren Bildfolgen den Ausbau der Bedienungs- und Sch
 | clock | Uhr |
 | control unit | Bedieneinheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-01 — Bauteilübersicht Heizungs- und Klimaanlage]] — Abschnitt 64: gemeinsame Begriffe: air conditioner switch, blower switch
+- [[64-110 — Bowdenzug für Fußraumlüftung aus- und einbauen]] — Abschnitt 64: gemeinsame Begriffe: control panel, radio opening mask
+- [[64-111 — Kabel für Fensterbelüftung aus- und einbauen]] — Abschnitt 64: gemeinsame Begriffe: control panel, radio opening mask
+- [[64-112 — Bowdenzug Temperaturmischklappe aus- und einbauen]] — Abschnitt 64: gemeinsame Begriffe: control panel, radio opening mask
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

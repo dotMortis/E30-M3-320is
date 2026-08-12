@@ -70,5 +70,11 @@ Die Seite 12-46 beschreibt zwei Arbeiten an der Lichtmaschine: den Austausch der
 | solder | Lötzinn |
 | out of true | Rundlauffehler |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-143_2 — Lichtmaschinen-Spannungsregler aus- und einbauen]] — gemeinsame Begriffe: contact surfaces, slip rings, spring contacts
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

@@ -76,5 +76,12 @@ Die Seite 51-810 zeigt eine schematische Übersicht der elektrischen Fensterhebe
 | ignition key | Zündschlüssel |
 | excessive loads | Überlast |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-811 — Fehlersuche Fensterheber Totalausfall]] — gemeinsame Begriffe: push button, special equipment plug
+- [[51-813 — Fehlersuche Fensterheber links hinten]] — gemeinsame Begriffe: door wire harness, window motor
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

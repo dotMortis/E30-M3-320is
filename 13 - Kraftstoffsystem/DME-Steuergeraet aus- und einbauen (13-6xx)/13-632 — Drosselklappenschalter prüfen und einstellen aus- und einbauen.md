@@ -74,5 +74,12 @@ Die Seite 13-632 beschreibt die Prüfung, Einstellung sowie den Ausbau und Einba
 | screw | Schraube |
 | ohm | Ohm |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-630 — Drosselklappenschalter pruefen und einstellen]] — gemeinsame Begriffe: connection, full load, idle
+- [[13-771 — Drosselklappenschalter prüfen aus- und einbauen]] — gemeinsame Begriffe: connection, full load, throttle valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

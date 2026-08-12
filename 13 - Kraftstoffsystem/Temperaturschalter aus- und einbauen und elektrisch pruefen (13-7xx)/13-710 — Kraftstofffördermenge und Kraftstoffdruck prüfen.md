@@ -74,5 +74,17 @@ Die Seite 13-710 beschreibt die Prüfung der Kraftstofffördermenge und des Kraf
 | delivery rate | Fördermenge |
 | delivery pressure | Förderdruck |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-00-index-a — Inhaltsverzeichnis Kraftstoffanlage Arbeitsvorgänge]] — gemeinsame Begriffe: fuel delivery pressure, fuel delivery rate
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

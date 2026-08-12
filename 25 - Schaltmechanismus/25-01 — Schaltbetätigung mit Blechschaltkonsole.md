@@ -88,5 +88,13 @@ Explosionsdarstellung der Schaltbetätigung eines Schaltgetriebes mit Blechschal
 | Circlip | Sicherungsring |
 | Spacer | Distanzring |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-305 — Getriebegehäusevorderteil aus- und einbauen und abdichten]] — Abschnitt 23: gemeinsame Begriffe: selector rod joint, spring sleeve
+- [[25-07 — Schalthebel an Blech-Schaltkonsole zerlegen und zusammenbauen]] — gemeinsame Begriffe: sheet metal shift console, shift lever upper section
+- [[25-09 — Schaltstangengelenk an Blechschaltkonsole aus- und einbauen]] — gemeinsame Begriffe: selector rod joint, sheet metal shift console
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

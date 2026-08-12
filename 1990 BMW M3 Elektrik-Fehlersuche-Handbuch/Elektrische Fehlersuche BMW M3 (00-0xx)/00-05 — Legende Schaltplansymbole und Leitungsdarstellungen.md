@@ -118,5 +118,11 @@ Diese Seite ist eine Legende der Schaltplansymbole und Leitungsdarstellungen. Si
 | ACCY | Zubehör |
 | OFF | Aus |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[0670-04 — Stromlaufplan Stromverteilung Beleuchtungsanlage]] — gemeinsame Begriffe: low beam relay, relay coil
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

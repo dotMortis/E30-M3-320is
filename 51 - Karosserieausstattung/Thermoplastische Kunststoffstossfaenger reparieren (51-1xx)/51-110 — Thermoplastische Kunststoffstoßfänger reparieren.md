@@ -114,5 +114,13 @@ Die Seite 51-110, Abschnitt 51 00, enthält allgemeine Informationen und Sicherh
 | scrapping | Entsorgung |
 | special refuse | Sonderabfall |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-14_1 — Hardtop reparieren und einbauen]] — Abschnitt 54: gemeinsame Begriffe: body mounting points, fire extinguishing agents, first aid, scrapping, toxicology
+- [[41-011 — Sicherheitsvorschriften für glasfaserverstärkte Kunststoffteile]] — Abschnitt 41: gemeinsame Begriffe: fire extinguishing agents, first aid, scrapping, toxicology
+- [[51-111 — Kunststoffschäden mit Reparaturmaterial instand setzen]] — gemeinsame Begriffe: aluminum adhesive tape, glass grid fabric, grinding abrasion
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

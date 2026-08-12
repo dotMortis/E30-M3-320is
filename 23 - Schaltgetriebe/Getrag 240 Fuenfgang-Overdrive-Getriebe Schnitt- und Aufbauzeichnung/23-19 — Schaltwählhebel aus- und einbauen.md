@@ -93,5 +93,11 @@ Die Seite 23-19 beschreibt den Ausbau und Einbau des Wählhebels beziehungsweise
 | socket head bolt | Innensechskantschraube |
 | locking compound | Schraubensicherungsmittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-185 — Wählhebel und Lagerhalter aus- und einbauen]] — gemeinsame Begriffe: bearing holder, locking lever, roller, socket head bolt, thrust pin
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

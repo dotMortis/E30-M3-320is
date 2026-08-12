@@ -77,5 +77,13 @@ Werkstatthandbuchseite 16-11 mit Aus- und Einbauhinweisen für den Aktivkohlebeh
 | empty float position | Leerstellung des Schwimmers |
 | full float position | Vollstellung des Schwimmers |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]] — gemeinsame Begriffe: delivery pressure, fuel level sender, fuel transfer pump
+- [[16-00-index-a — Kraftstoffbehälter und Leitungen Inhaltsverzeichnis]] — gemeinsame Begriffe: carbon canister, fuel level sender
+- [[16-01 — Kraftstoffversorgung ab Baujahr 1988]] — gemeinsame Begriffe: carbon canister, fuel level sender
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

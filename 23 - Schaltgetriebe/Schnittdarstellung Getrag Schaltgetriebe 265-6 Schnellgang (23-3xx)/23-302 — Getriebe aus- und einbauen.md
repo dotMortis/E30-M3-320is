@@ -97,5 +97,13 @@ Die Seite 23-302 beschreibt den Ausbau und Einbau des Getriebes (Arbeitsvorgang 
 | threaded ring | Gewindering |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-167 — Getriebe aus- und einbauen]] — gemeinsame Begriffe: joint disc, shift rod, stop nuts, threaded ring
+- [[23-03 — Schaltgetriebe aus- und einbauen]] — gemeinsame Begriffe: reverse gear switch, shift rod, threaded ring
+- [[26-14 — Vordere Gelenkscheibe der Kardanwelle aus- und einbauen]] — Abschnitt 26: gemeinsame Begriffe: joint disc, stop nuts
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

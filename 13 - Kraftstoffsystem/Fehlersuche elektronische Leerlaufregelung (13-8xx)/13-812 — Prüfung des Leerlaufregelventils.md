@@ -86,5 +86,11 @@ Flussdiagramm zur Prüfung des Leerlaufregelventils am BMW-Motor. Die Seite füh
 | color code | Farbcode |
 | break | Leitungsunterbrechung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-802 — Prüfablauf zur Diagnose des Leerlaufregelventils]] — gemeinsame Begriffe: ammeter, color code, idle control valve, idle speed, nominal speed, operating temperature, wire plug
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

@@ -96,5 +96,14 @@ Die Seite 00-10 aus dem BMW-Wartungssystem beschreibt den Wartungsumfang der BMW
 | Molykote Longterm | Molykote Longterm |
 | visual inspection | Sichtprüfung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-07 — Wartungsplan Einfahrkontrolle 2000 km]] — gemeinsame Begriffe: engine oil, heater hoses, oil filter, valve clearance
+- [[00-01 — Ablieferungsinspektion Prüfumfang und Arbeitsanweisungen]] — gemeinsame Begriffe: oil filter, tank cap, visual inspection
+- [[00-17 — Motorölservice und Service-Intervallanzeige zurücksetzen]] — gemeinsame Begriffe: engine oil, oil filter, operating temperature
+- [[13-731 — Drosselklappenbetätigung aus- und einbauen und Drosselklappenstutzen einstellen]] — Abschnitt 13: gemeinsame Begriffe: throttle lever, throttle valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

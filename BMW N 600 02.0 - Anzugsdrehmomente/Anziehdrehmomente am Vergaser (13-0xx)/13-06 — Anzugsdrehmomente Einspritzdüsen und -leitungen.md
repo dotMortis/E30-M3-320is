@@ -59,5 +59,17 @@ Die Seite enthält eine Anzugsdrehmomenttabelle zum Abschnitt 13-6 „Kraftstoff
 | Injection panel | Einspritzleiste |
 | Torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]] — gemeinsame Begriffe: coupling nut, injection pump
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

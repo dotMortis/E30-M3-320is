@@ -69,5 +69,12 @@ Die Seite 41-106 C zeigt in einer bebilderten Arbeitsfolge den Einbau eines hint
 | trunk floor plate | Kofferraumbodenblech |
 | entrance | Einstieg |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-102c — Karosserie-Ersatzteile anpassen und verschweißen]] — gemeinsame Begriffe: door, entrance, support
+- [[41-210 — Nacharbeiten instand gesetzter Karosseriebereiche]] — Abschnitt 41: gemeinsame Begriffe: entrance, grind
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

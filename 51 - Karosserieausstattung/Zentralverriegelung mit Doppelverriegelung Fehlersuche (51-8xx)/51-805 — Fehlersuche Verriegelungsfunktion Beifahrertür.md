@@ -71,5 +71,12 @@ Die Seite 51-805 zeigt ein Diagnoseflussdiagramm für den Fehler „Verriegeln n
 | break in wire | Leitungsunterbrechung |
 | ground | Masse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-804 — Diagnoseablauf Beifahrertürschloss keine Entriegelung]] — gemeinsame Begriffe: door/body plug, vehicle ground
+- [[51-806 — Kofferraumschloss ohne Funktion beim Entriegeln und Verriegeln]] — gemeinsame Begriffe: socket, vehicle ground
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -66,5 +66,18 @@ Die Seite zeigt eine BMW-Anziehdrehmomenttabelle für den Motorbereich 11-36, Ab
 | screw | Schraube |
 | torque | Anziehdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-29 — Anzugsdrehmomente Ölfilter und Leitungen]] — gemeinsame Begriffe: engine block, hollow bolt, turbocharger
+- [[18-01 — Anzugs- und Montagevorgaben Abgasanlage]] — gemeinsame Begriffe: exhaust manifold, flow section, turbocharger
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

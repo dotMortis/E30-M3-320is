@@ -94,5 +94,11 @@ Die Seite 17-6 beschreibt den Ausbau und Einbau des Kühlmittel-Ausgleichsbehäl
 | coolant level mark | Kühlmittelstandsmarkierung |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

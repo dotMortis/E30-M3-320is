@@ -61,5 +61,14 @@ Die Seite zeigt eine Schnitt- und Zusammenbauzeichnung des manuellen Fünfgang-O
 | transmission housing | Getriebegehäuse |
 | synchronizer assembly | Synchronisierbaugruppe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-101 — Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe]] — gemeinsame Begriffe: assembly drawing, fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-165 — Getrag-260-Fünfgang-Schaltgetriebe Schnittzeichnung und Gangstufen]] — gemeinsame Begriffe: assembly drawing, fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-300 — Schnittdarstellung Getrag Schaltgetriebe 265-6 Schnellgang]] — gemeinsame Begriffe: fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-02 — Schaltmechanismus Schnitt- und Montagezeichnung]] — gemeinsame Begriffe: assembly drawing, five-speed overdrive manual transmission
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

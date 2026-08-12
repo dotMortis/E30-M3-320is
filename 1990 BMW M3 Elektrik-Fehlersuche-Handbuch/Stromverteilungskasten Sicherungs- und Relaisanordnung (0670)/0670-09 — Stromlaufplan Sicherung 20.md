@@ -73,5 +73,11 @@ Stromlaufdiagramm der Stromversorgung für Sicherung 20 im BMW-Leistungsverteilu
 | terminal 87 | Anschluss 87 |
 | wire color code | Kabelfarbkennzeichnung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6413-01 — Gebläse- und Klimaanlagensteuerung Fehlersuche]] — gemeinsame Begriffe: blower speed control, control switches
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

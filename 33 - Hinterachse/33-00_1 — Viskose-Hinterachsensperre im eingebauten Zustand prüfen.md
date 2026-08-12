@@ -87,5 +87,11 @@ Die Seite beschreibt die Prüfung der viskosen Hinterachsensperre beim BMW 325ix
 | rear wheel | Hinterrad |
 | all-wheel drive | Allradantrieb |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[33-00_2 — Prüfdiagramm Visco-Sperre Bremsenprüfstand]] — gemeinsame Begriffe: brake test stand, braking force, wheel speed
+
+
 ---
 [[Startseite]] · [[_Übersicht 33 — Hinterachse|Abschnittsübersicht]] · [[Glossar]]

@@ -84,5 +84,12 @@ Werkstatthandbuchseite 12-4 zur Prüfung und zum Ersetzen der Unterdruckverstell
 | TDC (top dead center) | oberer Totpunkt (OT) |
 | BMW service test unit | BMW-Serviceprüfgerät |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-00-index-a — Inhaltsverzeichnis Elektrische Ausrüstung Motor]] — gemeinsame Begriffe: pulse transmitter, vacuum control
+- [[12-03 — Impulsgeber im Zündverteiler prüfen und aus- und einbauen]] — gemeinsame Begriffe: carrier plate, pulse transmitter
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

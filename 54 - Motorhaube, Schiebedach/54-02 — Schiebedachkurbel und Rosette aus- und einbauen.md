@@ -61,5 +61,12 @@ Die Seite 54-2 beschreibt den Ausbau und Einbau der Handkurbel des Schiebedachs 
 | large opening | große Öffnung |
 | bolt | Schraube |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-00-index-a — Inhaltsverzeichnis Motorhaube Schiebedach Hardtop Verdeck]] — gemeinsame Begriffe: sun roof lid, sun roof winder
+- [[54-04 — Zahnrad am manuellen Schiebedach aus- und einbauen]] — gemeinsame Begriffe: pressure point, recess plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

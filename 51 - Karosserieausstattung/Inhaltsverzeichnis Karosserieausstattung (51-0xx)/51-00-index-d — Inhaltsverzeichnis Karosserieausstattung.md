@@ -72,5 +72,11 @@ Seite 68 ist ein Inhaltsverzeichnis des Kapitels 51 „Karosserieausstattung“ 
 | remove and install | aus- und einbauen |
 | replace | ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-770 — Seitliche Fußraumverkleidung bearbeiten und einbauen]] — gemeinsame Begriffe: dashboard trim panel, side trim panel
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

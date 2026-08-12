@@ -80,5 +80,13 @@ Die Seite 31-16 beschreibt den Ausbau und Einbau beziehungsweise Ersatz der link
 | part number | Teilenummer |
 | shoulder | Auflageschulter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-12 — Federbeinaufbau mit Stoßdämpfer und Schraubenfeder]] — gemeinsame Begriffe: protective tube, rubber damper, upper spring retainer
+- [[31-14 — Vorderes Federbein aus- und einbauen]] — gemeinsame Begriffe: protective tube, rubber damper, spring retainer
+- [[31-15 — Federbeinlager aus- und einbauen]] — gemeinsame Begriffe: spring retainer, spring strut mount, upper spring retainer
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

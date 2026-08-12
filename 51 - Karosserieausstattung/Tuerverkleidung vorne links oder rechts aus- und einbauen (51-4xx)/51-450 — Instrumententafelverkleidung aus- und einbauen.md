@@ -71,5 +71,12 @@ Die Seite 51-450 beschreibt den Ausbau und Einbau der Verkleidung der Instrument
 | twist lock | Drehverriegelung |
 | dust cover | Staubschutzabdeckung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-162 — Mittelkonsole aus- und einbauen]] — gemeinsame Begriffe: ashtray, parking brake lever, shift lever knob, twist lock
+- [[65-93 — Kassettenboxen in Mittelkonsole einbauen]] — Abschnitt 65: gemeinsame Begriffe: ashtray, parking brake lever
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

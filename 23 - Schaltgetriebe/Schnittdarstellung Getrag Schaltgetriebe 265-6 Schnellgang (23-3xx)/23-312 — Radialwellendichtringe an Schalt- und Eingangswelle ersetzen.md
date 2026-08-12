@@ -76,5 +76,11 @@ Werkstattbuchseite 23–312 mit Anleitungen zum Ersetzen der Radialwellendichtri
 | cover with guide tube | Deckel mit Führungsrohr |
 | special tool | Spezialwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-305 — Getriebegehäusevorderteil aus- und einbauen und abdichten]] — gemeinsame Begriffe: cylindrical pin, selector rod joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

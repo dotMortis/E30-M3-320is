@@ -70,5 +70,12 @@ Die Seite 13-806 beschreibt im Abschnitt „Bevorzugte Schaltung“ die Spannung
 | wire | Kabel |
 | breaks | Unterbrechungen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-813 — Leerlaufdrehzahlanhebung bei Klimaanlage prüfen]] — gemeinsame Begriffe: breaks, drive range, ignition, nominal idle speed, preferred circuit
+- [[13-816 — Prüfstromkreis Versorgungsspannung Getriebe]] — gemeinsame Begriffe: drive range, preferred circuit, selector lever switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

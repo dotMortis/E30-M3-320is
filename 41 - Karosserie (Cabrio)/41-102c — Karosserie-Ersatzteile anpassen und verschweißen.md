@@ -67,5 +67,11 @@ Die Seite 41–102 C zeigt anhand einer bebilderten Arbeitsfolge das Anpassen, H
 | welding seam | Schweißnaht |
 | gap | Spaltmaß |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-106c — Hinteres Seitenteil aus- und einbauen]] — gemeinsame Begriffe: door, entrance, support
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

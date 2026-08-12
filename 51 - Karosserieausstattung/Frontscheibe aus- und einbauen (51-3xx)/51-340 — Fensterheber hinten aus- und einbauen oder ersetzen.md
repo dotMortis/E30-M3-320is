@@ -71,5 +71,11 @@ Die Seite 51-340 beschreibt unter der Arbeitsnummer 51 34 020 den Ausbau sowie d
 | front end | vorderes Ende |
 | window adjustment | Fensterscheibeneinstellung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-323 — Vordere Türscheibe links oder rechts aus- und einbauen]] — gemeinsame Begriffe: guide roller, window adjustment
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

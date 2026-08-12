@@ -56,5 +56,11 @@ Die Seite 23-105 beschreibt den Einbau des Rillenkugellagers auf der Eingangswel
 | circlip | Sicherungsring |
 | reverse gear switch | Rückwärtsgangschalter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-170 — Führungshülse für Kupplungsausrücklager aus- und einbauen]] — gemeinsame Begriffe: case front section, reverse gear switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -79,5 +79,12 @@ Die Seite 34-13 zeigt in mehreren Montagezeichnungen den Zusammenbau eines Brems
 | contact button | Kontaktstift |
 | silicone grease | Silikonfett |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-12 — Tandem-Hauptbremszylinder zerlegen und überholen]] — gemeinsame Begriffe: assembly sleeve, cylinder bore, intermediate piston, plastic bushing, push rod piston, secondary cup, stop screw, stop washer
+- [[65-302 — Schalter und Halter aus- und einbauen]] — Abschnitt 65: gemeinsame Begriffe: contact button, lock nut
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

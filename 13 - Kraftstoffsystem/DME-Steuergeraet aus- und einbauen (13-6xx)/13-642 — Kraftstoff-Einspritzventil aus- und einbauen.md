@@ -69,5 +69,11 @@ Die Seite beschreibt den Ausbau und Einbau eines einzelnen Kraftstoff-Einspritzv
 | plug receptacle | Steckeraufnahme |
 | fuel injector guard | Einspritzventilschutz |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-781 — Kraftstoff-Einspritzventil am Einspritzrohr aus- und einbauen]] — gemeinsame Begriffe: fuel injector guard, plastic washer
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

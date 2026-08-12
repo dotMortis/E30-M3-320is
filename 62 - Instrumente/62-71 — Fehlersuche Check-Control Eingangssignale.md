@@ -82,5 +82,11 @@ Die Seite zeigt eine Prüftabelle zur Fehlersuche an der Check-Control. Bei abge
 | voltmeter | Voltmeter |
 | battery voltage | Batteriespannung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-74 — BMW E30 Check-Control-Schaltplan]] — gemeinsame Begriffe: air bag, central warning lamp, fasten seat belts
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

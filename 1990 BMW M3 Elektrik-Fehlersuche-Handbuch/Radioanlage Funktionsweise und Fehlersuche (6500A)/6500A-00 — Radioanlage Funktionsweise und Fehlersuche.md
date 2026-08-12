@@ -101,5 +101,13 @@ Die Seite 6500A-0 „Radio/Antenne“ beschreibt die Funktionsweise des Radio- u
 | LH Speakers | Lautsprecher links |
 | RH Speakers | Lautsprecher rechts |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6500-01 — Lautsprecher- und Verstärkeranschlüsse]] — gemeinsame Begriffe: radio/antenna, speaker
+- [[6500A-01 — Spannungsprüfungen Radio- und Antennenanlage]] — gemeinsame Begriffe: antenna, speaker
+- [[6500A-02 — Fehlersuche Lautsprecher Radio Antenne]] — gemeinsame Begriffe: antenna, speaker
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

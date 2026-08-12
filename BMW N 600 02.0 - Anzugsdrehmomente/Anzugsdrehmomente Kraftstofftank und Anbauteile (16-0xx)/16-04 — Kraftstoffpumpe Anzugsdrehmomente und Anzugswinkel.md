@@ -76,5 +76,13 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle aus dem Kapitel „Kraftstofftank un
 | Fill level sensor | Füllstandgeber |
 | Tighten nuts crosswise | Muttern über Kreuz anziehen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-00-index-a — Kraftstoffbehälter und Leitungen Inhaltsverzeichnis]] — Abschnitt 16: gemeinsame Begriffe: fuel intake, fuel level sender, intake pump, transfer pump
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]] — Abschnitt 16: gemeinsame Begriffe: fuel intake, fuel level sender
+- [[16-09 — Kraftstoffvorratsgeber und Kraftstoffpumpe aus- und zerlegen]] — Abschnitt 16: gemeinsame Begriffe: fuel intake, fuel level sender
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

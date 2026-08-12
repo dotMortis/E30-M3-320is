@@ -75,5 +75,18 @@ Die Seite beschreibt die Fehlersuche an der Temperaturzeitschaltuhr der Kraftsto
 | wiring diagram | Schaltplan |
 | water bath | Wasserbad |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-907 — Kühlmitteltemperaturfühler prüfen]] — gemeinsame Begriffe: coolant level, plug contact, resistance values, water bath
+- [[13-626 — Temperaturzeitschalter prüfen aus- und einbauen]] — gemeinsame Begriffe: temperature time switch, water bath
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

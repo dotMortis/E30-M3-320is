@@ -89,5 +89,20 @@ Die Seite 11-55a beschreibt anhand von Montagefotos und Arbeitsschritten den Aus
 | universal sealing compound | Universal-Dichtmittel |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-109 — Ober- und Unterteil der Ölwanne aus- und einbauen]] — gemeinsame Begriffe: end cover, oil dipstick, oil drain plug, oil pan gasket, oil pan lower section, oil pan upper section, oil pump, timing case cover, universal sealing compound
+- [[11-57 — Unteren Steuergehäusedeckel aus- und einbauen]] — gemeinsame Begriffe: oil pan gasket, reinforcement plate, timing case cover
+- [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: oil dipstick, oil pump
+- [[11-00-index-c — Inhaltsverzeichnis Motor M3 320is]] — gemeinsame Begriffe: oil pan lower section, oil pan upper section
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

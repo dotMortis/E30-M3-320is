@@ -63,5 +63,13 @@ Die Seite 41-329 zeigt anhand mehrerer Detailaufnahmen die vorgesehenen Schweiß
 | entrance | Einstieg |
 | tinning | Verzinnen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-117 — Hinteres Seitenteil an Türsäule einpassen und verbinden]] — gemeinsame Begriffe: braze joint, grind down
+- [[41-324 — Seitliche Karosserie instandsetzen und abdichten]] — gemeinsame Begriffe: entrance, grind down
+- [[41-334 — Verbindungs- und Verstärkungsarbeiten hintere Karosserie]] — gemeinsame Begriffe: grind down, trunk lid opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

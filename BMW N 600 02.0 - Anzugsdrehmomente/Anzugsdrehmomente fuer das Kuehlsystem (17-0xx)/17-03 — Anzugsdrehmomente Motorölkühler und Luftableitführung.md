@@ -51,5 +51,11 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle aus der Baugruppe 17-3 „Kühl
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

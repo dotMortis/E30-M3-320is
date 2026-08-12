@@ -89,5 +89,13 @@ Die Seite 12-160 zeigt die Anschlussbelegung des runden BMW-Diagnosesteckers sow
 | RXD data lead | RXD-Datenleitung |
 | TXD data lead | TXD-Datenleitung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-104 — Anschlussplan Diagnosestecker Pinbelegung]] — gemeinsame Begriffe: alternator charge indicator, diagnosis plug, oxygen sensor signal, service indicator
+- [[12-103 — Anschlussplan Motor-Kabelbaumstecker bis 1985 und ab 1986]] — gemeinsame Begriffe: alternator charge indicator, service indicator reset
+- [[12-107_1 — Motorsteckverbindung M20 Anschlussbelegung]] — gemeinsame Begriffe: diagnosis plug, service indicator reset
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

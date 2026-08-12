@@ -73,5 +73,11 @@ Die Seite 51-325 beschreibt den Ausbau und Einbau beziehungsweise den Ersatz der
 | stop | Anschlag |
 | lubricant | Gleitmittel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-00-index-c — Inhaltsverzeichnis Karosserieausstattung Fenster]] — gemeinsame Begriffe: fixed window, front door window
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

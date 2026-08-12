@@ -70,5 +70,11 @@ Die Seite 13-803 zeigt ein Diagnose-Flussdiagramm zur Prüfung der Peripheriesch
 | nominal speed | Nenndrehzahl |
 | automatic transmission | Automatikgetriebe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-813 — Leerlaufdrehzahlanhebung bei Klimaanlage prüfen]] — gemeinsame Begriffe: air conditioner speed, blue/white wire, periphery
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

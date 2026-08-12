@@ -89,5 +89,13 @@ Montageanleitung für das hintere Getriebegehäuse eines BMW-Schaltgetriebes. Di
 | detent assembly | Schaltstangen-Arretiereinrichtung |
 | special tools | Spezialwerkzeuge |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-176 — Getriebewellen und Schaltstangen einbauen]] — gemeinsame Begriffe: detent ball, locking ball, locking lever
+- [[23-316 — Schaltgabeln Schaltstangen und Synchronisierer montieren]] — gemeinsame Begriffe: detent ball, locking ball
+- [[23-317 — Rückwärtsgangbereich des fünften Gangs zusammenbauen]] — gemeinsame Begriffe: detent ball, locking ball
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

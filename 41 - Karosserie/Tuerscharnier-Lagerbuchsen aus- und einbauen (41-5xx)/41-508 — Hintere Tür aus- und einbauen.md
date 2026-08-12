@@ -78,5 +78,12 @@ Die Seite 41-508 beschreibt den Ausbau der linken oder rechten hinteren Tür bei
 | clip | Clip |
 | hinge | Türscharnier |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-504 — Vordertür aus- und einbauen]] — gemeinsame Begriffe: door lock, door retarder, door window, hinge, ornamental frame, outside handle, rubbing strip, weatherstrip
+- [[51-410 — Türverkleidung vorne links oder rechts aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: door window, window winder
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

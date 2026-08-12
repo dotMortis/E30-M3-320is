@@ -76,5 +76,12 @@ Die Seite 51-342 beschreibt anhand von Bildfolgen den Ausbau der hinteren Türsc
 | clips | Clips |
 | paint finish | Lackierung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-341 — Hintere Seitenscheibe links oder rechts einstellen]] — gemeinsame Begriffe: rear door trim panel, rear door window
+- [[51-344 — Hintere Seitenscheibe fest im Rahmen aus- und einbauen]] — gemeinsame Begriffe: cover strip, window recess cover
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

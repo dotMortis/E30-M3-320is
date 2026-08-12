@@ -106,5 +106,14 @@ Die Seite 00-7 zeigt eine tabellarische Übersicht des BMW-Wartungssystems für 
 | tightening torque | Anzugsdrehmoment |
 | cotter pins | Splinte |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-10 — Wartungsumfang BMW Inspektion I]] — gemeinsame Begriffe: engine oil, heater hoses, oil filter, valve clearance
+- [[00-11 — Wartungsübersicht BMW Inspektion I]] — gemeinsame Begriffe: brake calipers, cotter pins, power steering, transfer case
+- [[00-01 — Ablieferungsinspektion Prüfumfang und Arbeitsanweisungen]] — gemeinsame Begriffe: coolant level, exhaust system, oil filter
+- [[00-02 — Checkliste der Fahrzeugübergabeinspektion]] — gemeinsame Begriffe: cotter pins, power steering, wheel bolts
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

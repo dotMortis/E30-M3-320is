@@ -71,5 +71,14 @@ Die Seite 41-324 beschreibt Arbeitsschritte zur Instandsetzung und Abdichtung de
 | body sealing compound | Karosseriedichtmittel |
 | bumper | Stoßfänger |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-317 — Hinteren Radausschnitt und Seitenteil nacharbeiten]] — gemeinsame Begriffe: wheel opening, wider tires
+- [[41-322 — Seitenblech ausrichten und befestigen]] — gemeinsame Begriffe: entrance, wheel opening
+- [[41-328 — Hinteres Seitenteil anpassen und befestigen]] — gemeinsame Begriffe: entrance, wheel opening
+- [[41-329 — Schweiß- und Lötstellen an Seitenwand und Heckabschlussblech]] — gemeinsame Begriffe: entrance, grind down
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

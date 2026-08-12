@@ -82,5 +82,11 @@ Die Seite 26-2 des BMW-Werkstatthandbuchs enthält die Anzugsdrehmomente für di
 | Sliding joint | Schiebestück |
 | Tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]] — gemeinsame Begriffe: propeller shaft complete, universal joint
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -73,5 +73,11 @@ Die Seite zeigt ein Ablaufdiagramm zur Fehlersuche an der L-Jetronic bei nicht l
 | Resistance value | Widerstandswert |
 | Terminal 87a | Anschluss 87a |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-854 — Fehlerdiagnose Kaltstartventil L-Jetronic]] — gemeinsame Begriffe: control relay, terminal 87a
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

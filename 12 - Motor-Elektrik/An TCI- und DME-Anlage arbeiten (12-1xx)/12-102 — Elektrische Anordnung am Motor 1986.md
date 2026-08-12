@@ -88,5 +88,20 @@ Die Seite 12-102 zeigt die elektrische Anordnung am Motor für BMW-Modelle des B
 | speed sensor | Drehzahlsensor |
 | pressure sensor | Drucksensor |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-101 — Motorleitungssatz Anordnung 1984 1985 Modelle]] — gemeinsame Begriffe: air conditioner plug, engine electric layout, idle speed control unit, pressure sensor, reference mark sensor, temperature time switch, temperature transmitter
+- [[12-01 — Elektrische Anordnung am Motor 318i]] — gemeinsame Begriffe: idle speed control unit, temperature transmitter
+- [[12-105 — Elektrische Anordnung Motor M20 Motronic M1-1 325i]] — gemeinsame Begriffe: engine electric layout, engine wire harness plug
+- [[12-106 — Elektrische Anlage Motor M3 S14]] — gemeinsame Begriffe: air conditioner plug, engine electric layout
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

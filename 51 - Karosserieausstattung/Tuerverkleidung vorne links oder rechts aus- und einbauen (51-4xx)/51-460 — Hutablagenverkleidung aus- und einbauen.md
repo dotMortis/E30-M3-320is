@@ -69,5 +69,11 @@ Die Seite 51-460 beschreibt den Ausbau der Verkleidung der Hutablage am Fahrzeug
 | radio speakers | Radiolautsprecher |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnitt 72]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

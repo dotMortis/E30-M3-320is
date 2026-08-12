@@ -94,5 +94,12 @@ Die Seite 23-180 zeigt anhand mehrerer Fotos die Demontage, Montage und Einstell
 | pressing-on force | Aufpresskraft |
 | Special Tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-115 — Gangradbaugruppen erster bis dritter Gang zusammenbauen]] — gemeinsame Begriffe: 1st gear, brass synchromesh ring
+- [[23-13 — Getriebe-Abtriebswelle zerlegen und zusammenbauen]] — gemeinsame Begriffe: brass synchromesh ring, pressing-off force
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

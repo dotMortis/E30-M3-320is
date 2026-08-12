@@ -64,5 +64,11 @@ Die Seite 11-51 beschreibt die BMW-Arbeitsanweisung 11 00 039 zum Prüfen der Ko
 | tightening torque | Anzugsdrehmoment |
 | nominal value | Nennwert |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-101 — Kompressionsdruck aller Zylinder prüfen]] — gemeinsame Begriffe: compression tester, spark plug, spark plug connector
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

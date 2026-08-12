@@ -87,5 +87,13 @@ Werkstatthandbuchseite 33-16 zum Arbeitsauftrag 33 52 000 „Aus- und Einbau der
 | side backrest | seitliche Rückenlehne |
 | seat belt reel | Sicherheitsgurtaufroller |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
+- [[_Übersicht 52 — Sitze|Abschnitt 52]]
+- [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnitt 72]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 33 — Hinterachse|Abschnittsübersicht]] · [[Glossar]]

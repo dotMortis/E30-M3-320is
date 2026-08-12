@@ -104,5 +104,12 @@ Die Seite 23-168 beschreibt anhand von Bildfolgen den Ausbau und den Wiedereinba
 | splines | Verzahnung |
 | breaking-loose torque | Losbrechmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[21-01 — Kupplungsbetätigung entlüften und Kupplungsgehäuse aus- und einbauen]] — Abschnitt 21: gemeinsame Begriffe: breaking-loose torque, dme sender, torx bolt
+- [[23-03 — Schaltgetriebe aus- und einbauen]] — gemeinsame Begriffe: reverse gear switch, shift arm
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

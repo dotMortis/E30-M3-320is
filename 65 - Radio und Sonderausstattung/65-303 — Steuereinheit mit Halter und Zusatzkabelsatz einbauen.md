@@ -71,5 +71,12 @@ Die Seite 65–303 beschreibt den Einbau einer Steuereinheit einschließlich Hal
 | selector switch | Wählerschalter |
 | self-tapping screws | selbstschneidende Schrauben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-305 — Zusatzkabelbaum und Halter montieren]] — gemeinsame Begriffe: extra wire harness, special equipment plug
+- [[65-306 — Betätigungsmotor mit Betätigungszug und Kabelbaum einbauen und einstellen]] — gemeinsame Begriffe: extra wire harness, operating motor
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

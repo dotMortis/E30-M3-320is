@@ -92,5 +92,12 @@ Die Seite zeigt einen Stromlaufplan der Stromverteilung für die Sicherungen 8, 
 | MIRROR CONTROL SWITCH | Spiegelverstellschalter |
 | WIRE COLOR CODE | Kabelfarbcode |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5116-00 — Schaltplan elektrische Spiegelverstellung]] — gemeinsame Begriffe: interior light timer control, mirror control switch
+- [[6100-02 — Schaltplan elektrische Heckscheibenheizung]] — gemeinsame Begriffe: hot in run, rear defogger switch
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

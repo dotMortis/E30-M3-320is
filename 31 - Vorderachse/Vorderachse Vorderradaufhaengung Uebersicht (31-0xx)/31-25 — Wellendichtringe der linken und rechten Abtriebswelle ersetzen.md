@@ -59,5 +59,11 @@ Die Seite 31–25 beschreibt den Austausch des Wellendichtrings an der linken bz
 | left output shaft | linke Abtriebswelle |
 | right output shaft | rechte Abtriebswelle |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-32 — Lager in Konsole der rechten Abtriebswelle ersetzen]] — gemeinsame Begriffe: gear lube, right output shaft
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

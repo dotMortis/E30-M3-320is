@@ -68,5 +68,11 @@ Werkstattseite 51-323 zur Demontage und Montage beziehungsweise zum Ersetzen der
 | window adjustment | Fenstereinstellung |
 | bolts | Schrauben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-340 — Fensterheber hinten aus- und einbauen oder ersetzen]] — gemeinsame Begriffe: guide roller, window adjustment
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

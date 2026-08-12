@@ -75,5 +75,11 @@ Die Seite 12–43 beschreibt die Zerlegung und den Zusammenbau eines ausgebauten
 | insulating sleeves | Isolierbuchsen |
 | washers | Unterlegscheiben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-42 — Generator aus- und einbauen]] — gemeinsame Begriffe: b+ terminal, d+ terminal
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

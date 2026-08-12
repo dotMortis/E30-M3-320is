@@ -100,5 +100,12 @@ Die Seite beschreibt die Prüfung und Einstellung des BMW-Service-Testers bezieh
 | needle | Zeiger |
 | battery negative terminal | Minuspol der Batterie |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-82 — Anschluss und Prüfung des Tachosimulators]] — gemeinsame Begriffe: display range, frequency, selector switch
+- [[62-84 — Funktionsprüfung Testgerät Kombiinstrumente]] — gemeinsame Begriffe: display range, knob, selector switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

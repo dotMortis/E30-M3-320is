@@ -86,5 +86,13 @@ Die Seite 34–12 beschreibt die Überholung des Tandem-Hauptbremszylinders am B
 | compensating bore | Ausgleichsbohrung |
 | feeding bore | Zulaufbohrung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-13 — Bremslichtschalter am Bremspedal einstellen]] — gemeinsame Begriffe: assembly sleeve, cylinder bore, intermediate piston, plastic bushing, push rod piston, secondary cup, stop screw, stop washer
+- [[34-11 — Tandem-Hauptbremszylinder aus- und einbauen]] — gemeinsame Begriffe: primary cup, tandem brake master cylinder
+- [[34-22 — Fehlersuchtabelle für die Bremsanlage]] — gemeinsame Begriffe: primary cup, tandem brake master cylinder
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

@@ -71,5 +71,11 @@ Die Seite 12-23 zeigt die Prüfschritte 5 und 6 der Fehlersuche an der Transisto
 | resistance | Widerstand |
 | burning traces | Brandspuren |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-00-index-d — Inhaltsverzeichnis Elektrische Ausrüstung des Motors]] — gemeinsame Begriffe: spark plug connectors, spark plugs
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

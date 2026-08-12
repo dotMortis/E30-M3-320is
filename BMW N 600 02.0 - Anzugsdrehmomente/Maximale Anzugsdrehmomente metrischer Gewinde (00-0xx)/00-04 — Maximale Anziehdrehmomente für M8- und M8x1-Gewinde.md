@@ -64,5 +64,12 @@ Die Seite aus dem Abschnitt „00 – Allgemeine Anweisungen“ enthält eine Ta
 | applicable range | Gültigkeitsbereich |
 | standard | Norm |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-06 — Maximale Anzugsdrehmomente M12-Gewinde]] — gemeinsame Begriffe: applicable range, maximum tightening torque, standard
+- [[00-02 — Maximale Anziehdrehmomente für M4 und M5]] — gemeinsame Begriffe: applicable range, strength class
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

@@ -83,5 +83,11 @@ Die Seite 23–114 zeigt anhand mehrerer Montageabbildungen den Aus- und Einbau 
 | collar | Bund |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-115 — Gangradbaugruppen erster bis dritter Gang zusammenbauen]] — gemeinsame Begriffe: brass synchromesh ring, pressure pieces
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -94,5 +94,12 @@ Elektrischer Schaltplan des Kombiinstruments für die Anzeigen und Warnsysteme. 
 | Ground | Masse |
 | Splice | Kabelspleiß |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6210-01 — Schaltplan Service-Intervallanzeige Kombiinstrument]] — gemeinsame Begriffe: coolant temperature sender, engine temperature input, service interval processor
+- [[6210-03 — Schaltplan Kombiinstrument Drehzahlmesser Kraftstoffverbrauchsanzeige]] — gemeinsame Begriffe: gauges/indicators, service interval processor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

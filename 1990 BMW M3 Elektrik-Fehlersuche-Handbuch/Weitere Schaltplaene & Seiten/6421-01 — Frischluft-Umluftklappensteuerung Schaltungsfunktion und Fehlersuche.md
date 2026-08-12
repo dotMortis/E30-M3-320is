@@ -112,5 +112,14 @@ Die Seite 6421-1 beschreibt die Schaltungsfunktion der Frisch-/Umluftklappensteu
 | fresh air | Frischluft |
 | recirculating air | Umluft |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6421-00 — Schaltplan Frischluft-Umluftsteuerung Heizungs-Klimaanlage]] — gemeinsame Begriffe: a/c air delivery control, flap door motor, fresh air, fresh/recirculating air flap door, fresh/recirculating air switch, recirculating air
+- [[6413-01 — Gebläse- und Klimaanlagensteuerung Fehlersuche]] — gemeinsame Begriffe: circuit operation, fresh/recirculating air switch, open circuit, system diagnosis
+- [[6410-00 — Systemprüfung Heizungs- und Klimaanlage]] — gemeinsame Begriffe: blower, fresh/recirculating air switch
+- [[6412-02 — Fehlersuche Klimaanlagen-Luftverteilung Spannungsmessung]] — gemeinsame Begriffe: a/c air delivery control, fresh/recirculating air relay
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

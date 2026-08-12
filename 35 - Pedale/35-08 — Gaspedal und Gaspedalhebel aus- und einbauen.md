@@ -81,5 +81,17 @@ Die Seite 35-8 beschreibt den Aus- und Einbau des Gaspedals sowie des Gaspedalhe
 | dashboard trim panel | Armaturenbrettverkleidung |
 | carpet | Teppichboden |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-09 — Gaszug aus- und einbauen]] — gemeinsame Begriffe: accelerator cable, dashboard trim panel
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

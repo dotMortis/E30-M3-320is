@@ -51,5 +51,12 @@ Die Seite enthält eine Anzugsdrehmoment-Tabelle zum Kraftstoffzufuhr- und Kraft
 | measure | Anzugsmaß beziehungsweise Anzugsdrehmoment |
 | Nm | Newtonmeter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-02 — Anzugsdrehmomente Kraftstoffpumpe mit Antrieb und Leitungen]] — gemeinsame Begriffe: fuel delivery and metering system, k-jetr.
+- [[13-03 — Anzugsdrehmomente Kraftstofffilter Kraftstoffleitungen]] — gemeinsame Begriffe: coupling nut, fuel delivery and metering system
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

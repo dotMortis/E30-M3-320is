@@ -79,5 +79,11 @@ Die Seite 35-10 beschreibt die Einstellung des Gaszugs bei Fahrzeugen mit Schalt
 | pressure point | Druckpunkt |
 | male plug | Stecker |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-00-index-a — Inhaltsverzeichnis Pedale und Betätigungen]] — gemeinsame Begriffe: accelerator cable, eh transmission, kickdown switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

@@ -86,5 +86,13 @@ Die Seite „Steckeransichten“ (8500-3) zeigt die Ansichten der Kabelanschluss
 | Pin | Kontakt bzw. Anschlussstift |
 | Wiring Face | Kabelseite des Steckers |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6413-00 — Schaltplan Gebläsesteuerung Heizung Klimaanlage]] — gemeinsame Begriffe: blower resistors, blower speed control
+- [[6413-01 — Gebläse- und Klimaanlagensteuerung Fehlersuche]] — gemeinsame Begriffe: blower resistors, blower speed control
+- [[6413-02 — Klimaanlagen-Gebläseansteuerung Leitungs- und Spannungsprüfung]] — gemeinsame Begriffe: blower resistors, blower speed control
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

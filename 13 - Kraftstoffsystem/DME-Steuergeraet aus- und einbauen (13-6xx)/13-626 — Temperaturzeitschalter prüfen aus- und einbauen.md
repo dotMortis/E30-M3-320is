@@ -80,5 +80,19 @@ Die BMW-Werkstatthandbuchseite 13-626 beschreibt den Temperaturzeitschalter der 
 | connector | Stecker |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-853 — Fehlersuche L-Jetronic Fehlerursachen 3 bis 5]] — gemeinsame Begriffe: jetronic test lead, temperature time switch
+- [[13-904 — Fehlersuche Kaltstartventil Jetronic]] — gemeinsame Begriffe: jetronic test lead, temperature time switch
+- [[13-906 — Fehlersuche Temperaturzeitschaltuhr Kraftstoff-Einspritzanlage]] — gemeinsame Begriffe: temperature time switch, water bath
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

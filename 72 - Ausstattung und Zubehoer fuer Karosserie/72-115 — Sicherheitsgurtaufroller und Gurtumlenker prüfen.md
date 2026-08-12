@@ -73,5 +73,12 @@ Die Seite 72-115 beschreibt die Prüfung eines automatischen Sicherheitsgurtaufr
 | door beam | Türholm |
 | full-stop braking | Vollbremsung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[72-111 — Sicherheitsgurtbefestigungen und Gurtaufroller aus- und einbauen]] — gemeinsame Begriffe: belt reversing holder, belt stopper
+- [[72-118 — Automatischen Sicherheitsgurt prüfen]] — gemeinsame Begriffe: belt reversing holder, mounting tab
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

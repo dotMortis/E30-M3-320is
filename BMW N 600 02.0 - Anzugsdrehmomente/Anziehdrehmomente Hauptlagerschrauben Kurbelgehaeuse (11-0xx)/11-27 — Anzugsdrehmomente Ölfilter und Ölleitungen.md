@@ -68,5 +68,18 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle aus dem Kapitel Motor, Abschnitt 1
 | Screw | Schraube |
 | Nm | Newtonmeter |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-77 — Vollstromölfilter aus- und einbauen]] — Abschnitt 11: gemeinsame Begriffe: full flow oil filter, oil filter housing
+- [[11-29 — Anzugsdrehmomente Ölfilter und Leitungen]] — gemeinsame Begriffe: oil filter and pipes, oil filter housing
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

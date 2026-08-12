@@ -79,5 +79,12 @@ Die Seite 41-104 beschreibt den Ausbau und Austausch des linken vorderen Motortr
 | wheel alignment | Achsvermessung |
 | data plate | Datenschild |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-108 — Vorderen Motorträgerabschnitt ohne Radhaus aus- und einbauen]] — gemeinsame Begriffe: data plate, front wall
+- [[41-306 — Frontwand aus- und einbauen]] — gemeinsame Begriffe: data plate, welding seam
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

@@ -89,5 +89,11 @@ Die Seite 51-714 beschreibt den Ausbau und Einbau der Verkleidungsblende für di
 | zinc dust paint | Zinkstaubfarbe |
 | punch mark | ankörnen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-716 — Hinteren Steinschlagschutz aus- und einbauen]] — gemeinsame Begriffe: drilling template, sealing cord
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

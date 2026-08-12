@@ -71,5 +71,12 @@ Die Seite 51-451 zeigt anhand von Fotografien und Pfeilmarkierungen die Arbeitss
 | tray | Ablagefach |
 | ashtray console | Aschenbecherkonsole |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-163 — Aschenbecherkonsole und Ablagefach ausbauen]] — gemeinsame Begriffe: ashtray console, ashtray light, cigar lighter
+- [[00-03 — Übergabeinspektion Prüfungen und Ausstattungen]] — Abschnitt 00: gemeinsame Begriffe: cigar lighter, electric windows
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

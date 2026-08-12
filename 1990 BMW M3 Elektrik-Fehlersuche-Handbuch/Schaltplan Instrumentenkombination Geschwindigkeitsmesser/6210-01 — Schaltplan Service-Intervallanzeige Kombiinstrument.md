@@ -118,5 +118,14 @@ Schaltplan des Kombiinstruments für die Serviceintervallanzeige, Seite 6210-1. 
 | Printed Circuit | Leiterplatte |
 | Gauge | Anzeigeinstrument |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6210-04 — Schaltplan Instrumentenkombination Öldruck Kühlmitteltemperatur]] — gemeinsame Begriffe: coolant temperature sender, engine temperature input, service interval processor
+- [[6581-00 — Elektrischer Schaltplan des Bordcomputers]] — gemeinsame Begriffe: service interval indicator, service interval processor, vehicle speed input
+- [[6210-03 — Schaltplan Kombiinstrument Drehzahlmesser Kraftstoffverbrauchsanzeige]] — gemeinsame Begriffe: service interval processor, vehicle speed input
+- [[8500-00 — Diagnosestecker C101 Kontaktbelegung]] — gemeinsame Begriffe: service interval indicator, service interval processor
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

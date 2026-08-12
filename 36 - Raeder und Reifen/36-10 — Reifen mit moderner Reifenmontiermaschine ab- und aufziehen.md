@@ -89,5 +89,13 @@ Die Seite 36–10 beschreibt das Ab- beziehungsweise Aufziehen eines Reifens mit
 | aluminum rim | Aluminiumfelge |
 | valve | Ventil |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-09 — Reifen ab- und aufziehen]] — gemeinsame Begriffe: pressing-off horn, rim flange, rim shoulder, rim well, tire bead, tire mounting machine
+- [[36-11 — Schlauchlosen Reifen mit Reifenmontiermaschine montieren]] — gemeinsame Begriffe: mounting finger, mounting head, mounting pillar, rim flange, tire bead
+- [[36-08 — Felge auf Seiten- und Höhenschlag prüfen]] — gemeinsame Begriffe: rim flange, rim well
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

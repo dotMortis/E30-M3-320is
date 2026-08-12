@@ -86,5 +86,13 @@ Illustrierte Arbeitsanweisung auf Seite 31–23 zum Ersetzen des Wellendichtring
 | special tool | Sonderwerkzeug |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-26 — Antriebssatz aus- und einbauen]] — gemeinsame Begriffe: case, drive set
+- [[31-30 — Triebling und Tellerrad aus- und einbauen]] — gemeinsame Begriffe: drive set, friction torque
+- [[31-33 — Differenzial aus- und einbauen]] — gemeinsame Begriffe: case, drive set
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

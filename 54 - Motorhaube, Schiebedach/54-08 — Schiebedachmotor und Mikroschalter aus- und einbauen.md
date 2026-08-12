@@ -85,5 +85,13 @@ Die Seite 54-8 beschreibt den Ausbau, Einbau und die Einstellung der Motor-/Getr
 | trim | Verkleidung |
 | grease | Fett |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-01 — Schiebe-Hubdachdeckel einstellen und prüfen]] — gemeinsame Begriffe: control switch, sun roof
+- [[54-04 — Zahnrad am manuellen Schiebedach aus- und einbauen]] — gemeinsame Begriffe: clamping strip, edge guard
+- [[54-10 — Fehlersuche und Abhilfe Elektrisches Schiebedach]] — gemeinsame Begriffe: control switch, sun roof
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

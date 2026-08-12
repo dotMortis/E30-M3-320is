@@ -89,5 +89,12 @@ Die Seite beschreibt den zweiten Prüfschritt zur Fehlersuche an der Transistor-
 | starter terminal 50 | Starterklemme 50 |
 | ignition timing retard while starting | Zündzeitpunktverstellung beim Starten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-08 — Anschlussplan transistorisierter Zündsteuergeräte]] — gemeinsame Begriffe: pulse transmitter, shielding, starter terminal 50
+- [[12-00-index-a — Inhaltsverzeichnis Elektrische Ausrüstung Motor]] — gemeinsame Begriffe: pulse transmitter, tci control unit
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

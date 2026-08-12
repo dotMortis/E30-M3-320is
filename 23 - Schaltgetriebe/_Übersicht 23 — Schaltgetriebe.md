@@ -10,7 +10,7 @@ tags:
 
 > [!abstract] 103 Seiten in diesem Abschnitt
 
-## Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung
+## Getrag 240 Fuenfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -52,7 +52,7 @@ tags:
 | `23-168a` | [[23-168a — Austauschgetriebe Getrag 260 einbauen]] | Text |
 | `23-173a` | [[23-173a — Schwingungsdämpfer aus- und einbauen]] | Diagramm |
 
-## Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe (23-1xx)
+## Getriebeaufbau ZF S5-16 Fuenfgang-Schaltgetriebe (23-1xx)
 
 | Code | Seite | Typ |
 | --- | --- | --- |

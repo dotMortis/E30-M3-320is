@@ -69,5 +69,12 @@ Die Seite 51-770 zeigt anhand einer Maßskizze und zweier Montagefotos die Bearb
 | mandrel | Durchschlag |
 | deburr | entgraten |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-769 — M-Technic-Fußstütze im Fahrerfußraum einbauen]] — gemeinsame Begriffe: footrest, mandrel, mounting tab, side trim panel, turnlock
+- [[51-00-index-d — Inhaltsverzeichnis Karosserieausstattung]] — gemeinsame Begriffe: dashboard trim panel, side trim panel
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

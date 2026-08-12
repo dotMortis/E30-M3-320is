@@ -57,5 +57,14 @@ Die Seite 18 ist das Inhaltsverzeichnis des Kapitels 16 „Kraftstoffbehälter u
 | Fuel return pipe | Kraftstoffrücklaufleitung |
 | Carbon canister | Aktivkohlebehälter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[16-04 — Kraftstoffpumpe Anzugsdrehmomente und Anzugswinkel]] — gemeinsame Begriffe: fuel intake, fuel level sender, intake pump, transfer pump
+- [[16-00 — Kraftstoffversorgung vor 1988]] — gemeinsame Begriffe: carbon canister, fuel intake
+- [[16-01 — Kraftstoffversorgung ab Baujahr 1988]] — gemeinsame Begriffe: carbon canister, fuel level sender
+- [[16-08 — Kraftstoffentnehmer mit Transferpumpe aus- und einbauen]] — gemeinsame Begriffe: fuel intake, fuel level sender
+
+
 ---
 [[Startseite]] · [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnittsübersicht]] · [[Glossar]]

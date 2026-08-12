@@ -80,5 +80,14 @@ Die Seite 64–110 beschreibt den Ausbau und Einbau des Bowdenzugs für die Fuß
 | sleeve | Seilhülle |
 | stop | Anschlag |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-111 — Kabel für Fensterbelüftung aus- und einbauen]] — gemeinsame Begriffe: air flap, control panel, lever, radio opening mask, sleeve
+- [[64-112 — Bowdenzug Temperaturmischklappe aus- und einbauen]] — gemeinsame Begriffe: control panel, lever, radio opening mask
+- [[64-113 — Bowdenzug für Frischluftklappe aus- und einbauen]] — gemeinsame Begriffe: control panel, lever, radio opening mask
+- [[51-453 — Heizungs- und Lüftungsbedienung aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: control panel, radio opening mask
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

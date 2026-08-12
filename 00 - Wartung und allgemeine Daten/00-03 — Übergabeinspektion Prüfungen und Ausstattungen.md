@@ -104,5 +104,13 @@ Die Seite 00-3 enthält einen Abschnitt der BMW-Übergabeinspektion („Pre-Deli
 | seat belts | Sicherheitsgurte |
 | SRS light | SRS-Kontrollleuchte |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-13 — Arbeitsumfang BMW Inspektion I]] — gemeinsame Begriffe: intensive washer fluid, rear window defogger, seat belts, windshield washing system
+- [[51-451 — Mittelkonsole und Aschenbecherkonsole aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: cigar lighter, electric windows
+- [[00-08 — Einfahrkontrolle 1200 Meilen Prüfliste]] — gemeinsame Begriffe: intensive washer fluid, windshield washing system
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

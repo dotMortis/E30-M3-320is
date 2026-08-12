@@ -93,5 +93,14 @@ Inhaltsverzeichnis der BMW-Werkstattunterlage für Kapitel 34 „Bremsen“, Sei
 | brake force regulator | Bremskraftregler |
 | parking brake cable | Feststellbremsseil |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-11 — Wartungsübersicht BMW Inspektion I]] — Abschnitt 00: gemeinsame Begriffe: brake calipers, brake discs
+- [[00-18 — Zusätzlich empfohlene Servicearbeiten]] — Abschnitt 00: gemeinsame Begriffe: brake discs, brake pads
+- [[34-15 — Bremskraftverstärker und Tandem-Hauptbremszylinder aus- und einbauen]] — gemeinsame Begriffe: check valve, tandem brake master cylinder
+- [[34-16 — Bremskraftverstärker aus- und einbauen Rückschlagventil und Unterdruckschlauch ersetzen]] — gemeinsame Begriffe: check valve, tandem brake master cylinder
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

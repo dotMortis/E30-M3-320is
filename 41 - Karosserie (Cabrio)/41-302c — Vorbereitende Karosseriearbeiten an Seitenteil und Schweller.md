@@ -63,5 +63,11 @@ Die Seite 41–302 C zeigt anhand mehrerer Fotodarstellungen die vorbereitenden 
 | B pillar | B-Säule |
 | side member cover | Schwellerabdeckung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-202c — Türsäule aus- und einbauen]] — gemeinsame Begriffe: resistance spot welding, sheet metal panels
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie (Cabrio)|Abschnittsübersicht]] · [[Glossar]]

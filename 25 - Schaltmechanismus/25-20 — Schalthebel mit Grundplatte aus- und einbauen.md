@@ -82,5 +82,13 @@ Die Seite 25-20 beschreibt den Ausbau und Einbau des Schalthebels mit Grundplatt
 | fork | Gabel |
 | bearing surfaces | Lagerflächen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-19 — Schalthebel mit Schaltstange aus- und einbauen]] — gemeinsame Begriffe: bearing sleeves, selector lever base, transmission switch
+- [[25-15 — Schaltbetätigung Automatikgetriebe mit Schaltstange]] — gemeinsame Begriffe: shift gate, transmission switch
+- [[25-16 — Schaltbetätigung Automatikgetriebe mit Schaltseil]] — gemeinsame Begriffe: shift gate, transmission switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

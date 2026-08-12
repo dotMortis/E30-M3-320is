@@ -75,5 +75,13 @@ Die Seite 41-204 beschreibt den Karosserie-Reparaturvorgang zum Ersetzen des äu
 | door opening edge guard | Türöffnungs-Kantenschutzprofil |
 | seat belt | Sicherheitsgurt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-201 — B-Säule links oder rechts erneuern]] — gemeinsame Begriffe: door opening edge guard, heat protection paste, rain molding
+- [[41-203 — Fügestellen an Dachrahmen und Seitenträgern bearbeiten und abdichten]] — gemeinsame Begriffe: heat protection paste, rain molding
+- [[41-301 — Dachblech ohne Schiebedach aus- und einbauen]] — gemeinsame Begriffe: rain molding, roof liner
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

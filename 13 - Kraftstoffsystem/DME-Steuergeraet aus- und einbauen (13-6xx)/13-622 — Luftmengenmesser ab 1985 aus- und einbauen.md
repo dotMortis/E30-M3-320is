@@ -77,5 +77,11 @@ Die Seite 13-622 beschreibt den Aus- und Einbau des Luftmengenmessers bei Fahrze
 | code number | Kennnummer |
 | manufacturing date | Herstellungsdatum |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-621 — Luftmengenmesser bis Modelljahr 1985 aus- und einbauen]] — gemeinsame Begriffe: engine idle speed, idle speed co level
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

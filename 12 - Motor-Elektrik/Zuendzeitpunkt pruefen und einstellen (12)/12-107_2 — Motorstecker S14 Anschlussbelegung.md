@@ -81,5 +81,12 @@ Die Seite 12-107/2 zeigt die 20-polige Motorsteckverbindung des BMW-Motors S14 i
 | oil temperature sender | Öltemperaturgeber |
 | temperature gauge ground | Masse der Temperaturanzeige |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-107_1 — Motorsteckverbindung M20 Anschlussbelegung]] — gemeinsame Begriffe: coolant temperature gauge, electric fuel pump, fuse protection, generator charge indicator, oil level static, oil pressure, service indicator reset, speedometer signal, voltage while starting, voltage with ignition on
+- [[12-103 — Anschlussplan Motor-Kabelbaumstecker bis 1985 und ab 1986]] — gemeinsame Begriffe: electric fuel pump, fuse protection, oil level static, oil pressure, service indicator reset
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

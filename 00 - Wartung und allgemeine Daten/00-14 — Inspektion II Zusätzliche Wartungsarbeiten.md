@@ -104,5 +104,11 @@ Die Seite 00-14 des BMW-Wartungssystems zeigt eine tabellarische Übersicht der 
 | Owner's Manual | Betriebsanleitung |
 | Important Remarks | Wichtige Hinweise |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-08 — Einfahrkontrolle 1200 Meilen Prüfliste]] — gemeinsame Begriffe: approved oil, operating temperature
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

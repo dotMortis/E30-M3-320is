@@ -76,5 +76,11 @@ Die Seite 7000-2 zeigt anhand von sechs Fotografien die Einbauorte verschiedener
 | Engine Compartment | Motorraum |
 | Front Bumper | Vorderer Stoßfänger |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6160-01 — Elektrischer Schaltplan Scheibenwaschdüsenheizung]] — gemeinsame Begriffe: lh jet heater, rh jet heater
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

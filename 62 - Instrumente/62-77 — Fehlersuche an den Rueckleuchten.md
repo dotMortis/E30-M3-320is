@@ -77,5 +77,11 @@ Die Seite zeigt ein Diagnose-Flussdiagramm zur Fehlersuche an den Rückleuchten.
 | outlet | Ausgangsbuchse |
 | resistance | Widerstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-72 — Prüftabelle Anschlussbelegung Pins 10 bis 19]] — gemeinsame Begriffe: bulb tester, tail lights
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

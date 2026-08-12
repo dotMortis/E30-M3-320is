@@ -93,5 +93,11 @@ Die Seite 72-117 zeigt eine Prüf- und Entscheidungsübersicht für automatische
 | rolling and squeaking noise | Roll- und Quietschgeräusche |
 | WHB 81 229 407 005 spray | Spray WHB 81 229 407 005 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[72-116 — Sicherheitsgurte prüfen reinigen und ersetzen]] — gemeinsame Begriffe: lower strap, plastic sleeve
+
+
 ---
 [[Startseite]] · [[_Übersicht 72 — Ausstattung und Zubehör für Karosserie|Abschnittsübersicht]] · [[Glossar]]

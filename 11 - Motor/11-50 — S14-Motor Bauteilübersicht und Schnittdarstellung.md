@@ -55,5 +55,12 @@ Die Seite zeigt eine perspektivische technische Schnitt- beziehungsweise Explosi
 | alternator | Lichtmaschine |
 | BMW M Power | BMW M Power |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-100 — Motorübersicht S14 B20 B23]] — gemeinsame Begriffe: bmw m power, exhaust manifold, valve train
+- [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: oil pump, water pump
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

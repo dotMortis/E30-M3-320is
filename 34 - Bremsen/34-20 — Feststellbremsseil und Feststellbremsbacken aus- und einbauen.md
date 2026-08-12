@@ -94,5 +94,14 @@ Die BMW-Werkstatthandbuchseite 34–20 beschreibt den Ausbau und Einbau des Fest
 | sliding surfaces | Gleitflächen |
 | Molykote G paste | Molykote-G-Paste |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[33-06 — Hinterachsträger aus- und einbauen]] — Abschnitt 33: gemeinsame Begriffe: parking brake cable, parking brake lever, protective tube, rear disc brakes
+- [[34-06 — Bremsbacken der Hinterradbremse aus- und einbauen]] — gemeinsame Begriffe: parking brake cable, return spring
+- [[34-19 — Handbremshebel und Handbremsseile aus- und einbauen]] — gemeinsame Begriffe: parking brake cable, parking brake lever
+- [[34-24 — Fehlersuchtabelle Bremsanlage Ursachen Maßnahmen]] — gemeinsame Begriffe: parking brake cable, parking brake shoes
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

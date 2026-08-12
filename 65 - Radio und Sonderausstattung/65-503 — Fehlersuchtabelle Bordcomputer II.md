@@ -93,5 +93,13 @@ Die Seite 65–503 zeigt eine Fehlersuchtabelle für den Bordcomputer II (BC II)
 | BC II | Bordcomputer II |
 | ignition lock | Zündschloss |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-501 — Fehlersuchplan Bordcomputer BC II]] — gemeinsame Begriffe: bc ii, coding plug, consumption signal, ignition lock
+- [[65-502 — Fehlerdiagnose Bordcomputer BC II]] — gemeinsame Begriffe: fuel level transmitter, ignition lock, relay box
+- [[65-500 — Bordcomputer II prüfen]] — gemeinsame Begriffe: coding plug, fuel level transmitter
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -71,5 +71,12 @@ Die Seite 13-771 behandelt den Drosselklappenschalter am BMW-Motor. Sie zeigt di
 | code number | Codenummer |
 | screw | Befestigungsschraube |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-632 — Drosselklappenschalter prüfen und einstellen aus- und einbauen]] — gemeinsame Begriffe: connection, full load, throttle valve
+- [[13-630 — Drosselklappenschalter pruefen und einstellen]] — gemeinsame Begriffe: connection, full load
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

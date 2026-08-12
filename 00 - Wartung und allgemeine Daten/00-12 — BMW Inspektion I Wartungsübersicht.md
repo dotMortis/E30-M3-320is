@@ -78,5 +78,11 @@ Die Seite 00-12 ist eine tabellarische Übersicht des BMW-Wartungssystems für d
 | Service Information | Serviceinformationen |
 | Owner's Manual | Betriebsanleitung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-08 — Einfahrkontrolle 1200 Meilen Prüfliste]] — gemeinsame Begriffe: spare wheel, tire inflation pressure
+
+
 ---
 [[Startseite]] · [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnittsübersicht]] · [[Glossar]]

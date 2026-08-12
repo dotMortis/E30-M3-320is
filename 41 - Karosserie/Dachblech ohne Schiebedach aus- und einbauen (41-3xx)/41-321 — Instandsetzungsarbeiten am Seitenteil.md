@@ -63,5 +63,11 @@ Die Seite 41-321 zeigt eine Folge von Karosserie-Instandsetzungsarbeiten beim Er
 | fuel filler neck | Tankstutzen |
 | wheel opening | Radausschnitt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-327 — Seitenteil an C-Säule und Einstieg teilweise erneuern]] — gemeinsame Begriffe: brace, entrance joint, wheel opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

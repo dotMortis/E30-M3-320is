@@ -81,5 +81,12 @@ Die Seite 31–16.2 enthält zwei Zuordnungstabellen in Matrixform. Die obere Ta
 | hatched area | Schraffurfeld beziehungsweise nicht zulässiger Bereich |
 | difference value | Differenzwert beziehungsweise Korrekturwert |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-16_3 — Schraubenfeder-Zuordnung für Allradfahrzeuge]] — gemeinsame Begriffe: part number, table
+- [[31-16_4 — Zuordnungstabelle M-Technic-Sportfahrwerk]] — gemeinsame Begriffe: part number, table
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

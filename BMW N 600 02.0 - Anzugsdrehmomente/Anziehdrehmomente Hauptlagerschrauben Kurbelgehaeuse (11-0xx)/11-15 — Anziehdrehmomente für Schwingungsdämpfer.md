@@ -75,5 +75,17 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle für den Motorbereich 11–15, Abs
 | Torque angle | Anzugswinkel |
 | Unfasten screw one half turn | Schraube eine halbe Umdrehung lösen |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-16 — Schwingungsdämpfer Anziehdrehmomente und Anziehwinkel]] — gemeinsame Begriffe: replace screws, vibration damper hub
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

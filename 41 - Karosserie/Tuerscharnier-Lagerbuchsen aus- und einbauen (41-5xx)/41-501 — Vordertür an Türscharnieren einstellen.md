@@ -70,5 +70,13 @@ Werkstatthandbuchseite 41-501 zur Einstellung der linken oder rechten Vordertür
 | wind noise | Windgeräusch |
 | stone damage | Steinschaden |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-502 — Türschließbügel ausrichten und einstellen]] — gemeinsame Begriffe: door lock, stone damage, striker, wind noise
+- [[41-505 — Hintertür an den Scharnieren einstellen]] — gemeinsame Begriffe: embossed edge, stone damage, unfinished body shell, wind noise
+- [[41-506 — Schließbügel Hintertür einstellen]] — gemeinsame Begriffe: door lock, stone damage, striker, wind noise
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

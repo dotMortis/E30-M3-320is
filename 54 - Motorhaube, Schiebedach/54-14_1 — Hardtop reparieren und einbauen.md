@@ -118,5 +118,13 @@ Die Seite 54-14/1 enthält allgemeine Informationen zur Reparatur von Hardtops s
 | fire extinguishing agents | Löschmittel |
 | scrapping | Entsorgung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-14_2 — Hartschalen- und Wabenstruktur reparieren]] — gemeinsame Begriffe: clear lacquer, glass rod, hardener, hardtop, honeycomb structure, repair patches, rubber roller
+- [[51-110 — Thermoplastische Kunststoffstoßfänger reparieren]] — Abschnitt 51: gemeinsame Begriffe: body mounting points, fire extinguishing agents, first aid, scrapping, toxicology
+- [[41-011 — Sicherheitsvorschriften für glasfaserverstärkte Kunststoffteile]] — Abschnitt 41: gemeinsame Begriffe: fire extinguishing agents, first aid, scrapping, toxicology
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

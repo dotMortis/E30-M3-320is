@@ -64,5 +64,11 @@ Die Seite 23-187 beschreibt die Einstellung des axialen Spiels der Vorgelegewell
 | circlip | Sicherungsring |
 | guide sleeve | Führungsbuchse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-21 — Getriebegehaeuse montieren und einstellen]] — gemeinsame Begriffe: gear wheel set, oil filler plug
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

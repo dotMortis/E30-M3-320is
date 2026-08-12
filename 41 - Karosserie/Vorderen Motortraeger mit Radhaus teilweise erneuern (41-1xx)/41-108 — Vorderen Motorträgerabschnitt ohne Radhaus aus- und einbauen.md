@@ -78,5 +78,14 @@ Die Seite 41-108 beschreibt den Austausch des linken bzw. rechten vorderen Absch
 | scrap metal | Restblech |
 | mating surfaces | Anlageflächen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-306 — Frontwand aus- und einbauen]] — gemeinsame Begriffe: data plate, engine hood lock, front fog light, front panel, headlight
+- [[41-101 — Vorderen Motorträger mit Radhaus teilweise erneuern]] — gemeinsame Begriffe: engine carrier front section, front panel, front wall
+- [[51-230 — Motorhaubenschloss aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: engine hood lock, radiator grille
+- [[41-104 — Linken vorderen Motorträger aus- und einbauen]] — gemeinsame Begriffe: data plate, front wall
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

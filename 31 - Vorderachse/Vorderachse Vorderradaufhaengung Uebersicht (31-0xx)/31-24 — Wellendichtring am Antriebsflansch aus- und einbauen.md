@@ -62,5 +62,12 @@ Die Seite 31-24 zeigt den Ausbau und Einbau des Wellendichtrings am Antriebsflan
 | Special Tool | Sonderwerkzeug |
 | stop | Anschlag |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-29 — Antriebsflansch und Ritzel einbauen und einstellen]] — gemeinsame Begriffe: friction torque, gear lube
+- [[31-39 — Einstellarbeiten am Vorderachsgetriebe]] — gemeinsame Begriffe: friction torque, gear lube
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

@@ -99,5 +99,13 @@ Die Seite 36-9 beschreibt das fachgerechte Ab- und Aufziehen von Reifen mit eine
 | spring pressure | Sprungdruck |
 | settle pressure | Setzdruck |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-10 — Reifen mit moderner Reifenmontiermaschine ab- und aufziehen]] — gemeinsame Begriffe: pressing-off horn, rim flange, rim shoulder, rim well, tire bead, tire mounting machine
+- [[36-08 — Felge auf Seiten- und Höhenschlag prüfen]] — gemeinsame Begriffe: balance weights, rim flange, rim well
+- [[36-11 — Schlauchlosen Reifen mit Reifenmontiermaschine montieren]] — gemeinsame Begriffe: rim flange, tire bead, valve insert
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

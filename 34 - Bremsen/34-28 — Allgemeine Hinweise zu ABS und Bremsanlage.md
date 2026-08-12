@@ -94,5 +94,13 @@ Die Seite 34-28 behandelt die ABS-Kontrollleuchte sowie allgemeine Hinweise zu A
 | low/high pressure test | Prüfung mit niedrigem und hohem Druck |
 | four-wheel drive | Vierradantrieb |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-00-index-b — Inhaltsverzeichnis Bremsanlage und ABS]] — gemeinsame Begriffe: abs indicator lamp, brake system
+- [[34-01 — Betriebsbremse auf Bremsenprüfstand sowie Hoch- und Niederdruckprüfung durchführen]] — gemeinsame Begriffe: brake test dynamometer, four-wheel drive
+- [[34-42 — Prüftabelle ABS-Rückförderpumpe Spannung Leitungen 1 und 10]] — gemeinsame Begriffe: brake lines, brake test dynamometer
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

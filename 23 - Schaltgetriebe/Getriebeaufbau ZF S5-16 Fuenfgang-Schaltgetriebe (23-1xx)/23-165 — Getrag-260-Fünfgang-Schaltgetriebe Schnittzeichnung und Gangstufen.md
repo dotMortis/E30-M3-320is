@@ -60,5 +60,14 @@ Die Seite 23-165 zeigt eine schematische Schnitt- und Montagezeichnung des Getra
 | layshaft | Vorgelegewelle |
 | overdrive | Overdrive beziehungsweise Schnellgang |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-01 — Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung]] — gemeinsame Begriffe: assembly drawing, fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-101 — Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe]] — gemeinsame Begriffe: assembly drawing, fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-300 — Schnittdarstellung Getrag Schaltgetriebe 265-6 Schnellgang]] — gemeinsame Begriffe: fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-166 — Schaltbetätigung Getrag-260-Getriebe]] — gemeinsame Begriffe: assembly drawing, getrag 260 five speed overdrive manual transmission, overdrive
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

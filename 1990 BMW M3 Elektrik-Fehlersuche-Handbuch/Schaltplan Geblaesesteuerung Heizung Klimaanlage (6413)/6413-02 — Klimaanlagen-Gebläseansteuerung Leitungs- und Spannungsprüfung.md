@@ -88,5 +88,13 @@ Die Seite 6413-2 „A/C-Gebläseansteuerung“ setzt die Diagnose des Klimaanlag
 | ignition switch | Zündschalter |
 | A/C select switch | A/C-Wahlschalter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6413-00 — Schaltplan Gebläsesteuerung Heizung Klimaanlage]] — gemeinsame Begriffe: a/c blower controls, a/c select switch, blower resistors, blower speed control
+- [[6413-01 — Gebläse- und Klimaanlagensteuerung Fehlersuche]] — gemeinsame Begriffe: a/c blower controls, a/c select switch, blower resistors, blower speed control
+- [[8500-03 — Steckeransichten Steuergeräte und Komponenten]] — gemeinsame Begriffe: blower resistors, blower speed control
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

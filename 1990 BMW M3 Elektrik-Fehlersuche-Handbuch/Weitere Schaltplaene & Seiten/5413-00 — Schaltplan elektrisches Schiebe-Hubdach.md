@@ -79,5 +79,11 @@ Die Seite zeigt den elektrischen Schaltplan des elektrischen Schiebe-/Hubdachs f
 | Latch type | Rastend |
 | Terminal | Klemme/Anschluss |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[8500-08 — Steckeransichten Relais Schalter Motoren Warnmodule]] — gemeinsame Begriffe: sunroof motor, sunroof switch
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

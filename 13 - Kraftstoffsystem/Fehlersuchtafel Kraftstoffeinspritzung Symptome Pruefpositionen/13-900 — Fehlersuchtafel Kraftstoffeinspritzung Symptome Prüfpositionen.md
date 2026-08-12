@@ -121,5 +121,19 @@ Die Seite 13-900 zeigt eine Fehlersuchtafel für die elektronische Kraftstoffein
 | knock while accelerating | Klopfen beim Beschleunigen |
 | CO/HC values | CO-/HC-Werte |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 12 — Motor-Elektrik|Abschnitt 12]]
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-110 — DME Fehlersuchtabelle nach Symptomen]] — Abschnitt 12: gemeinsame Begriffe: misfiring, symptom / test table
+- [[13-853 — Fehlersuche L-Jetronic Fehlerursachen 3 bis 5]] — gemeinsame Begriffe: fuel pressure, temperature time switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

@@ -80,5 +80,13 @@ Die Seite 23-304 beschreibt den Einbau eines Austauschgetriebes. Sie zeigt die e
 | Molykote Longterm 2 | Molykote Longterm 2 |
 | intermediate case | Zwischengehäuse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-03b — Austauschgetriebe vorbereiten und einbauen]] — gemeinsame Begriffe: exchange transmission, lubricating groove, oil level, shift rod joint
+- [[23-168a — Austauschgetriebe Getrag 260 einbauen]] — gemeinsame Begriffe: exchange transmission, lubricating groove, oil level, shift rod joint
+- [[23-303 — Schaltgetriebe aus- und einbauen]] — gemeinsame Begriffe: lubricating groove, oil level
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

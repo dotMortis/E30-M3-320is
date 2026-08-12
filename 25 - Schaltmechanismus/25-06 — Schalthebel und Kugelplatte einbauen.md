@@ -55,5 +55,11 @@ Die Seite 25-6 beschreibt den Einbau eines Schalthebels beziehungsweise der zuge
 | openings | Öffnungen |
 | four-wheel drive | Allradantrieb |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-04 — Schalthebel der Aluminium-Schaltkonsole aus- und einbauen]] — gemeinsame Begriffe: retaining tabs, spherical plate
+
+
 ---
 [[Startseite]] · [[_Übersicht 25 — Schaltmechanismus|Abschnittsübersicht]] · [[Glossar]]

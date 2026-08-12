@@ -72,5 +72,12 @@ Die Seite 31–28 zeigt anhand mehrerer Fotos und Montagezeichnungen den Aus- un
 | press on | aufpressen |
 | drive in | eintreiben |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-27 — Kegelrollenlager des Antriebsritzels ersetzen]] — gemeinsame Begriffe: bevel gear, bushing, tapered roller bearing
+- [[31-33 — Differenzial aus- und einbauen]] — gemeinsame Begriffe: case, tapered roller bearing
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

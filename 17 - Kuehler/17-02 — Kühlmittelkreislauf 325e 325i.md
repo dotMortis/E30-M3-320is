@@ -72,5 +72,11 @@ Die Seite zeigt den Kühlmittelkreislauf der BMW-Modelle 325e und 325i als schem
 | Heat exchanger return | Rücklauf vom Heizungswärmetauscher |
 | Expansion tank | Ausgleichsbehälter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[17-01 — Kühlmittelkreislauf BMW 318i]] — gemeinsame Begriffe: coolant circuit, thermostat, water pump
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

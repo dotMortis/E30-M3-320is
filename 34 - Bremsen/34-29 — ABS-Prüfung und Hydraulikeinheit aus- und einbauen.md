@@ -106,5 +106,11 @@ Die Seite 34-29 behandelt die Prüfung und Wartung des Antiblockiersystems (ABS)
 | plug | Verschlussstopfen |
 | headlight cover | Scheinwerferabdeckung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-04 — Vordere Bremsbeläge und Bremssättel aus- und einbauen]] — gemeinsame Begriffe: bleed brakes, front brake caliper
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

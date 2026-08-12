@@ -58,5 +58,17 @@ Die Seite enthält eine Anzugsdrehmomenttabelle zum Kapitel 13 2 „Kraftstoffzu
 | Measure | Anzugsmaß |
 | Unit | Einheit |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-08 — Anzugsdrehmomente der Kraftstoff-Einspritzventile]] — gemeinsame Begriffe: fuel delivery and metering system, k-jetr.
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

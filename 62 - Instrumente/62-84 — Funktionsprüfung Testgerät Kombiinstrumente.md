@@ -91,5 +91,14 @@ Die Seite beschreibt die Funktionsprüfung eines BMW-Testgeräts für die Kombii
 | simulator | Simulator |
 | needle deflection | Zeigerauslenkung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-83 — Service-Tester und Simulator prüfen und einstellen]] — gemeinsame Begriffe: display range, knob, selector switch
+- [[62-02 — Kühlmitteltemperaturanzeige und Kraftstoffanzeige aus- und einbauen]] — gemeinsame Begriffe: fuel gauge, temperature gauge
+- [[62-53 — Funktionsweise der Service-Intervallanzeige]] — gemeinsame Begriffe: green leds, service indicator
+- [[62-81 — Simulator zum Prüfen von Instrumentenkombinationen]] — gemeinsame Begriffe: selector switch, service indicator
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

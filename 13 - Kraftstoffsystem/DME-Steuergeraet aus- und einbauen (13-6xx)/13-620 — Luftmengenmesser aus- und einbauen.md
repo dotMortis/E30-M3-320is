@@ -66,5 +66,11 @@ Werkstattanweisung 13 62 000 zum Aus- und Einbauen des Luftmengenmessers am BMW-
 | engine idle speed | Leerlaufdrehzahl |
 | CO level | CO-Gehalt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-00-index-a — Inhaltsverzeichnis Kraftstoffanlage Arbeitsvorgänge]] — gemeinsame Begriffe: co level, engine idle speed
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

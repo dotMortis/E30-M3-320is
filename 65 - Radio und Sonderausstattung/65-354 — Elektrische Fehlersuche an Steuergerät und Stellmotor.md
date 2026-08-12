@@ -71,5 +71,18 @@ Die Seite 65-354 zeigt einen Ablaufplan zur elektrischen Fehlersuche an einem St
 | ignition | Zündung |
 | connection | Anschluss |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 62 — Instrumente|Abschnitt 62]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-355 — Elektrische Prüfung von Steuergerät und Stellmotor]] — gemeinsame Begriffe: 7-pin plug, connection, operating motor
+- [[65-351 — Prüfdiagramm zur Fehlersuche an der Geschwindigkeitsregelanlage]] — gemeinsame Begriffe: operating motor, wires
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -90,5 +90,13 @@ Die Seite 31–27 beschreibt den Ausbau zum Ersetzen der beiden Kegelrollenlager
 | vise | Schraubstock |
 | aluminum jaws | Aluminiumbacken |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-28 — Kegelrad und Kegelrollenlager aus- und einbauen]] — gemeinsame Begriffe: bevel gear, bushing, tapered roller bearing
+- [[31-37 — Differentiallager aus- und einbauen]] — gemeinsame Begriffe: aluminum jaws, tapered roller bearing, vise
+- [[31-34 — Differential Schnittdarstellung Tellerrad aus- und einbauen]] — gemeinsame Begriffe: tapered roller bearing, vise
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

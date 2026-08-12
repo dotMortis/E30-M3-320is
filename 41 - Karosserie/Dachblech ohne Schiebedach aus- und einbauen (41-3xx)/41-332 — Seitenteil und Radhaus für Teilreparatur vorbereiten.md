@@ -61,5 +61,11 @@ Die Seite 41-332 zeigt in einer bebilderten Arbeitsfolge die Vorbereitung eines 
 | trunk | Kofferraum |
 | spot welding paint | Schweißprimer |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-333 — Teilersatzstück im Tankstutzenbereich einsetzen und verschweißen]] — gemeinsame Begriffe: partial replacement section, spot welding paint
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

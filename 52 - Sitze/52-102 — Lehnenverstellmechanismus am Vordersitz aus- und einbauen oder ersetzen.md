@@ -78,5 +78,11 @@ Die Seite 52–102 beschreibt den Ausbau und Einbau beziehungsweise Austausch de
 | gas pressure spring | Gasdruckfeder |
 | Special Tool 00 5 600 | Sonderwerkzeug 00 5 600 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[52-00-index-a — Inhaltsübersicht Kapitel Sitze]] — gemeinsame Begriffe: front seat, reclining mechanism, seat rails
+
+
 ---
 [[Startseite]] · [[_Übersicht 52 — Sitze|Abschnittsübersicht]] · [[Glossar]]

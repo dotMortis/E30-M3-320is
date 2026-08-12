@@ -81,5 +81,14 @@ Die Seite 64-503 beschreibt den Ausbau und Einbau des Verdampfers der Klimaanlag
 | cooling fins | Kühllamellen |
 | special comb | Spezialkamm |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-504 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: condenser, cooling fins, evaporator, expansion valve, special comb
+- [[64-00-index-b — Inhaltsverzeichnis der Klimaanlage]] — gemeinsame Begriffe: condenser, evaporator, expansion valve
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: condenser, evaporator, expansion valve
+- [[64-501 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: evaporator, expansion valve, special comb
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

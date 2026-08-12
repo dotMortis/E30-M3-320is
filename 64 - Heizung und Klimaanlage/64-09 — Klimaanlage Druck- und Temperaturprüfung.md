@@ -82,5 +82,13 @@ Die Seite 64-9 beschreibt die Prüfung der Klimaanlage anhand der Kältemitteldr
 | ambient temperature | Umgebungstemperatur |
 | compressor | Kompressor |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-07 — Klimaanlage mit Füllstation entleeren und befüllen]] — gemeinsame Begriffe: charging valve, compressor, discharging and charging station, low pressure side, pressure gauge
+- [[64-05 — Entleerungs- und Füllstation Übersicht]] — gemeinsame Begriffe: charging valve, discharging and charging station, pressure gauge
+- [[64-08 — Kältemittel-Füllzylinder und Klimaanlage befüllen]] — gemeinsame Begriffe: charging valve, pressure gauge
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

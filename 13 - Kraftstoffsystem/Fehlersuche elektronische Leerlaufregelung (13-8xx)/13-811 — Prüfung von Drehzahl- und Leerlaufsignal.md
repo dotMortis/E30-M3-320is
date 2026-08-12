@@ -72,5 +72,11 @@ Die Seite 13-811 beschreibt die Prüfung des Drehzahlsignals und des Leerlaufsig
 | cable | Gaszug |
 | nominal value | Sollwert |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-801 — Prüfung Geschwindigkeits- und Leerlaufsignal]] — gemeinsame Begriffe: idle control unit, idle signal
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

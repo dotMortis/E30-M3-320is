@@ -57,5 +57,11 @@ Die Seite zeigt in einer Draufsicht des Fahrzeugs die Lage der Spleißverbindung
 | connector | Steckverbinder |
 | vehicle top view | Fahrzeug-Draufsicht |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[8000-02 — Lageübersicht Kabelverbindungsstellen Hauptkabelbaum]] — gemeinsame Begriffe: splice location views, vehicle top view
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

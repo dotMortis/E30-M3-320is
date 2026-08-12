@@ -82,5 +82,17 @@ Die Seite 11-52b beschreibt die vorbereitenden Arbeitsschritte zum Ausbau des Mo
 | drive belt | Antriebsriemen |
 | Special Tool | Sonderwerkzeug |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-104 — Motor aus- und einbauen]] — gemeinsame Begriffe: engine mounts, oil filter housing, power steering pump, refrigerant hoses
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

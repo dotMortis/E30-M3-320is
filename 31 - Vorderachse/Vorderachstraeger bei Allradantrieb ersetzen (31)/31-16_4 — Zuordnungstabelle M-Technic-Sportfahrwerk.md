@@ -62,5 +62,12 @@ Die Seite 31-16.4 zeigt eine Zuordnungstabelle für das M-Technic-Sportfahrwerk.
 | value | Wert |
 | reference dimension | Bezugsgröße |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-16_2 — Zuordnungstabellen für Teilenummern]] — gemeinsame Begriffe: part number, table
+- [[31-16_3 — Schraubenfeder-Zuordnung für Allradfahrzeuge]] — gemeinsame Begriffe: part number, table
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

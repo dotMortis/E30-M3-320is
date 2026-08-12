@@ -93,5 +93,13 @@ Die Seite 23-305 beschreibt unter Arbeitsnummer 23 11 013 den Ausbau und Einbau 
 | special tool | Sonderwerkzeug |
 | seal | Dichtung beziehungsweise Abdichtung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[25-01 — Schaltbetätigung mit Blechschaltkonsole]] — Abschnitt 25: gemeinsame Begriffe: selector rod joint, spring sleeve
+- [[23-103 — Getriebegehäusevorderteil aus- und einbauen und abdichten]] — gemeinsame Begriffe: cylindrical pin, end cap
+- [[23-312 — Radialwellendichtringe an Schalt- und Eingangswelle ersetzen]] — gemeinsame Begriffe: cylindrical pin, selector rod joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

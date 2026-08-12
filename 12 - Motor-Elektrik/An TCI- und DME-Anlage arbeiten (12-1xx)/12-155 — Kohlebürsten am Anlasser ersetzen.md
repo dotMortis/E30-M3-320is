@@ -77,5 +77,13 @@ Die Seite 12-155 beschreibt den Austausch der Kohlebürsten am Anlasser. Sie ent
 | carbon brush springs | Kohlebürstenfedern |
 | fine grind and polish | feinschleifen und polieren |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-53 — Kohlebürsten am Anlasser aus- und einbauen]] — gemeinsame Begriffe: brush holder, commutator, pole housing, shorted turns
+- [[12-153 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: brush holder, commutator, pole housing
+- [[12-52 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: brush holder, commutator, pole housing
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

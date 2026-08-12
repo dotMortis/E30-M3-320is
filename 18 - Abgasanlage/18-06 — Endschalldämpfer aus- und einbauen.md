@@ -77,5 +77,11 @@ Die Seite 18-6 beschreibt den Ausbau und Einbau des Endschalldämpfers einschlie
 | preload | Vorspannung |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[18-07 — Katalysator am M20-Sechszylindermotor aus- und einbauen]] — gemeinsame Begriffe: self-locking nuts, three hole flange, two hole flange
+
+
 ---
 [[Startseite]] · [[_Übersicht 18 — Abgasanlage|Abschnittsübersicht]] · [[Glossar]]

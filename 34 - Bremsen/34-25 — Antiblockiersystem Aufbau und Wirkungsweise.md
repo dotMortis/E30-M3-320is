@@ -80,5 +80,11 @@ Die Seite 34–25 beschreibt Aufbau und Wirkungsweise des Antiblockiersystems (A
 | road surface | Fahrbahnoberfläche |
 | ABS operating range | ABS-Arbeitsbereich |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-26 — Antiblockiersystem Aufbau und Funktion]] — gemeinsame Begriffe: slip, wheel brake cylinder
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

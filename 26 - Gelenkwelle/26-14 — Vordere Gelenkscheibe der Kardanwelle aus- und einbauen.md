@@ -74,5 +74,14 @@ Die Seite 26-14 beschreibt den Ausbau und Einbau der vorderen Gelenkscheibe (Har
 | power divider | Verteilergetriebe |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-12 — Vordere Kardanwelle Allradantrieb aus- und einbauen]] — gemeinsame Begriffe: centering disc, flange arms, front propeller shaft, joint disc, stop nuts
+- [[23-167 — Getriebe aus- und einbauen]] — Abschnitt 23: gemeinsame Begriffe: joint disc, stop nuts
+- [[23-302 — Getriebe aus- und einbauen]] — Abschnitt 23: gemeinsame Begriffe: joint disc, stop nuts
+- [[26-07 — Gelenkwelle aus- und einbauen]] — gemeinsame Begriffe: flange arms, stop nuts
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

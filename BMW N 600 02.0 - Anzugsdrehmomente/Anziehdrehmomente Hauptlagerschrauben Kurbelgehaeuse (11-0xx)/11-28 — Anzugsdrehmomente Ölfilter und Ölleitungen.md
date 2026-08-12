@@ -69,5 +69,11 @@ Die Seite zeigt eine Anzugsdrehmomenttabelle aus dem Kapitel Motor (11-28), Absc
 | Measure | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-29 — Anzugsdrehmomente Ölfilter und Leitungen]] — gemeinsame Begriffe: hollow bolt, oil filter and pipes
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

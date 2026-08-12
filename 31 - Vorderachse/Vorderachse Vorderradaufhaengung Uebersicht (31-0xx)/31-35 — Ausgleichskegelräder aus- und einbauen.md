@@ -69,5 +69,11 @@ Die Seite 31-35 beschreibt den Ausbau und den Einbau der Ausgleichskegelräder i
 | torque angle | Drehwinkel |
 | play | Spiel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-36 — Ausgleichsscheibendicke der Differentialräder ermitteln]] — gemeinsame Begriffe: differential gear, differential gear shaft, shaft gear
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

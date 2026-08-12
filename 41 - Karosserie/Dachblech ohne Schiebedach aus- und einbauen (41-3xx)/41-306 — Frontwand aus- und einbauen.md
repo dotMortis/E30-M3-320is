@@ -83,5 +83,12 @@ Die Seite 41-306 beschreibt im Karosserie-Reparaturverfahren 41 33 001 den Austa
 | zinc dust paint | Zinkstaubfarbe |
 | towline eye | Abschleppöse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-108 — Vorderen Motorträgerabschnitt ohne Radhaus aus- und einbauen]] — gemeinsame Begriffe: data plate, engine hood lock, front fog light, front panel, headlight
+- [[41-104 — Linken vorderen Motorträger aus- und einbauen]] — gemeinsame Begriffe: data plate, welding seam
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

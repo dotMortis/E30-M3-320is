@@ -98,5 +98,12 @@ Die Seite beschreibt die Demontage, Prüfung, Reinigung, Schmierung und Montage 
 | all wheel drive | Allradantrieb |
 | balancing | Auswuchtung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-10 — Gelenkwellenmittellager aus- und einbauen]] — gemeinsame Begriffe: balancing, slide, universal joint
+- [[26-01 — Anzugsdrehmomente komplette Gelenkwelle]] — gemeinsame Begriffe: slide, universal joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

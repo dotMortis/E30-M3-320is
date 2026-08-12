@@ -77,5 +77,12 @@ Die Seite 31-19 enthält eine Fehlersuchtabelle für die Vorderachse. Sie ordnet
 | track holding | Spurhaltung |
 | replace shock absorbers | Stoßdämpfer ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[33-18 — Fehlersuchtabelle Hinterachse Ursachen Abhilfe]] — Abschnitt 33: gemeinsame Begriffe: cause, condition, correction
+- [[54-10 — Fehlersuche und Abhilfe Elektrisches Schiebedach]] — Abschnitt 54: gemeinsame Begriffe: cause, condition, correction
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

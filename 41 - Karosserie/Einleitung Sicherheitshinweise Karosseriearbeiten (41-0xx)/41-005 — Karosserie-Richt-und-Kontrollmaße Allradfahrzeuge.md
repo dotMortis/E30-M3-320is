@@ -67,5 +67,11 @@ Die Seite 41-005 zeigt die Karosserie-Richt- und Kontrollmaße für allradgetrie
 | rough inspection | überschlägige Prüfung |
 | body shell | Karosserieaufbau |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-004 — Kontrollmaße Rahmen- und Karosserieflucht]] — gemeinsame Begriffe: approved set of attachments, frame alignment control dimensions, front axle take-up, rear axle take-up
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

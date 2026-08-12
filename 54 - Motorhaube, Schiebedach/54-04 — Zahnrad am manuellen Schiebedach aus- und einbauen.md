@@ -71,5 +71,13 @@ Die Seite 54-4 beschreibt unter Arbeitsnummer 54 12 230 den Ausbau sowie den Ein
 | inside mirror | Innenspiegel |
 | pressure point | Druckpunkt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-05 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: gear, manual sun roof, pressure point
+- [[54-02 — Schiebedachkurbel und Rosette aus- und einbauen]] — gemeinsame Begriffe: pressure point, recess plate
+- [[54-08 — Schiebedachmotor und Mikroschalter aus- und einbauen]] — gemeinsame Begriffe: clamping strip, edge guard
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

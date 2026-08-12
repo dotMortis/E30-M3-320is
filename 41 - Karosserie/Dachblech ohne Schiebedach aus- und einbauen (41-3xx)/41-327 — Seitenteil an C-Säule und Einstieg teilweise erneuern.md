@@ -70,5 +70,11 @@ Die Seite 41-327 zeigt anhand von Fotosequenzen die Reparatur beziehungsweise de
 | wheel opening | Radausschnitt |
 | wind guide plate | Windleitplatte |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-321 — Instandsetzungsarbeiten am Seitenteil]] — gemeinsame Begriffe: brace, entrance joint, wheel opening
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

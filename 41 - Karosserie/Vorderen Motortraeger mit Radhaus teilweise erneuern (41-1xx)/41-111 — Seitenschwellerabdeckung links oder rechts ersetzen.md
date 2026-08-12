@@ -67,5 +67,11 @@ Die Seite 41-111 beschreibt die Karosserie-Instandsetzung am viertürigen Modell
 | thrust strut mountings | Aufnahmen der Druckstreben |
 | fuel tank | Kraftstoffbehälter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-325 — Seitenteil hinten rechts teilweise erneuern]] — gemeinsame Begriffe: entrance cover strip, thrust strut mountings
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

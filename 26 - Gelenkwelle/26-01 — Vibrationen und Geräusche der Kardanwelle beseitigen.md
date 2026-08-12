@@ -97,5 +97,11 @@ Die Seite 26-1 beschreibt das Beseitigen von Vibrationen und Geräuschen der Kar
 | oil pan flange | Ölwannenflansch |
 | engine inclination | Motorneigung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-01a — Knick- und Ablenkwinkel im Antriebsstrang]] — gemeinsame Begriffe: deflection angle, gage
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

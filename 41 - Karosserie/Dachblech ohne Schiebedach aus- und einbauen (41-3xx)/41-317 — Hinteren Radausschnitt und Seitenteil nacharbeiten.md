@@ -55,5 +55,14 @@ Die Seite 41-317 beschreibt abschließende Arbeiten an einer reparierten Karosse
 | side panel | Seitenteil |
 | trunk | Kofferraum |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-330 — Karosseriebereiche instandsetzen und nachbehandeln]] — gemeinsame Begriffe: anti-drumming coat, spot-welded flange, wheel opening
+- [[41-305c — Stossbearbeitung und Abdichtung Radausschnitt]] — Abschnitt 41: gemeinsame Begriffe: spot-welded flange, trunk
+- [[41-210 — Nacharbeiten instand gesetzter Karosseriebereiche]] — gemeinsame Begriffe: anti-drumming coat, joint sealing compound
+- [[41-324 — Seitliche Karosserie instandsetzen und abdichten]] — gemeinsame Begriffe: wheel opening, wider tires
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

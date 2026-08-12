@@ -79,5 +79,18 @@ Die Seite 35-5 beschreibt den Ausbau und Einbau des Bremspedals (Arbeitsnummer 3
 | pedal layout | Pedalanordnung |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 51 — Karosserieausstattung|Abschnitt 51]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[35-03 — Pedalträger aus- und einbauen]] — gemeinsame Begriffe: bearing surfaces, brake linkage
+- [[35-06 — Kupplungspedal aus- und einbauen]] — gemeinsame Begriffe: dashboard trim panel, over-center helper spring
+
+
 ---
 [[Startseite]] · [[_Übersicht 35 — Pedale|Abschnittsübersicht]] · [[Glossar]]

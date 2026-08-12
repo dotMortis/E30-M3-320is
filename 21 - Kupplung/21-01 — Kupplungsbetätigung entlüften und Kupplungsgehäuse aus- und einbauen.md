@@ -93,5 +93,12 @@ Die Seite 21-1 enthält zwei Arbeitsanweisungen für den BMW M3 beziehungsweise 
 | breaking-loose torque | Losbrechmoment |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-168 — Getriebe aus- und einbauen]] — Abschnitt 23: gemeinsame Begriffe: breaking-loose torque, dme sender, torx bolt
+- [[21-05 — Kupplungsgeber- und Kupplungsnehmerzylinder aus- und einbauen]] — gemeinsame Begriffe: brake fluid tank, float container
+
+
 ---
 [[Startseite]] · [[_Übersicht 21 — Kupplung|Abschnittsübersicht]] · [[Glossar]]

@@ -81,5 +81,12 @@ Die Seite zeigt die Arbeitsanweisung zum Aus- und Einbau der Mittelkonsole bezie
 | insulation sheet | Dämmmatte |
 | twist lock | Drehverriegelung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-450 — Instrumententafelverkleidung aus- und einbauen]] — gemeinsame Begriffe: ashtray, parking brake lever, shift lever knob, twist lock
+- [[65-93 — Kassettenboxen in Mittelkonsole einbauen]] — Abschnitt 65: gemeinsame Begriffe: ashtray, parking brake lever
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

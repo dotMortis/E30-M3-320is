@@ -92,5 +92,11 @@ Die BMW-Werkstatthandbuchseite 23-4 beschreibt den Ausbau, die Montage und die A
 | reverse gear shaft | Rückwärtsgangwelle |
 | tightening torque | Anziehdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-169 — Getriebegehäuse Vorderteil aus- und einbauen und abdichten]] — gemeinsame Begriffe: cylindrical pin, snap ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

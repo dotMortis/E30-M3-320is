@@ -98,5 +98,11 @@ Werkstatthandbuchseite 23-188 zur Demontage und Montage der vollständigen Synch
 | molybdenum-coated | molybdänbeschichtet |
 | hard nickel plated | hartvernickelt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-22 — Synchronisierung zerlegen und zusammenbauen]] — gemeinsame Begriffe: clutch body, thrust piece
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

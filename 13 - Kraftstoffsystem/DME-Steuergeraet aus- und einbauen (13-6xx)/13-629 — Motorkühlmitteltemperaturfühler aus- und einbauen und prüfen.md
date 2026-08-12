@@ -79,5 +79,17 @@ Die Seite beschreibt den Ausbau, Einbau und die Prüfung des Motorkühlmitteltem
 | water bath | Wasserbad |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-762 — Kühlmitteltemperaturfühler für Motorsteuerung aus- und einbauen und prüfen]] — gemeinsame Begriffe: ntc resistor, water bath
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

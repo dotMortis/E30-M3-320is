@@ -64,5 +64,11 @@ Die Seite ist eine Drehmomenttabelle für das Schaltgetriebe, Kapitel 23-7 „Ma
 | Screw | Schraube |
 | Measure | Drehmomentwert |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 23 — Schaltgetriebe|Abschnitt 23]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

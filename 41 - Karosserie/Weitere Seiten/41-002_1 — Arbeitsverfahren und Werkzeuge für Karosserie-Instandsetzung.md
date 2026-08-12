@@ -91,5 +91,11 @@ Die Seite 41-002.1 beschreibt empfohlene Arbeitsverfahren und Werkzeuge für Kar
 | cavity sealing compound | Karosserie-Hohlraumdichtmasse |
 | gaps | Spaltmaße |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-116c — Radhaus-Außenteil instand setzen und ersetzen]] — Abschnitt 41: gemeinsame Begriffe: plug weld, spot welding tongs
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

@@ -62,5 +62,14 @@ Die Seite 54–7 beschreibt den Austausch der linken oder rechten Schiebedachfü
 | grease | Fett |
 | left or right | links oder rechts |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-01 — Schiebe-Hubdachdeckel einstellen und prüfen]] — gemeinsame Begriffe: gate, sun roof, sun roof lid
+- [[54-06 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: drive cable, gate, sun roof lid
+- [[54-00-index-a — Inhaltsverzeichnis Motorhaube Schiebedach Hardtop Verdeck]] — gemeinsame Begriffe: sun roof, sun roof lid
+- [[54-05 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: drive cable, gate
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

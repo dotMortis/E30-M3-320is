@@ -107,5 +107,11 @@ Explosionsdarstellung des Schaltgetriebes mit Eingangswelle, Abtriebswelle, Vorg
 | Circlip | Sicherungsring |
 | Bearing holder | Lagerhalter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-183 — Getriebesatz mit Lagern]] — gemeinsame Begriffe: speedometer drive gear, synchro ring
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

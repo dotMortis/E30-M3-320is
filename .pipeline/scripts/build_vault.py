@@ -50,6 +50,14 @@ SUBGROUP_THRESHOLD = 60          # only sections larger than this get sub-groupe
 # emitted only for the duplicates. DUP_IMAGE_NAMES is populated in main().
 DUP_IMAGE_NAMES: set[str] = set()
 
+# Populated in main(): resolve related-page links and mentioned-section links.
+# PAGE_BY_ID maps page_id -> page dict (for related wikilink stems); SECTION_MOC_BY_NO
+# maps a BMW group number ("34") -> that section's MOC stem for "Erwähnte Abschnitte".
+PAGE_BY_ID: dict[str, dict] = {}
+SECTION_MOC_BY_NO: dict[str, str] = {}
+# Sections for which the related/mentioned blocks are rendered. Empty set = all.
+RENDER_RELATED_SECTIONS: set[str] = set()
+
 
 def embed_target(img: str, dest_dir: Path) -> str:
     """Embed path for a scan: bare filename if unique, else vault-relative."""
@@ -209,6 +217,45 @@ def compute_subgroups(pages: list[dict]) -> dict[str, str] | None:
 
 # ---------------------------------------------------------------- note bodies
 
+def related_block(page: dict) -> str:
+    """Render '## Verwandte Seiten' from page['related'] (ordered page_ids)."""
+    related = page.get("related") or []
+    meta = page.get("related_meta") or {}
+    lines = []
+    for rid in related:
+        rp = PAGE_BY_ID.get(rid)
+        if not rp:
+            continue
+        stem = note_stem(rp)
+        m = meta.get(rid) or {}
+        shared = ", ".join(m.get("shared") or [])
+        sec = sanitize(rp.get("section_no") or "")
+        note = f" — {shared}" if shared else ""
+        prefix = f"Abschnitt {sec}: " if (m.get("cross") and sec) else ""
+        lines.append(f"- [[{stem}]] — {prefix}gemeinsame Begriffe: {shared}"
+                     if shared else f"- [[{stem}]]")
+    if not lines:
+        return ""
+    return ("## Verwandte Seiten\n"
+            "> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.\n\n"
+            + "\n".join(lines) + "\n")
+
+
+def mentioned_block(page: dict) -> str:
+    """Render '## Erwähnte Abschnitte' from page['mentioned_sections']."""
+    nos = page.get("mentioned_sections") or []
+    lines = []
+    for no in nos:
+        stem = SECTION_MOC_BY_NO.get(no)
+        if stem:
+            lines.append(f"- [[{stem}|Abschnitt {no}]]")
+    if not lines:
+        return ""
+    return ("## Erwähnte Abschnitte\n"
+            "> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.\n\n"
+            + "\n".join(lines) + "\n")
+
+
 def build_page_note(page: dict, section_de: str, section_no: str,
                     dest_dir: Path) -> str:
     a = page.get("analysis") or {}
@@ -266,6 +313,17 @@ def build_page_note(page: dict, section_de: str, section_no: str,
         parts.append("## Fachbegriffe (EN → DE)")
         parts.append(tbl)
         parts.append("")
+
+    if not RENDER_RELATED_SECTIONS or page.get("section_folder") in RENDER_RELATED_SECTIONS:
+        ment = mentioned_block(page)
+        if ment:
+            parts.append(ment)
+            parts.append("")
+        rel = related_block(page)
+        if rel:
+            parts.append(rel)
+            parts.append("")
+
     parts.append("---")
     parts.append(f"[[Startseite]] · [[{section_moc_stem(section_no, section_de)}|Abschnittsübersicht]] · [[Glossar]]")
     parts.append("")
@@ -486,6 +544,19 @@ def main() -> int:
     # can be written as unambiguous vault-relative paths (see embed_target).
     _img_counts = Counter(p["image_file"] for p in manifest["pages"])
     DUP_IMAGE_NAMES.update(n for n, c in _img_counts.items() if c > 1)
+
+    # Populate lookups for related-page / mentioned-section rendering.
+    PAGE_BY_ID.update({p["page_id"]: p for p in manifest["pages"]})
+    for folder, meta in sections_meta.items():
+        no = meta.get("no")
+        if not no:
+            continue
+        # a group number may map to two folders (41 Body / 41 Body Convertibles):
+        # prefer the first (non-convertible) so the MOC link is the main section.
+        SECTION_MOC_BY_NO.setdefault(str(no), section_moc_stem(no, meta["de"]))
+    # RENDER_RELATED_SECTIONS is left empty -> related/mentioned blocks render on
+    # every section. Populate it with section folders to restrict rendering (as
+    # was done during the pilot phase).
 
     # section ordering for the home page
     section_order = []

@@ -93,5 +93,11 @@ Die Seite 41-001 enthält die Einleitung und allgemeinen Sicherheitshinweise fü
 | anti-drumming insulation | Antidröhnisolierung |
 | flange | Flansch |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-002 — Reparaturarbeiten an PVC-Beschichtungen und verzinkten Stahlblechen]] — gemeinsame Begriffe: inert gas welding, resistance spot welding
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

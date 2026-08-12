@@ -78,5 +78,12 @@ Die Seite 64-118 beschreibt den Ausbau und Einbau des Heizungsgebläsemotors ein
 | air flap | Luftklappe |
 | code number | Kennnummer |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-116 — Heizungsgehäuse aus- und einbauen]] — gemeinsame Begriffe: rubber strip, wire strap
+- [[64-120 — Widerstandsplatte Gebläsemotor aus- und einbauen]] — gemeinsame Begriffe: rubber strip, wire strap
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

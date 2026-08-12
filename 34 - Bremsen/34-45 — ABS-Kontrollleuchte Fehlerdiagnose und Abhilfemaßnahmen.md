@@ -90,5 +90,12 @@ Die Seite 34–45 enthält eine Fehlerdiagnosetabelle für das ABS des BMW 325iX
 | current path | Strompfad |
 | Service Tester | Service-Tester |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-34c — Stromlaufplan ABS 325ix Modelljahr 1988]] — gemeinsame Begriffe: acceleration sender, hydraulic control unit, return delivery pump motor
+- [[34-34 — Elektrischer Schaltplan Antiblockiersystem]] — gemeinsame Begriffe: hydraulic control unit, return delivery pump motor
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

@@ -58,5 +58,14 @@ Die Seite ist eine Drehmomenttabelle aus dem Kapitel „Motor“, Abschnitt „Z
 | settling time | Setzzeit |
 | warm-running time | Warmlaufzeit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-05 — Anziehvorschriften Zylinderkopfschrauben M21 M30]] — gemeinsame Begriffe: cylinder head and cover, cylinder head bolts, settling time, warm-running time
+- [[11-09 — Anzugsdrehmomente Zylinderkopfschrauben]] — gemeinsame Begriffe: cylinder head and cover, cylinder head bolts, settling time
+- [[11-06 — Anziehdaten Zylinderkopf und Zylinderkopfhaube]] — gemeinsame Begriffe: cylinder head bolts, warm-running time
+- [[11-08 — Anzugsdrehmomente für Zylinderkopf und Zylinderkopfhaube]] — gemeinsame Begriffe: cylinder head bolts, torx head
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

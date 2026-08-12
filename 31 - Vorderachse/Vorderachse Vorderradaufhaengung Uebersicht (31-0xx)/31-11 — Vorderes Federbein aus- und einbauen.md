@@ -97,5 +97,20 @@ Die Seite 31-11 beschreibt unter Arbeitsnummer 31 31 000 den Ausbau und Einbau d
 | special tool | Sonderwerkzeug |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 36 — Räder und Reifen|Abschnitt 36]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-11_1 — Federbeinaggregat vorn bei Allradfahrzeug aus- und einbauen]] — gemeinsame Begriffe: front spring strut, guide joint, push rod, spring strut assembly, tie rod joint
+- [[31-06 — Querlenker Vorderachse aus- und einbauen]] — gemeinsame Begriffe: guide joint, push rod, stabilizer
+- [[31-13 — Stoßdämpfer des vorderen Federbeins ersetzen]] — gemeinsame Begriffe: front spring strut, piston rod, spring strut assembly
+- [[31-02 — Vorderachseinheit aus- und einbauen]] — gemeinsame Begriffe: abs pulse sender, brake pad wear indicator
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

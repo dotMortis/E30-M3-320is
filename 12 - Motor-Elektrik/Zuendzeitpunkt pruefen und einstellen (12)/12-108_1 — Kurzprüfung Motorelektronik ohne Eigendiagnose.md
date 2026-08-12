@@ -73,5 +73,11 @@ Die Seite 12-108/1 enthält eine kurze Prüfliste für die elektrische und elekt
 | 55-pin connecting leads | 55-polige Anschlussleitungen |
 | BMW Diagnosis Tester | BMW-Diagnose-Tester |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-112_3 — DME-Steuergerät Fehlersuche Prüftabelle]] — gemeinsame Begriffe: starting motor, universal adapter
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

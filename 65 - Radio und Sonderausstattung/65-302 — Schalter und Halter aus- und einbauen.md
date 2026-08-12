@@ -69,5 +69,11 @@ Die Seite 65-302 zeigt in bebilderten Arbeitsschritten den Einbau beziehungsweis
 | plug | Stecker |
 | spring washer | Federscheibe |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-13 — Bremslichtschalter am Bremspedal einstellen]] — Abschnitt 34: gemeinsame Begriffe: contact button, lock nut
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

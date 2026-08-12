@@ -79,5 +79,11 @@ Die Seite 64-506 beschreibt den Ausbau und Einbau des Klimaanlagentrockners beim
 | tightening torque | Anzugsdrehmoment |
 | seals | Dichtungen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: high pressure pressostat, low pressure pressostat
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

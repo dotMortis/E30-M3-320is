@@ -101,5 +101,11 @@ Die Seite beschreibt den Ausbau und Einbau des Klimakompressors beim BMW 325e. D
 | compressor oil | Kompressoröl |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-505 — Klimakompressor aus- und einbauen]] — gemeinsame Begriffe: a/c compressor, compressor oil, pulling hook
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

@@ -96,5 +96,17 @@ Werkstattanleitung BMW, Seite 17-3, zum Prüfen des Kühlsystems auf Undichtigke
 | fan | Lüfter |
 | pressure drop | Druckabfall |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 00 — Wartung und allgemeine Daten|Abschnitt 00]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[17-00-index-a — Inhaltsverzeichnis Kühler und Kühlkreislauf]] — gemeinsame Begriffe: combustion chamber, tester
+
+
 ---
 [[Startseite]] · [[_Übersicht 17 — Kühler|Abschnittsübersicht]] · [[Glossar]]

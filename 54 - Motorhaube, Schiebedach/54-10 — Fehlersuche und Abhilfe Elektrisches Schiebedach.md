@@ -96,5 +96,14 @@ Die Seite 54-10 zeigt eine Fehlersuch- und Abhilfetabelle für das elektrische S
 | lift position | Hubstellung |
 | position 0 | Stellung 0 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-19 — Fehlersuchtabelle Vorderachse Stoßdämpfer]] — Abschnitt 31: gemeinsame Begriffe: cause, condition, correction
+- [[33-18 — Fehlersuchtabelle Hinterachse Ursachen Abhilfe]] — Abschnitt 33: gemeinsame Begriffe: cause, condition, correction
+- [[54-01 — Schiebe-Hubdachdeckel einstellen und prüfen]] — gemeinsame Begriffe: control switch, sun roof, sun roof lid
+- [[54-00-index-a — Inhaltsverzeichnis Motorhaube Schiebedach Hardtop Verdeck]] — gemeinsame Begriffe: sun roof, sun roof lid
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

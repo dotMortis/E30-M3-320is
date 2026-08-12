@@ -77,5 +77,12 @@ Die Seite 34-31 zeigt anhand von Fotosequenzen den Ausbau beziehungsweise das Fr
 | wire harness | Kabelbaum |
 | clamp | Klammer |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-33 — ABS-Relais und ABS-Kontrollleuchte auswechseln]] — gemeinsame Begriffe: bulb holder, indicator lamp
+- [[34-38 — Fehlersuchtabelle Dynamische Spannung ABS Hydrauliksystem]] — gemeinsame Begriffe: electronic relay, indicator lamp
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

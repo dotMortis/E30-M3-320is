@@ -103,5 +103,11 @@ Die Seite 5126A-2 behandelt die Zentralverriegelung und enthält die Fortsetzung
 | Open circuit | Unterbrechung |
 | System diagnosis | Systemdiagnose |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[5126A-03 — Zentralverriegelung Funktionsbeschreibung und Fehlersuche]] — gemeinsame Begriffe: control unit connector, fused jumper
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

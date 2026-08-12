@@ -57,5 +57,13 @@ Die Seite 62-1 beschreibt den Ausbau des Instrumententrägers und den Zugang zur
 | bolt | Schraube |
 | light duct | Lichtleiter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[62-02 — Kühlmitteltemperaturanzeige und Kraftstoffanzeige aus- und einbauen]] — gemeinsame Begriffe: instrument carrier, instrument carrier assembly, instruments
+- [[62-00-index-a — Inhaltsverzeichnis Instrumente Reparatur- und Prüfarbeiten]] — gemeinsame Begriffe: instrument carrier assembly, instruments
+- [[62-03 — Geschwindigkeitsmesser aus- und einbauen]] — gemeinsame Begriffe: instrument carrier assembly, instruments
+
+
 ---
 [[Startseite]] · [[_Übersicht 62 — Instrumente|Abschnittsübersicht]] · [[Glossar]]

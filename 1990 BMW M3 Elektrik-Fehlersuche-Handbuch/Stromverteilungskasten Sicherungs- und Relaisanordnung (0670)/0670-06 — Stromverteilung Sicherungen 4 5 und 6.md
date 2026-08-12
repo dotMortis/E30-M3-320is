@@ -78,5 +78,14 @@ Schaltplanseite 0670-6 zur Stromverteilung im BMW-Bordnetz. Dargestellt sind die
 | Wire | Leitung |
 | Ampere | Ampere |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6100-01 — Stromlaufplan Zigarettenanzünder Handschuhfachbeleuchtung Taschenlampe Kartenleseleuchte]] — gemeinsame Begriffe: glove box light, hazard switch, map reading light
+- [[6160-00 — Elektrischer Schaltplan Scheibenwisch-Waschanlage]] — gemeinsame Begriffe: washer pump, wiper control unit
+- [[6160-01 — Elektrischer Schaltplan Scheibenwaschdüsenheizung]] — gemeinsame Begriffe: washer pump, wiper control unit
+- [[6313-00 — Stromlaufplan Fahrtrichtungsanzeiger Warnblinkanlage]] — gemeinsame Begriffe: glove box light, hazard switch
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

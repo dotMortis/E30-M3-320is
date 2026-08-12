@@ -116,5 +116,14 @@ Die Seite 23-167 beschreibt den Arbeitsablauf zum Aus- und Einbau des Getriebes.
 | self-locking bolts | selbstsichernde Schrauben |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-302 — Getriebe aus- und einbauen]] — gemeinsame Begriffe: joint disc, shift rod, stop nuts, threaded ring
+- [[23-03 — Schaltgetriebe aus- und einbauen]] — gemeinsame Begriffe: self-locking bolts, shift rod, threaded ring
+- [[26-12 — Vordere Kardanwelle Allradantrieb aus- und einbauen]] — Abschnitt 26: gemeinsame Begriffe: joint disc, stop nuts
+- [[26-14 — Vordere Gelenkscheibe der Kardanwelle aus- und einbauen]] — Abschnitt 26: gemeinsame Begriffe: joint disc, stop nuts
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

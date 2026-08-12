@@ -73,5 +73,13 @@ Die Seite 12-112 beschreibt im Rahmen der DME-Fehlersuche die Prüfungen 2 und 3
 | spark plug type | Zündkerzentyp |
 | electrode gap | Elektrodenabstand |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[00-01 — Ablieferungsinspektion Prüfumfang und Arbeitsanweisungen]] — Abschnitt 00: gemeinsame Begriffe: electrode gap, spark plug
+- [[12-06 — Zündspule prüfen und aus- und einbauen]] — gemeinsame Begriffe: primary coil, secondary coil
+- [[12-133 — Zündspule prüfen und aus- und einbauen]] — gemeinsame Begriffe: primary coil, secondary coil
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

@@ -55,5 +55,12 @@ Inhaltsverzeichnis des Kapitels 36 „Räder und Reifen“ aus einem BMW-Werksta
 | tire | Reifen |
 | mounting machine | Reifenmontiermaschine |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-02 — Vorder- und Hinterräder am Fahrzeug auswuchten]] — gemeinsame Begriffe: dynamic balancing, electronic balancing
+- [[36-08 — Felge auf Seiten- und Höhenschlag prüfen]] — gemeinsame Begriffe: radial runout, wheel rim
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

@@ -79,5 +79,12 @@ Die Seite 11-75 beschreibt zwei Arbeitsgänge am Motor des BMW E30 M3/320is: die
 | shim | Einstellscheibe |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-76 — Ölpumpenantriebskette aus- und einbauen]] — gemeinsame Begriffe: chain tightness, oil pump, sprocket
+- [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: engine oil pressure, oil pump
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

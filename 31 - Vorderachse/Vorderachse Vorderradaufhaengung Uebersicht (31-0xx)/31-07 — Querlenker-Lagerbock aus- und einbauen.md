@@ -84,5 +84,11 @@ Die Seite beschreibt den Ausbau, Einbau und Austausch des Lagerbocks beziehungsw
 | normal position | Normalstellung |
 | all-wheel drive | Allradantrieb |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-08 — Gummilager des Querlenkers aus- und einbauen]] — gemeinsame Begriffe: control arm bracket, normal position
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

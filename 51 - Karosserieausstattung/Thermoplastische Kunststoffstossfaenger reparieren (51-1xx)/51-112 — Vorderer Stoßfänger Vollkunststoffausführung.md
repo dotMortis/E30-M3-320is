@@ -60,5 +60,13 @@ Explosionsdarstellung des vorderen Stoßfängers in Vollkunststoffausführung. D
 | bracket on side panel | Halter am Seitenteil |
 | towing eye | Abschleppöse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-113 — Stoßfänger vorn M3 massive Kunststoffausführung]] — gemeinsame Begriffe: bracket on side panel, bumper carrier, solid plastic version
+- [[51-00-index-a — Inhaltsverzeichnis Reparaturarbeiten Karosserieausstattung]] — gemeinsame Begriffe: impact absorber, solid plastic version
+- [[51-120 — Hintere Stoßfängereinheit M3]] — gemeinsame Begriffe: bracket on side panel, bumper carrier
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

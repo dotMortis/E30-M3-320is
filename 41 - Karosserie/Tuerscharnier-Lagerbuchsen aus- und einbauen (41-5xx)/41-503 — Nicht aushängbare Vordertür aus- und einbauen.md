@@ -71,5 +71,11 @@ Werkstatthandbuchseite 41-503 zum Ausbau und Einbau der linken oder rechten Vord
 | rubber cap | Gummikappe |
 | unhinge | aushängen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-507 — Aushängbare hintere Tür aus- und einbauen]] — gemeinsame Begriffe: rubber cap, unhinge
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

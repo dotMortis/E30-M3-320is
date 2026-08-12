@@ -61,5 +61,14 @@ Längsschnitt- und Montagezeichnung des ZF-S5-16-Fünfgang-Schaltgetriebes mit O
 | layshaft | Vorgelegewelle |
 | ZF S5-16 | ZF S5-16 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-01 — Getrag 240 Fünfgang-Overdrive-Getriebe Schnitt- und Aufbauzeichnung]] — gemeinsame Begriffe: assembly drawing, fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-165 — Getrag-260-Fünfgang-Schaltgetriebe Schnittzeichnung und Gangstufen]] — gemeinsame Begriffe: assembly drawing, fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-300 — Schnittdarstellung Getrag Schaltgetriebe 265-6 Schnellgang]] — gemeinsame Begriffe: fifth gear, first gear, fourth gear, second gear, third gear
+- [[23-102 — Längsschnitt Schaltmechanismus ZF-S5-16-Fünfgang-Schaltgetriebe]] — gemeinsame Begriffe: assembly drawing, five speed overdrive manual transmission
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

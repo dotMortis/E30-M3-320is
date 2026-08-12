@@ -55,5 +55,13 @@ Die Seite 41-203 zeigt anhand mehrerer Fotodarstellungen Arbeitsschritte zur Bea
 | side member | Seitenträger / Längsträger |
 | joint sealing compound | Fugendichtmasse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-205 — B-Säule einsetzen und verschweißen]] — gemeinsame Begriffe: braze joint, grind down joints, heat protection paste
+- [[41-201 — B-Säule links oder rechts erneuern]] — gemeinsame Begriffe: heat protection paste, rain molding
+- [[41-204 — Äußeren Abschnitt der B-Säule ersetzen]] — gemeinsame Begriffe: heat protection paste, rain molding
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

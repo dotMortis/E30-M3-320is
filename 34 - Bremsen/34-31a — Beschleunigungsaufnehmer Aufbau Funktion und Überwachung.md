@@ -82,5 +82,12 @@ Die Seite 34–31a beschreibt Aufbau, Funktion und Überwachung des Beschleunigu
 | road condition | Fahrbahnzustand |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-31b — Beschleunigungsaufnehmer aus- und einbauen oder ersetzen]] — gemeinsame Begriffe: abs control unit, acceleration pick-up
+- [[34-31c — ABS-Beschleunigungsaufnehmer mit Ausgleichsscheiben einstellen]] — gemeinsame Begriffe: acceleration pick-up, switching point
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

@@ -62,5 +62,11 @@ Die Seite 65-151a zeigt den Einbau einer Steckantenne einschließlich Dichttüll
 | bolted version | verschraubte Ausführung |
 | cover | Abdeckung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[65-101a — Steckantenne und hintere Sitzanlage aus- und einbauen]] — gemeinsame Begriffe: bolted version, plug-in antenna, sealing grommet, seat cushion, upper holder
+
+
 ---
 [[Startseite]] · [[_Übersicht 65 — Radio und Sonderausstattung|Abschnittsübersicht]] · [[Glossar]]

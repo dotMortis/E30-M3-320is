@@ -76,5 +76,11 @@ Die Seite zeigt die Einbauarbeiten für die Nockenwellen und deren Kettenräder 
 | cam distance N | Nockenmaß N |
 | cast boss on bearing cap | angegossener Ansatz am Lagerdeckel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-68 — Nockenwellen aus- und einbauen]] — gemeinsame Begriffe: camshaft bearing cap, chain tensioner, sprocket, timing case, top dead center (tdc)
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

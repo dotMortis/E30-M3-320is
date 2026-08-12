@@ -80,5 +80,12 @@ Die Seite 13-713 beschreibt den Ausbau, Einbau und die Prüfung des Leerlaufrege
 | dynamic test | Dynamische Prüfung |
 | nominal value | Sollwert |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[13-730 — Drosselklappenstutzen aus- und einbauen]] — gemeinsame Begriffe: air intake manifold, hose strap, mounting nut, throttle cable, throttle valve neck
+- [[11-102 — Motor aus- und einbauen]] — Abschnitt 11: gemeinsame Begriffe: air intake manifold, throttle cable
+
+
 ---
 [[Startseite]] · [[_Übersicht 13 — Kraftstoffsystem|Abschnittsübersicht]] · [[Glossar]]

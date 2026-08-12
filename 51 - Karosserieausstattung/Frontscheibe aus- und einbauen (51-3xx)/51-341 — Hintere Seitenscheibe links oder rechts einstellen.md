@@ -65,5 +65,12 @@ Die Seite 51-341 beschreibt die Einstellung der Fensterhebermechanik und der Sch
 | slots | Langlöcher |
 | uniform gap | gleichmäßiger Spalt |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-321 — Vordere Türscheibe links oder rechts einstellen]] — gemeinsame Begriffe: slots, window frame
+- [[51-342 — Hintere Türscheibe aus- und einbauen]] — gemeinsame Begriffe: rear door trim panel, rear door window
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

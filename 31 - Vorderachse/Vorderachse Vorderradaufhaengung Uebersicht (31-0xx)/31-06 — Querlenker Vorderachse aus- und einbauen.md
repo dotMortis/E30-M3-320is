@@ -75,5 +75,18 @@ Die Seite 31-6 beschreibt den Ausbau und Einbau des linken oder rechten Querlenk
 | special tool | Sonderwerkzeug |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 36 — Räder und Reifen|Abschnitt 36]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[31-11 — Vorderes Federbein aus- und einbauen]] — gemeinsame Begriffe: guide joint, push rod, stabilizer
+- [[31-11_1 — Federbeinaggregat vorn bei Allradfahrzeug aus- und einbauen]] — gemeinsame Begriffe: guide joint, push rod
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

@@ -65,5 +65,12 @@ Die Seite enthält eine Anzugsdrehmomenttabelle für den Heckscheibenwischer im 
 | Type | Fahrzeugtyp |
 | Nm | Newtonmeter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[61-04 — Anzugsdrehmomente der Scheibenwischanlage]] — gemeinsame Begriffe: general electrical system, motor crank, wiper console, wiper motor
+- [[61-05 — Anzugsdrehmomente der Scheibenwischeranlage]] — gemeinsame Begriffe: general electrical system, wiper console
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

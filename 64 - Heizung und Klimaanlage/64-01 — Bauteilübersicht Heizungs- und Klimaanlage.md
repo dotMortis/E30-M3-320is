@@ -76,5 +76,11 @@ Die Seite zeigt eine schematische fotografische Komponentenübersicht der Heizun
 | Bypass air switch | Bypass-Luftschalter |
 | Blower switch | Gebläseschalter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-453 — Heizungs- und Lüftungsbedienung aus- und einbauen]] — Abschnitt 51: gemeinsame Begriffe: air conditioner switch, blower switch
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

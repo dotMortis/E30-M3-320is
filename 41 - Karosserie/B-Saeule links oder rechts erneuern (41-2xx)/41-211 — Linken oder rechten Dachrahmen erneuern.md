@@ -79,5 +79,11 @@ Werkstatthandbuchseite 41-211 zur Arbeitsanweisung 41 22 501 „Linken oder rech
 | drill off | ausbohren |
 | cut off | abtrennen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-214 — Außendachblech einsetzen und verschweißen]] — gemeinsame Begriffe: cowl, roof brace
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

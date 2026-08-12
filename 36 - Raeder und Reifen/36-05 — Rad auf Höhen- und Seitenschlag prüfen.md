@@ -81,5 +81,14 @@ Die Seite beschreibt die Prüfung eines Vorder- oder Hinterrades auf radialen H�
 | side surface | Seitenfläche |
 | valve | Ventil |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[36-07 — Abgebaute Räder dynamisch auswuchten]] — gemeinsame Begriffe: balancing machine, basic flange, center, radial runout, type flange
+- [[36-08 — Felge auf Seiten- und Höhenschlag prüfen]] — gemeinsame Begriffe: balancing machine, basic flange, center, radial runout, type flange
+- [[36-01 — Vorder- und Hinterräder am Fahrzeug feinwuchten]] — gemeinsame Begriffe: balancing machine, valve
+- [[36-04 — Räder fahrzeugseitig feinwuchten]] — gemeinsame Begriffe: balancing machine, valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 36 — Räder und Reifen|Abschnittsübersicht]] · [[Glossar]]

@@ -93,5 +93,12 @@ Die Seite beschreibt den Ausbau der Getriebe-Abtriebswelle einschließlich der Z
 | special tool | Sonderwerkzeug |
 | pressing-off force | Abdrückkraft |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-179 — Getriebeausgangswelle aus- und einbauen]] — gemeinsame Begriffe: gear, pressing-off force
+- [[23-180 — Rückwärtsgang- und 1. Gang-Radsatz aus- und einbauen]] — gemeinsame Begriffe: brass synchromesh ring, pressing-off force
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

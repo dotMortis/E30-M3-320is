@@ -95,5 +95,11 @@ Die Seite zeigt den Stromlaufplan des Kombiinstruments für die Anzeigen und War
 | ground point | Massepunkt |
 | splice | Spleißstelle |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[6581-00 — Elektrischer Schaltplan des Bordcomputers]] — gemeinsame Begriffe: fuel gauge, fuel tank sender, low fuel warning indicator
+
+
 ---
 [[Startseite]] · [[_Übersicht — 1990 BMW M3 Elektrik-Fehlersuche-Handbuch|Abschnittsübersicht]] · [[Glossar]]

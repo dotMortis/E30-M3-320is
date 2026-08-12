@@ -91,5 +91,13 @@ Montageanleitung für den Zusammenbau des 5. Rückwärtsgangsbereichs eines BMW-
 | special tool | Sonderwerkzeug |
 | pressing force | Aufpresskraft |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-10 — Hinteres Getriebegehäuse zusammenbauen]] — gemeinsame Begriffe: detent ball, locking ball
+- [[23-176 — Getriebewellen und Schaltstangen einbauen]] — gemeinsame Begriffe: detent ball, locking ball
+- [[23-316 — Schaltgabeln Schaltstangen und Synchronisierer montieren]] — gemeinsame Begriffe: detent ball, locking ball
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

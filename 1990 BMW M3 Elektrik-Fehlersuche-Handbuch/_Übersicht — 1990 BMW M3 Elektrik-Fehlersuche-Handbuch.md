@@ -47,7 +47,7 @@ tags:
 | `0670-15` | [[0670-15 — Masseverteilung G200 G202 G300]] | Diagramm |
 | `0670-16` | [[0670-16 — Masseverteilungs-Schaltplan G200 G300]] | Diagramm |
 
-## Weitere Schaltpläne & Seiten
+## Weitere Schaltplaene & Seiten
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -102,7 +102,7 @@ tags:
 | `1364-05` | [[1364-05 — Motronic Schaltplan Einspritz- und Sensorelektronik]] | Diagramm |
 | `1364-06` | [[1364-06 — Stromlaufplan Motronic-Einspritzanlage S14]] | Diagramm |
 
-## Zentralverriegelung Systemprüfung Prüfschritte (5126A)
+## Zentralverriegelung Systempruefung Pruefschritte (5126A)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -111,7 +111,7 @@ tags:
 | `5126A-02` | [[5126A-02 — Zentralverriegelung Systemdiagnose und Prüftabellen]] | Tabelle |
 | `5126A-03` | [[5126A-03 — Zentralverriegelung Funktionsbeschreibung und Fehlersuche]] | Text |
 
-## Schaltplan Hupenanlage und Türschlossheizung (6100)
+## Schaltplan Hupenanlage und Tuerschlossheizung (6100)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -138,7 +138,7 @@ tags:
 | `6216-02` | [[6216-02 — Schaltplan aktive Check-Control Rückleuchten Kennzeichenbeleuchtung]] | Diagramm |
 | `6216-03` | [[6216-03 — Schaltplan Active-Check-Control-Anlage]] | Diagramm |
 
-## Schaltplan Gebläsesteuerung Heizung Klimaanlage (6413)
+## Schaltplan Geblaesesteuerung Heizung Klimaanlage (6413)
 
 | Code | Seite | Typ |
 | --- | --- | --- |
@@ -183,7 +183,7 @@ tags:
 | `7000-11` | [[7000-11 — Bauteil- und Einbauortansichten]] | Diagramm |
 | `7000-12` | [[7000-12 — Bauteillageansichten Kofferraum und Kofferraumdeckel]] | Diagramm |
 
-## Index der Spleißstellen-Ansichten (8000)
+## Index der Spleissstellen-Ansichten (8000)
 
 | Code | Seite | Typ |
 | --- | --- | --- |

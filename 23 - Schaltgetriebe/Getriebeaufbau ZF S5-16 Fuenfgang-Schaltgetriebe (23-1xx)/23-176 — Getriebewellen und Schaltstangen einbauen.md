@@ -92,5 +92,14 @@ Die Seite 23-176 beschreibt den Einbau der Getriebewellen und der Schaltstangen 
 | neutral position | Neutralstellung |
 | arrest assembly | Sperreinrichtung |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-09 — Hinteres Getriebegehäuse zerlegen und zusammenbauen]] — gemeinsame Begriffe: case rear section, locking lever, locking pin
+- [[23-10 — Hinteres Getriebegehäuse zusammenbauen]] — gemeinsame Begriffe: detent ball, locking ball, locking lever
+- [[23-316 — Schaltgabeln Schaltstangen und Synchronisierer montieren]] — gemeinsame Begriffe: detent ball, locking ball
+- [[23-317 — Rückwärtsgangbereich des fünften Gangs zusammenbauen]] — gemeinsame Begriffe: detent ball, locking ball
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

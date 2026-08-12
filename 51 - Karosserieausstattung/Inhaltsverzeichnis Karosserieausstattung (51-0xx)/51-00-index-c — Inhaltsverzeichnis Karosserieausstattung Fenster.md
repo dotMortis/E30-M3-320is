@@ -67,5 +67,13 @@ Seite 67 enthält das Inhaltsverzeichnis des Kapitels 51 „Karosserieausstattun
 | adjust | einstellen |
 | replace | ersetzen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-00-index-b — Inhaltsverzeichnis Karosserieausstattung]] — gemeinsame Begriffe: body equipment, rear window
+- [[51-325 — Feststehende vordere Türscheibe aus- und einbauen]] — gemeinsame Begriffe: fixed window, front door window
+- [[51-360 — Hintere Seitenscheibe links oder rechts aus- und einbauen]] — gemeinsame Begriffe: ornamental strips, rear side window
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

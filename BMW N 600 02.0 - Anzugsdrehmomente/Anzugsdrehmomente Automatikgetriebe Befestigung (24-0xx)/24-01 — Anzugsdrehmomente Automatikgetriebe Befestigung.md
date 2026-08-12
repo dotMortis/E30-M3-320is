@@ -61,5 +61,11 @@ Die Seite zeigt eine Anzugsdrehmomenttabelle für das Automatikgetriebe im Absch
 | Dimension | Anzugsdrehmoment |
 | Unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-01 — Anzugsdrehmomente Getriebe am Motor]] — gemeinsame Begriffe: hex screws, torx bolts, transmission in general, transmission to engine
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

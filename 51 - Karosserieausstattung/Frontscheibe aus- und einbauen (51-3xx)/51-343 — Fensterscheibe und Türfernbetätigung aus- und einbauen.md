@@ -66,5 +66,11 @@ Die Seite 51-343 zeigt anhand mehrerer Fotos die Arbeitsschritte zum Ausbau der 
 | bores | Bohrungen |
 | preload | vorspannen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-344 — Hintere Seitenscheibe fest im Rahmen aus- und einbauen]] — gemeinsame Begriffe: door remote control, fixed window, guide rail, window guide
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

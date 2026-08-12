@@ -102,5 +102,12 @@ Werkstattanweisung zum Aus- und Einbau der Kolben beim ausgebauten S14-Motor. Di
 | timing chain | Steuerkette |
 | weight class | Gewichtsklasse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-64 — Pleuel und Pleuellagerschalen erneuern]] — gemeinsame Begriffe: connecting rod, exhaust side, piston pin, weight class
+- [[11-00-index-b — Inhaltsverzeichnis Motor S14 Z]] — gemeinsame Begriffe: connecting rod, piston
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

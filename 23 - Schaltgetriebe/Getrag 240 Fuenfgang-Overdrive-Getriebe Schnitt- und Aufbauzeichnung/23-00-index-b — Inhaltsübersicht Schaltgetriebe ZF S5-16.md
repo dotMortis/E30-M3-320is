@@ -70,5 +70,12 @@ Inhaltsübersicht des Abschnitts 23 „Schaltgetriebe“ für das ZF-S5-16-Fünf
 | Synchronization | Synchronisierung |
 | Troubleshoot | Fehlersuche |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-00-index-e — Inhaltsübersicht Schaltgetriebe Getrag 265-6]] — gemeinsame Begriffe: guide sleeve for clutch release, layout drawing, shift mechanism
+- [[23-00-index-a — Inhaltsverzeichnis Fünfgang-Schaltgetriebe Getrag 240]] — gemeinsame Begriffe: guide sleeve for clutch release, shift mechanism
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

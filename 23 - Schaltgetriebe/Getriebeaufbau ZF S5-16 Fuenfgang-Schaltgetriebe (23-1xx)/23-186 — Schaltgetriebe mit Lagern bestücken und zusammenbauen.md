@@ -88,5 +88,14 @@ Die Seite 23-186 zeigt anhand von Montagefotos und Arbeitshinweisen den Zusammen
 | hot air blower | Heißluftgebläse |
 | Special Tool | Spezialwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-20 — Lager der Vorgelegewelle aus- und einbauen]] — gemeinsame Begriffe: front case section, oil groove, rear case section, roller bearings
+- [[23-21 — Getriebegehaeuse montieren und einstellen]] — gemeinsame Begriffe: dowel pins, front case section, oil filler plug
+- [[23-18 — Lager aller Getriebewellen erneuern]] — gemeinsame Begriffe: front case section, rear case section
+- [[23-184 — Lager aller Getriebewellen ersetzen]] — gemeinsame Begriffe: front case section, rear case section
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

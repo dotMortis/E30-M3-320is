@@ -74,5 +74,12 @@ Die Seite 41-013 beschreibt die Reparatur eines beschädigten GFK-Bauteils mit e
 | paper template | Papierschablone |
 | glass fiber putty | Glasfaserspachtel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[41-015 — GFK-Karosserieteil mit lichthärtendem Laminat reparieren]] — gemeinsame Begriffe: foil, glass fiber putty, hardening, laminate, repair material, ultraviolet lamp
+- [[41-012 — Eckbereich am Kofferraumdeckel reparieren]] — gemeinsame Begriffe: hardening, laminate
+
+
 ---
 [[Startseite]] · [[_Übersicht 41 — Karosserie|Abschnittsübersicht]] · [[Glossar]]

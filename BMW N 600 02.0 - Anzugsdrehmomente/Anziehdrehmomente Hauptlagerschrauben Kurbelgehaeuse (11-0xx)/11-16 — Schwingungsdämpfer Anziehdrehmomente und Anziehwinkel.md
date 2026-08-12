@@ -63,5 +63,11 @@ Die Seite ist eine BMW-Drehmomenttabelle für den Schwingungsdämpfer an der Kur
 | torque angle | Anzieh-Drehwinkel |
 | Type | Motortyp |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-15 — Anziehdrehmomente für Schwingungsdämpfer]] — gemeinsame Begriffe: replace screws, vibration damper hub
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

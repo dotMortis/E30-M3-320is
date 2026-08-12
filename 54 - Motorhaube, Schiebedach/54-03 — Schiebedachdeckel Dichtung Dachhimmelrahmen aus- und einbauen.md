@@ -93,5 +93,13 @@ Die Seite 54-3 beschreibt Ausbau, Einbau und Austausch des Schiebedachdeckels, d
 | rivet | Niet |
 | special tools | Sonderwerkzeuge |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[54-01 — Schiebe-Hubdachdeckel einstellen und prüfen]] — gemeinsame Begriffe: guide pin, roof liner frame, sun roof lid
+- [[54-06 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: cover rail, guide pin, sun roof lid
+- [[54-05 — Schiebedach-Antriebskabel aus- und einbauen]] — gemeinsame Begriffe: cover rail, guide pin
+
+
 ---
 [[Startseite]] · [[_Übersicht 54 — Motorhaube, Schiebedach|Abschnittsübersicht]] · [[Glossar]]

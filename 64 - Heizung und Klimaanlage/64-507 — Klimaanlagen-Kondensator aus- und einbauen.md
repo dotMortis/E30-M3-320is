@@ -93,5 +93,13 @@ Die Werkstatthandbuchseite 64–507 beschreibt den Ausbau und Einbau des Klimaan
 | cooling fins | Kühllamellen |
 | special comb | Richtkamm für Kühllamellen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-504 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: condenser, cooling fins, pipe, special comb
+- [[64-503 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: condenser, cooling fins, special comb
+- [[17-07 — Zusatzlüftereinheit aus- und einbauen]] — Abschnitt 17: gemeinsame Begriffe: condenser, extra fan
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

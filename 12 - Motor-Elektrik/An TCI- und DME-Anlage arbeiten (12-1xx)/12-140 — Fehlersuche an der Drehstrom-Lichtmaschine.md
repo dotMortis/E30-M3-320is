@@ -100,5 +100,13 @@ Flussdiagramm zur Fehlersuche an der Drehstrom-Lichtmaschine. Die Seite führt a
 | battery | Batterie |
 | power drain | Ruhestrom |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-40 — Fehlersuche Lichtmaschine und Ladesystem]] — gemeinsame Begriffe: charge indicator lamp, charging current, harmonic wave ratio, power drain, regulating voltage, slip rings
+- [[12-41 — Prüfung von Lichtmaschine und Spannungsregler]] — gemeinsame Begriffe: charging current, harmonic wave ratio, regulating voltage, slip rings
+- [[12-141 — Lichtmaschine und Spannungsregler prüfen]] — gemeinsame Begriffe: charging current, regulating voltage, slip rings
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

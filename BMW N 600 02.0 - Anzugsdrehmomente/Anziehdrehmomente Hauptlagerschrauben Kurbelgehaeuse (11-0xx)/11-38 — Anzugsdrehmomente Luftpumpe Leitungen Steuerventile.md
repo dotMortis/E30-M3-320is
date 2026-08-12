@@ -53,5 +53,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle im Kapitel 11–38 „Motor“. Sie 
 | Screw | Schraube |
 | Torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

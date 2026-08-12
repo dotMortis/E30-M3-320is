@@ -57,5 +57,11 @@ Die Seite 51-315 beschreibt den Einbau einer Scheibe in die Karosserieöffnung. 
 | repair kit | Reparatursatz |
 | nozzle | Düse |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-319 — Kleberaupe auftragen und Fahrzeugscheibe einsetzen]] — gemeinsame Begriffe: adhesive tape, nozzle, repair kit, ultrasonic tester
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

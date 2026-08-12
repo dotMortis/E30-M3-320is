@@ -57,5 +57,11 @@ Die Seite 11-105 beschreibt im Arbeitsgang 11 12 000 den Aus- und Einbau des Zyl
 | gaskets | Dichtungen |
 | removing and installing | Aus- und Einbau |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-53 — Zylinderkopfhaube aus- und einbauen]] — gemeinsame Begriffe: cylinder head cover, gaskets, nuts, spark plug connectors
+
+
 ---
 [[Startseite]] · [[_Übersicht 11 — Motor|Abschnittsübersicht]] · [[Glossar]]

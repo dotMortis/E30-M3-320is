@@ -63,5 +63,11 @@ Die Seite 12-143/2 beschreibt den Ausbau, die Prüfung und den Einbau beziehungs
 | contact surfaces | Kontaktflächen |
 | gas discharging tank | Gasableitungsbehälter |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-46 — Kohlebürsten und Spannungsregler aus- und einbauen]] — gemeinsame Begriffe: contact surfaces, slip rings, spring contacts
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

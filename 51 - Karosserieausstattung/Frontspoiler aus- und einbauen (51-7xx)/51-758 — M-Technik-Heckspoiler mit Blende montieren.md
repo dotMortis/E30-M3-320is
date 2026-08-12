@@ -58,5 +58,12 @@ Die Seite 51–758 zeigt in drei Bildschritten die Montage einer Blende beziehun
 | plastic nuts | Kunststoffmuttern |
 | insulators | Isolierstücke |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-757 — M-Technic-Heckspoiler am Kofferraumdeckel einbauen]] — gemeinsame Begriffe: adhesive strips, panel, plastic nuts, rear spoiler
+- [[51-756 — Heckspoiler am Kofferraumdeckel einbauen]] — gemeinsame Begriffe: adhesive tape, rear spoiler
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

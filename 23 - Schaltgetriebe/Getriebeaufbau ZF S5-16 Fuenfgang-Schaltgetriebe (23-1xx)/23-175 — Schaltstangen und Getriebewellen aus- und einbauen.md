@@ -84,5 +84,12 @@ Die Seite 23-175 zeigt anhand mehrerer Montageabbildungen die Demontage und Mont
 | detent and locking balls | Rast- und Sperrkugeln |
 | locking lever | Sperrhebel |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-09 — Hinteres Getriebegehäuse zerlegen und zusammenbauen]] — gemeinsame Begriffe: 3rd/4th gear selector fork, detent and locking balls, locking lever
+- [[23-316 — Schaltgabeln Schaltstangen und Synchronisierer montieren]] — gemeinsame Begriffe: 1st/2nd gear selector rod, 3rd/4th gear selector fork
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

@@ -79,5 +79,11 @@ Die Seite 31-9.1 beschreibt den Ausbau und Einbau des Radnabenlagers am linken o
 | spindle | Spindel |
 | tightening torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 34 — Bremsen|Abschnitt 34]]
+
+
 ---
 [[Startseite]] · [[_Übersicht 31 — Vorderachse|Abschnittsübersicht]] · [[Glossar]]

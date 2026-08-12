@@ -93,5 +93,11 @@ Die Seite 51-757 beschreibt den Einbau des M-Technic-Heckspoilers am Kofferraumd
 | zinc dust paint | Zinkstaubfarbe |
 | baking temperature | Einbrenntemperatur |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-758 — M-Technik-Heckspoiler mit Blende montieren]] — gemeinsame Begriffe: adhesive strips, panel, plastic nuts, rear spoiler
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -88,5 +88,11 @@ Die Seite 26-16 enthält eine Fehlersuchtabelle für die Gelenkwelle. Sie ordnet
 | preload | Vorspannung |
 | Molykote Longterm 2 | Molykote Longterm 2 |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[26-15 — Fehlersuche Kardanwelle Geraeusche Vibrationen]] — gemeinsame Begriffe: final drive flange, runout, transmission flange, universal joint
+
+
 ---
 [[Startseite]] · [[_Übersicht 26 — Gelenkwelle|Abschnittsübersicht]] · [[Glossar]]

@@ -54,5 +54,14 @@ Seite 75 enthält das Inhaltsverzeichnis des Abschnitts 64 „Heizung und Klimaa
 | Condenser | Kondensator |
 | remove and install | aus- und einbauen |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[64-04 — Aufbau und Funktion des Kältemittelkreislaufs]] — gemeinsame Begriffe: compressor, condenser, drier, evaporator, expansion valve
+- [[64-503 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: condenser, evaporator, expansion valve
+- [[64-504 — Verdampfer der Klimaanlage aus- und einbauen]] — gemeinsame Begriffe: condenser, evaporator, expansion valve
+- [[64-01-operation — Integrierte Heizungs- und Klimaanlage]] — gemeinsame Begriffe: drier, expansion valve
+
+
 ---
 [[Startseite]] · [[_Übersicht 64 — Heizung und Klimaanlage|Abschnittsübersicht]] · [[Glossar]]

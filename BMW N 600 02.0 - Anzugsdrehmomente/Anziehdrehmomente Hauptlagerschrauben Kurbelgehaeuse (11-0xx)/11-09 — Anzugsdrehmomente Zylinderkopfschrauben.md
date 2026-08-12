@@ -66,5 +66,12 @@ Die Seite zeigt eine Anzugsdrehmoment-Tabelle für Zylinderkopfschrauben im Absc
 | measure | Wert |
 | unit | Einheit |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[11-05 — Anziehvorschriften Zylinderkopfschrauben M21 M30]] — gemeinsame Begriffe: cylinder head and cover, cylinder head bolts, settling time, wash and oil
+- [[11-04 — Anziehdaten der Zylinderkopfschrauben]] — gemeinsame Begriffe: cylinder head and cover, cylinder head bolts, settling time
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

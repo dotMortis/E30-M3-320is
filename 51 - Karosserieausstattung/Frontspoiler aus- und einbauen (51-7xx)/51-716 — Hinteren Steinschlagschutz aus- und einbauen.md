@@ -96,5 +96,13 @@ Die Seite 51-716 beschreibt den Ausbau und Einbau des hinteren Steinschlagschutz
 | wheel house | Radhaus |
 | special tool | Sonderwerkzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[51-711 — Platte am vorderen Seitenteil aus- und einbauen]] — gemeinsame Begriffe: drilling template, expansion rivet, grommet, sealing cord
+- [[51-712 — Blech an hinterer Seitenwand aus- und einbauen]] — gemeinsame Begriffe: grommet, plastic rivet, sealing cord
+- [[51-714 — Verkleidungsblende der Seitenschwellerabdeckung aus- und einbauen]] — gemeinsame Begriffe: drilling template, sealing cord
+
+
 ---
 [[Startseite]] · [[_Übersicht 51 — Karosserieausstattung|Abschnittsübersicht]] · [[Glossar]]

@@ -60,5 +60,13 @@ Die Seite zeigt einen Längsschnitt durch den Schaltmechanismus des ZF-S5-16-Fü
 | operating lever | Betätigungshebel |
 | selector arm | Schaltarm |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[23-02 — Schaltmechanismus Schnitt- und Montagezeichnung]] — gemeinsame Begriffe: assembly drawing, shift parts
+- [[23-101 — Getriebeaufbau ZF S5-16 Fünfgang-Schaltgetriebe]] — gemeinsame Begriffe: assembly drawing, five speed overdrive manual transmission
+- [[23-301 — Schaltmechanik GETRAG-265-6-Getriebe mit Schnellgang]] — gemeinsame Begriffe: 1st/2nd gear, 3rd/4th gear
+
+
 ---
 [[Startseite]] · [[_Übersicht 23 — Schaltgetriebe|Abschnittsübersicht]] · [[Glossar]]

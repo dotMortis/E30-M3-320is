@@ -44,5 +44,11 @@ Seite 79 ist das Inhaltsverzeichnis des Kapitels 97 „Abdichtung von Hohlräume
 | Body cavity | Karosseriehohlraum |
 | entire car | gesamtes Fahrzeug |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[97-01 — Hohlraumversiegelung der gesamten Karosserie]] — gemeinsame Begriffe: body cavity sealing, undercoating
+
+
 ---
 [[Startseite]] · [[_Übersicht 97 — Hohlraumversiegelung und Unterbodenschutz|Abschnittsübersicht]] · [[Glossar]]

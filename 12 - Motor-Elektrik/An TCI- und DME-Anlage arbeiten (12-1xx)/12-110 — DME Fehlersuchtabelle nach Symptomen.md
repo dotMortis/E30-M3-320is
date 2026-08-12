@@ -113,5 +113,24 @@ Die Seite 12-110 zeigt eine Übersicht zur Fehlersuche an der Digitalen Motorele
 | misfiring | Zündaussetzer |
 | fuel consumption | Kraftstoffverbrauch |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 13 — Kraftstoffsystem|Abschnitt 13]]
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+- [[_Übersicht 16 — Kraftstofftank und Leitungen|Abschnitt 16]]
+- [[_Übersicht 18 — Abgasanlage|Abschnitt 18]]
+- [[_Übersicht 17 — Kühler|Abschnitt 17]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-00-index-c — Inhaltsverzeichnis Elektrische Ausrüstung des Motors]] — gemeinsame Begriffe: digital motor electronics (dme), exhaust system, fuel supply
+- [[13-900 — Fehlersuchtafel Kraftstoffeinspritzung Symptome Prüfpositionen]] — Abschnitt 13: gemeinsame Begriffe: misfiring, symptom / test table
+- [[12-114_1 — DME-Fehlersuche Kraftstoffversorgung und Ansaugsystem]] — gemeinsame Begriffe: fuel supply, intake system
+- [[12-115 — DME Fehlersuche Prüfungen 17 bis 20]] — gemeinsame Begriffe: crankcase vent, exhaust system
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

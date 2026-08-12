@@ -60,5 +60,11 @@ Die Seite ist eine Anzugsdrehmoment-Tabelle zum Kapitel 25 „Schaltmechanismus�
 | Interlock cable | Sperrzug |
 | Torque | Anzugsdrehmoment |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 25 — Schaltmechanismus|Abschnitt 25]]
+
+
 ---
 [[Startseite]] · [[_Übersicht — BMW N 600 02.0 - Anzugsdrehmomente|Abschnittsübersicht]] · [[Glossar]]

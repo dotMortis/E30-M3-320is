@@ -68,5 +68,11 @@ Die Seite 12-113 beschreibt die Fehlersuche an der DME-Zündanlage in zwei Prüf
 | hairline crack | Haarriss |
 | burning sign | Brandspur |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-132 — Zündkerzenstecker prüfen und erneuern]] — gemeinsame Begriffe: shielded connector, spark plug connector
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

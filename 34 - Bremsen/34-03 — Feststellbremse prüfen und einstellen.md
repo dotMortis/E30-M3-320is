@@ -89,5 +89,14 @@ Werkstattanweisung zum Einstellen der Feststellbremse am BMW E30. Die Seite besc
 | switch | Schalter |
 | tightening torque | Anzugsdrehmoment |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[34-06 — Bremsbacken der Hinterradbremse aus- und einbauen]] — gemeinsame Begriffe: automatic slack control, brake drum, parking brake cable
+- [[34-23 — Fehlersuchtabelle Bremsanlage Ursachen Abhilfemaßnahmen]] — gemeinsame Begriffe: brake drum, brake lining, brake shoe
+- [[34-19 — Handbremshebel und Handbremsseile aus- und einbauen]] — gemeinsame Begriffe: brake shoe, parking brake cable
+- [[34-24 — Fehlersuchtabelle Bremsanlage Ursachen Maßnahmen]] — gemeinsame Begriffe: brake drum, parking brake cable
+
+
 ---
 [[Startseite]] · [[_Übersicht 34 — Bremsen|Abschnittsübersicht]] · [[Glossar]]

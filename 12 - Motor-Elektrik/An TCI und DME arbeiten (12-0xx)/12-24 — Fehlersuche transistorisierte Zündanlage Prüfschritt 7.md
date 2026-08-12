@@ -71,5 +71,17 @@ Flussdiagramm des Prüfschritts 7 zur Fehlersuche an der transistorisierten Zün
 | ignition voltage | Zündspannung |
 | nominal value microfiche | Mikrofilm mit Nennwerten |
 
+## Erwähnte Abschnitte
+> [!quote] Im Originaltext dieser Seite ausdrücklich genannt.
+
+- [[_Übersicht 11 — Motor|Abschnitt 11]]
+
+
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-22 — Fehlersuche Transistorzündanlage Prüfschritte 3 und 4]] — gemeinsame Begriffe: ignition voltage, transistor coil ignition (tci)
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]

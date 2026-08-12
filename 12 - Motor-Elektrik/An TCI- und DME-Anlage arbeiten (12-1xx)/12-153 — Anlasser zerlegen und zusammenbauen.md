@@ -107,5 +107,14 @@ Werkstattseite 12-153 zur Zerlegung und zum Zusammenbau des ausgebauten Anlasser
 | one-way clutch | Freilauf |
 | intermediate bearing | Zwischenlager |
 
+## Verwandte Seiten
+> [!tip] Automatisch anhand gemeinsamer Fachbegriffe verknüpft.
+
+- [[12-52 — Anlasser zerlegen und zusammenbauen]] — gemeinsame Begriffe: armature, bearing race, brush holder, commutator, dust cap, engaging fork, engaging lever, intermediate bearing, one-way clutch, pole housing
+- [[12-53 — Kohlebürsten am Anlasser aus- und einbauen]] — gemeinsame Begriffe: armature, brush holder, commutator, dust cap, pole housing
+- [[12-155 — Kohlebürsten am Anlasser ersetzen]] — gemeinsame Begriffe: brush holder, commutator, pole housing
+- [[12-150 — Fehlersuche am Anlasser]] — gemeinsame Begriffe: armature, one-way clutch
+
+
 ---
 [[Startseite]] · [[_Übersicht 12 — Motor-Elektrik|Abschnittsübersicht]] · [[Glossar]]
