@@ -9,9 +9,13 @@ vault.read) -> generate an answer via gen_client.py (Zen `gemini-3.6-flash`
 by default, keeping LLM iteration off the Google embedding budget/quota).
 
 Asserts the answer cites the expected page (by seitencode) and, for a
-question whose answer is NOT in the manual, that the model explicitly
-refuses per the system prompt rather than hallucinating from general
-knowledge.
+question whose answer is NOT in the manual, that the model is still honest
+about that gap in the "Aus dem Werkstatthandbuch" section (rather than
+inventing a manual citation that doesn't exist) while ALSO populating the
+"Zusätzliches Wissen" section per the current system prompt - this is a
+dev/test-only, non-agentic client (see gen_client.py's module doc), so it
+only exercises the baseline prompt behavior, not the tool-calling agent
+loop in src/agent.ts.
 """
 
 from __future__ import annotations
@@ -43,11 +47,16 @@ QUESTIONS = [
         "expect_refusal": False,
     },
     {
-        "label": "spec absent from a 1989 manual (refusal check)",
+        "label": "spec absent from a 1989 manual (honest-gap + extended-knowledge check)",
         "question": "Wie aktualisiere ich die Software des Navigationssystems über eine USB-Verbindung?",
         "expect_seitencode": None,
-        "expect_substrings": ["nicht enthalten"],
-        "expect_refusal": True,
+        # "nicht enthalten" - section 1 must stay honest about the manual gap
+        # rather than inventing a citation; "Zusätzliches Wissen" - section 2
+        # must still be populated per the current system prompt (this used to
+        # assert a bare refusal only - see module doc above for why that
+        # changed).
+        "expect_substrings": ["nicht enthalten", "Zusätzliches Wissen"],
+        "expect_refusal": False,
     },
 ]
 

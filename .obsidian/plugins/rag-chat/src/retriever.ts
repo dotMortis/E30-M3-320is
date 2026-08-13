@@ -1,6 +1,8 @@
-import { requestUrl, type Vault } from "obsidian";
+import type { Vault } from "obsidian";
 import { search, type AnyOrama } from "@orama/orama";
 import { loadTextIndex, loadVectorShard, type RagMetadata } from "./orama-schema";
+import { requestUrlWithRetry } from "./http-retry";
+import type { GroundingChunk, GroundingSupport } from "./gemini";
 import type { RagChatSettings } from "./settings";
 
 /** Query-time task prefix for gemini-embedding-2 (see PLAN.md - this model has
@@ -95,6 +97,30 @@ export interface ContextBlock {
   fullText: string;
 }
 
+/** A compact (no full text) search hit shape handed back to the model as a
+ * search_manual/search_manual_fuzzy tool response (see agent.ts) - keeps
+ * tool round-trip payloads small; the model calls get_manual_page separately
+ * if it wants full text for a specific result. */
+export interface CompactHit {
+  notePath: string;
+  seitencode: string;
+  sektion: string;
+  titel: string;
+}
+
+export function toCompactHits(hits: RetrievedHit[]): CompactHit[] {
+  return hits.map((h) => ({ notePath: h.notePath, seitencode: h.seitencode, sektion: h.sektion, titel: h.titel }));
+}
+
+/** A web source surfaced by Gemini's native Google Search grounding tool
+ * (see gemini.ts's generateWithTools / groundingMetadata parsing), distinct
+ * from ContextBlock (manual pages) - rendered as a separate citation list
+ * in the UI (see view.ts). */
+export interface WebCitation {
+  uri: string;
+  title: string;
+}
+
 /** One turn of the chat log. Shared between view.ts (UI/history state),
  * gemini.ts (folded into the model's `contents[]` for real multi-turn memory)
  * and workflow.ts (follow-up query resolution). */
@@ -107,7 +133,26 @@ export interface ChatTurn {
    * bubble. Cleared once real content starts arriving. UI-only: never sent
    * to the model (gemini.ts's buildHistoryContents only reads `text`). */
   status?: string;
+  /** Every status line emitted over the course of this turn (baseline
+   * retrieval hit count, per-round tool calls + result counts, retry
+   * countdowns, etc.) - unlike `status` (which is overwritten each time),
+   * this accumulates so the full research trail stays reviewable after the
+   * turn finishes (see view.ts's collapsed "Rechercheverlauf" block).
+   * UI-only, never sent to the model. */
+  statusLog?: string[];
+  /** Manual-page citations (see agent.ts's manualCitations). */
   citations?: ContextBlock[];
+  /** Web source citations from Google Search grounding (see agent.ts's
+   * webCitations) - rendered as a separate list in the UI (view.ts). */
+  webCitations?: WebCitation[];
+  /** This turn's final-round grounding chunks/supports (see workflow.ts's
+   * WorkflowDone doc) - used only for inline web-citation splicing
+   * (citation-links.ts's linkifyWebCitations), not for display on their own. */
+  webGroundingChunks?: GroundingChunk[];
+  webGroundingSupports?: GroundingSupport[];
+  /** True if this assistant turn is a paused ask_user clarifying question
+   * rather than a final answer - styled distinctly in the UI (view.ts). */
+  isClarifying?: boolean;
 }
 
 /** A single ranked hit from Vault Search's independent fuzzy/typo/synonym
@@ -150,25 +195,34 @@ export function validateManifest(manifest: RagManifest, settings: RagChatSetting
 }
 
 /** Embeds a user query via the Google gemini-embedding-2 REST API (non-streaming,
- * via Obsidian's CORS-safe requestUrl - no streaming needed here). */
-export async function embedQuery(query: string, settings: RagChatSettings): Promise<number[]> {
+ * via Obsidian's CORS-safe requestUrl - no streaming needed here). Retries on
+ * transient 429/5xx (see http-retry.ts); `onStatus`, if given, is called once
+ * per retry with a live progress label for the UI. */
+export async function embedQuery(
+  query: string,
+  settings: RagChatSettings,
+  onStatus?: (status: string) => void
+): Promise<number[]> {
   if (!settings.geminiApiKey) {
     throw new Error("Google API key (GEMINI_API_KEY) is required for query embeddings - set it in RAG Chat settings.");
   }
   const prefixed = QUERY_PREFIX_TMPL.replace("{content}", query);
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${settings.embeddingModel}:embedContent`;
-  const response = await requestUrl({
-    url,
-    method: "POST",
-    headers: {
-      "x-goog-api-key": settings.geminiApiKey,
-      "Content-Type": "application/json",
+  const response = await requestUrlWithRetry(
+    {
+      url,
+      method: "POST",
+      headers: {
+        "x-goog-api-key": settings.geminiApiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: { parts: [{ text: prefixed }] },
+        outputDimensionality: settings.outputDim,
+      }),
     },
-    body: JSON.stringify({
-      content: { parts: [{ text: prefixed }] },
-      outputDimensionality: settings.outputDim,
-    }),
-  });
+    { onStatus, label: "Embedding" }
+  );
   const values = response.json?.embedding?.values;
   if (!Array.isArray(values)) {
     throw new Error(`Unexpected embedContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
@@ -290,8 +344,11 @@ const FOLLOWUP_MAX_WORDS = 6;
  * about tank removal becomes "<prior question> und was ist mit 16-03?".
  * Falls through to the raw question when it doesn't look like a follow-up,
  * or when there's no prior turn to resolve against. This is intentionally a
- * cheap heuristic, not an LLM call - see gemini.ts's rewriteQuery() for the
- * LLM-based fallback used only when this + retrieval still come back thin.
+ * cheap heuristic, not an LLM call - it only seeds the free baseline
+ * retrieval (see workflow.ts); if that's not enough, the agent loop's own
+ * search_manual/search_manual_fuzzy tools (see agent.ts) let the model
+ * re-query with a better phrasing itself instead of relying on a fixed
+ * rewrite step.
  */
 export function resolveFollowupQuery(question: string, history: ChatTurn[]): string {
   const trimmed = question.trim();

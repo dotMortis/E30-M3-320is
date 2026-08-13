@@ -116,7 +116,8 @@ GEN_PROVIDER      = "zen" | "google"         # default "zen"
 ZEN_GEN_ENDPOINT  = "https://opencode.ai/zen/v1/models/gemini-3.6-flash"
 GOOGLE_GEN_BASE   = "https://generativelanguage.googleapis.com/v1beta/models"
 TOP_K             = 8
-SIMILARITY        = 0.75
+SIMILARITY        = 0.55  # CORRECTED (see settings.ts): 0.75 empirically returned ZERO vector
+                          # candidates on real colloquial queries, silently disabling the vector leg
 CHUNK_TOKENS      = 800
 CHUNK_OVERLAP     = 100
 ```
@@ -362,7 +363,7 @@ so surrounding torque specs / part lists are never severed.
     shipped index's truncated dims, not the 3072 cache dims), `topK`, `similarity`
   - All persisted in Obsidian `data.json`; embedding always routes to Google regardless of toggle.
 
-### System prompt (pinned, shipped verbatim)
+### System prompt (superseded — kept for history, see "Phase 6" below)
 Derived from the research (grounding via `<context>`/`<question>`, image #3 §4). German output:
 ```
 Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
@@ -376,6 +377,53 @@ Antworte auf Deutsch.
 Context assembly: `<context>` = full parent notes (dedup by `notePath`), each block tagged with
 its note filename + `seitencode` + `sektion` (disambiguates the known `seitencode` collisions);
 `<question>` = the user query.
+
+**Superseded (Aug 2026):** this prompt forced strict "context-only" answers and, combined with
+the original workflow's hidden early-return on empty retrieval (see workflow.ts's git history),
+meant the model never extended an answer with its own knowledge or live web results even when
+explicitly asked to — see "Phase 6" below for the replacement design (extend-with-knowledge +
+web search + bounded agent loop) and its exact current prompt text in `src/gemini.ts`.
+
+## Phase 6 — Agentic extend-with-knowledge upgrade (Aug 2026)
+
+Motivation: the strict context-only prompt above was *too* conservative for general use — it
+refused to add general knowledge or look anything up on the web even when the manual didn't
+cover a question, and the workflow didn't even call the LLM at all when retrieval came back
+empty (a hardcoded "not found" message was shown instead). This phase replaces that with a
+system that always extends manual answers with clearly labeled general knowledge and live web
+search, and gives the model its own tools to decide when the initial retrieval isn't enough.
+
+**Answer structure** (see `src/gemini.ts`'s current `SYSTEM_PROMPT` for the exact text):
+1. **Aus dem Werkstatthandbuch** — strictly grounded in retrieved `<context>`, cited by
+   Seitencode; numeric specs (torque, part numbers) may ONLY be stated here if they're literally
+   present in a retrieved page.
+2. **Zusätzliches Wissen (Allgemeinwissen & Web, nicht werksseitig verifiziert)** — always
+   populated, even when section 1 already answers the question; sourced from the model's own
+   knowledge and from Gemini's native Google Search grounding tool (`tools: [{google_search:{}}]`
+   on every `generateContent` call). Explicitly flagged as unverified against the factory manual,
+   with manual values taking precedence for safety-relevant numbers.
+
+**Bounded agent loop** (`src/agent.ts`, replacing the old deterministic
+`isWeak`/`widenSettings`/`rewriteQuery`/`critiqueAnswer` retry stack in `workflow.ts` entirely —
+no separate forced grounding-check call remains; grounding relies on the prompt wording + the
+model's own tool use):
+- Tools: `search_manual(query)`, `search_manual_fuzzy(query)`, `get_manual_page(notePath,
+  seitencode, sektion, titel)`, `google_search` (native), `ask_user(question)`.
+- Hard cap: `settings.maxAgentRounds` (default 4) — each round is one non-streaming
+  `generateContent` call; once the round budget is exhausted while the model still wants to call
+  tools, one final tools-stripped call forces a plain-text answer.
+- `ask_user` pauses the turn (in-memory `PendingAgentState`, not persisted across app restarts):
+  the question is shown as its own chat turn, and the user's next message resumes the *same*
+  loop/round budget via `resumeAgentLoop()` rather than starting an independent new turn.
+- Trade-off accepted: since each tool-calling round needs to inspect the response for
+  `functionCall` parts, generation is no longer token-streamed — the final answer is revealed in
+  one shot (same pattern the old self-critique step already used). Live per-round status labels
+  ("Runde 2/4: durchsuche Handbuch nach '…'") substitute for token-level streaming feedback.
+
+Also removed: `enableQueryRewriteFallback`, `enableSelfCritique`, `maxRetries`,
+`weakResultScoreThreshold`, `weakResultMinHits` settings (all superseded by the agent loop).
+`enableFuzzySearchLeg` was repurposed from "always merge Vault Search into every query" to
+"offer `search_manual_fuzzy` as a tool the model can choose to call".
 
 ## Phase 5 — QA, docs, ship
 

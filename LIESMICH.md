@@ -87,29 +87,38 @@ treffsicherer als die Standardsuche.
 ## 5. RAG‑Chat (KI‑gestützte Fragen)
 
 Zusätzlich zur Volltextsuche gibt es einen **KI‑Chat** (Plugin *RAG Chat*), der Fragen in
-normaler Sprache beantwortet und dabei **immer die genaue Handbuchseite zitiert** — z. B.
-„Anzugsdrehmoment Zylinderkopf?“ oder „welches Spezialwerkzeug für den
-Radialwellendichtring?“. Die Antwort stützt sich **ausschließlich** auf den Handbuchinhalt;
-fehlt eine Angabe im Handbuch, sagt der Chat das ausdrücklich, statt zu raten.
+normaler Sprache beantwortet — z. B. „Anzugsdrehmoment Zylinderkopf?“ oder „welches
+Spezialwerkzeug für den Radialwellendichtring?“. Jede Antwort ist in zwei Abschnitte
+gegliedert:
 
-- **Offline‑first:** Der Such‑Index (ein Textindex `rag-index-text.orama.msp` plus mehrere
-  Vektor‑Shards `rag-index-vectors-*.orama.msp`, alle im Plugin‑Ordner) ist bereits fertig
-  gebaut und im Repository enthalten — kein separater Build‑Schritt nötig, um den Chat zu
-  nutzen.
+1. **Aus dem Werkstatthandbuch** — stützt sich ausschließlich auf tatsächlich gefundene
+   Handbuchseiten und **zitiert immer die genaue Seite**. Fehlt eine Angabe im Handbuch, sagt
+   der Chat das ausdrücklich, statt eine Zahl zu erfinden.
+2. **Zusätzliches Wissen (Allgemeinwissen & Web, nicht werksseitig verifiziert)** — ergänzt
+   die Antwort immer um Kontext, Praxistipps und aktuelle Web‑Ergebnisse (Google Search), klar
+   getrennt vom Werksinhalt. Bei sicherheitsrelevanten Werten (Drehmomente, Toleranzen) hat die
+   Werksangabe aus Abschnitt 1 immer Vorrang vor ungeprüften Zusatzinfos.
+
+- **Offline‑first für das Handbuch selbst:** Der Such‑Index (ein Textindex
+  `rag-index-text.orama.msp` plus mehrere Vektor‑Shards `rag-index-vectors-*.orama.msp`, alle
+  im Plugin‑Ordner) ist bereits fertig gebaut und im Repository enthalten. Die Web‑Suche
+  (Abschnitt 2) benötigt dagegen eine aktive Internetverbindung.
 - **Öffnen:** Symbol in der linken Randleiste, oder Befehlspalette (**`Strg`+`P`**) →
   „*RAG: Frage stellen*“.
 - **Merkt sich das Gespräch:** Rückfragen wie „und was ist mit dem S14?“ beziehen sich auf
   die vorherige Antwort — der gesamte bisherige Chatverlauf wird bei jeder neuen Frage
   mitgeschickt.
-- **Nutzt zusätzlich die Handbuchsuche:** Findet die reine KI‑Suche (Vektor/BM25) eine
-  Formulierung nicht — z. B. bei Tippfehlern oder umgangssprachlichen Begriffen wie „Sprit“
-  statt „Kraftstoff“ — greift der Chat automatisch auch auf die tippfehler‑/synonymtolerante
-  **Handbuchsuche** (Plugin *Vault Search*) zurück. Ist dieses Plugin deaktiviert, funktioniert
-  der Chat trotzdem, findet dann aber ggf. weniger.
-- **Sucht bei schwachen Treffern automatisch breiter:** Wirkt das erste Suchergebnis dünn,
-  zeigt der Chat kurz „*Erweitere Suche …*“ / „*Prüfe Antwort …*“ und versucht es automatisch
-  noch einmal (breitere Suche, ggf. umformulierte Frage, geprüfte Antwort), bevor die finale
-  Antwort erscheint — das kann eine Frage etwas länger dauern lassen als vorher.
+- **Sucht bei Bedarf selbstständig weiter:** Der Chat entscheidet selbst, ob eine erste Suche
+  reicht oder ob er erneut im Handbuch sucht, die tippfehler‑/synonymtolerante **Handbuchsuche**
+  (Plugin *Vault Search*) nutzt, eine bestimmte Seite vollständig nachlädt, das Web durchsucht —
+  oder **dich um eine kurze Rückfrage bittet** (z. B. bei mehrdeutigen Fragen), bevor er
+  antwortet. Dafür zeigt er kurze Status‑Hinweise wie „*Runde 2/4: durchsuche Handbuch nach
+  „…“ …*“. Eine Rückfrage erscheint als eigene, farblich hervorgehobene Chat‑Nachricht — einfach
+  direkt darunter antworten, der Chat setzt dieselbe Suche fort. Pro Frage gibt es ein festes
+  Limit an Suchrunden (Einstellungen → RAG Chat → „*Max. Werkzeug‑Runden*“, Standard 4), danach
+  antwortet der Chat direkt mit dem, was er bis dahin gefunden hat.
+- **Ist dieses Plugin deaktiviert (Vault Search):** funktioniert der Chat trotzdem, findet dann
+  aber ggf. weniger im Handbuch selbst.
 - **API‑Schlüssel erforderlich** (unter Einstellungen → RAG Chat einzutragen):
   - **Google‑Schlüssel** (`GEMINI_API_KEY`) — wird sowohl für die Frage‑Embeddings als auch
     für die eigentliche Antwortgenerierung (`gemini-3.6-flash`) verwendet.

@@ -35,26 +35,18 @@ export interface RagChatSettings {
    * larger candidate pools and, tested here, buried single-leg-exclusive
    * top matches under documents that were merely mediocre on both legs. */
   rrfK: number;
-  /** Merge in Vault Search's fuzzy/typo/synonym-aware results as a third
-   * retrieval leg on every query (see retriever.ts's mergeWithFuzzy). */
+  /** Whether the search_manual_fuzzy tool (Vault Search's fuzzy/typo/synonym
+   * search) is offered to the model at all during the agent loop (see
+   * agent.ts). Requires the vault-search plugin to be installed/enabled. */
   enableFuzzySearchLeg: boolean;
-  /** If the first retrieval pass looks thin (see workflow.ts's isWeak), retry
-   * once with a loosened similarity threshold, and - if still thin - fall
-   * back to an LLM-rewritten query. Set to 0 to disable automatic retries. */
-  maxRetries: number;
-  /** Below this merged score, a top hit is considered "thin" (0-1 scale). */
-  weakResultScoreThreshold: number;
-  /** Fewer than this many retrieved documents is also considered "thin". */
-  weakResultMinHits: number;
-  /** Ask the LLM to rewrite the question (using conversation history) as a
-   * last-resort retry when deterministic retrieval still comes back thin.
-   * Costs one extra non-streaming Gemini call, only when triggered. */
-  enableQueryRewriteFallback: boolean;
-  /** After generating a draft answer, ask the LLM to critique whether it's
-   * actually supported by the retrieved context, and regenerate once (with
-   * broadened retrieval) if not. Costs one extra non-streaming Gemini call
-   * per turn, plus a possible regeneration. */
-  enableSelfCritique: boolean;
+  /** Hard cap on tool-calling rounds per question in the agent loop (see
+   * agent.ts's runAgentLoop). Each round is one non-streaming Gemini call
+   * that may return a tool call (search_manual, search_manual_fuzzy,
+   * get_manual_page, ask_user) or a final answer. Once the cap is hit, tools
+   * are stripped and the model is forced to answer directly with whatever
+   * it has gathered so far. An ask_user round that pauses for a clarifying
+   * question still consumes one round of this budget on resume. */
+  maxAgentRounds: number;
 }
 
 export const DEFAULT_SETTINGS: RagChatSettings = {
@@ -66,11 +58,7 @@ export const DEFAULT_SETTINGS: RagChatSettings = {
   similarity: 0.55,
   rrfK: 2,
   enableFuzzySearchLeg: true,
-  maxRetries: 1,
-  weakResultScoreThreshold: 0.35,
-  weakResultMinHits: 2,
-  enableQueryRewriteFallback: true,
-  enableSelfCritique: true,
+  maxAgentRounds: 4,
 };
 
 export class RagChatSettingTab extends PluginSettingTab {
@@ -183,19 +171,20 @@ export class RagChatSettingTab extends PluginSettingTab {
         })
       );
 
-    containerEl.createEl("h3", { text: "Reasoning-Workflow (Retrieval-Qualität)" });
+    containerEl.createEl("h3", { text: "Agenten-Schleife (Werkzeuge & Rückfragen)" });
     containerEl.createEl("p", {
       text:
-        "Diese Optionen adressieren Fälle, in denen RAG Chat eine Seite nicht findet, " +
-        "die die Handbuchsuche (Fuzzy Search) findet - z.B. bei Tippfehlern oder " +
-        "umgangssprachlichen Formulierungen.",
+        "RAG Chat beantwortet Fragen nicht mehr nur aus dem Handbuch: das Modell kann selbst " +
+        "entscheiden, erneut zu suchen, eine bestimmte Seite vollständig nachzuladen, das Web " +
+        "zu durchsuchen oder dich um eine Klärung zu bitten - begrenzt durch ein festes Budget " +
+        "an Werkzeug-Runden pro Frage.",
     });
 
     new Setting(containerEl)
-      .setName("Vault-Search-Ergebnisse einbeziehen")
+      .setName("Vault-Search-Werkzeug anbieten")
       .setDesc(
-        "Nutzt die tippfehler-/synonymtolerante Handbuchsuche (Plugin \"vault-search\") als " +
-          "zusätzliche Quelle bei jeder Frage. Benötigt das vault-search-Plugin (aktiviert)."
+        "Bietet dem Modell die tippfehler-/synonymtolerante Handbuchsuche (Plugin \"vault-search\") " +
+          "als eigenständiges Werkzeug an. Benötigt das vault-search-Plugin (aktiviert)."
       )
       .addToggle((toggle) =>
         toggle.setValue(this.plugin.settings.enableFuzzySearchLeg).onChange(async (value) => {
@@ -205,68 +194,19 @@ export class RagChatSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Max. Wiederholungen")
-      .setDesc("Wie oft bei schwachen Treffern automatisch breiter gesucht/neu generiert wird (0 = aus).")
-      .addText((text) =>
-        text.setValue(String(this.plugin.settings.maxRetries)).onChange(async (value) => {
-          const n = parseInt(value, 10);
-          if (!Number.isNaN(n) && n >= 0) {
-            this.plugin.settings.maxRetries = n;
-            await this.plugin.saveSettings();
-          }
-        })
-      );
-
-    new Setting(containerEl)
-      .setName("Schwellwert für \"schwache\" Treffer")
-      .setDesc("Bester gemischter Score (0-1) unterhalb dessen ein Retry ausgelöst wird.")
-      .addText((text) =>
-        text.setValue(String(this.plugin.settings.weakResultScoreThreshold)).onChange(async (value) => {
-          const n = parseFloat(value);
-          if (!Number.isNaN(n) && n >= 0 && n <= 1) {
-            this.plugin.settings.weakResultScoreThreshold = n;
-            await this.plugin.saveSettings();
-          }
-        })
-      );
-
-    new Setting(containerEl)
-      .setName("Mindestanzahl Treffer")
-      .setDesc("Weniger als diese Anzahl gefundener Seiten löst ebenfalls einen Retry aus.")
-      .addText((text) =>
-        text.setValue(String(this.plugin.settings.weakResultMinHits)).onChange(async (value) => {
-          const n = parseInt(value, 10);
-          if (!Number.isNaN(n) && n >= 0) {
-            this.plugin.settings.weakResultMinHits = n;
-            await this.plugin.saveSettings();
-          }
-        })
-      );
-
-    new Setting(containerEl)
-      .setName("LLM-Suchanfragen-Umformulierung (Fallback)")
+      .setName("Max. Werkzeug-Runden")
       .setDesc(
-        "Wenn Retrieval weiterhin schwach bleibt, die Frage per LLM anhand des Gesprächsverlaufs " +
-          "umformulieren und erneut suchen. Kostet einen zusätzlichen Gemini-Aufruf, nur bei Bedarf."
+        "Hartes Limit an Werkzeug-Aufrufen (erneute Suche, Seite nachladen, Rückfrage) pro Frage, " +
+          "bevor das Modell gezwungen wird, direkt zu antworten. Eine Rückfrage an dich verbraucht " +
+          "beim Fortsetzen ebenfalls eine Runde dieses Budgets."
       )
-      .addToggle((toggle) =>
-        toggle.setValue(this.plugin.settings.enableQueryRewriteFallback).onChange(async (value) => {
-          this.plugin.settings.enableQueryRewriteFallback = value;
-          await this.plugin.saveSettings();
-        })
-      );
-
-    new Setting(containerEl)
-      .setName("Antwort-Selbstprüfung (LLM)")
-      .setDesc(
-        "Nach der Generierung per LLM prüfen, ob die Antwort wirklich durch den Kontext gestützt " +
-          "wird, und bei Bedarf einmal mit breiterer Suche neu generieren. Kostet einen " +
-          "zusätzlichen Gemini-Aufruf pro Frage."
-      )
-      .addToggle((toggle) =>
-        toggle.setValue(this.plugin.settings.enableSelfCritique).onChange(async (value) => {
-          this.plugin.settings.enableSelfCritique = value;
-          await this.plugin.saveSettings();
+      .addText((text) =>
+        text.setValue(String(this.plugin.settings.maxAgentRounds)).onChange(async (value) => {
+          const n = parseInt(value, 10);
+          if (!Number.isNaN(n) && n > 0) {
+            this.plugin.settings.maxAgentRounds = n;
+            await this.plugin.saveSettings();
+          }
         })
       );
   }
