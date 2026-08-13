@@ -607,17 +607,15 @@ def write_obsidian_config():
     # .obsidian/plugins/. A full pipeline rebuild rewrites this file, so any
     # enabled plugin missing here would be silently disabled on rebuild.
     #
-    # NOTE: "obsidian-image-toolkit" is deliberately NOT listed here (see
-    # eda93c9 "fix(obsidian): disable phantom/image plugins"): its plugin
-    # folder only ships a pre-seeded data.json (see below), not an actual
-    # main.js/manifest.json -- listing it as enabled makes Obsidian try to
-    # load a plugin that isn't there and error on startup. Per LIESMICH.md
-    # step 5, the user installs it themselves from the community catalog.
+    # NOTE: "obsidian-image-toolkit" is intentionally not vendored at all
+    # (see LIESMICH.md section 6): the user installs it themselves from the
+    # community catalog if they want it. "show-local-graph" was removed in
+    # favor of "rag-chat" auto-opening in the right sidebar by default (see
+    # rag-chat's onLayoutReady handler).
     (OBS / "community-plugins.json").write_text(
         json.dumps([
             "hide-image-files",
             "auto-reveal-active-file",
-            "show-local-graph",
             "vault-search",
         ], indent=2), encoding="utf-8")
     (OBS / "appearance.json").write_text(json.dumps({
@@ -632,13 +630,6 @@ def write_obsidian_config():
         "vault-search:open-vault-search": [
             {"modifiers": ["Mod", "Shift"], "key": "F"},
         ],
-    }, indent=2), encoding="utf-8")
-    itk = OBS / "plugins" / "obsidian-image-toolkit"
-    itk.mkdir(parents=True, exist_ok=True)
-    (itk / "data.json").write_text(json.dumps({
-        "viewImageGlobal": True, "viewImageInCPB": True, "viewImageWithLink": True,
-        "viewImageOther": True, "imageMoveSpeed": 10, "imgTipToggle": True,
-        "imgFullScreenMode": "FIT",
     }, indent=2), encoding="utf-8")
 
 

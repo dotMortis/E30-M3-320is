@@ -1,9 +1,0 @@
-{
-  "id": "show-local-graph",
-  "name": "Show Local Graph",
-  "version": "1.0.0",
-  "minAppVersion": "1.5.0",
-  "description": "Opens the local graph view in the right sidebar by default when the vault loads.",
-  "author": "E30-M3-320is vault",
-  "isDesktopOnly": false
-}

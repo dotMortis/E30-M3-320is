@@ -44,6 +44,11 @@ export function createFakeWorkspace() {
     revealLeaf(leaf: FakeLeaf): void {
       revealedLeaves.push(leaf);
     },
+    onLayoutReady(callback: () => void): void {
+      // Real Obsidian defers until the workspace layout has loaded; in
+      // tests the fake workspace is always "ready", so invoke immediately.
+      callback();
+    },
     async openLinkText(linktext: string, sourcePath: string, newLeaf = false): Promise<void> {
       openLinkTextCalls.push({ linktext, sourcePath, newLeaf });
     },

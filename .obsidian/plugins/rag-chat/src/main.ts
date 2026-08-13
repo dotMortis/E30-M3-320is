@@ -34,6 +34,15 @@ export default class RagChatPlugin extends Plugin {
 
     this.addSettingTab(new RagChatSettingTab(this.app, this));
 
+    // Ensure the RAG Chat view is present in the right sidebar once the
+    // workspace layout is ready, mirroring the vault's previous
+    // show-local-graph plugin. This makes RAG Chat appear by default for
+    // every user, independent of the per-user (gitignored) workspace.json
+    // state, without stealing focus from the editor on startup.
+    this.app.workspace.onLayoutReady(() => {
+      void this.activateView({ focus: false });
+    });
+
     try {
       const manifest = await this.getManifest();
       const warnings = validateManifest(manifest, this.settings);
@@ -62,13 +71,21 @@ export default class RagChatPlugin extends Plugin {
     return this.manifestCache;
   }
 
-  async activateView(): Promise<void> {
+  async activateView(options?: { focus?: boolean }): Promise<void> {
+    const focus = options?.focus ?? true;
     const { workspace } = this.app;
     let leaf = workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)[0];
     if (!leaf) {
       leaf = workspace.getRightLeaf(false) ?? workspace.getLeaf(true);
-      await leaf.setViewState({ type: RAG_CHAT_VIEW_TYPE, active: true });
+      // Only mark the leaf active (and thus focused/revealed) when the
+      // caller explicitly wants focus, e.g. the ribbon icon or command.
+      // The startup auto-open passes focus: false so it doesn't steal
+      // keyboard focus from the editor.
+      await leaf.setViewState({ type: RAG_CHAT_VIEW_TYPE, active: focus });
     }
+    // Reveal the sidebar leaf regardless of focus so it's visible even when
+    // auto-opened at startup; `active: false` above already ensured we
+    // didn't steal keyboard focus from the editor in that case.
     workspace.revealLeaf(leaf);
   }
 

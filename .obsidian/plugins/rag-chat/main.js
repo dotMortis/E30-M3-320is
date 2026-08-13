@@ -8959,6 +8959,9 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			}
 		});
 		this.addSettingTab(new RagChatSettingTab(this.app, this));
+		this.app.workspace.onLayoutReady(() => {
+			this.activateView({ focus: false });
+		});
 		try {
 			const warnings = validateManifest(await this.getManifest(), this.settings);
 			for (const w of warnings) new obsidian.Notice(`RAG Chat: ${w}`, 1e4);
@@ -8978,14 +8981,15 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		this.manifestCache = await readManifest(this.app.vault, this.getPluginDir());
 		return this.manifestCache;
 	}
-	async activateView() {
+	async activateView(options) {
+		const focus = options?.focus ?? true;
 		const { workspace } = this.app;
 		let leaf = workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)[0];
 		if (!leaf) {
 			leaf = workspace.getRightLeaf(false) ?? workspace.getLeaf(true);
 			await leaf.setViewState({
 				type: RAG_CHAT_VIEW_TYPE,
-				active: true
+				active: focus
 			});
 		}
 		workspace.revealLeaf(leaf);
