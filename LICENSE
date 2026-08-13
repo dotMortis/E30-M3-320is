@@ -1,0 +1,43 @@
+MIT License
+
+Copyright (c) 2026 E30-M3-320is vault contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Scope: this license applies only to the original source code in this
+repository — the Obsidian plugin source under `.obsidian/plugins/*/src`
+(and their build configs), the pipeline scripts under `.pipeline/scripts/`
+and `.pipeline/rag/`, and the tooling under `scripts/`.
+
+It does NOT apply to the manual content shipped alongside this code: the
+scanned pages, transcriptions, and derived notes in the numbered section
+folders, `Glossar*.md`, `Sicherheitshinweise.md`, `Sonderwerkzeuge.md`,
+`Technische-Daten.md`, `Startseite.md`, `LIESMICH.md`, `Referenzbilder/`,
+and the source scan folders (`1990 BMW M3 Elektrik-Fehlersuche-Handbuch`,
+`BMW N 600 02.0 - Anzugsdrehmomente`, `Bosch Motronic ML 3.1 (Zusatz)`,
+`.pipeline/_quellen/`). That content is derived from copyrighted BMW factory
+manuals and remains all rights reserved by the original manuals' copyright
+holder; no license is granted to it here.
+
+Separately, `.obsidian/plugins/vault-search`'s German synonym data is derived
+in part from OpenThesaurus (Daniel Naber et al.), licensed under CC-BY-SA 4.0 /
+LGPL 2.1 — see LIESMICH.md and
+`.obsidian/plugins/vault-search/scripts/openthesaurus-LICENSE.txt`.
