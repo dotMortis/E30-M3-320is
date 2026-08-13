@@ -6,9 +6,14 @@
  * Reads ./chunks.json (produced by embed_gemini.py) and builds:
  *   - ONE text-only BM25 index (full corpus, correct global IDF stats)
  *   - N vector-only shards at FULL 3072-dim fidelity (no truncation)
+ *   - a reference-chunks.json sidecar (rowId -> chunk text) for `kind:
+ *     "reference"` rows (standalone docs like Sonderwerkzeuge.md - see the
+ *     sidecar's own comment below for why they can't use the page-note
+ *     full-file "Parent Note" pattern)
  * plus a manifest, all written into the shipped plugin directory:
  *   .obsidian/plugins/rag-chat/rag-index-text.orama.msp
  *   .obsidian/plugins/rag-chat/rag-index-vectors-0.orama.msp ... -{N-1}.orama.msp
+ *   .obsidian/plugins/rag-chat/reference-chunks.json
  *   .obsidian/plugins/rag-chat/rag-manifest.json
  *
  * WHY SPLIT INDICES (see orama_schema.mjs for the full writeup): GitHub
@@ -63,6 +68,7 @@ const TEXT_INDEX_OUT = path.join(PLUGIN_DIR, "rag-index-text.orama.msp");
 const VECTOR_SHARD_PATH = (i) => path.join(PLUGIN_DIR, `rag-index-vectors-${i}.orama.msp`);
 const SCRATCH_PATH = path.join(__dirname, ".vector-scratch.orama.msp");
 const MANIFEST_OUT = path.join(PLUGIN_DIR, "rag-manifest.json");
+const REFERENCE_CHUNKS_OUT = path.join(PLUGIN_DIR, "reference-chunks.json");
 
 function mb(bytes) {
   return (bytes / 1024 / 1024).toFixed(1);
@@ -145,7 +151,27 @@ async function main() {
 
   const textCount = rows.filter((r) => r.kind === "text").length;
   const multimodalCount = rows.filter((r) => r.kind === "multimodal").length;
+  const referenceRows = rows.filter((r) => r.kind === "reference");
   const noteCount = new Set(rows.map((r) => r.notePath)).size;
+
+  // --- Reference-chunk sidecar (rowId -> chunk text + titel + notePath) ---
+  // Reference docs (Sonderwerkzeuge.md, Sicherheitshinweise.md, the Glossar
+  // letter-files, Technische-Daten.md - see chunk.py's REFERENCE_DOCS) are
+  // 14-81KB standalone documents, not ~1-3KB manual pages. The plugin's
+  // "Parent Note" pattern (read the WHOLE source file via vault.read on any
+  // matching hit) is correct for a page note but would inject an entire
+  // reference doc into context on every hit. Instead retriever.ts's
+  // expandToParentNotes() looks up JUST the matched chunk's text here for
+  // `kind === "reference"` hits (a vector-only hit has no `text` field in
+  // its own shard - see VECTOR_SCHEMA - so this sidecar is the only
+  // reliable source for that text, not the text index, which a hit might
+  // not have matched into if it came purely from the vector leg).
+  const referenceChunks = Object.fromEntries(
+    referenceRows.map((r) => [r.rowId, { text: r.text, titel: r.titel, notePath: r.notePath }])
+  );
+  writeFileSync(REFERENCE_CHUNKS_OUT, JSON.stringify(referenceChunks), "utf-8");
+  const referenceChunksBytes = statSync(REFERENCE_CHUNKS_OUT).size;
+  console.log(`Wrote ${REFERENCE_CHUNKS_OUT} (${referenceRows.length} chunks, ${mb(referenceChunksBytes)} MB)`);
 
   const manifest = {
     embeddingModel: model,
@@ -156,6 +182,9 @@ async function main() {
     noteCount,
     textChunkCount: textCount,
     multimodalCount,
+    referenceChunkCount: referenceRows.length,
+    referenceDocCount: new Set(referenceRows.map((r) => r.notePath)).size,
+    referenceChunksFile: path.basename(REFERENCE_CHUNKS_OUT),
     totalRowCount: rows.length,
     textIndexFile: path.basename(TEXT_INDEX_OUT),
     textIndexBytes,

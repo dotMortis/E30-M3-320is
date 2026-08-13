@@ -75,6 +75,23 @@ QUERIES = [
         ),
         "validates": "vector / multimodal leg (no literal keyword overlap)",
     },
+    {
+        "label": "reference doc: special tool lookup (PLAN.md flagship example)",
+        "query": "welches Spezialwerkzeug fuer den Radialwellendichtring?",
+        "expected_note_path": "Sonderwerkzeuge.md",
+        "validates": (
+            "kind:'reference' rows are actually retrievable - this exact query is the "
+            "motivating example for why Sonderwerkzeuge.md needed to be indexed at all "
+            "(see PLAN.md's 'Reference documents' addendum); previously this file was "
+            "completely absent from the index (no seitencode -> skipped by chunk.py)"
+        ),
+    },
+    {
+        "label": "reference doc: consolidated safety warning lookup",
+        "query": "Warnhinweis Kuehlmittel Inspektion",
+        "expected_note_path": "Sicherheitshinweise.md",
+        "validates": "kind:'reference' rows for the consolidated safety-warning digest",
+    },
 ]
 
 

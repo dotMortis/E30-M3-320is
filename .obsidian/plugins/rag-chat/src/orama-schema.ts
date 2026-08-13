@@ -97,7 +97,13 @@ export interface RagMetadata {
   tags: string[];
   notePath: string;
   bilddatei: string;
-  kind: "text" | "multimodal";
+  /** "text"/"multimodal" = page-note chunk/scan-vector (seitencode set,
+   * full-file "Parent Note" expansion via vault.read). "reference" =
+   * standalone reference-doc chunk (Sonderwerkzeuge.md, Glossar, ... -
+   * empty seitencode, `sektion: "Referenz"`; context comes from the
+   * reference-chunks.json sidecar, never a full-file read - see
+   * retriever.ts's expandToParentNotes). */
+  kind: "text" | "multimodal" | "reference";
 }
 
 export interface RagTextDocument extends RagMetadata {

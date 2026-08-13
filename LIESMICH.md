@@ -103,6 +103,11 @@ gegliedert:
   `rag-index-text.orama.msp` plus mehrere Vektor‑Shards `rag-index-vectors-*.orama.msp`, alle
   im Plugin‑Ordner) ist bereits fertig gebaut und im Repository enthalten. Die Web‑Suche
   (Abschnitt 2) benötigt dagegen eine aktive Internetverbindung.
+- **Durchsucht auch die Nachschlagewerke, nicht nur die Handbuchseiten:** Neben den 1.253
+  einzelnen Handbuchseiten sind auch die eigenständigen Nachschlagewerke ohne Seitencode indiziert
+  — der **Sonderwerkzeug‑Index**, die **Sicherheitshinweise‑Sammlung**, das **Glossar** (EN↔DE)
+  und die **Technischen Daten**. Der Chat zitiert solche Treffer mit „*[Referenz: <Titel>]*“ statt
+  einer Seitenzahl.
 - **Öffnen:** Symbol in der linken Randleiste, oder Befehlspalette (**`Strg`+`P`**) →
   „*RAG: Frage stellen*“.
 - **Merkt sich das Gespräch:** Rückfragen wie „und was ist mit dem S14?“ beziehen sich auf

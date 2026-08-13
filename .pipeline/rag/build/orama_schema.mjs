@@ -74,6 +74,11 @@ export const GERMAN_TOKENIZER = {
 // Metadata fields present on EVERY row in BOTH the text index and every
 // vector shard - needed so hits from either side carry full citation info
 // and can be merged on `rowId` without a cross-index lookup.
+// `kind` is one of "text" (page-note chunk) | "multimodal" (page-note
+// scan+description vector) | "reference" (standalone reference-doc chunk,
+// e.g. Sonderwerkzeuge.md - see chunk.py's REFERENCE_DOCS and
+// build_orama.mjs's reference-chunks.json sidecar). Orama's "enum" schema
+// type has no closed value list to declare - any string is accepted.
 const METADATA_FIELDS = {
   rowId: "string",
   seitencode: "string",

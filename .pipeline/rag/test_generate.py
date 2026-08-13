@@ -36,7 +36,7 @@ REPO_ROOT = RAG_DIR.parents[1]
 SEARCH_SCRIPT = RAG_DIR / "build" / "orama_search.mjs"
 
 TOP_K = 8
-SIMILARITY = 0.75
+SIMILARITY = 0.55
 
 QUESTIONS = [
     {
@@ -44,6 +44,16 @@ QUESTIONS = [
         "question": "Was ist das Anzugsdrehmoment für die Zündkerzen bei der Kompressionsprüfung (Seite 11-101)?",
         "expect_seitencode": "11-101",
         "expect_substrings": ["20 Nm", "11-101"],
+        "expect_refusal": False,
+    },
+    {
+        "label": "reference doc: special tool lookup (kind:'reference', no seitencode)",
+        "question": "Welches BMW-Sonderwerkzeug wird fuer den Radialwellendichtring am Antriebsflansch benoetigt?",
+        "expect_seitencode": None,
+        # Sonderwerkzeuge.md has no seitencode - the model should cite it via
+        # "[Referenz: Sonderwerkzeuge]" (see gemini.ts/gen_client.py's
+        # SYSTEM_PROMPT), not a "[Seite ...]" bracket.
+        "expect_substrings": ["Referenz: Sonderwerkzeuge"],
         "expect_refusal": False,
     },
     {

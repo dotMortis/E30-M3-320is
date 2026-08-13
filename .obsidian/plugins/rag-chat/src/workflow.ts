@@ -92,7 +92,7 @@ async function baselineRetrieve(
     }
   }
 
-  return expandToParentNotes(hits, vault);
+  return expandToParentNotes(hits, vault, indices.referenceChunks);
 }
 
 export async function answerQuestion(params: WorkflowParams): Promise<WorkflowResult> {

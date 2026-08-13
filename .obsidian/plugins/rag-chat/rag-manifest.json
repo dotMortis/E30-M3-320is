@@ -4,19 +4,23 @@
   "docPrefixTemplate": "title: {title} | text: {content}",
   "queryPrefixTemplate": "task: search result | query: {content}",
   "generationModel": "gemini-3.6-flash",
-  "noteCount": 1253,
+  "noteCount": 1261,
   "textChunkCount": 1569,
   "multimodalCount": 1253,
-  "totalRowCount": 2822,
+  "referenceChunkCount": 191,
+  "referenceDocCount": 8,
+  "referenceChunksFile": "reference-chunks.json",
+  "totalRowCount": 3013,
   "textIndexFile": "rag-index-text.orama.msp",
-  "textIndexBytes": 16206638,
-  "vectorShardCount": 2,
+  "textIndexBytes": 17774923,
+  "vectorShardCount": 3,
   "vectorIndexFilePattern": "rag-index-vectors-{i}.orama.msp",
   "vectorShardBytes": [
-    80947418,
-    80933482
+    57664915,
+    57545988,
+    57345591
   ],
-  "corpusHash": "104fecdaeabee7d52a8d169639999a1e3a3d3c89cd57f5b0463cbfb6181ae400",
-  "chunkedAt": "2026-08-13T09:43:20.327389+00:00",
-  "builtAt": "2026-08-13T11:30:27.478Z"
+  "corpusHash": "082caabbb7325ae912174c3ecbe36eeb6f09a26ef59ec3d7b1de5b33ca6800b3",
+  "chunkedAt": "2026-08-13T17:16:28.815941+00:00",
+  "builtAt": "2026-08-13T17:19:27.109Z"
 }

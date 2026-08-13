@@ -218,10 +218,13 @@ def run(rows: list[dict], client: genai.Client, workers: int = MAX_WORKERS) -> l
     out_rows = [dict(r) for r in rows]
 
     def _work(i: int, row: dict):
-        if row["kind"] == "text":
-            result = embed_text_row(client, row)
-        else:
+        if row["kind"] == "multimodal":
             result = embed_multimodal_row(client, row)
+        else:
+            # "text" (page-note chunk) and "reference" (standalone reference
+            # doc chunk, see chunk.py's REFERENCE_DOCS) both embed the same
+            # way - plain text, no image.
+            result = embed_text_row(client, row)
         return i, result
 
     with ThreadPoolExecutor(max_workers=workers) as pool:
@@ -267,7 +270,11 @@ def main():
 
     text_rows = [r for r in rows if r["kind"] == "text"]
     multimodal_rows = [r for r in rows if r["kind"] == "multimodal"]
-    print(f"Rows to embed: {len(rows)} ({len(text_rows)} text, {len(multimodal_rows)} multimodal)")
+    reference_rows = [r for r in rows if r["kind"] == "reference"]
+    print(
+        f"Rows to embed: {len(rows)} ({len(text_rows)} text, {len(multimodal_rows)} multimodal, "
+        f"{len(reference_rows)} reference)"
+    )
     if args.pilot:
         print(f"*** PILOT MODE: limited to first {args.pilot} rows ***")
 

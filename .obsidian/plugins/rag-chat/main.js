@@ -22,6 +22,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 //#endregion
 let obsidian = require("obsidian");
+let node_fs = require("node:fs");
 let node_crypto = require("node:crypto");
 let node_os = require("node:os");
 node_os = __toESM(node_os, 1);
@@ -8007,13 +8008,18 @@ async function embedQuery(query, settings, onStatus) {
 }
 var cached = null;
 var cachedPluginDir = null;
-/** Loads (and caches) the split text index + all vector shards from the
-* plugin directory, per the manifest's vectorShardCount. */
+/** Loads (and caches) the split text index + all vector shards + the
+* reference-chunks.json sidecar from the plugin directory, per the
+* manifest's vectorShardCount/referenceChunksFile. */
 async function getIndices(pluginDir, manifest) {
 	if (cached && cachedPluginDir === pluginDir) return cached;
+	const textDb = await loadTextIndex(`${pluginDir}/${manifest.textIndexFile}`);
+	const vectorDbs = await Promise.all(Array.from({ length: manifest.vectorShardCount }, (_, i) => loadVectorShard(`${pluginDir}/${manifest.vectorIndexFilePattern.replace("{i}", String(i))}`)));
+	const referenceChunksRaw = JSON.parse((0, node_fs.readFileSync)(`${pluginDir}/${manifest.referenceChunksFile}`, "utf-8"));
 	cached = {
-		textDb: await loadTextIndex(`${pluginDir}/${manifest.textIndexFile}`),
-		vectorDbs: await Promise.all(Array.from({ length: manifest.vectorShardCount }, (_, i) => loadVectorShard(`${pluginDir}/${manifest.vectorIndexFilePattern.replace("{i}", String(i))}`)))
+		textDb,
+		vectorDbs,
+		referenceChunks: new Map(Object.entries(referenceChunksRaw))
 	};
 	cachedPluginDir = pluginDir;
 	return cached;
@@ -8059,6 +8065,7 @@ async function federatedHybridSearch(indices, term, vector, settings) {
 		score: h.score
 	})), settings.rrfK).slice(0, settings.topK).map(({ score, doc }) => ({
 		score,
+		rowId: doc.rowId,
 		notePath: doc.notePath,
 		seitencode: doc.seitencode,
 		sektion: doc.sektion,
@@ -8139,6 +8146,7 @@ function mergeWithFuzzy(hybridHits, fuzzyHits, topK) {
 		if (existing) existing.score += contribution;
 		else merged.set(f.notePath, {
 			score: contribution,
+			rowId: `${f.notePath}::fuzzy`,
 			notePath: f.notePath,
 			seitencode: f.seitencode,
 			sektion: f.sektion,
@@ -8149,16 +8157,41 @@ function mergeWithFuzzy(hybridHits, fuzzyHits, topK) {
 	return [...merged.values()].sort((a, b) => b.score - a.score).slice(0, topK);
 }
 /**
-* Parent-note expansion (see PLAN.md Phase 4): dedupe hits by notePath (the
-* UNIQUE key - seitencode alone has 47 known collisions across the vault,
-* see PLAN.md), read each source note IN FULL via vault.read (the "Parent
-* Note" pattern - never truncate), and return context blocks labelled with
-* notePath + seitencode + sektion (that pair disambiguates the collisions).
+* Parent-note expansion (see PLAN.md Phase 4): for page-note hits
+* (`kind: "text" | "multimodal"`), dedupe by notePath (the UNIQUE key -
+* seitencode alone has 47 known collisions across the vault, see PLAN.md)
+* and read each source note IN FULL via vault.read (the "Parent Note"
+* pattern - never truncate).
+*
+* For `kind: "reference"` hits (standalone docs like Sonderwerkzeuge.md -
+* see chunk.py's REFERENCE_DOCS), this does NOT read the whole file: those
+* documents run 14-81KB, far too large to inject in full on every matching
+* chunk hit the way a ~1-3KB page note is. Instead it looks up just the
+* matched CHUNK's text from the reference-chunks.json sidecar (`hit.rowId`
+* is stable across a hit's originating leg - text or vector-only), and
+* dedupes by `rowId` rather than `notePath` so multiple distinct relevant
+* chunks from the SAME reference doc (e.g. two different Sonderwerkzeuge
+* tool groups) are all kept, instead of collapsing to just the top-ranked
+* one the way same-notePath page-note hits correctly do.
 */
-async function expandToParentNotes(hits, vault) {
+async function expandToParentNotes(hits, vault, referenceChunks) {
 	const seen = /* @__PURE__ */ new Set();
 	const blocks = [];
 	for (const hit of hits) {
+		if (hit.kind === "reference") {
+			if (seen.has(hit.rowId)) continue;
+			seen.add(hit.rowId);
+			const chunk = referenceChunks.get(hit.rowId);
+			if (!chunk) continue;
+			blocks.push({
+				notePath: hit.notePath,
+				seitencode: "",
+				sektion: hit.sektion,
+				titel: hit.titel,
+				fullText: chunk.text
+			});
+			continue;
+		}
 		if (seen.has(hit.notePath)) continue;
 		seen.add(hit.notePath);
 		const file = vault.getFileByPath(hit.notePath);
@@ -8174,9 +8207,16 @@ async function expandToParentNotes(hits, vault) {
 	}
 	return blocks;
 }
-/** Assembles the <context> block fed to the generation model. */
+/** Assembles the <context> block fed to the generation model. `titel` is
+* included as an attribute (not just relied on being inline in `fullText`,
+* which page notes start with as "# <titel>" but a reference-doc chunk from
+* later in a large file may not) so the model can always identify which
+* document a chunk came from. Blocks with an empty `seitencode` are
+* reference-doc chunks - see gemini.ts's SYSTEM_PROMPT for the citation
+* format the model is instructed to use for those ("[Referenz: <titel>]"
+* instead of "[Seite <code>]"). */
 function buildContextXml(blocks) {
-	return `<context>\n${blocks.map((b) => `<document source="${b.notePath}" seitencode="${b.seitencode}" sektion="${b.sektion}">\n${b.fullText}\n</document>`).join("\n\n")}\n</context>`;
+	return `<context>\n${blocks.map((b) => `<document source="${b.notePath}" seitencode="${b.seitencode}" sektion="${b.sektion}" titel="${b.titel}">\n${b.fullText}\n</document>`).join("\n\n")}\n</context>`;
 }
 //#endregion
 //#region src/gemini.ts
@@ -8215,7 +8255,11 @@ Struktur jeder Antwort:
    exakt im Format "[Seite <code>]" bzw. bei mehreren Seiten "[Seite <code1>, <code2>]" (z.B.
    "[Seite 16-02, 16-03]") - nur die Seitencodes selbst getrennt durch ", ", ohne zusätzlichen Text
    innerhalb der Klammer. Verwende dabei ausschließlich Seitencodes, die dir tatsächlich in einem
-   <document seitencode="..."> deiner abgerufenen Quellen geliefert wurden.
+   <document seitencode="..."> deiner abgerufenen Quellen geliefert wurden. Manche abgerufenen
+   <document>-Quellen haben KEINEN Seitencode (leeres seitencode-Attribut) - das sind eigenständige
+   Nachschlagewerke (z.B. Sonderwerkzeuge, Sicherheitshinweise, Glossar, Technische Daten), keine
+   einzelnen Handbuchseiten. Zitiere solche Quellen stattdessen exakt im Format "[Referenz: <titel>]"
+   (titel aus dem titel-Attribut derselben Quelle), niemals mit "[Seite ...]".
 2. **Zusätzliches Wissen (Allgemeinwissen & Web, nicht werksseitig verifiziert):** Ergänze die Antwort
    IMMER um zusätzlichen Kontext, praktische Hinweise und aktuelle Informationen (z.B. moderne
    Ersatzteile, gängige Foren-Hinweise, aktualisierte Teilenummern) aus deinem Allgemeinwissen und -
@@ -8594,7 +8638,7 @@ async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, onSta
 	if (settings.enableFuzzySearchLeg && fuzzyApi) try {
 		hits = mergeWithFuzzy(hybridHits, (await fuzzyApi.search(query, 10)).results, settings.topK);
 	} catch {}
-	return expandToParentNotes(hits, vault);
+	return expandToParentNotes(hits, vault, indices.referenceChunks);
 }
 async function answerQuestion(params) {
 	const { question, history, settings, vault, indices, fuzzyApi, onStatus } = params;
@@ -8694,6 +8738,34 @@ function linkifyCitations(text, citations) {
 			if (matches.length === 1) return `[[${escapeWikilinkPath(matches[0].notePath)}|${code}]]`;
 			return `<details class="rag-chat-citation-ambiguous"><summary>${code}</summary>${matches.map((m) => `[[${escapeWikilinkPath(m.notePath)}|${m.sektion}]]`).join(" · ")}</details>`;
 		}).join(", ")}]`;
+	});
+}
+/**
+* Sibling of linkifyCitations for the OTHER citation format the model uses
+* (see gemini.ts's SYSTEM_PROMPT): "[Referenz: <titel>]", for `<document>`
+* sources with no seitencode - standalone reference docs (Sonderwerkzeuge,
+* Sicherheitshinweise, Glossar, Technische Daten; see chunk.py's
+* REFERENCE_DOCS). Matched by `titel` instead of `seitencode` (reference
+* blocks all share the same empty seitencode, so bySeitencode collapses
+* them - titel is the only thing that actually disambiguates them). Same
+* verified/unverified/ambiguous shape as linkifyCitations, run as a
+* separate pass since the two formats never overlap in the same brackets.
+*/
+function linkifyReferenceCitations(text, citations) {
+	const referenceBlocks = citations.filter((b) => !b.seitencode);
+	if (referenceBlocks.length === 0) return text;
+	const byTitel = /* @__PURE__ */ new Map();
+	for (const block of referenceBlocks) {
+		const list = byTitel.get(block.titel);
+		if (list) list.push(block);
+		else byTitel.set(block.titel, [block]);
+	}
+	return text.replace(/\[Referenz:\s*([^\]]+)\]/gi, (whole, inner) => {
+		const titel = inner.trim();
+		if (!titel) return whole;
+		const matches = byTitel.get(titel);
+		if (!matches) return `<span class="rag-chat-citation-unverified" title="Konnte nicht gegen die abgerufenen Quellen dieser Antwort verifiziert werden">${titel}</span>`;
+		return `[Referenz: [[${escapeWikilinkPath(matches[0].notePath)}|${titel}]]]`;
 	});
 }
 var LEADING_LIST_MARKER_RE = /^([ \t]*(?:[-*+]|\d+[.)])[ \t]+)/;
@@ -8949,7 +9021,7 @@ var RagChatView = class extends obsidian.ItemView {
 			this.turnEls.set(turn, textEl);
 			if (status) textEl.setText(turn.status);
 			else if (turn.role === "assistant" && turn.text) {
-				const renderedText = linkifyCitations(linkifyWebCitations(turn.text, turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []), turn.citations ?? []);
+				const renderedText = linkifyReferenceCitations(linkifyCitations(linkifyWebCitations(turn.text, turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []), turn.citations ?? []), turn.citations ?? []);
 				obsidian.MarkdownRenderer.render(this.app, renderedText, textEl, "", this).then(() => {
 					this.wireInternalLinks(textEl);
 				});
@@ -8961,13 +9033,16 @@ var RagChatView = class extends obsidian.ItemView {
 			if (turn.citations && turn.citations.length > 0) {
 				const citeEl = turnEl.createDiv({ cls: "rag-chat-citations" });
 				citeEl.createSpan({ text: "Quellen (Handbuch): " });
-				for (const block of turn.citations) citeEl.createEl("a", {
-					cls: "rag-chat-citation-link",
-					text: `${block.seitencode} (${block.sektion})`
-				}).addEventListener("click", (evt) => {
-					evt.preventDefault();
-					this.app.workspace.openLinkText(block.notePath, "", false);
-				});
+				for (const block of turn.citations) {
+					const label = block.seitencode ? `${block.seitencode} (${block.sektion})` : `${block.titel} (${block.sektion})`;
+					citeEl.createEl("a", {
+						cls: "rag-chat-citation-link",
+						text: label
+					}).addEventListener("click", (evt) => {
+						evt.preventDefault();
+						this.app.workspace.openLinkText(block.notePath, "", false);
+					});
+				}
 			}
 			if (turn.webCitations && turn.webCitations.length > 0) {
 				const snippets = buildWebCitationSnippets(turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []);

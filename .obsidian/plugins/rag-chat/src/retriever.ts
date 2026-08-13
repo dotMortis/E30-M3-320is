@@ -1,4 +1,5 @@
 import type { Vault } from "obsidian";
+import { readFileSync } from "node:fs";
 import { search, type AnyOrama } from "@orama/orama";
 import { loadTextIndex, loadVectorShard, type RagMetadata } from "./orama-schema";
 import { requestUrlWithRetry } from "./http-retry";
@@ -68,6 +69,16 @@ export interface RagManifest {
   noteCount: number;
   textChunkCount: number;
   multimodalCount: number;
+  /** Count of chunks from standalone reference docs (Sonderwerkzeuge.md,
+   * Sicherheitshinweise.md, the Glossar letter-files, Technische-Daten.md -
+   * see chunk.py's REFERENCE_DOCS). */
+  referenceChunkCount: number;
+  referenceDocCount: number;
+  /** rowId -> { text, titel, notePath } sidecar for `kind: "reference"` rows
+   * - see getIndices()/expandToParentNotes() and reference-chunks.json's own
+   * comment in build_orama.mjs for why these can't use the page-note
+   * full-file vault.read expansion. */
+  referenceChunksFile: string;
   totalRowCount: number;
   textIndexFile: string;
   textIndexBytes: number;
@@ -82,20 +93,33 @@ export interface RagManifest {
 
 export interface RetrievedHit {
   score: number;
+  /** Stable identity key shared with the text index + every vector shard
+   * (see orama_schema.mjs's buildRowId) - needed to look up a "reference"
+   * kind hit's chunk text in the reference-chunks.json sidecar (a
+   * vector-only hit has no `text` field of its own to read). */
+  rowId: string;
   notePath: string;
   seitencode: string;
   sektion: string;
   titel: string;
-  kind: "text" | "multimodal";
+  kind: "text" | "multimodal" | "reference";
 }
 
 export interface ContextBlock {
   notePath: string;
+  /** Empty for reference-doc blocks (see chunk.py's REFERENCE_DOCS) - these
+   * aren't tied to one scanned manual page, so there's no Seitencode to
+   * cite. gemini.ts's SYSTEM_PROMPT instructs the model to cite such blocks
+   * by `titel` (format "[Referenz: <titel>]") instead of "[Seite <code>]". */
   seitencode: string;
   sektion: string;
   titel: string;
   fullText: string;
 }
+
+/** rowId -> chunk text/titel/notePath, loaded from reference-chunks.json
+ * (see build_orama.mjs). Populated only for `kind: "reference"` rows. */
+export type ReferenceChunkMap = Map<string, { text: string; titel: string; notePath: string }>;
 
 /** A compact (no full text) search hit shape handed back to the model as a
  * search_manual/search_manual_fuzzy tool response (see agent.ts) - keeps
@@ -233,13 +257,15 @@ export async function embedQuery(
 export interface CachedIndices {
   textDb: AnyOrama;
   vectorDbs: AnyOrama[];
+  referenceChunks: ReferenceChunkMap;
 }
 
 let cached: CachedIndices | null = null;
 let cachedPluginDir: string | null = null;
 
-/** Loads (and caches) the split text index + all vector shards from the
- * plugin directory, per the manifest's vectorShardCount. */
+/** Loads (and caches) the split text index + all vector shards + the
+ * reference-chunks.json sidecar from the plugin directory, per the
+ * manifest's vectorShardCount/referenceChunksFile. */
 export async function getIndices(pluginDir: string, manifest: RagManifest): Promise<CachedIndices> {
   if (cached && cachedPluginDir === pluginDir) return cached;
   const textDb = await loadTextIndex(`${pluginDir}/${manifest.textIndexFile}`);
@@ -248,7 +274,11 @@ export async function getIndices(pluginDir: string, manifest: RagManifest): Prom
       loadVectorShard(`${pluginDir}/${manifest.vectorIndexFilePattern.replace("{i}", String(i))}`)
     )
   );
-  cached = { textDb, vectorDbs };
+  const referenceChunksRaw = JSON.parse(
+    readFileSync(`${pluginDir}/${manifest.referenceChunksFile}`, "utf-8")
+  ) as Record<string, { text: string; titel: string; notePath: string }>;
+  const referenceChunks: ReferenceChunkMap = new Map(Object.entries(referenceChunksRaw));
+  cached = { textDb, vectorDbs, referenceChunks };
   cachedPluginDir = pluginDir;
   return cached;
 }
@@ -309,6 +339,7 @@ export async function federatedHybridSearch(
     .slice(0, settings.topK)
     .map(({ score, doc }) => ({
       score,
+      rowId: doc.rowId,
       notePath: doc.notePath,
       seitencode: doc.seitencode,
       sektion: doc.sektion,
@@ -407,6 +438,11 @@ export function mergeWithFuzzy(
     } else {
       merged.set(f.notePath, {
         score: contribution,
+        // Vault Search only indexes page notes, not reference docs, and its
+        // hits are never looked up by rowId (that only matters for
+        // "reference" kind hits' sidecar lookup) - this synthetic id is
+        // just a placeholder to satisfy RetrievedHit's shape.
+        rowId: `${f.notePath}::fuzzy`,
         notePath: f.notePath,
         seitencode: f.seitencode,
         sektion: f.sektion,
@@ -420,16 +456,45 @@ export function mergeWithFuzzy(
 }
 
 /**
- * Parent-note expansion (see PLAN.md Phase 4): dedupe hits by notePath (the
- * UNIQUE key - seitencode alone has 47 known collisions across the vault,
- * see PLAN.md), read each source note IN FULL via vault.read (the "Parent
- * Note" pattern - never truncate), and return context blocks labelled with
- * notePath + seitencode + sektion (that pair disambiguates the collisions).
+ * Parent-note expansion (see PLAN.md Phase 4): for page-note hits
+ * (`kind: "text" | "multimodal"`), dedupe by notePath (the UNIQUE key -
+ * seitencode alone has 47 known collisions across the vault, see PLAN.md)
+ * and read each source note IN FULL via vault.read (the "Parent Note"
+ * pattern - never truncate).
+ *
+ * For `kind: "reference"` hits (standalone docs like Sonderwerkzeuge.md -
+ * see chunk.py's REFERENCE_DOCS), this does NOT read the whole file: those
+ * documents run 14-81KB, far too large to inject in full on every matching
+ * chunk hit the way a ~1-3KB page note is. Instead it looks up just the
+ * matched CHUNK's text from the reference-chunks.json sidecar (`hit.rowId`
+ * is stable across a hit's originating leg - text or vector-only), and
+ * dedupes by `rowId` rather than `notePath` so multiple distinct relevant
+ * chunks from the SAME reference doc (e.g. two different Sonderwerkzeuge
+ * tool groups) are all kept, instead of collapsing to just the top-ranked
+ * one the way same-notePath page-note hits correctly do.
  */
-export async function expandToParentNotes(hits: RetrievedHit[], vault: Vault): Promise<ContextBlock[]> {
+export async function expandToParentNotes(
+  hits: RetrievedHit[],
+  vault: Vault,
+  referenceChunks: ReferenceChunkMap
+): Promise<ContextBlock[]> {
   const seen = new Set<string>();
   const blocks: ContextBlock[] = [];
   for (const hit of hits) {
+    if (hit.kind === "reference") {
+      if (seen.has(hit.rowId)) continue;
+      seen.add(hit.rowId);
+      const chunk = referenceChunks.get(hit.rowId);
+      if (!chunk) continue; // stale sidecar/index mismatch - rebuild the index
+      blocks.push({
+        notePath: hit.notePath,
+        seitencode: "", // no Seitencode for standalone reference docs - see ContextBlock's doc
+        sektion: hit.sektion,
+        titel: hit.titel,
+        fullText: chunk.text,
+      });
+      continue;
+    }
     if (seen.has(hit.notePath)) continue;
     seen.add(hit.notePath);
     const file = vault.getFileByPath(hit.notePath);
@@ -446,11 +511,18 @@ export async function expandToParentNotes(hits: RetrievedHit[], vault: Vault): P
   return blocks;
 }
 
-/** Assembles the <context> block fed to the generation model. */
+/** Assembles the <context> block fed to the generation model. `titel` is
+ * included as an attribute (not just relied on being inline in `fullText`,
+ * which page notes start with as "# <titel>" but a reference-doc chunk from
+ * later in a large file may not) so the model can always identify which
+ * document a chunk came from. Blocks with an empty `seitencode` are
+ * reference-doc chunks - see gemini.ts's SYSTEM_PROMPT for the citation
+ * format the model is instructed to use for those ("[Referenz: <titel>]"
+ * instead of "[Seite <code>]"). */
 export function buildContextXml(blocks: ContextBlock[]): string {
   const parts = blocks.map(
     (b) =>
-      `<document source="${b.notePath}" seitencode="${b.seitencode}" sektion="${b.sektion}">\n${b.fullText}\n</document>`
+      `<document source="${b.notePath}" seitencode="${b.seitencode}" sektion="${b.sektion}" titel="${b.titel}">\n${b.fullText}\n</document>`
   );
   return `<context>\n${parts.join("\n\n")}\n</context>`;
 }

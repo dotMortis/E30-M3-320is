@@ -70,6 +70,43 @@ export function linkifyCitations(text: string, citations: ContextBlock[]): strin
   });
 }
 
+/**
+ * Sibling of linkifyCitations for the OTHER citation format the model uses
+ * (see gemini.ts's SYSTEM_PROMPT): "[Referenz: <titel>]", for `<document>`
+ * sources with no seitencode - standalone reference docs (Sonderwerkzeuge,
+ * Sicherheitshinweise, Glossar, Technische Daten; see chunk.py's
+ * REFERENCE_DOCS). Matched by `titel` instead of `seitencode` (reference
+ * blocks all share the same empty seitencode, so bySeitencode collapses
+ * them - titel is the only thing that actually disambiguates them). Same
+ * verified/unverified/ambiguous shape as linkifyCitations, run as a
+ * separate pass since the two formats never overlap in the same brackets.
+ */
+export function linkifyReferenceCitations(text: string, citations: ContextBlock[]): string {
+  const referenceBlocks = citations.filter((b) => !b.seitencode);
+  if (referenceBlocks.length === 0) return text;
+
+  const byTitel = new Map<string, ContextBlock[]>();
+  for (const block of referenceBlocks) {
+    const list = byTitel.get(block.titel);
+    if (list) list.push(block);
+    else byTitel.set(block.titel, [block]);
+  }
+
+  return text.replace(/\[Referenz:\s*([^\]]+)\]/gi, (whole, inner: string) => {
+    const titel = inner.trim();
+    if (!titel) return whole;
+    const matches = byTitel.get(titel);
+    if (!matches) {
+      return `<span class="rag-chat-citation-unverified" title="Konnte nicht gegen die abgerufenen Quellen dieser Antwort verifiziert werden">${titel}</span>`;
+    }
+    // Reference docs are 1:1 by titel in this corpus (unlike seitencode,
+    // which has known collisions) - matches.length > 1 would only happen if
+    // the same reference doc were retrieved via >1 chunk AND both ended up
+    // in `citations` with identical titel, which is harmless to collapse.
+    return `[Referenz: [[${escapeWikilinkPath(matches[0].notePath)}|${titel}]]]`;
+  });
+}
+
 const LEADING_LIST_MARKER_RE = /^([ \t]*(?:[-*+]|\d+[.)])[ \t]+)/;
 
 /** Finds the single line containing `pos`, and splits it into a leading

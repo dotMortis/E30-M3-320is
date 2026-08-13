@@ -3,7 +3,7 @@ import type RagChatPlugin from "./main";
 import type { PendingAgentState } from "./agent";
 import { getIndices, type ChatTurn, type FuzzySearchApi } from "./retriever";
 import { answerQuestion, continueAnswer, type WorkflowResult } from "./workflow";
-import { buildWebCitationSnippets, linkifyCitations, linkifyWebCitations } from "./citation-links";
+import { buildWebCitationSnippets, linkifyCitations, linkifyReferenceCitations, linkifyWebCitations } from "./citation-links";
 
 export const RAG_CHAT_VIEW_TYPE = "rag-chat-view";
 
@@ -233,8 +233,12 @@ export class RagChatView extends ItemView {
         //     "Quellen (Web)" list below.
         //  2. Manual "[Seite ...]" citations become real Obsidian
         //     wikilinks (see linkifyCitations).
+        //  3. Reference-doc "[Referenz: <titel>]" citations (Sonderwerkzeuge,
+        //     Sicherheitshinweise, Glossar, ... - no seitencode) become real
+        //     Obsidian wikilinks too (see linkifyReferenceCitations).
         const withWebLinks = linkifyWebCitations(turn.text, turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []);
-        const renderedText = linkifyCitations(withWebLinks, turn.citations ?? []);
+        const withManualLinks = linkifyCitations(withWebLinks, turn.citations ?? []);
+        const renderedText = linkifyReferenceCitations(withManualLinks, turn.citations ?? []);
         void MarkdownRenderer.render(this.app, renderedText, textEl, "", this).then(() => {
           this.wireInternalLinks(textEl);
         });
@@ -250,10 +254,14 @@ export class RagChatView extends ItemView {
         const citeEl = turnEl.createDiv({ cls: "rag-chat-citations" });
         citeEl.createSpan({ text: "Quellen (Handbuch): " });
         for (const block of turn.citations) {
-          const link = citeEl.createEl("a", {
-            cls: "rag-chat-citation-link",
-            text: `${block.seitencode} (${block.sektion})`,
-          });
+           // Reference-doc blocks (Sonderwerkzeuge, Sicherheitshinweise, ...)
+           // have no seitencode - label by titel instead (see retriever.ts's
+           // ContextBlock doc).
+           const label = block.seitencode ? `${block.seitencode} (${block.sektion})` : `${block.titel} (${block.sektion})`;
+           const link = citeEl.createEl("a", {
+             cls: "rag-chat-citation-link",
+             text: label,
+           });
           link.addEventListener("click", (evt) => {
             evt.preventDefault();
             void this.app.workspace.openLinkText(block.notePath, "", false);

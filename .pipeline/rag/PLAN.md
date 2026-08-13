@@ -524,4 +524,51 @@ notes + scans ──chunk.py──▶ chunks + parent-note map
   `BMW N 600 02.0 - Anzugsdrehmomente/.../(00-0xx)/` subfolder with a different `sektion`). Every
   identity join, dedup step, and QA assertion in this plan uses `notePath` as the unique key;
   `seitencode` + `sektion` together are used only for human-facing citation labels.
-```
+
+---
+
+## Addendum (Aug 2026) — Reference documents were missing from the index
+
+**Gap found:** `chunk.py`'s `parse_note()` skips every markdown file with no `seitencode`
+frontmatter field (by design — most such files are pure `_Übersicht ...md` folder-index
+navigation, `Startseite.md`, `LIESMICH.md`, etc., correctly excluded, no unique content of their
+own). But this also silently excluded **8 genuinely content-bearing standalone reference
+documents** that have no `seitencode` because they aren't tied to one scanned manual page:
+`Sonderwerkzeuge.md` (308 special-tool cross-references), `Sicherheitshinweise.md` (291
+consolidated safety warnings), `Technische-Daten.md` (M3/320is spec sheet), and the 5 `Glossar
+(...).md` letter-files (5,817 EN↔DE terms). Notably, **the exact "welches Spezialwerkzeug für den
+Radialwellendichtring?" flagship example query used earlier in this plan and in `LIESMICH.md`
+could never actually retrieve `Sonderwerkzeuge.md`** — it was entirely invisible to the RAG index.
+
+**Fix — `REFERENCE_DOCS` allowlist + `kind: "reference"`:**
+- `chunk.py` gained an explicit `REFERENCE_DOCS` path list and `process_reference_docs()`, chunked
+  with the same `chunk_text()` as page notes but with `seitencode: ""`, `sektion: "Referenz"`, no
+  multimodal row (no per-doc scan image).
+- **Table-heavy docs needed a chunking fix first:** the 5 Glossar files are ~90%+ one giant
+  markdown table with almost no blank lines between rows — `chunk_text()`'s paragraph-boundary
+  splitter treats a whole table as ONE unbreakable unit, which measured at 16,000-27,000 tokens
+  per Glossar file (gemini-embedding-2's hard cap is 8,192). Fixed with a new `expand_tables()`
+  pass (run on every reference doc before chunking) that rewrites `| a | b | c |` table rows into
+  blank-line-separated `a -> b | c` entries — same rationale as the existing `clean_fachbegriffe`
+  page-note transform, generalized to arbitrary column counts and applied before chunking rather
+  than after.
+- **Context assembly could not reuse the page-note "Parent Note" pattern as-is:** these files run
+  14-81KB, 5-20x a typical ~1-3KB page note — reading one in FULL via `vault.read` on every
+  matching hit (the existing pattern for `kind: "text"/"multimodal"`) would flood context with a
+  huge, mostly-irrelevant file on every hit. Fix: `build_orama.mjs` emits a new
+  `reference-chunks.json` sidecar (`rowId -> {text, titel, notePath}`) alongside the shipped
+  indices; `retriever.ts`'s `expandToParentNotes()` branches on `hit.kind === "reference"` and
+  uses just the matched CHUNK's text from the sidecar, deduped by `rowId` (not `notePath` — unlike
+  page notes, multiple distinct relevant chunks from the SAME reference doc, e.g. two different
+  Sonderwerkzeuge tool groups, are all kept rather than collapsed to the top-ranked one).
+- **Citation format:** these blocks have an empty `seitencode`, so `gemini.ts`/`gen_client.py`'s
+  `SYSTEM_PROMPT` (kept byte-identical between the two) gained an instruction to cite them as
+  `[Referenz: <titel>]` instead of `[Seite <code>]`; `citation-links.ts` gained a sibling
+  `linkifyReferenceCitations()` pass matching that format by `titel` (seitencode-based matching
+  can't disambiguate reference docs — they all share the same empty seitencode).
+- **Cost/rebuild impact:** +191 chunks (3,013 rows total, up from 2,822), embedded incrementally
+  (existing 2,822 vectors stayed cache-hit, ~$0.03 for the new chunks). Vector index grew from 2
+  shards (~81MB each) to 3 shards (~55MB each) — `build_orama.mjs`'s measure-then-split logic
+  handled this automatically, no manual retuning needed. `qa_rag.py` gained two regression queries
+  (`Sonderwerkzeuge.md`, `Sicherheitshinweise.md`) so this gap can't silently reappear; both pass
+  (ranks 2 and 1 respectively, `TOP_K=8`, `SIMILARITY=0.55`).

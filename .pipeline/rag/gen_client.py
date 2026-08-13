@@ -54,7 +54,11 @@ Struktur jeder Antwort:
    exakt im Format "[Seite <code>]" bzw. bei mehreren Seiten "[Seite <code1>, <code2>]" (z.B.
    "[Seite 16-02, 16-03]") - nur die Seitencodes selbst getrennt durch ", ", ohne zusätzlichen Text
    innerhalb der Klammer. Verwende dabei ausschließlich Seitencodes, die dir tatsächlich in einem
-   <document seitencode="..."> deiner abgerufenen Quellen geliefert wurden.
+   <document seitencode="..."> deiner abgerufenen Quellen geliefert wurden. Manche abgerufenen
+   <document>-Quellen haben KEINEN Seitencode (leeres seitencode-Attribut) - das sind eigenständige
+   Nachschlagewerke (z.B. Sonderwerkzeuge, Sicherheitshinweise, Glossar, Technische Daten), keine
+   einzelnen Handbuchseiten. Zitiere solche Quellen stattdessen exakt im Format "[Referenz: <titel>]"
+   (titel aus dem titel-Attribut derselben Quelle), niemals mit "[Seite ...]".
 2. **Zusätzliches Wissen (Allgemeinwissen & Web, nicht werksseitig verifiziert):** Ergänze die Antwort
    IMMER um zusätzlichen Kontext, praktische Hinweise und aktuelle Informationen (z.B. moderne
    Ersatzteile, gängige Foren-Hinweise, aktualisierte Teilenummern) aus deinem Allgemeinwissen und -

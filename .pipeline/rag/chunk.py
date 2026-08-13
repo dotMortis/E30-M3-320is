@@ -61,6 +61,28 @@ EMBEDDING_MAX_INPUT_TOKENS = 8192  # gemini-embedding-2 hard cap; chunks stay fa
 # Directories to never treat as vault content when walking for notes.
 EXCLUDED_DIR_NAMES = {".git", ".obsidian", ".pipeline", ".trash"}
 
+# Standalone reference documents (no `seitencode`, so parse_note() skips them)
+# that nonetheless carry real, unique knowledge-base content: a consolidated
+# special-tools cross-reference, a consolidated safety-warning digest, the
+# full bilingual glossary, and the vehicle spec sheet. Discovered missing
+# from the RAG index entirely (see PLAN.md "Reference documents" addendum) -
+# every OTHER seitencode-less file in the vault (29 `_Übersicht ...md` folder
+# indexes, Startseite.md, LIESMICH.md, Glossar.md's own redirect index,
+# Referenzbilder.md, and the "Bosch Motronic ML 3.1 (Zusatz)" folder index)
+# is pure navigation whose real content already lives on regular page notes
+# with their own `seitencode` - correctly excluded, not listed here.
+# Paths are vault-relative, matching notePath convention elsewhere.
+REFERENCE_DOCS = [
+    "Sonderwerkzeuge.md",
+    "Sicherheitshinweise.md",
+    "Technische-Daten.md",
+    "Glossar (0–9, A–C).md",
+    "Glossar (D–G).md",
+    "Glossar (H–O).md",
+    "Glossar (P–S).md",
+    "Glossar (T–Z).md",
+]
+
 try:
     import tiktoken
 
@@ -171,6 +193,67 @@ def clean_wikilink_list(raw: str, prefix: str) -> str:
     return f"{prefix}:\n" + "\n".join(f"- {l}" for l in lines)
 
 
+def _table_block_to_paragraphs(block_lines: list[str]) -> str:
+    """Converts one contiguous run of '| a | b | c | ... |' table lines into
+    blank-line-separated 'a -> b | c | ...' entries (see expand_tables)."""
+    entries = []
+    for line in block_lines:
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if not cells:
+            continue
+        if all(set(c) <= {"-", " ", ":"} for c in cells):
+            continue  # markdown separator row (---|---|---)
+        if cells[0].lower() in ("englisch", "merkmal"):
+            continue  # header row (best-effort by first-column label)
+        if len(cells) >= 2:
+            entry = f"{cells[0]} -> {cells[1]}"
+            extra = [c for c in cells[2:] if c]
+            if extra:
+                entry += " | " + " | ".join(extra)
+        else:
+            entry = cells[0]
+        entry = entry.strip(" ->|")
+        if entry:
+            entries.append(entry)
+    return "\n\n".join(entries)
+
+
+def expand_tables(text: str) -> str:
+    """Rewrites every markdown table in `text` into blank-line-separated
+    'a -> b | ...' entries instead of raw pipe syntax.
+
+    Two reasons this matters (see REFERENCE_DOCS / process_reference_docs):
+    1. Better BM25/embedding signal than raw pipe syntax (same rationale as
+       clean_fachbegriffe, which does the same 2-column-only transform for
+       page notes' small Fachbegriffe tables).
+    2. CRITICAL for chunk_text()'s paragraph-boundary packing: a markdown
+       table has no blank lines between its rows, so a long table (e.g. a
+       Glossar letter-file's ~1,300-row single table) is otherwise ONE
+       unbroken "paragraph unit" that chunk_text() cannot split - measured
+       at 16,000-27,000 tokens per such unit, more than 3x gemini-embedding-2's
+       8,192-token hard cap. Converting each row into its own blank-line-
+       separated entry lets chunk_text() pack rows into proper ~800-token
+       chunks like any other content.
+    """
+    lines = text.splitlines()
+    out: list[str] = []
+    i = 0
+    n = len(lines)
+    while i < n:
+        if lines[i].strip().startswith("|"):
+            block = []
+            while i < n and lines[i].strip().startswith("|"):
+                block.append(lines[i])
+                i += 1
+            converted = _table_block_to_paragraphs(block)
+            if converted:
+                out.append(converted)
+            continue
+        out.append(lines[i])
+        i += 1
+    return "\n".join(out)
+
+
 @dataclasses.dataclass
 class Note:
     note_path: str  # vault-relative path, e.g. "11 - Motor/11-101 — ....md"
@@ -236,6 +319,78 @@ def parse_note(path: Path, vault_root: Path) -> Note | None:
         verwandte_seiten=verwandte_seiten,
         raw_bytes_hash=hashlib.sha256(raw_bytes).hexdigest(),
     )
+
+
+@dataclasses.dataclass
+class ReferenceDoc:
+    note_path: str  # vault-relative path, e.g. "Sonderwerkzeuge.md"
+    titel: str
+    text: str  # full body, frontmatter stripped, wikilinks resolved to plain text
+    raw_bytes_hash: str
+
+
+def parse_reference_doc(path: Path, vault_root: Path) -> ReferenceDoc | None:
+    if not path.exists():
+        print(f"WARN: reference doc not found, skipping: {path}", file=sys.stderr)
+        return None
+    raw_bytes = path.read_bytes()
+    try:
+        post = frontmatter.loads(raw_bytes.decode("utf-8"))
+    except Exception as e:  # pragma: no cover
+        print(f"WARN: failed to parse frontmatter for {path}: {e}", file=sys.stderr)
+        return None
+
+    note_path = str(path.relative_to(vault_root))
+    titel = str(post.get("titel", path.stem))
+    body = strip_wikilinks(post.content)
+    body = expand_tables(body)
+    # Drop the trailing footer nav line (e.g. "---\n[[Startseite]]") - same
+    # cosmetic cleanup split_sections() applies to page notes.
+    body = re.sub(r"\n---\s*\nStartseite.*$", "", body, flags=re.DOTALL)
+    return ReferenceDoc(
+        note_path=note_path,
+        titel=titel,
+        text=body.strip(),
+        raw_bytes_hash=hashlib.sha256(raw_bytes).hexdigest(),
+    )
+
+
+def process_reference_docs(vault_root: Path) -> tuple[list[dict], list[str]]:
+    """Chunks the standalone reference documents (see REFERENCE_DOCS above).
+
+    Returns (rows, content_hashes) in the same shape process_vault() uses
+    for page notes, so the two sets combine transparently into one corpus.
+    Each row is `kind: "reference"`: no seitencode/sektion (a page-note
+    concept - these files aren't tied to one scanned manual page), and no
+    multimodal counterpart (no per-doc scan image).
+
+    Unlike a page note's ~1-3KB "Parent Note" (fed to the LLM in full on
+    any matching chunk hit), these files run 14-81KB each - far too large to
+    inject whole on every retrieval. So the chunk TEXT ITSELF becomes the
+    context fed to the LLM at query time (see build_orama.mjs's
+    reference-chunks.json sidecar + retriever.ts's expandToParentNotes
+    branching on `kind === "reference"`), not the full file.
+    """
+    rows: list[dict] = []
+    content_hashes: list[str] = []
+    for rel_path in REFERENCE_DOCS:
+        doc = parse_reference_doc(vault_root / rel_path, vault_root)
+        if doc is None:
+            continue
+        content_hashes.append(doc.raw_bytes_hash)
+        base_meta = dict(
+            notePath=doc.note_path,
+            seitencode="",
+            sektionNr="",
+            sektion="Referenz",
+            titel=doc.titel,
+            bilddatei="",
+            tags=["referenz"],
+        )
+        pieces = chunk_text(doc.text)
+        for idx, piece in enumerate(pieces):
+            rows.append({**base_meta, "kind": "reference", "chunkIndex": idx, "text": piece})
+    return rows, content_hashes
 
 
 def iter_vault_notes(vault_root: Path):
@@ -369,12 +524,18 @@ def process_vault(vault_root: Path, limit: int | None = None) -> dict:
                 }
             )
 
+    reference_rows, reference_hashes = process_reference_docs(vault_root)
+    rows.extend(reference_rows)
+    content_hashes.extend(reference_hashes)
+    reference_doc_count = len({r["notePath"] for r in reference_rows})
+
     corpus_hash = hashlib.sha256("".join(sorted(content_hashes)).encode()).hexdigest()
 
     return {
         "corpusHash": corpus_hash,
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "noteCount": note_count,
+        "referenceDocCount": reference_doc_count,
         "chunkCount": len(rows),
         "rows": rows,
         "parentNoteText": parent_note_text,
@@ -405,11 +566,14 @@ def main():
 
     text_rows = [r for r in result["rows"] if r["kind"] == "text"]
     multimodal_rows = [r for r in result["rows"] if r["kind"] == "multimodal"]
-    over_cap = [r for r in text_rows if count_tokens(r["text"]) > EMBEDDING_MAX_INPUT_TOKENS]
+    reference_rows = [r for r in result["rows"] if r["kind"] == "reference"]
+    over_cap = [r for r in text_rows + reference_rows if count_tokens(r["text"]) > EMBEDDING_MAX_INPUT_TOKENS]
 
     print(f"Notes parsed:        {result['noteCount']}")
+    print(f"Reference docs:      {result['referenceDocCount']} ({REFERENCE_DOCS})")
     print(f"Text chunks:         {len(text_rows)}")
     print(f"Multimodal rows:     {len(multimodal_rows)}")
+    print(f"Reference chunks:    {len(reference_rows)}")
     print(f"Total rows:          {result['chunkCount']}")
     print(f"Corpus hash:         {result['corpusHash'][:16]}...")
     print(f"Chunks over {EMBEDDING_MAX_INPUT_TOKENS} tokens: {len(over_cap)}")
