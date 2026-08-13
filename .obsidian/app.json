@@ -8,5 +8,11 @@
   "trashOption": "local",
   "newLinkFormat": "relative",
   "useMarkdownLinks": false,
-  "defaultViewMode": "preview"
+  "defaultViewMode": "preview",
+  "userIgnoreFilters": [
+    "scripts/",
+    "LICENSE",
+    "DEVELOPMENT.md",
+    "mise.toml"
+  ]
 }
