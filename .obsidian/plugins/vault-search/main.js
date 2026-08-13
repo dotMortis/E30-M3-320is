@@ -5342,6 +5342,51 @@ function expandQuery(rawQuery, synonymMap, dict, vocabulary, compoundParts) {
   for (const v2 of synthesizeJoinedCompounds(content, vocab)) expanded.add(v2);
   return [...expanded];
 }
+function expandQueryConcepts(rawQuery, synonymMap, dict, vocabulary, compoundParts) {
+  const allTokens = tokenize2(rawQuery);
+  const content = allTokens.filter((t) => !STOPWORDS.has(t));
+  const vocab = vocabulary || /* @__PURE__ */ new Set();
+  const precomputed = compoundParts || {};
+  const concepts = [];
+  const conceptByRaw = /* @__PURE__ */ new Map();
+  for (const tok of content) {
+    if (tok.length < 3 || conceptByRaw.has(tok)) continue;
+    const terms = /* @__PURE__ */ new Set([tok]);
+    const synonyms = expandSynonyms(synonymMap, tok);
+    for (const syn of synonyms) terms.add(syn);
+    if (synonyms.length === 0) {
+      const parts = precomputed[tok] || decompound(tok, dict);
+      if (parts) for (const p of parts) terms.add(p);
+    }
+    const concept = { raw: tok, terms };
+    conceptByRaw.set(tok, concept);
+    concepts.push(concept);
+  }
+  const prefixes = allTokens.filter((t) => SPLIT_PREFIX_DENY.has(t));
+  for (const prefix of prefixes) {
+    for (const concept of concepts) {
+      for (const stem of verbStemCandidates(concept.raw)) {
+        const candidate = prefix + stem + "en";
+        if (vocab.has(candidate)) concept.terms.add(candidate);
+      }
+    }
+  }
+  for (let i = 0; i < content.length - 1; i++) {
+    const a = content[i];
+    const b = content[i + 1];
+    if (a.length < MIN_PART_LEN || b.length < MIN_PART_LEN) continue;
+    const conceptA = conceptByRaw.get(a);
+    const conceptB = conceptByRaw.get(b);
+    if (!conceptA && !conceptB) continue;
+    for (const fug of FUGEN) {
+      const candidate = a + fug + b;
+      if (!vocab.has(candidate)) continue;
+      if (conceptA) conceptA.terms.add(candidate);
+      if (conceptB) conceptB.terms.add(candidate);
+    }
+  }
+  return concepts.map((c2) => ({ raw: c2.raw, terms: [...c2.terms] }));
+}
 
 // src/schema.js
 var FIELD_BOOST = {
@@ -5397,6 +5442,7 @@ async function insertDocs(db, docs) {
 }
 
 // src/search.js
+var COVERAGE_BOOST_PER_EXTRA_CONCEPT = 0.35;
 function maxJustifiedTolerance(contentWords) {
   const longest = contentWords.reduce((m, w) => Math.max(m, w.length), 0);
   if (longest <= 3) return 0;
@@ -5441,6 +5487,22 @@ function snippetFor(content, expandedTerms) {
   if (end < content.length) snip = snip + " \u2026";
   return snip;
 }
+function conceptCoverage(doc, concepts) {
+  const haystack = fold([doc.code, doc.titel, doc.titleEn, ...doc.tags || []].filter(Boolean).join(" "));
+  let matched = 0;
+  for (const concept of concepts) {
+    if (concept.terms.some((t) => t.length >= 3 && haystack.includes(t))) matched++;
+  }
+  return matched;
+}
+function rerankByCoverage(hits, concepts) {
+  if (concepts.length <= 1) return hits;
+  return hits.map((hit, index) => {
+    const matched = conceptCoverage(hit.document, concepts);
+    const bonus = 1 + COVERAGE_BOOST_PER_EXTRA_CONCEPT * Math.max(0, matched - 1);
+    return { hit, index, combinedScore: hit.score * bonus };
+  }).sort((a, b) => b.combinedScore - a.combinedScore || a.index - b.index).map(({ hit }) => hit);
+}
 function correctionHint(rawQuery, toleranceUsed, vocabulary) {
   if (toleranceUsed === 0) return null;
   const tokens = tokenize2(rawQuery);
@@ -5457,9 +5519,11 @@ async function runSearch(db, rawQuery, limit, vocabulary, contentByRowId, synony
   const contentWords = tokenize2(query).filter((t) => t.length >= 3);
   const expanded = expandQuery(query, synonymMap, dict, vocabulary, compoundParts);
   const term = expanded.join(" ");
+  const concepts = expandQueryConcepts(query, synonymMap, dict, vocabulary, compoundParts);
   const cap = maxJustifiedTolerance(contentWords);
   const { result, toleranceUsed } = await escalatingSearch(db, term, cap);
-  const results = result.hits.slice(0, limit).map((hit, i) => {
+  const rankedHits = rerankByCoverage(result.hits, concepts);
+  const results = rankedHits.slice(0, limit).map((hit, i) => {
     const doc = hit.document;
     return {
       notePath: doc.notePath,

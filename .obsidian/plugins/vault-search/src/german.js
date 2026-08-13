@@ -286,8 +286,10 @@ export function synthesizeSeparableVerbs(queryTokens, vocabulary) {
  * common present-tense endings, so synthesizeSeparableVerbs can rebuild an
  * infinitive. E.g. "baue" -> "bau", "ziehst" -> "zieh", "schraubt" -> "schraub".
  * Also returns the word itself unchanged (covers words already close to a
- * stem, e.g. nouns used loosely, cheap to include). */
-function verbStemCandidates(word) {
+ * stem, e.g. nouns used loosely, cheap to include). Exported so
+ * expandQueryConcepts (below) can reuse it to attribute a synthesized
+ * separable-verb candidate back to the concept it came from. */
+export function verbStemCandidates(word) {
   const stems = new Set([word]);
   for (const suf of ["est", "st", "et", "en", "e", "t"]) {
     if (word.length - suf.length >= 3 && word.endsWith(suf)) {
@@ -467,4 +469,92 @@ export function expandQuery(rawQuery, synonymMap, dict, vocabulary, compoundPart
   for (const v of synthesizeJoinedCompounds(content, vocab)) expanded.add(v);
 
   return [...expanded];
+}
+
+/**
+ * Like expandQuery(), but groups the expansion by originating query
+ * "concept" instead of flattening it into one bag of terms. A concept is
+ * one meaningful (>= 3 chars, matching the length gate search.js's
+ * maxJustifiedTolerance/snippetFor already use) content word from the raw
+ * query, together with everything that should count as satisfying it
+ * (itself, its curated/thesaurus synonyms, its decompound parts, and any
+ * synthesized separable-verb/joined-compound candidate that was built FROM
+ * it) — e.g. for "benzin einbauen" this produces two concepts: {benzin,
+ * sprit, treibstoff, kraftstoff, gasoline, fuel} and {einbauen}.
+ *
+ * Why this exists (see search.js's runSearch doc-comment for the full
+ * story): Orama's BM25 scores a flattened multi-term query by summing
+ * per-term contributions weighted by each term's corpus-wide IDF. In this
+ * vault, a generic repair-manual verb like "einbauen" appears in roughly a
+ * third of ALL page titles (nearly every procedure is titled "X aus- und
+ * einbauen") so its IDF is tiny — matching it barely moves a document's
+ * score. A rarer word like "kraftstoff" has a much higher IDF, so a
+ * document that merely repeats "kraftstoff" twice in its title can
+ * outscore a document that matches "kraftstoff" once AND "einbauen" once,
+ * even though the second document is the more relevant match from a human
+ * reader's point of view. This function's grouped output lets the caller
+ * apply a coverage bonus (matched DISTINCT concepts, not raw matched terms)
+ * on top of Orama's score to correct for that — see search.js's
+ * conceptCoverage()/COVERAGE_BOOST_PER_EXTRA_CONCEPT.
+ *
+ * Deliberately independent from expandQuery() above (some duplicated
+ * expansion logic) rather than deriving one from the other, so this
+ * additive ranking signal can never change expandQuery()'s existing flat
+ * term list (which feeds Orama's actual search term / tolerance escalation
+ * and must stay exactly as it already was benchmarked).
+ */
+export function expandQueryConcepts(rawQuery, synonymMap, dict, vocabulary, compoundParts) {
+  const allTokens = tokenize(rawQuery);
+  const content = allTokens.filter((t) => !STOPWORDS.has(t));
+  const vocab = vocabulary || new Set();
+  const precomputed = compoundParts || {};
+
+  const concepts = [];
+  const conceptByRaw = new Map();
+  for (const tok of content) {
+    if (tok.length < 3 || conceptByRaw.has(tok)) continue;
+    const terms = new Set([tok]);
+    const synonyms = expandSynonyms(synonymMap, tok);
+    for (const syn of synonyms) terms.add(syn);
+    if (synonyms.length === 0) {
+      const parts = precomputed[tok] || decompound(tok, dict);
+      if (parts) for (const p of parts) terms.add(p);
+    }
+    const concept = { raw: tok, terms };
+    conceptByRaw.set(tok, concept);
+    concepts.push(concept);
+  }
+
+  // Separable-verb synthesis: credit the candidate to whichever concept's
+  // raw word it was built from (mirrors synthesizeSeparableVerbs' own
+  // prefix x verbish loop, but keeps the attribution this function needs).
+  const prefixes = allTokens.filter((t) => SPLIT_PREFIX_DENY.has(t));
+  for (const prefix of prefixes) {
+    for (const concept of concepts) {
+      for (const stem of verbStemCandidates(concept.raw)) {
+        const candidate = prefix + stem + "en";
+        if (vocab.has(candidate)) concept.terms.add(candidate);
+      }
+    }
+  }
+
+  // Joined-compound synthesis: a joined form built from two ADJACENT
+  // content words genuinely satisfies both of their concepts at once, so
+  // credit it to both (mirrors synthesizeJoinedCompounds' own loop).
+  for (let i = 0; i < content.length - 1; i++) {
+    const a = content[i];
+    const b = content[i + 1];
+    if (a.length < MIN_PART_LEN || b.length < MIN_PART_LEN) continue;
+    const conceptA = conceptByRaw.get(a);
+    const conceptB = conceptByRaw.get(b);
+    if (!conceptA && !conceptB) continue;
+    for (const fug of FUGEN) {
+      const candidate = a + fug + b;
+      if (!vocab.has(candidate)) continue;
+      if (conceptA) conceptA.terms.add(candidate);
+      if (conceptB) conceptB.terms.add(candidate);
+    }
+  }
+
+  return concepts.map((c) => ({ raw: c.raw, terms: [...c.terms] }));
 }
