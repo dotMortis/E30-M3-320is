@@ -24,16 +24,24 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 let obsidian = require("obsidian");
 let node_https = require("node:https");
 node_https = __toESM(node_https, 1);
+let node_crypto = require("node:crypto");
+let node_os = require("node:os");
+node_os = __toESM(node_os, 1);
 //#region src/settings.ts
 var DEFAULT_SETTINGS = {
-	opencodeApiKey: "",
 	geminiApiKey: "",
-	genProvider: "zen",
 	embeddingModel: "gemini-embedding-2",
 	generationModel: "gemini-3.6-flash",
-	outputDim: 768,
+	outputDim: 3072,
 	topK: 8,
-	similarity: .75
+	similarity: .55,
+	rrfK: 2,
+	enableFuzzySearchLeg: true,
+	maxRetries: 1,
+	weakResultScoreThreshold: .35,
+	weakResultMinHits: 2,
+	enableQueryRewriteFallback: true,
+	enableSelfCritique: true
 };
 var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 	constructor(app, plugin) {
@@ -44,17 +52,9 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 		this.containerEl.empty();
 		const { containerEl } = this;
 		containerEl.createEl("h2", { text: "RAG Chat" });
-		containerEl.createEl("p", { text: "Embeddings always use Google (gemini-embedding-2) - Zen has no embedding model. Generation defaults to Zen (gemini-3.6-flash) and is switchable to Google below." });
-		new obsidian.Setting(containerEl).setName("Google API key (GEMINI_API_KEY)").setDesc("Required for query embeddings. Also used for generation if the provider below is set to Google.").addText((text) => text.setPlaceholder("AIza...").setValue(this.plugin.settings.geminiApiKey).onChange(async (value) => {
+		containerEl.createEl("p", { text: "Google (gemini-embedding-2 + gemini-3.6-flash) is used for both query embeddings and generation." });
+		new obsidian.Setting(containerEl).setName("Google API key (GEMINI_API_KEY)").setDesc("Required for query embeddings and generation.").addText((text) => text.setPlaceholder("AIza...").setValue(this.plugin.settings.geminiApiKey).onChange(async (value) => {
 			this.plugin.settings.geminiApiKey = value.trim();
-			await this.plugin.saveSettings();
-		}));
-		new obsidian.Setting(containerEl).setName("OpenCode Zen API key (OPENCODE_API_KEY)").setDesc("Used for generation when the provider below is set to Zen (the default).").addText((text) => text.setPlaceholder("sk-...").setValue(this.plugin.settings.opencodeApiKey).onChange(async (value) => {
-			this.plugin.settings.opencodeApiKey = value.trim();
-			await this.plugin.saveSettings();
-		}));
-		new obsidian.Setting(containerEl).setName("Generation provider").setDesc("Zen keeps the Google generation budget untouched; embeddings always go to Google regardless of this toggle.").addDropdown((dropdown) => dropdown.addOption("zen", "Zen (opencode.ai)").addOption("google", "Google").setValue(this.plugin.settings.genProvider).onChange(async (value) => {
-			this.plugin.settings.genProvider = value;
 			await this.plugin.saveSettings();
 		}));
 		new obsidian.Setting(containerEl).setName("Embedding model").setDesc("Must match the model the index was built with (see rag-manifest.json). Google-only.").addText((text) => text.setValue(this.plugin.settings.embeddingModel).onChange(async (value) => {
@@ -65,7 +65,7 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 			this.plugin.settings.generationModel = value.trim();
 			await this.plugin.saveSettings();
 		}));
-		new obsidian.Setting(containerEl).setName("Output dimensions").setDesc("Must match rag-manifest.json's embeddingDims (768 for the shipped index) - not the 3072 build-time cache dims.").addText((text) => text.setValue(String(this.plugin.settings.outputDim)).onChange(async (value) => {
+		new obsidian.Setting(containerEl).setName("Output dimensions").setDesc("Must match rag-manifest.json's embeddingDims (3072 - full-fidelity, no truncation).").addText((text) => text.setValue(String(this.plugin.settings.outputDim)).onChange(async (value) => {
 			const n = parseInt(value, 10);
 			if (!Number.isNaN(n) && n > 0) {
 				this.plugin.settings.outputDim = n;
@@ -79,12 +79,54 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 				await this.plugin.saveSettings();
 			}
 		}));
-		new obsidian.Setting(containerEl).setName("Similarity threshold").setDesc("Minimum vector similarity for hybrid/vector search (0-1).").addText((text) => text.setValue(String(this.plugin.settings.similarity)).onChange(async (value) => {
+		new obsidian.Setting(containerEl).setName("Similarity threshold").setDesc("Minimum vector similarity for the vector leg (0-1). Measured on this corpus: real natural-language queries top out around 0.60-0.75 cosine similarity even for the exact correct page — setting this above ~0.75 silently disables the vector leg entirely on most real questions. Default 0.55 is calibrated from live benchmarking, not a guess.").addText((text) => text.setValue(String(this.plugin.settings.similarity)).onChange(async (value) => {
 			const n = parseFloat(value);
 			if (!Number.isNaN(n) && n >= 0 && n <= 1) {
 				this.plugin.settings.similarity = n;
 				await this.plugin.saveSettings();
 			}
+		}));
+		new obsidian.Setting(containerEl).setName("Hybrid fusion (RRF) k").setDesc("Reciprocal Rank Fusion constant merging the BM25 and vector leg rankings. Small values (1-10) were empirically best on this corpus; the common literature default of 60 buried single-leg-exclusive top matches under documents merely mediocre on both legs.").addText((text) => text.setValue(String(this.plugin.settings.rrfK)).onChange(async (value) => {
+			const n = parseInt(value, 10);
+			if (!Number.isNaN(n) && n > 0) {
+				this.plugin.settings.rrfK = n;
+				await this.plugin.saveSettings();
+			}
+		}));
+		containerEl.createEl("h3", { text: "Reasoning-Workflow (Retrieval-Qualität)" });
+		containerEl.createEl("p", { text: "Diese Optionen adressieren Fälle, in denen RAG Chat eine Seite nicht findet, die die Handbuchsuche (Fuzzy Search) findet - z.B. bei Tippfehlern oder umgangssprachlichen Formulierungen." });
+		new obsidian.Setting(containerEl).setName("Vault-Search-Ergebnisse einbeziehen").setDesc("Nutzt die tippfehler-/synonymtolerante Handbuchsuche (Plugin \"vault-search\") als zusätzliche Quelle bei jeder Frage. Benötigt das vault-search-Plugin (aktiviert).").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableFuzzySearchLeg).onChange(async (value) => {
+			this.plugin.settings.enableFuzzySearchLeg = value;
+			await this.plugin.saveSettings();
+		}));
+		new obsidian.Setting(containerEl).setName("Max. Wiederholungen").setDesc("Wie oft bei schwachen Treffern automatisch breiter gesucht/neu generiert wird (0 = aus).").addText((text) => text.setValue(String(this.plugin.settings.maxRetries)).onChange(async (value) => {
+			const n = parseInt(value, 10);
+			if (!Number.isNaN(n) && n >= 0) {
+				this.plugin.settings.maxRetries = n;
+				await this.plugin.saveSettings();
+			}
+		}));
+		new obsidian.Setting(containerEl).setName("Schwellwert für \"schwache\" Treffer").setDesc("Bester gemischter Score (0-1) unterhalb dessen ein Retry ausgelöst wird.").addText((text) => text.setValue(String(this.plugin.settings.weakResultScoreThreshold)).onChange(async (value) => {
+			const n = parseFloat(value);
+			if (!Number.isNaN(n) && n >= 0 && n <= 1) {
+				this.plugin.settings.weakResultScoreThreshold = n;
+				await this.plugin.saveSettings();
+			}
+		}));
+		new obsidian.Setting(containerEl).setName("Mindestanzahl Treffer").setDesc("Weniger als diese Anzahl gefundener Seiten löst ebenfalls einen Retry aus.").addText((text) => text.setValue(String(this.plugin.settings.weakResultMinHits)).onChange(async (value) => {
+			const n = parseInt(value, 10);
+			if (!Number.isNaN(n) && n >= 0) {
+				this.plugin.settings.weakResultMinHits = n;
+				await this.plugin.saveSettings();
+			}
+		}));
+		new obsidian.Setting(containerEl).setName("LLM-Suchanfragen-Umformulierung (Fallback)").setDesc("Wenn Retrieval weiterhin schwach bleibt, die Frage per LLM anhand des Gesprächsverlaufs umformulieren und erneut suchen. Kostet einen zusätzlichen Gemini-Aufruf, nur bei Bedarf.").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableQueryRewriteFallback).onChange(async (value) => {
+			this.plugin.settings.enableQueryRewriteFallback = value;
+			await this.plugin.saveSettings();
+		}));
+		new obsidian.Setting(containerEl).setName("Antwort-Selbstprüfung (LLM)").setDesc("Nach der Generierung per LLM prüfen, ob die Antwort wirklich durch den Kontext gestützt wird, und bei Bedarf einmal mit breiterer Suche neu generieren. Kostet einen zusätzlichen Gemini-Aufruf pro Frage.").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableSelfCritique).onChange(async (value) => {
+			this.plugin.settings.enableSelfCritique = value;
+			await this.plugin.saveSettings();
 		}));
 	}
 };
@@ -3608,7 +3650,7 @@ function innerHybridSearch(orama, params, language) {
 	const hybridWeights = params.hybridWeights;
 	return mergeAndRankResults(fullTextIDs, vectorIDs, params.term ?? "", hybridWeights);
 }
-function hybridSearch$1(orama, params, language) {
+function hybridSearch(orama, params, language) {
 	const timeStart = getNanosecondsTime();
 	function performSearchLogic() {
 		let uniqueTokenScores = innerHybridSearch(orama, params, language);
@@ -3689,7 +3731,7 @@ function search(orama, params, language) {
 	const mode = params.mode ?? "fulltext";
 	if (mode === "fulltext") return fullTextSearch(orama, params, language);
 	if (mode === "vector") return searchVector(orama, params);
-	if (mode === "hybrid") return hybridSearch$1(orama, params);
+	if (mode === "hybrid") return hybridSearch(orama, params);
 	throw createError("INVALID_SEARCH_MODE", mode);
 }
 function fetchDocumentsWithDistinct(orama, uniqueDocsArray, offset, limit, distinctOn) {
@@ -7158,8 +7200,8 @@ async function restoreFromFile(format = "binary", path, runtime) {
 async function loadFileSystem(runtime) {
 	switch (runtime) {
 		case "node": {
-			const { readFile, writeFile } = await import("node:fs/promises");
-			const { resolve } = await import("node:path");
+			const { readFile, writeFile } = await Promise.resolve().then(() => /* @__PURE__ */ __toESM(require("node:fs/promises"), 1));
+			const { resolve } = await Promise.resolve().then(() => /* @__PURE__ */ __toESM(require("node:path"), 1));
 			return {
 				cwd: process.cwd,
 				resolve,
@@ -7168,10 +7210,10 @@ async function loadFileSystem(runtime) {
 			};
 		}
 		/* c8 ignore next 13 */ case "deno": {
-			const { resolve } = await import(
+			const { resolve } = await Promise.resolve().then(() => /* @__PURE__ */ __toESM(require(
 				/* webpackIgnore: true */
 				"https://deno.land/std/path/mod.ts"
-);
+			), 1));
 			const { cwd, readTextFile: readFile, writeTextFile: writeFile } = Deno;
 			return {
 				cwd,
@@ -7641,10 +7683,53 @@ var s = new function() {
 function stemmer(r) {
 	return s.stemWord(r);
 }
+var language = "german";
+//#endregion
+//#region src/orama-schema.ts
+/**
+* orama-schema.ts — TypeScript port of .pipeline/rag/build/orama_schema.mjs.
+* MUST stay in sync with that file (schemas + German tokenizer config); it
+* is the source of truth for how the shipped indices were built.
+*
+* ARCHITECTURE — split text/vector indices: GitHub hard-blocks any pushed
+* file over 100MB. A single hybrid index (BM25 + full 3072-dim vectors
+* together) measures ~165MB for this corpus, and Matryoshka-truncating
+* vectors to fit under 100MB in one file is lossy. Instead the shipped
+* index is split into:
+*   - ONE text-only index (rag-index-text.orama.msp): full corpus, BM25
+*     fulltext only, no `embedding` field.
+*   - N vector-only shards (rag-index-vectors-{i}.orama.msp, N from
+*     rag-manifest.json's vectorShardCount): full 3072-dim fidelity, no
+*     `text` field, split by row count to stay under 100MB per file.
+* Every row carries a `rowId` present in BOTH the text index and every
+* vector shard, used by retriever.ts's federatedHybridSearch to merge hits
+* back together (reimplementing Orama's own hybrid merge formula by hand -
+* safe because vector search returns raw, non-corpus-relative cosine
+* scores, so scores from separate shards are directly comparable; BM25/IDF
+* stays correct because the text index is never sharded).
+*
+* CRITICAL correctness note (discovered during Phase 3/5 QA, see PLAN.md):
+* Orama's `restoreFromFile`/`restore` cannot preserve custom tokenizer
+* components (stemmer functions and stopword lists aren't serializable) -
+* internally they create a placeholder db with the DEFAULT (English, no
+* stopwords) tokenizer, then `load()` the index data into it. A bare
+* `restoreFromFile` silently reverts to default English tokenization, which
+* reintroduces a real bug: the German preposition "hinter" (behind) prefix-
+* matches every "Hinterachse" (rear axle) page, badly polluting BM25
+* ranking. The fix (`loadTextIndex` below) is: restore via the library (to
+* get the data), re-export with `save()`, then `create()` a fresh db with
+* the correct German tokenizer and `load()` the exported data into THAT.
+* This only matters for the TEXT index (the only one with a fulltext-
+* tokenized field); vector shards have no fulltext field, so a bare
+* restoreFromFile is fine for them (`loadVectorShard`).
+*/
+/** Full-fidelity Gemini embedding dims (no Matryoshka truncation - see the
+* ARCHITECTURE note above for why this is safe to ship at full size). */
+var EMBEDDING_DIMS = 3072;
 var GERMAN_TOKENIZER = {
 	stemming: true,
 	stemmer,
-	language: "german",
+	language,
 	stopWords: [
 		"der",
 		"die",
@@ -7741,7 +7826,11 @@ var GERMAN_TOKENIZER = {
 		"jenes"
 	]
 };
-var ORAMA_SCHEMA = {
+/** Metadata present on EVERY row in BOTH the text index and every vector
+* shard - so a hit from either side carries full citation info and can be
+* merged on `rowId` without a cross-index lookup. */
+var METADATA_FIELDS = {
+	rowId: "string",
 	seitencode: "string",
 	sektionNr: "string",
 	sektion: "string",
@@ -7749,25 +7838,81 @@ var ORAMA_SCHEMA = {
 	tags: "string[]",
 	notePath: "string",
 	bilddatei: "string",
-	kind: "enum",
-	text: "string",
-	embedding: `vector[768]`
+	kind: "enum"
 };
-/** Correctly restores the shipped binary index with the German tokenizer intact. */
-async function loadIndex(indexPath) {
+var TEXT_SCHEMA = {
+	...METADATA_FIELDS,
+	text: "string"
+};
+({ ...METADATA_FIELDS }), `${EMBEDDING_DIMS}`;
+/** Correctly restores the text index with the German tokenizer intact. */
+async function loadTextIndex(indexPath) {
 	const exported = await save(await restoreFromFile("binary", indexPath, "node"));
 	const db = await create({
-		schema: ORAMA_SCHEMA,
+		schema: TEXT_SCHEMA,
 		components: { tokenizer: GERMAN_TOKENIZER }
 	});
 	await load(db, exported);
 	return db;
+}
+/** Restores a vector-only shard. No custom tokenizer needed - there is no
+* fulltext field in this schema, so a bare restoreFromFile is safe here. */
+async function loadVectorShard(indexPath) {
+	return await restoreFromFile("binary", indexPath, "node");
 }
 //#endregion
 //#region src/retriever.ts
 /** Query-time task prefix for gemini-embedding-2 (see PLAN.md - this model has
 * no task_type EmbedContentConfig param; steering is a text prefix instead). */
 var QUERY_PREFIX_TMPL = "task: search result | query: {content}";
+/** Large enough to capture "every" ranked candidate on this corpus size, so
+* the federated merge below sees the same full candidate set Orama's own
+* single-DB hybrid mode would internally, before slicing down to topK. */
+var CANDIDATE_POOL_LIMIT = 5e3;
+/**
+* NOTE (superseded, kept for history): this fixed 0.5/0.5 min-max score-sum
+* split used to mirror Orama's own search-hybrid.js mergeAndRankResults().
+* Benchmarked against 12 real natural-language queries (see
+* .pipeline/rag/PLAN.md's "Retrieval benchmark" section) it had a serious
+* flaw: min-max normalizing each leg to its OWN [0,1] range and summing
+* means a document that is the single BEST match on one leg (e.g. the
+* correct page, ranked #1 by the vector leg but entirely absent from BM25
+* because of German compound/separable-verb mismatches) caps at 0.5,
+* while a document that is merely mediocre on BOTH legs can approach 1.0.
+* This was confirmed to bury the correct answer for real queries even
+* after the similarity-threshold fix. Replaced by Reciprocal Rank Fusion
+* (see rrfMerge below), which does not have this pathology.
+*/
+/**
+* Reciprocal Rank Fusion: score = sum over legs of 1/(k + rank), rank is
+* 1-based within that leg's own ranking. Unlike min-max score fusion, a
+* document ranked #1 in ONE leg gets a strong, fixed contribution
+* regardless of whether/how it ranks in the other leg — it can't be
+* buried by a document that's merely mediocre-but-present on both legs.
+* Small k (1-10) was empirically best on this corpus size (~2822 rows);
+* the common literature default of k=60 assumes much larger candidate
+* pools and, benchmarked here, underperformed noticeably (see PLAN.md).
+*/
+function rrfMerge(textHitsSorted, vectorHitsSorted, k) {
+	const scores = /* @__PURE__ */ new Map();
+	textHitsSorted.forEach((h, i) => {
+		const rowId = h.document.rowId;
+		const existing = scores.get(rowId);
+		scores.set(rowId, {
+			score: (existing?.score ?? 0) + 1 / (k + i + 1),
+			doc: existing?.doc ?? h.document
+		});
+	});
+	vectorHitsSorted.forEach((h, i) => {
+		const rowId = h.document.rowId;
+		const existing = scores.get(rowId);
+		scores.set(rowId, {
+			score: (existing?.score ?? 0) + 1 / (k + i + 1),
+			doc: existing?.doc ?? h.document
+		});
+	});
+	return [...scores.values()].sort((a, b) => b.score - a.score);
+}
 /** Validates the shipped manifest against the plugin's settings (embedding-parity
 * guard - see PLAN.md). Returns a list of human-readable warning strings (empty = OK). */
 function validateManifest(manifest, settings) {
@@ -7798,37 +7943,145 @@ async function embedQuery(query, settings) {
 	if (!Array.isArray(values)) throw new Error(`Unexpected embedContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
 	return values;
 }
-var cachedDb = null;
-var cachedDbPath = null;
-/** Loads (and caches) the Orama index from the plugin directory. */
-async function getIndex(indexPath) {
-	if (cachedDb && cachedDbPath === indexPath) return cachedDb;
-	cachedDb = await loadIndex(indexPath);
-	cachedDbPath = indexPath;
-	return cachedDb;
+var cached = null;
+var cachedPluginDir = null;
+/** Loads (and caches) the split text index + all vector shards from the
+* plugin directory, per the manifest's vectorShardCount. */
+async function getIndices(pluginDir, manifest) {
+	if (cached && cachedPluginDir === pluginDir) return cached;
+	cached = {
+		textDb: await loadTextIndex(`${pluginDir}/${manifest.textIndexFile}`),
+		vectorDbs: await Promise.all(Array.from({ length: manifest.vectorShardCount }, (_, i) => loadVectorShard(`${pluginDir}/${manifest.vectorIndexFilePattern.replace("{i}", String(i))}`)))
+	};
+	cachedPluginDir = pluginDir;
+	return cached;
 }
-/** Runs hybrid (BM25 + vector) search and returns typed hits. */
-async function hybridSearch(db, term, vector, settings) {
-	return (await search(db, {
-		mode: "hybrid",
+function maxScore(hits) {
+	return hits.reduce((m, h) => Math.max(m, h.score), 0);
+}
+/**
+* Runs a federated hybrid (BM25 + vector) search across the split indices
+* and returns typed, merged, ranked hits.
+*
+* BM25 stays correct because the text index is never sharded (single
+* corpus, single set of document-frequency stats). Vector hits from all
+* shards are concatenated and ranked together before fusion (vector search
+* returns raw, non-corpus-relative cosine similarities, so this is
+* equivalent to querying one unified vector index).
+*
+* The two legs are combined via Reciprocal Rank Fusion (rrfMerge above),
+* not min-max score-sum — see rrfMerge's docstring for why the previous
+* approach was replaced (empirically confirmed to bury single-leg-exclusive
+* correct answers under documents merely mediocre on both legs).
+*/
+async function federatedHybridSearch(indices, term, vector, settings) {
+	const textResult = await search(indices.textDb, {
+		mode: "fulltext",
 		term,
+		limit: CANDIDATE_POOL_LIMIT
+	});
+	const vectorHits = (await Promise.all(indices.vectorDbs.map((db) => search(db, {
+		mode: "vector",
 		vector: {
 			value: vector,
 			property: "embedding"
 		},
 		similarity: settings.similarity,
-		limit: settings.topK
-	})).hits.map((h) => {
-		const doc = h.document;
-		return {
-			score: h.score,
-			notePath: doc.notePath,
-			seitencode: doc.seitencode,
-			sektion: doc.sektion,
-			titel: doc.titel,
-			kind: doc.kind
-		};
-	});
+		limit: CANDIDATE_POOL_LIMIT
+	})))).flatMap((r) => r.hits);
+	return rrfMerge([...textResult.hits].sort((a, b) => b.score - a.score).map((h) => ({
+		document: h.document,
+		score: h.score
+	})), [...vectorHits].sort((a, b) => b.score - a.score).map((h) => ({
+		document: h.document,
+		score: h.score
+	})), settings.rrfK).slice(0, settings.topK).map(({ score, doc }) => ({
+		score,
+		notePath: doc.notePath,
+		seitencode: doc.seitencode,
+		sektion: doc.sektion,
+		titel: doc.titel,
+		kind: doc.kind
+	}));
+}
+/** Short follow-up markers, e.g. "und was ist mit ...?" or "auch für ...?" -
+* a question starting with one of these AND being short is almost certainly
+* referring back to the previous turn rather than being self-contained. */
+var FOLLOWUP_MARKERS = [
+	"und was ist mit",
+	"was ist mit",
+	"und für",
+	"auch für",
+	"wie sieht es aus mit",
+	"und wie",
+	"und wo",
+	"und wieviel",
+	"und welche",
+	"was ist",
+	"und",
+	"auch"
+];
+var FOLLOWUP_MAX_WORDS = 6;
+/**
+* Deterministic (free, instant) query-time "planning" step: resolves short
+* follow-up questions against the previous user turn so retrieval sees a
+* self-contained query, e.g. "und was ist mit 16-03?" after a prior question
+* about tank removal becomes "<prior question> und was ist mit 16-03?".
+* Falls through to the raw question when it doesn't look like a follow-up,
+* or when there's no prior turn to resolve against. This is intentionally a
+* cheap heuristic, not an LLM call - see gemini.ts's rewriteQuery() for the
+* LLM-based fallback used only when this + retrieval still come back thin.
+*/
+function resolveFollowupQuery(question, history) {
+	const trimmed = question.trim();
+	if (!trimmed) return trimmed;
+	const lower = trimmed.toLowerCase();
+	if (!(trimmed.split(/\s+/).length <= FOLLOWUP_MAX_WORDS && FOLLOWUP_MARKERS.some((marker) => lower.startsWith(marker)))) return trimmed;
+	const lastUserTurn = [...history].reverse().find((t) => t.role === "user" && t.text.trim());
+	if (!lastUserTurn) return trimmed;
+	return `${lastUserTurn.text.trim()} ${trimmed}`;
+}
+/** Relative weight given to each retrieval leg when merging. Vault Search's
+* hits aren't independently corroborated by BM25/vector similarity, so it's
+* kept as a meaningful-but-secondary signal - strong enough to surface a
+* document the hybrid legs missed entirely (the "tank einbauen" case), but
+* not strong enough to bury a well-corroborated hybrid hit under it. */
+var HYBRID_LEG_WEIGHT = .7;
+var FUZZY_LEG_WEIGHT = .3;
+/**
+* Merges Vault Search's independent fuzzy/typo/synonym-aware results into an
+* already-ranked hybrid (BM25+vector) hit list, by notePath. This is what
+* lets RAG chat recover documents that only the fuzzy search's decompounding/
+* typo-correction/colloquial-synonym logic would find (see the vault-search
+* plugin's runSearch()) - added as a genuine third leg on every query, not
+* just as a last-resort fallback, since it's cheap and independently useful.
+*/
+function mergeWithFuzzy(hybridHits, fuzzyHits, topK) {
+	const maxHybrid = maxScore(hybridHits);
+	const merged = /* @__PURE__ */ new Map();
+	for (const h of hybridHits) {
+		const normalized = maxHybrid > 0 ? h.score / maxHybrid : 0;
+		merged.set(h.notePath, {
+			...h,
+			score: normalized * HYBRID_LEG_WEIGHT
+		});
+	}
+	const n = fuzzyHits.length;
+	for (let i = 0; i < n; i++) {
+		const f = fuzzyHits[i];
+		const contribution = (n > 1 ? 1 - i / (n - 1) : 1) * FUZZY_LEG_WEIGHT;
+		const existing = merged.get(f.notePath);
+		if (existing) existing.score += contribution;
+		else merged.set(f.notePath, {
+			score: contribution,
+			notePath: f.notePath,
+			seitencode: f.seitencode,
+			sektion: f.sektion,
+			titel: f.titel,
+			kind: "text"
+		});
+	}
+	return [...merged.values()].sort((a, b) => b.score - a.score).slice(0, topK);
 }
 /**
 * Parent-note expansion (see PLAN.md Phase 4): dedupe hits by notePath (the
@@ -7875,35 +8128,45 @@ Beantworte die Frage AUSSCHLIESSLICH anhand der Informationen im <context>.
 - Nenne den Dateinamen (Seitencode) der Quelle bei technischen Angaben.
 Antworte auf Deutsch.`;
 /**
-* Streams a generation response via gemini-3.6-flash, calling onChunk for
-* every text delta as it arrives.
+* Streams a generation response via gemini-3.6-flash (Google), calling
+* onChunk for every text delta as it arrives.
 *
-* IMPORTANT (see PLAN.md - verified live against the real Zen endpoint, Aug
-* 2026): Obsidian's requestUrl helper (the usual CORS-safe HTTP path for
-* plugins) does NOT expose a readable stream - it only resolves a full
-* response. Since this plugin is isDesktopOnly, Node's built-in `https`
-* module is used instead (externalized in vite.config.ts) - it isn't a
-* browser fetch(), so it isn't subject to CORS at all.
+* IMPORTANT (see PLAN.md): Obsidian's requestUrl helper (the usual CORS-safe
+* HTTP path for plugins) does NOT expose a readable stream - it only
+* resolves a full response. Since this plugin is isDesktopOnly, Node's
+* built-in `https` module is used instead (externalized in vite.config.ts) -
+* it isn't a browser fetch(), so it isn't subject to CORS at all.
 *
 * Wire format: `:streamGenerateContent?alt=sse` returns standard SSE
 * `data: {...}` chunks, each a partial GenerateContentResponse. There is no
 * `[DONE]` sentinel - the connection just closes after the final chunk
-* (which carries finishReason). Zen appends one extra trailing event with
-* no `candidates` field: `data: {"type":"ping","cost":"..."}` - this and any
-* other candidate-less event are silently skipped.
+* (which carries finishReason). Any candidate-less event is silently
+* skipped.
+*
+* CRITICAL (confirmed by inspecting the raw response, Aug 2026): Google's
+* real endpoint terminates each SSE event with CRLF (`\r\n\r\n`), NOT the
+* bare `\n\n` a naive parser might assume - `"\r\n\r\n".includes("\n\n")`
+* is false (there's a `\r` between the two `\n`s), so splitting on a
+* literal `"\n\n"` NEVER finds an event boundary, onChunk is never called,
+* and the promise still resolves cleanly via the normal 'end' event (no
+* error) - producing a silent empty answer with no visible failure. Every
+* `\r` is stripped from incoming chunks before buffering to normalize this.
+*
+* `history` carries prior turns of THIS chat session so follow-up questions
+* ("und was ist mit dem S14?") resolve correctly - previously this plugin
+* sent only the current question, making every turn effectively stateless.
+* Only each turn's text is replayed (not its retrieved <context>), to keep
+* token cost from growing unboundedly across a long session; the current
+* turn always gets a fresh context block built from this turn's retrieval.
 */
-function streamGenerate(contextXml, question, settings, onChunk) {
-	const provider = settings.genProvider;
-	const apiKey = provider === "google" ? settings.geminiApiKey : settings.opencodeApiKey;
-	if (!apiKey) {
-		const keyName = provider === "google" ? "Google API key" : "OpenCode Zen API key";
-		return Promise.reject(/* @__PURE__ */ new Error(`${keyName} is required for generation - set it in RAG Chat settings.`));
-	}
-	const host = provider === "google" ? "generativelanguage.googleapis.com" : "opencode.ai";
-	const path = provider === "google" ? `/v1beta/models/${settings.generationModel}:streamGenerateContent?alt=sse` : `/zen/v1/models/${settings.generationModel}:streamGenerateContent?alt=sse`;
+function streamGenerate(contextXml, question, history, settings, onChunk) {
+	const apiKey = settings.geminiApiKey;
+	if (!apiKey) return Promise.reject(/* @__PURE__ */ new Error("Google API key is required for generation - set it in RAG Chat settings."));
+	const host = "generativelanguage.googleapis.com";
+	const path = `/v1beta/models/${settings.generationModel}:streamGenerateContent?alt=sse`;
 	const requestBody = JSON.stringify({
 		systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-		contents: [{
+		contents: [...buildHistoryContents(history), {
 			role: "user",
 			parts: [{ text: `${contextXml}\n\n<question>\n${question}\n</question>` }]
 		}]
@@ -7916,8 +8179,7 @@ function streamGenerate(contextXml, question, settings, onChunk) {
 			headers: {
 				"Content-Type": "application/json",
 				"Content-Length": Buffer.byteLength(requestBody),
-				"x-goog-api-key": apiKey,
-				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+				"x-goog-api-key": apiKey
 			}
 		}, (res) => {
 			if ((res.statusCode ?? 0) >= 400) {
@@ -7927,9 +8189,10 @@ function streamGenerate(contextXml, question, settings, onChunk) {
 				return;
 			}
 			let buffer = "";
+			let chunksEmitted = 0;
 			res.setEncoding("utf-8");
 			res.on("data", (chunk) => {
-				buffer += chunk;
+				buffer += chunk.replace(/\r\n/g, "\n");
 				let idx;
 				while ((idx = buffer.indexOf("\n\n")) !== -1) {
 					const event = buffer.slice(0, idx);
@@ -7940,18 +8203,284 @@ function streamGenerate(contextXml, question, settings, onChunk) {
 						if (!payload || payload === "[DONE]") continue;
 						try {
 							const text = JSON.parse(payload)?.candidates?.[0]?.content?.parts?.[0]?.text;
-							if (typeof text === "string" && text.length > 0) onChunk(text);
+							if (typeof text === "string" && text.length > 0) {
+								chunksEmitted++;
+								onChunk(text);
+							}
 						} catch {}
 					}
 				}
 			});
-			res.on("end", () => resolve());
+			res.on("end", () => {
+				if (chunksEmitted === 0) {
+					reject(/* @__PURE__ */ new Error("Generation completed but returned no text (empty response from Gemini)."));
+					return;
+				}
+				resolve();
+			});
 			res.on("error", (err) => reject(err));
 		});
 		req.on("error", (err) => reject(err));
 		req.write(requestBody);
 		req.end();
 	});
+}
+/** Maps prior chat turns onto Gemini's `contents[]` shape (role "assistant"
+* -> "model", per the API's naming). Empty-text turns (e.g. an in-progress
+* assistant turn) are dropped - the API rejects empty parts. */
+function buildHistoryContents(history) {
+	return history.filter((t) => t.text.trim().length > 0).map((t) => ({
+		role: t.role === "assistant" ? "model" : "user",
+		parts: [{ text: t.text }]
+	}));
+}
+/** Non-streaming single-turn Gemini call, used for the small "planning" and
+* "validation" workflow steps (query rewriting, self-critique) - these need
+* one short, complete response, not a token stream, so Obsidian's CORS-safe
+* requestUrl (used already by retriever.ts's embedQuery) is simpler here
+* than the raw `https` SSE path streamGenerate needs. */
+async function generateOnce(prompt, settings, systemPrompt) {
+	const apiKey = settings.geminiApiKey;
+	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
+	const url = `https://generativelanguage.googleapis.com/v1beta/models/${settings.generationModel}:generateContent`;
+	const body = { contents: [{
+		role: "user",
+		parts: [{ text: prompt }]
+	}] };
+	if (systemPrompt) body.systemInstruction = { parts: [{ text: systemPrompt }] };
+	const response = await (0, obsidian.requestUrl)({
+		url,
+		method: "POST",
+		headers: {
+			"x-goog-api-key": apiKey,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(body)
+	});
+	const text = response.json?.candidates?.[0]?.content?.parts?.[0]?.text;
+	if (typeof text !== "string") throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
+	return text;
+}
+var REWRITE_SYSTEM_PROMPT = `Du hilfst, eine Nutzerfrage zu einem BMW E30 M3/320is-Werkstatthandbuch in eine
+knappe, stichwortartige Suchanfrage umzuformulieren, damit sie besser zu den technischen
+Begriffen des Handbuchs passt (z.B. Fachbegriffe statt umgangssprachlicher Wörter, ganze
+zusammengesetzte Wörter statt getrennter Verbteile wie "baue ... ein" -> "einbauen").
+Löse Rückbezüge auf vorherige Nachrichten im Gesprächsverlauf auf, sodass die Suchanfrage
+für sich allein verständlich ist. Antworte NUR mit der umformulierten Suchanfrage - keine
+Erklärung, keine Anführungszeichen, keine Einleitung.`;
+/**
+* LLM-based query rewrite - the fallback tier of the query-planning step
+* (see retriever.ts's resolveFollowupQuery for the free/deterministic tier).
+* Only called by workflow.ts when deterministic retrieval still comes back
+* thin, since it costs one extra non-streaming Gemini call.
+*/
+async function rewriteQuery(question, history, settings) {
+	const historyText = history.filter((t) => t.text.trim()).map((t) => `${t.role === "user" ? "Nutzer" : "Assistent"}: ${t.text}`).join("\n");
+	return (await generateOnce(historyText ? `Bisheriger Gesprächsverlauf:\n${historyText}\n\nAktuelle Frage: ${question}` : `Aktuelle Frage: ${question}`, settings, REWRITE_SYSTEM_PROMPT)).trim();
+}
+var CRITIQUE_SYSTEM_PROMPT = `Du prüfst, ob eine gegebene Antwort durch den bereitgestellten <context> tatsächlich
+belegt ist und die <question> sinnvoll beantwortet. Antworte NUR mit genau einer Zeile:
+- "OK" wenn die Antwort durch den Kontext gestützt wird und die Frage adressiert (auch wenn
+  sie ausdrücklich sagt, dass eine Angabe im Kontext fehlt - das ist eine ehrliche, gültige
+  Antwort).
+- "RETRY: <kurzer Grund>" wenn die Antwort vage ist, nicht durch den Kontext belegt ist, oder
+  die im Kontext eigentlich vorhandene Hauptseite zum Thema übersehen wurde (z.B. es werden
+  nur verwandte/angrenzende Seiten zitiert statt der Seite, die die Frage direkt behandelt).
+Keine weitere Erklärung, keine zusätzliche Zeile.`;
+/**
+* Post-generation self-critique (see workflow.ts): asks the model to judge
+* its own draft answer against the retrieved context before it's shown to
+* the user. Fails OPEN (treats an unparseable/erroring critique as "OK")
+* rather than blocking the user on a broken validation call.
+*/
+async function critiqueAnswer(question, contextXml, draftAnswer, settings) {
+	const text = (await generateOnce(`${contextXml}\n\n<question>\n${question}\n</question>\n\n<answer>\n${draftAnswer}\n</answer>`, settings, CRITIQUE_SYSTEM_PROMPT)).trim();
+	if (/^OK\b/i.test(text)) return { ok: true };
+	const match = /^RETRY:\s*(.*)/is.exec(text);
+	if (match) return {
+		ok: false,
+		reason: match[1]?.trim()
+	};
+	return { ok: true };
+}
+//#endregion
+//#region src/workflow.ts
+/** Loosen retrieval for a retry: lower the similarity floor (never below
+* 0.4 - much below that the vector leg stops being meaningfully selective)
+* and consider a few more candidates before the final topK slice. */
+function widenSettings(settings) {
+	return {
+		...settings,
+		similarity: Math.max(.4, settings.similarity - .15),
+		topK: settings.topK + 4
+	};
+}
+async function retrieveOnce(query, settings, indices, fuzzyApi, vault) {
+	const hybridHits = await federatedHybridSearch(indices, query, await embedQuery(query, settings), settings);
+	let hits = hybridHits;
+	if (settings.enableFuzzySearchLeg && fuzzyApi) try {
+		hits = mergeWithFuzzy(hybridHits, (await fuzzyApi.search(query, 10)).results, settings.topK);
+	} catch {}
+	const blocks = await expandToParentNotes(hits, vault);
+	return {
+		hits,
+		blocks
+	};
+}
+/** German query/title words that carry no topical signal on their own -
+* excluded from the keyword-overlap sanity check below so e.g. "wie" or
+* "was" never counts as a "match". Intentionally small; this check is a
+* coarse safety net, not a linguistic pipeline. */
+var OVERLAP_STOPWORDS = /* @__PURE__ */ new Set([
+	"wie",
+	"was",
+	"wer",
+	"wo",
+	"wann",
+	"warum",
+	"welche",
+	"welcher",
+	"welches",
+	"ich",
+	"du",
+	"er",
+	"sie",
+	"es",
+	"wir",
+	"ihr",
+	"mein",
+	"meine",
+	"meinen",
+	"der",
+	"die",
+	"das",
+	"den",
+	"dem",
+	"des",
+	"ein",
+	"eine",
+	"einen",
+	"einem",
+	"und",
+	"oder",
+	"aber",
+	"kann",
+	"kannst",
+	"muss",
+	"soll",
+	"geht",
+	"macht",
+	"nicht",
+	"auch",
+	"noch",
+	"schon",
+	"sehr",
+	"viel",
+	"komisch",
+	"einfach",
+	"diese",
+	"dieser",
+	"dieses",
+	"hier",
+	"dort",
+	"dann",
+	"beim",
+	"beim"
+]);
+function contentWords(text) {
+	return text.toLowerCase().replace(/[^a-zäöüß0-9\s-]/gi, " ").split(/\s+/).filter((w) => w.length >= 4 && !OVERLAP_STOPWORDS.has(w));
+}
+/** True if any word in `a` is a substring of (or contains) any word in `b`,
+* in either direction. Deliberately permissive substring matching (not
+* exact-token matching) as a cheap stand-in for German compound-noun
+* awareness — e.g. query word "tank" is a substring of title word
+* "kraftstofftank", so this catches that overlap without needing a real
+* decompounder here. This is a coarse sanity net against confidently-wrong
+* retrieval, not a relevance scorer. */
+function hasWordOverlap(a, b) {
+	for (const wa of a) for (const wb of b) if (wa.includes(wb) || wb.includes(wa)) return true;
+	return false;
+}
+/**
+* A retrieval outcome is "weak" if it's thin by count/score (the original
+* heuristic) OR if NONE of the retrieved hits' titles share so much as one
+* substring-overlapping content word with the query.
+*
+* The count/score-only version of this check was confirmed (via live
+* benchmarking, see .pipeline/rag/PLAN.md) to miss real failures: a query
+* like "wie baue ich den Tank ein" could retrieve 7 hits with a
+* comfortable-looking merged score while every single hit was topically
+* wrong (tank-VENTING pages instead of tank-REMOVAL pages) — high count,
+* high score, zero retry triggered, wrong answer shown. The keyword-overlap
+* check catches that class of failure: if literally no retrieved title
+* shares any topical word with the question, no score threshold should be
+* able to override that "this doesn't look right" signal.
+*/
+function isWeak(outcome, settings, query) {
+	if (outcome.blocks.length === 0) return true;
+	if (outcome.blocks.length < settings.weakResultMinHits) return true;
+	if ((outcome.hits[0]?.score ?? 0) < settings.weakResultScoreThreshold) return true;
+	const queryWords = contentWords(query);
+	if (queryWords.length === 0) return false;
+	return !outcome.hits.some((h) => hasWordOverlap(queryWords, contentWords(h.titel)));
+}
+async function generateDraft(contextXml, question, history, settings, liveOnChunk) {
+	let draft = "";
+	await streamGenerate(contextXml, question, history, settings, (delta) => {
+		draft += delta;
+		liveOnChunk?.(delta);
+	});
+	return draft;
+}
+async function answerQuestion(params) {
+	const { question, history, settings, vault, indices, fuzzyApi, onChunk, onStatus } = params;
+	const resolvedQuery = resolveFollowupQuery(question, history);
+	onStatus?.("Durchsuche Handbuch …");
+	let outcome = await retrieveOnce(resolvedQuery, settings, indices, fuzzyApi, vault);
+	let retrievalRetriesLeft = Math.max(0, settings.maxRetries);
+	if (isWeak(outcome, settings, resolvedQuery) && retrievalRetriesLeft > 0) {
+		onStatus?.("Erweitere Suche …");
+		outcome = await retrieveOnce(resolvedQuery, widenSettings(settings), indices, fuzzyApi, vault);
+		retrievalRetriesLeft--;
+	}
+	if (isWeak(outcome, settings, resolvedQuery) && retrievalRetriesLeft > 0 && settings.enableQueryRewriteFallback) {
+		onStatus?.("Frage wird umformuliert …");
+		try {
+			const rewritten = await rewriteQuery(question, history, settings);
+			if (rewritten.trim()) {
+				onStatus?.("Durchsuche Handbuch (umformuliert) …");
+				const rewrittenOutcome = await retrieveOnce(rewritten.trim(), settings, indices, fuzzyApi, vault);
+				if (rewrittenOutcome.blocks.length > outcome.blocks.length) outcome = rewrittenOutcome;
+			}
+		} catch {}
+		retrievalRetriesLeft--;
+	}
+	if (outcome.blocks.length === 0) return { citations: [] };
+	let contextXml = buildContextXml(outcome.blocks);
+	onStatus?.("Erstelle Antwort …");
+	const liveStreaming = !settings.enableSelfCritique;
+	let draft = await generateDraft(contextXml, question, history, settings, liveStreaming ? onChunk : null);
+	if (settings.enableSelfCritique) {
+		onStatus?.("Prüfe Antwort …");
+		let verdictOk = true;
+		try {
+			verdictOk = (await critiqueAnswer(question, contextXml, draft, settings)).ok;
+		} catch {
+			verdictOk = true;
+		}
+		if (!verdictOk && retrievalRetriesLeft > 0) {
+			onStatus?.("Erweitere Suche …");
+			const retryOutcome = await retrieveOnce(resolvedQuery, widenSettings(settings), indices, fuzzyApi, vault);
+			if (retryOutcome.blocks.length > 0) {
+				outcome = retryOutcome;
+				contextXml = buildContextXml(retryOutcome.blocks);
+				onStatus?.("Erstelle Antwort …");
+				draft = await generateDraft(contextXml, question, history, settings, null);
+			}
+		}
+		onChunk(draft);
+	}
+	return { citations: outcome.blocks };
 }
 //#endregion
 //#region src/view.ts
@@ -7961,6 +8490,7 @@ var RagChatView = class extends obsidian.ItemView {
 		super(leaf);
 		this.turns = [];
 		this.busy = false;
+		this.turnEls = /* @__PURE__ */ new Map();
 		this.plugin = plugin;
 	}
 	getViewType() {
@@ -8003,57 +8533,89 @@ var RagChatView = class extends obsidian.ItemView {
 		this.sendButton.disabled = busy;
 		this.sendButton.setText(busy ? "..." : "Fragen");
 	}
+	/** Looks up Vault Search's public search API (see that plugin's onload()),
+	* if the plugin is installed and enabled. Returns null otherwise - the
+	* fuzzy-search retrieval leg is best-effort, not a hard dependency. */
+	getFuzzySearchApi() {
+		return (this.app.plugins?.plugins)?.["vault-search"]?.api ?? null;
+	}
 	async handleSend() {
 		if (this.busy) return;
 		const question = this.inputEl.value.trim();
 		if (!question) return;
 		this.inputEl.value = "";
+		const history = [...this.turns];
 		this.turns.push({
 			role: "user",
 			text: question
 		});
 		const assistantTurn = {
 			role: "assistant",
-			text: ""
+			text: "",
+			status: "Analysiere Frage …"
 		};
 		this.turns.push(assistantTurn);
 		this.renderTurns();
 		this.setBusy(true);
 		try {
-			await this.answer(question, assistantTurn);
+			await this.answer(question, history, assistantTurn);
 		} catch (err) {
+			assistantTurn.status = void 0;
 			assistantTurn.text = `Fehler: ${err instanceof Error ? err.message : String(err)}`;
+			assistantTurn.citations = [];
 			new obsidian.Notice(`RAG Chat error: ${err instanceof Error ? err.message : String(err)}`);
+			this.renderTurns();
 		} finally {
 			this.setBusy(false);
-			this.renderTurns();
 		}
 	}
-	async answer(question, turn) {
+	async answer(question, history, turn) {
 		const { settings } = this.plugin;
-		await this.plugin.getManifest();
-		const indexPath = this.plugin.getIndexPath();
-		const [vector, db] = await Promise.all([embedQuery(question, settings), getIndex(indexPath)]);
-		const contextBlocks = await expandToParentNotes(await hybridSearch(db, question, vector, settings), this.app.vault);
-		turn.citations = contextBlocks;
-		if (contextBlocks.length === 0) {
-			turn.text = "Keine passenden Seiten im Handbuch gefunden.";
-			this.renderTurns();
-			return;
-		}
-		await streamGenerate(buildContextXml(contextBlocks), question, settings, (delta) => {
+		const manifest = await this.plugin.getManifest();
+		const indices = await getIndices(this.plugin.getPluginDirFullPath(), manifest);
+		const fuzzyApi = this.getFuzzySearchApi();
+		const onChunk = (delta) => {
+			turn.status = void 0;
 			turn.text += delta;
-			this.renderTurns();
+			this.updateTurnText(turn);
+		};
+		const onStatus = (status) => {
+			turn.status = status;
+			this.updateTurnText(turn);
+		};
+		const result = await answerQuestion({
+			question,
+			history,
+			settings,
+			vault: this.app.vault,
+			indices,
+			fuzzyApi,
+			onChunk,
+			onStatus
 		});
+		turn.citations = result.citations;
+		if (result.citations.length === 0) {
+			turn.status = void 0;
+			turn.text = "Keine passenden Seiten im Handbuch gefunden.";
+		}
+		this.renderTurns();
+	}
+	/** True while a turn should show its transient `status` label instead of
+	* `text` (i.e. nothing has actually streamed in yet). */
+	showsStatus(turn) {
+		return turn.role === "assistant" && turn.text.length === 0 && Boolean(turn.status);
 	}
 	renderTurns() {
 		this.messagesEl.empty();
+		this.turnEls.clear();
 		for (const turn of this.turns) {
 			const turnEl = this.messagesEl.createDiv({ cls: `rag-chat-turn rag-chat-turn-${turn.role}` });
-			turnEl.createDiv({
-				cls: "rag-chat-turn-text",
-				text: turn.text
+			const status = this.showsStatus(turn);
+			const textEl = turnEl.createDiv({
+				cls: status ? "rag-chat-turn-text rag-chat-turn-status" : "rag-chat-turn-text",
+				text: status ? turn.status : turn.text
 			});
+			this.turnEls.set(turn, textEl);
 			if (turn.citations && turn.citations.length > 0) {
 				const citeEl = turnEl.createDiv({ cls: "rag-chat-citations" });
 				citeEl.createSpan({ text: "Quellen: " });
@@ -8068,9 +8630,126 @@ var RagChatView = class extends obsidian.ItemView {
 		}
 		this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight });
 	}
+	/** Lightweight in-place update for a single turn's visible text (status
+	* label or streamed answer content) - avoids rebuilding the whole message
+	* list (and re-binding every citation link) on every token/status change.
+	* Falls back to a full renderTurns() if the turn has no cached element yet. */
+	updateTurnText(turn) {
+		const el = this.turnEls.get(turn);
+		if (!el) {
+			this.renderTurns();
+			return;
+		}
+		const status = this.showsStatus(turn);
+		el.classList.toggle("rag-chat-turn-status", status);
+		el.textContent = status ? turn.status : turn.text;
+		this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight });
+	}
 };
 //#endregion
+//#region src/secure-storage.ts
+/**
+* secure-storage.ts — at-rest encryption for API keys persisted in data.json.
+*
+* Obsidian plugins run entirely in the Electron *renderer* process with no
+* main-process code and no IPC bridge, so Electron's `safeStorage` module
+* (main-process only, see Electron docs) is NOT reachable here. Instead we
+* derive an AES-256 key via scrypt from a machine fingerprint built purely
+* from `node:os` values (no subprocesses, no new dependencies) and use
+* AES-256-GCM for authenticated encryption.
+*
+* This is intentionally machine-bound: moving the vault to different
+* hardware will make decryption fail (by design) - see decryptSecret's
+* thrown error, which callers should catch and treat as "not set".
+*
+* Security note: the `os.*` fingerprint (hostname/platform/arch/cpu
+* model/total memory/homedir) is weaker than a true hardware UUID (e.g.
+* identical VM clones could collide) but matches the actual threat model
+* here - preventing the API key from sitting in plaintext in a file that
+* might get synced/backed up/committed by accident - without the
+* complexity/subprocess risk of shelling out to platform-specific machine-id
+* commands.
+*
+* This module is intentionally pure (no `obsidian` import) so it can be
+* exercised with a plain Node script outside of Obsidian.
+*/
+var ENC_PREFIX = "enc:v1:";
+var KEY_LEN = 32;
+var SALT_LEN = 16;
+var IV_LEN = 12;
+var SCRYPT_PARAMS = {
+	N: 16384,
+	r: 8,
+	p: 1
+};
+function scrypt(password, salt, keylen, options) {
+	return new Promise((resolve, reject) => {
+		(0, node_crypto.scrypt)(password, salt, keylen, options, (err, derivedKey) => {
+			if (err) reject(err);
+			else resolve(derivedKey);
+		});
+	});
+}
+function getMachineFingerprint() {
+	return [
+		node_os.hostname(),
+		node_os.platform(),
+		node_os.arch(),
+		node_os.cpus()?.[0]?.model ?? "unknown-cpu",
+		String(node_os.totalmem()),
+		node_os.homedir()
+	].join("|");
+}
+async function deriveKey(salt) {
+	return await scrypt(getMachineFingerprint(), salt, KEY_LEN, SCRYPT_PARAMS);
+}
+/**
+* Encrypts `plain` for at-rest storage. Returns "" for an empty/unset input
+* (never encrypts an empty string) so DEFAULT_SETTINGS round-trips cleanly.
+*/
+async function encryptSecret(plain) {
+	if (!plain) return "";
+	const salt = (0, node_crypto.randomBytes)(SALT_LEN);
+	const key = await deriveKey(salt);
+	const iv = (0, node_crypto.randomBytes)(IV_LEN);
+	const cipher = (0, node_crypto.createCipheriv)("aes-256-gcm", key, iv);
+	const ciphertext = Buffer.concat([cipher.update(plain, "utf8"), cipher.final()]);
+	const tag = cipher.getAuthTag();
+	return ENC_PREFIX + Buffer.concat([
+		salt,
+		iv,
+		tag,
+		ciphertext
+	]).toString("base64");
+}
+/**
+* Decrypts a value produced by encryptSecret. Throws on any failure
+* (unrecognized format, wrong machine fingerprint, corrupted/tampered data -
+* the GCM auth tag check catches the latter two). Callers should catch and
+* treat the secret as "not set" rather than propagating the error.
+*/
+async function decryptSecret(stored) {
+	if (!stored) return "";
+	if (!stored.startsWith(ENC_PREFIX)) throw new Error("unrecognized secret format");
+	const payload = Buffer.from(stored.slice(7), "base64");
+	const salt = payload.subarray(0, SALT_LEN);
+	const iv = payload.subarray(SALT_LEN, 28);
+	const tag = payload.subarray(28, 44);
+	const ciphertext = payload.subarray(44);
+	const key = await deriveKey(salt);
+	const decipher = (0, node_crypto.createDecipheriv)("aes-256-gcm", key, iv);
+	decipher.setAuthTag(tag);
+	return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString("utf8");
+}
+//#endregion
 //#region src/main.ts
+/** Settings fields that are encrypted at rest (see secure-storage.ts). Kept as
+* plaintext on `this.settings` in memory - only encrypted right before
+* saveData() and decrypted right after loadData(). */
+var ENCRYPTED_FIELDS = [{
+	field: "geminiApiKey",
+	label: "Google API key (GEMINI_API_KEY)"
+}];
 var RagChatPlugin = class extends obsidian.Plugin {
 	constructor(..._args) {
 		super(..._args);
@@ -8101,8 +8780,12 @@ var RagChatPlugin = class extends obsidian.Plugin {
 	getPluginDir() {
 		return this.manifest.dir ?? `.obsidian/plugins/${this.manifest.id}`;
 	}
-	getIndexPath() {
-		const relPath = `${this.getPluginDir()}/rag-index.orama.msp`;
+	/** Real filesystem path to the plugin directory (not vault-relative) -
+	* needed for Node's fs-based restoreFromFile/persistToFile (see
+	* orama-schema.ts). isDesktopOnly: true, so the adapter is always a
+	* FileSystemAdapter (never the mobile Capacitor adapter). */
+	getPluginDirFullPath() {
+		const relPath = this.getPluginDir();
 		if (this.app.vault.adapter instanceof obsidian.FileSystemAdapter) return this.app.vault.adapter.getFullPath(relPath);
 		return relPath;
 	}
@@ -8126,10 +8809,22 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		workspace.revealLeaf(leaf);
 	}
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const raw = await this.loadData() ?? {};
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, raw);
+		for (const { field, label } of ENCRYPTED_FIELDS) {
+			const storedValue = raw[field];
+			try {
+				this.settings[field] = await decryptSecret(storedValue);
+			} catch (err) {
+				this.settings[field] = "";
+				if (storedValue) new obsidian.Notice(`RAG Chat: ${label} konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.`, 1e4);
+			}
+		}
 	}
 	async saveSettings() {
-		await this.saveData(this.settings);
+		const toPersist = { ...this.settings };
+		for (const { field } of ENCRYPTED_FIELDS) toPersist[field] = await encryptSecret(this.settings[field]);
+		await this.saveData(toPersist);
 	}
 };
 //#endregion

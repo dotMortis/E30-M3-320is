@@ -2,6 +2,14 @@ import { FileSystemAdapter, Notice, Plugin, WorkspaceLeaf } from "obsidian";
 import { DEFAULT_SETTINGS, RagChatSettingTab, type RagChatSettings } from "./settings";
 import { RAG_CHAT_VIEW_TYPE, RagChatView } from "./view";
 import { validateManifest, type RagManifest } from "./retriever";
+import { decryptSecret, encryptSecret } from "./secure-storage";
+
+/** Settings fields that are encrypted at rest (see secure-storage.ts). Kept as
+ * plaintext on `this.settings` in memory - only encrypted right before
+ * saveData() and decrypted right after loadData(). */
+const ENCRYPTED_FIELDS: { field: "geminiApiKey"; label: string }[] = [
+  { field: "geminiApiKey", label: "Google API key (GEMINI_API_KEY)" },
+];
 
 export default class RagChatPlugin extends Plugin {
   settings!: RagChatSettings;
@@ -49,11 +57,12 @@ export default class RagChatPlugin extends Plugin {
     return this.manifest.dir ?? `.obsidian/plugins/${this.manifest.id}`;
   }
 
-  getIndexPath(): string {
-    // isDesktopOnly: true, so the adapter is always a FileSystemAdapter (never the mobile
-    // Capacitor adapter) - we need the real filesystem path for Node's fs-based
-    // restoreFromFile/persistToFile (see orama-schema.ts), not a vault-relative path.
-    const relPath = `${this.getPluginDir()}/rag-index.orama.msp`;
+  /** Real filesystem path to the plugin directory (not vault-relative) -
+   * needed for Node's fs-based restoreFromFile/persistToFile (see
+   * orama-schema.ts). isDesktopOnly: true, so the adapter is always a
+   * FileSystemAdapter (never the mobile Capacitor adapter). */
+  getPluginDirFullPath(): string {
+    const relPath = this.getPluginDir();
     if (this.app.vault.adapter instanceof FileSystemAdapter) {
       return this.app.vault.adapter.getFullPath(relPath);
     }
@@ -79,10 +88,33 @@ export default class RagChatPlugin extends Plugin {
   }
 
   async loadSettings(): Promise<void> {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    const raw = ((await this.loadData()) ?? {}) as Record<string, unknown>;
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, raw) as RagChatSettings;
+
+    // geminiApiKey is persisted encrypted (see secure-storage.ts) - decrypt it
+    // into the in-memory settings object here so the rest of the plugin
+    // (retriever.ts, gemini.ts, settings.ts) keeps working with plaintext.
+    for (const { field, label } of ENCRYPTED_FIELDS) {
+      const storedValue = raw[field] as string | undefined;
+      try {
+        this.settings[field] = await decryptSecret(storedValue);
+      } catch (err) {
+        this.settings[field] = "";
+        if (storedValue) {
+          new Notice(
+            `RAG Chat: ${label} konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.`,
+            10000
+          );
+        }
+      }
+    }
   }
 
   async saveSettings(): Promise<void> {
-    await this.saveData(this.settings);
+    const toPersist: Record<string, unknown> = { ...this.settings };
+    for (const { field } of ENCRYPTED_FIELDS) {
+      toPersist[field] = await encryptSecret(this.settings[field]);
+    }
+    await this.saveData(toPersist);
   }
 }

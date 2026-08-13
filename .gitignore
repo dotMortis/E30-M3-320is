@@ -25,6 +25,14 @@ __pycache__/
 .obsidian/plugins/rag-chat/node_modules/
 .obsidian/plugins/rag-chat/data.json
 
+# Vault Search v2 build tooling (node deps; never shipped). The raw OpenThesaurus
+# dump is a large (~4MB) input to scripts/build-data.mjs - regenerable by
+# re-downloading "Thesaurus im Text-Format" from openthesaurus.de/about/download.
+# Only the small, vault-filtered data/synonyms.json + data/compound-parts.json
+# outputs are committed (see build-data.mjs's own docstring).
+.obsidian/plugins/vault-search/node_modules/
+.obsidian/plugins/vault-search/scripts/openthesaurus-raw.txt
+
 # Obsidian per-user state (keep the pre-configured settings, ignore local state)
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json

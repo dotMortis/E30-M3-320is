@@ -9,15 +9,16 @@ each expected note appears in the top-K hits. Prints rank + score for
 tuning TOP_K / SIMILARITY.
 
 Cost note: each query is embedded via the real Google API (gemini-embedding-2,
-output_dimensionality=768, matching the shipped index) so results reflect
-actual plugin behavior. This is a handful of tiny queries (a few cents'
-fraction of a cent total) — not "free" in the absolute sense, but
+output_dimensionality=3072, full fidelity, matching the shipped index) so
+results reflect actual plugin behavior. This is a handful of tiny queries (a
+few cents' fraction of a cent total) — not "free" in the absolute sense, but
 negligible, and the only paid step is the query embedding, not any LLM call
-(no generation, no Zen key used here — see test_generate.py for that).
+(no generation used here — see test_generate.py for that).
 
 Since Python cannot read Orama's binary index format directly, the actual
 search is delegated to build/orama_search.mjs (Node) via subprocess — the
-exact same call shape the rag-chat plugin will make at query time.
+exact same federated (text index + vector shards) call shape the rag-chat
+plugin will make at query time.
 """
 
 from __future__ import annotations
@@ -37,7 +38,13 @@ SEARCH_SCRIPT = RAG_DIR / "build" / "orama_search.mjs"
 MANIFEST_PATH = RAG_DIR.parents[1] / ".obsidian" / "plugins" / "rag-chat" / "rag-manifest.json"
 
 TOP_K = 8
-SIMILARITY = 0.75
+# NOTE: 0.75 (the old default) was empirically confirmed via live benchmarking
+# (see PLAN.md's "Retrieval benchmark" section) to return ZERO vector-leg
+# candidates on every tested natural-language query - real cosine similarity
+# for even the exact correct document topped out around 0.59-0.74 on this
+# corpus. 0.55 matches the shipped plugin's new default (see settings.ts).
+SIMILARITY = 0.55
+RRF_K = 2  # matches settings.ts's new default rrfK; small k beat the literature default of 60 here.
 
 # Fixed query set (see PLAN.md Phase 5). Expected note identified by notePath
 # (unique) — seitencode alone is not a reliable identity key in this vault.
@@ -80,10 +87,10 @@ def check_manifest_parity():
             f"ERROR: embedding-parity mismatch. Index built with model={manifest['embeddingModel']!r}, "
             f"qa_rag.py expects {eg.EMBEDDING_MODEL!r}."
         )
-    if manifest["embeddingDims"] != 768:
+    if manifest["embeddingDims"] != 3072:
         sys.exit(
             f"ERROR: embedding-parity mismatch. Index built with dims={manifest['embeddingDims']}, "
-            f"qa_rag.py queries at 768 (the shipped/query dims, not the 3072 cache dims)."
+            f"qa_rag.py queries at 3072 (full fidelity, no truncation)."
         )
     return manifest
 
@@ -93,13 +100,15 @@ def embed_query(client: genai.Client, query: str) -> list[float]:
     resp = client.models.embed_content(
         model=eg.EMBEDDING_MODEL,
         contents=[prefixed],
-        config=types.EmbedContentConfig(output_dimensionality=768),
+        config=types.EmbedContentConfig(output_dimensionality=3072),
     )
     return resp.embeddings[0].values
 
 
-def orama_search(term: str, vector: list[float], mode: str = "hybrid", similarity: float = SIMILARITY, limit: int = TOP_K) -> dict:
-    payload = {"term": term, "vector": vector, "mode": mode, "similarity": similarity, "limit": limit}
+def orama_search(
+    term: str, vector: list[float], mode: str = "hybrid", similarity: float = SIMILARITY, limit: int = TOP_K, rrf_k: int = RRF_K
+) -> dict:
+    payload = {"term": term, "vector": vector, "mode": mode, "similarity": similarity, "limit": limit, "rrfK": rrf_k}
     proc = subprocess.run(
         ["node", str(SEARCH_SCRIPT)],
         input=json.dumps(payload),

@@ -27,6 +27,14 @@ export default defineConfig({
       ],
       output: {
         exports: "default",
+        // @orama/plugin-data-persistence is bundled in (not externalized) and
+        // internally does `await import("node:fs/promises")` etc. Rollup/Rolldown
+        // keeps that as a literal native dynamic import() for external targets by
+        // default, which Obsidian's plugin sandbox can't resolve (it goes through
+        // Chromium's module loader instead of Node's require), producing
+        // "Failed to fetch dynamically imported module: node:fs/promises".
+        // Forcing require()-based interop for dynamic imports in CJS output fixes it.
+        dynamicImportInCjs: false,
       },
     },
     minify: false,

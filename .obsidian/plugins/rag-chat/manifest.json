@@ -1,9 +1,9 @@
 {
   "id": "rag-chat",
   "name": "RAG Chat",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "minAppVersion": "1.5.0",
-  "description": "Offline-first hybrid RAG chat over the E30 M3/320is manual: hybrid (BM25 + vector) retrieval against a prebuilt, committed Orama index, with grounded answers citing exact manual pages.",
+  "description": "Offline-first hybrid RAG chat over the E30 M3/320is manual: hybrid (BM25 + vector) retrieval against a prebuilt, committed Orama index, merged with Vault Search's fuzzy/typo/synonym results, real multi-turn memory, and an automatic widen/rewrite/self-critique workflow on weak results.",
   "author": "E30-M3-320is vault",
   "isDesktopOnly": true
 }

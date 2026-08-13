@@ -1,16 +1,22 @@
 {
   "embeddingModel": "gemini-embedding-2",
-  "embeddingDims": 768,
-  "cacheDims": 3072,
+  "embeddingDims": 3072,
   "docPrefixTemplate": "title: {title} | text: {content}",
   "queryPrefixTemplate": "task: search result | query: {content}",
   "generationModel": "gemini-3.6-flash",
-  "genProviderDefault": "zen",
   "noteCount": 1253,
   "textChunkCount": 1569,
   "multimodalCount": 1253,
   "totalRowCount": 2822,
+  "textIndexFile": "rag-index-text.orama.msp",
+  "textIndexBytes": 16206638,
+  "vectorShardCount": 2,
+  "vectorIndexFilePattern": "rag-index-vectors-{i}.orama.msp",
+  "vectorShardBytes": [
+    80947418,
+    80933482
+  ],
   "corpusHash": "104fecdaeabee7d52a8d169639999a1e3a3d3c89cd57f5b0463cbfb6181ae400",
   "chunkedAt": "2026-08-13T09:43:20.327389+00:00",
-  "builtAt": "2026-08-13T10:03:50.179Z"
+  "builtAt": "2026-08-13T11:30:27.478Z"
 }

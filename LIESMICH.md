@@ -68,8 +68,16 @@ treffsicherer als die Standardsuche.
 - **Umlaute egal:** „*kuehler*“ und „*kühler*“, „*tuer*“ und „*tür*“ liefern das Gleiche.
 - Beispiel: **„Bremsscheibe“** oder **„brake disc“** — beides findet die passenden Seiten.
 - **Tags mitsuchen:** einfach mit eintippen, z. B. „*typ diagram bremsen*“ oder „*sektion 34*“.
+- **Seitencodes und Pfade:** „*16-02*“ findet direkt die passende Seite, auch mit
+  Bindestrich im Code.
 - Beim ersten Aufruf wird der Suchindex kurz aufgebaut (etwa eine Zehntelsekunde) —
   danach ist die Suche sofort da.
+
+> [!info] Datenquelle für Synonyme
+> Die allgemeinsprachlichen Synonyme (z. B. *Sprit* ↔ *Kraftstoff*) stammen zu einem
+> Teil aus [OpenThesaurus](https://www.openthesaurus.de) (Daniel Naber u. a.),
+> lizenziert unter CC‑BY‑SA 4.0 / LGPL 2.1 — auf dieses Handbuch gefiltert, siehe
+> `.obsidian/plugins/vault-search/scripts/build-data.mjs`.
 
 > [!tip] Standardsuche weiterhin verfügbar
 > Obsidians eingebaute globale Suche erreichst du weiterhin über die Seitenleiste
@@ -84,30 +92,41 @@ normaler Sprache beantwortet und dabei **immer die genaue Handbuchseite zitiert*
 Radialwellendichtring?“. Die Antwort stützt sich **ausschließlich** auf den Handbuchinhalt;
 fehlt eine Angabe im Handbuch, sagt der Chat das ausdrücklich, statt zu raten.
 
-- **Offline‑first:** Der Such‑Index (`rag-index.orama.msp`, im Plugin‑Ordner) ist bereits
-  fertig gebaut und im Repository enthalten — kein separater Build‑Schritt nötig, um den Chat
-  zu nutzen.
+- **Offline‑first:** Der Such‑Index (ein Textindex `rag-index-text.orama.msp` plus mehrere
+  Vektor‑Shards `rag-index-vectors-*.orama.msp`, alle im Plugin‑Ordner) ist bereits fertig
+  gebaut und im Repository enthalten — kein separater Build‑Schritt nötig, um den Chat zu
+  nutzen.
 - **Öffnen:** Symbol in der linken Randleiste, oder Befehlspalette (**`Strg`+`P`**) →
   „*RAG: Frage stellen*“.
+- **Merkt sich das Gespräch:** Rückfragen wie „und was ist mit dem S14?“ beziehen sich auf
+  die vorherige Antwort — der gesamte bisherige Chatverlauf wird bei jeder neuen Frage
+  mitgeschickt.
+- **Nutzt zusätzlich die Handbuchsuche:** Findet die reine KI‑Suche (Vektor/BM25) eine
+  Formulierung nicht — z. B. bei Tippfehlern oder umgangssprachlichen Begriffen wie „Sprit“
+  statt „Kraftstoff“ — greift der Chat automatisch auch auf die tippfehler‑/synonymtolerante
+  **Handbuchsuche** (Plugin *Vault Search*) zurück. Ist dieses Plugin deaktiviert, funktioniert
+  der Chat trotzdem, findet dann aber ggf. weniger.
+- **Sucht bei schwachen Treffern automatisch breiter:** Wirkt das erste Suchergebnis dünn,
+  zeigt der Chat kurz „*Erweitere Suche …*“ / „*Prüfe Antwort …*“ und versucht es automatisch
+  noch einmal (breitere Suche, ggf. umformulierte Frage, geprüfte Antwort), bevor die finale
+  Antwort erscheint — das kann eine Frage etwas länger dauern lassen als vorher.
 - **API‑Schlüssel erforderlich** (unter Einstellungen → RAG Chat einzutragen):
-  - **Google‑Schlüssel** (`GEMINI_API_KEY`) — **zwingend nötig**, wird für die Frage‑Embeddings
-    verwendet (Zen bietet kein Embedding‑Modell an).
-  - **Zen‑Schlüssel** (`OPENCODE_API_KEY`) — für die eigentliche Antwortgenerierung, per
-    Voreinstellung aktiv (auf Google umschaltbar in den Einstellungen).
-  - Beide Schlüssel bleiben **lokal** in den Obsidian‑Einstellungen (`data.json`) dieses
-    Tresors gespeichert, niemals im Repository.
+  - **Google‑Schlüssel** (`GEMINI_API_KEY`) — wird sowohl für die Frage‑Embeddings als auch
+    für die eigentliche Antwortgenerierung (`gemini-3.6-flash`) verwendet.
+  - Der Schlüssel bleibt **lokal** in den Obsidian‑Einstellungen (`data.json`) dieses Tresors
+    gespeichert (verschlüsselt), niemals im Repository.
 - **Index neu bauen** (nur nötig, wenn sich Notizen/Scans ändern): im Ordner `.pipeline/rag/`
   — Voraussetzung: `uv` (Python) und `node`/`npm` sind installiert, sowie eine `.env`‑Datei im
-  Projekt‑Root mit `GEMINI_API_KEY=...` und `OPENCODE_API_KEY=...`.
+  Projekt‑Root mit `GEMINI_API_KEY=...`.
   ```
   cd .pipeline/rag
   uv venv && uv pip install -r requirements.txt
   .venv/bin/python3 build_rag_index.py --pilot 20   # Kostencheck (paar Cent) vor dem Vollbau
   .venv/bin/python3 build_rag_index.py              # Vollbau (~$0.35-0.40, einmalig)
-  cd build && npm install && node build_orama.mjs   # baut den Index im Plugin-Ordner
+  cd build && npm install && node build_orama.mjs   # baut Textindex + Vektor-Shards im Plugin-Ordner
   ```
-  Die einmaligen Embedding‑Kosten trägt der Google‑Schlüssel (Cent‑Bereich); die
-  Chat‑Nutzung danach läuft über den Zen‑Schlüssel.
+  Die einmaligen Embedding‑Kosten sowie die spätere Chat‑Nutzung laufen beide über den
+  Google‑Schlüssel.
 
 ## 6. Zoom / Lupe für die Scans
 

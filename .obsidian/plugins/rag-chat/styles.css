@@ -36,6 +36,26 @@
   word-wrap: break-word;
 }
 
+/* Transient "what's happening right now" label (see view.ts's ChatTurn.status)
+ * shown in the answer box while retrieval/generation/validation are still in
+ * flight - visually distinct from real answer content so it's clear the
+ * reply isn't final yet. */
+.rag-chat-turn-status {
+  font-style: italic;
+  color: var(--text-muted);
+  animation: rag-chat-status-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes rag-chat-status-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 .rag-chat-citations {
   margin-top: 6px;
   padding-top: 6px;

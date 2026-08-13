@@ -1,9 +1,9 @@
 {
   "id": "vault-search",
   "name": "Vault Search",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "minAppVersion": "1.5.0",
-  "description": "Weighted, typo-tolerant search tuned for this static manual: results ranked title > tags > content, with glossary/colloquial synonym expansion (e.g. Benzin -> Kraftstoff).",
+  "description": "Orama-backed (BM25 + native typo tolerance) search over the manual vault: title/tag/path/content ranking, glossary/colloquial synonyms, and bidirectional German compound-word + separable-verb boundary tolerance.",
   "author": "E30-M3-320is vault",
   "isDesktopOnly": false
 }

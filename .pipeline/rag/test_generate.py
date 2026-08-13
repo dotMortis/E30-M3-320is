@@ -57,7 +57,7 @@ def embed_query(client: genai.Client, query: str) -> list[float]:
     resp = client.models.embed_content(
         model=eg.EMBEDDING_MODEL,
         contents=[prefixed],
-        config=types.EmbedContentConfig(output_dimensionality=768),
+        config=types.EmbedContentConfig(output_dimensionality=3072),
     )
     return resp.embeddings[0].values
 
