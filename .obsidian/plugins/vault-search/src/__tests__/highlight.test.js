@@ -1,8 +1,3 @@
-/**
- * highlight.test.js — unit tests for findTermRanges() (see ../highlight.js),
- * which maps folded match terms back to character ranges in ORIGINAL
- * (unfolded) text for Obsidian's renderMatches().
- */
 import { describe, it, expect } from "vitest";
 import { findTermRanges } from "../highlight.js";
 
@@ -13,8 +8,6 @@ describe("findTermRanges", () => {
   });
 
   it("maps ranges correctly through umlaut expansion (folded length != original length)", () => {
-    // "Kühler" folds to "kuehler" (7 chars folded vs 6 original) - the
-    // returned range must still refer to ORIGINAL text offsets.
     const ranges = findTermRanges("Kühler pruefen", ["kuehler"]);
     expect(ranges).toEqual([[0, 6]]);
   });
@@ -35,6 +28,9 @@ describe("findTermRanges", () => {
 
   it("finds multiple non-overlapping occurrences", () => {
     const ranges = findTermRanges("bremse vorne, bremse hinten", ["bremse"]);
-    expect(ranges).toEqual([[0, 6], [14, 20]]);
+    expect(ranges).toEqual([
+      [0, 6],
+      [14, 20],
+    ]);
   });
 });

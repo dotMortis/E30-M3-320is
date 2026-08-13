@@ -1,59 +1,80 @@
-/**
- * highlight.js — maps a set of already-resolved (folded) match terms back to
- * character ranges in ORIGINAL (unfolded) text, for renderMatches(). Ported
- * verbatim from v1 (this part needed no changes for Stage 2).
- */
-
 const FOLD_EXPAND = { ü: "ue", ö: "oe", ä: "ae", ß: "ss" };
+const MIN_HIGHLIGHT_TERM_LENGTH = 2;
 
-function foldWithMap(s) {
-  s = s || "";
+/**
+ * Folds `text` the same way {@link import("./german/fold.js").fold} does,
+ * while recording which original-text index each folded character came
+ * from.
+ * @param {string} text
+ * @returns {{folded: string, map: number[]}}
+ */
+function foldWithOriginalIndexMap(text) {
+  const input = text || "";
   let folded = "";
   const map = [];
-  for (let i = 0; i < s.length; i++) {
-    const ch = s[i];
-    const lower = ch.toLowerCase();
+
+  for (let i = 0; i < input.length; i++) {
+    const lower = input[i].toLowerCase();
     const expanded = FOLD_EXPAND[lower] !== undefined ? FOLD_EXPAND[lower] : lower;
-    const norm = expanded.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    for (let k = 0; k < norm.length; k++) {
-      folded += norm[k];
+    const normalized = expanded.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    for (const char of normalized) {
+      folded += char;
       map.push(i);
     }
   }
+
   return { folded, map };
 }
 
-/** Find highlight ranges in `text` for a set of already-resolved (folded)
- * match terms. Only terms of length >= 2 are considered (single chars would
- * bold almost everything). Returns a SearchMatches-compatible array. */
-export function findTermRanges(text, terms) {
-  if (!text || !terms || terms.length === 0) return [];
-  const { folded, map } = foldWithMap(text);
-  if (!folded) return [];
-  const ranges = [];
-  for (const term of terms) {
-    if (!term || term.length < 2) continue;
-    let from = 0;
-    let pos;
-    while ((pos = folded.indexOf(term, from)) !== -1) {
-      const startOrig = map[pos];
-      const lastFolded = pos + term.length - 1;
-      const endOrig = map[lastFolded] + 1;
-      ranges.push([startOrig, endOrig]);
-      from = pos + term.length;
-    }
-  }
-  if (ranges.length === 0) return [];
-  ranges.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+/**
+ * @param {Array<[number, number]>} ranges sorted by start index
+ * @returns {Array<[number, number]>}
+ */
+function mergeOverlappingRanges(ranges) {
   const merged = [ranges[0]];
   for (let i = 1; i < ranges.length; i++) {
-    const prev = merged[merged.length - 1];
-    const cur = ranges[i];
-    if (cur[0] <= prev[1]) {
-      if (cur[1] > prev[1]) prev[1] = cur[1];
+    const previous = merged[merged.length - 1];
+    const current = ranges[i];
+    if (current[0] <= previous[1]) {
+      previous[1] = Math.max(previous[1], current[1]);
     } else {
-      merged.push(cur);
+      merged.push(current);
     }
   }
   return merged;
+}
+
+/**
+ * Finds highlight ranges in `text` for a set of already-folded match
+ * terms, mapping them back to character ranges in the original
+ * (unfolded) text for Obsidian's `renderMatches()`. Terms shorter than
+ * {@link MIN_HIGHLIGHT_TERM_LENGTH} are ignored.
+ * @param {string} text
+ * @param {string[]} terms
+ * @returns {Array<[number, number]>}
+ */
+export function findTermRanges(text, terms) {
+  if (!text || !terms || terms.length === 0) return [];
+
+  const { folded, map } = foldWithOriginalIndexMap(text);
+  if (!folded) return [];
+
+  const ranges = [];
+  for (const term of terms) {
+    if (!term || term.length < MIN_HIGHLIGHT_TERM_LENGTH) continue;
+
+    let from = 0;
+    let position;
+    while ((position = folded.indexOf(term, from)) !== -1) {
+      const startOriginal = map[position];
+      const endOriginal = map[position + term.length - 1] + 1;
+      ranges.push([startOriginal, endOriginal]);
+      from = position + term.length;
+    }
+  }
+
+  if (ranges.length === 0) return [];
+  ranges.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  return mergeOverlappingRanges(ranges);
 }

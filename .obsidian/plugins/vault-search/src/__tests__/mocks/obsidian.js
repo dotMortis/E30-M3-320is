@@ -1,13 +1,7 @@
 /**
- * mocks/obsidian.js — minimal hand-rolled stand-in for the `obsidian`
- * module, covering only the primitives main.js actually uses (Plugin,
- * Modal, Component, MarkdownRenderer, Notice, renderMatches). Deliberately
- * NOT the real `obsidian` package + jsdom (per the agreed test scope) -
- * this is just enough fake DOM/API surface for VaultSearchModal's
- * onOpen()/_onQueryChanged()/_renderList() to run without throwing, so the
- * debounce/cancellation smoke test can drive it end-to-end.
+ * @param {string} tag
+ * @returns {object} a minimal fake DOM element
  */
-
 export function makeEl(tag) {
   const el = {
     tag,
@@ -32,24 +26,24 @@ export function makeEl(tag) {
       this.children.push(child);
       return child;
     },
-    addClass(c) {
-      this.classes.add(c);
+    addClass(cls) {
+      this.classes.add(cls);
       return this;
     },
-    removeClass(c) {
-      this.classes.delete(c);
+    removeClass(cls) {
+      this.classes.delete(cls);
       return this;
     },
     empty() {
       this.children = [];
       return this;
     },
-    setText(t) {
-      this.text = t;
+    setText(text) {
+      this.text = text;
       return this;
     },
-    appendText(t) {
-      this.text += t;
+    appendText(text) {
+      this.text += text;
       return this;
     },
     scrollIntoView() {},
@@ -58,7 +52,7 @@ export function makeEl(tag) {
       (this.listeners[type] = this.listeners[type] || []).push(fn);
     },
     removeEventListener(type, fn) {
-      this.listeners[type] = (this.listeners[type] || []).filter((f) => f !== fn);
+      this.listeners[type] = (this.listeners[type] || []).filter((listener) => listener !== fn);
     },
     dispatch(type, evt = {}) {
       for (const fn of [...(this.listeners[type] || [])]) fn(evt);
@@ -108,8 +102,10 @@ export const MarkdownRenderer = {
   render: async () => {},
 };
 
-/** Real renderMatches highlights sub-ranges; the mock just needs to render
- * the plain text so tests can assert on final displayed content. */
+/**
+ * @param {object} el
+ * @param {string} text
+ */
 export function renderMatches(el, text) {
   el.setText(text);
 }

@@ -1,37 +1,27 @@
 /**
- * mocks/fakeVault.js — minimal fake `app` (vault + metadataCache) for
- * exercising SearchEngine._build() (see ../../main.js) end-to-end without
- * a real Obsidian vault. Complements mocks/obsidian.js (which fakes the
- * `obsidian` module's UI primitives) - this fakes the `app` object a
- * Plugin instance receives.
- *
- * `notes` are shaped like ../fixtures/notes.js's fixture docs ({ rowId,
- * notePath, code, titel, titleEn, section, tags, content }); `content` is
- * treated as already-plain text (no frontmatter/markdown stripping
- * needed - metadataCache.getFileCache() is faked to return the note's
- * fields directly, mirroring what Obsidian's real frontmatter parser
- * would hand back for a note authored with `titel`/`titel_en`/`sektion`/
- * `seitencode`/`tags` frontmatter keys - see main.js:82-89).
+ * @param {Array} notes
+ * @param {object} [opts]
+ * @returns {object} a fake Obsidian `app` object
  */
 export function createFakeApp(notes, opts = {}) {
   const { dataFiles = {}, glossaryRaw = null, dataReadShouldFail = false, readDelayByPath = {} } = opts;
 
-  const files = notes.map((n) => ({ path: n.notePath, basename: n.titel || n.notePath }));
+  const files = notes.map((note) => ({ path: note.notePath, basename: note.titel || note.notePath }));
   const cacheByPath = new Map(
-    notes.map((n) => [
-      n.notePath,
+    notes.map((note) => [
+      note.notePath,
       {
         frontmatter: {
-          titel: n.titel,
-          titel_en: n.titleEn,
-          sektion: n.section,
-          seitencode: n.code,
-          tags: n.tags,
+          titel: note.titel,
+          titel_en: note.titleEn,
+          sektion: note.section,
+          seitencode: note.code,
+          tags: note.tags,
         },
       },
     ])
   );
-  const contentByPath = new Map(notes.map((n) => [n.notePath, n.content]));
+  const contentByPath = new Map(notes.map((note) => [note.notePath, note.content]));
 
   return {
     vault: {

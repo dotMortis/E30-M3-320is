@@ -1,22 +1,7 @@
-/**
- * search.baseline.test.js — golden/characterization tests for runSearch()
- * (see ../search.js), captured against the CURRENT (pre-optimization)
- * implementation over a small synthetic fixture vault (see
- * ./fixtures/notes.js). These pin down existing behaviour - result
- * ordering, snippet extraction, typo-tolerance escalation, and the
- * concept-coverage rerank documented in search.js's own comments - so that
- * the upcoming performance optimizations (debounce/cancel, bounded
- * fold(), lazy JSON load, parallel index build, caching) can be verified
- * not to silently change search results.
- *
- * Any test intentionally updated to reflect an approved behaviour change
- * (e.g. snippet windowing for very long notes, per the bounded-fold()
- * optimization) should say so in a comment at the point of change.
- */
 import { describe, it, expect, beforeAll } from "vitest";
-import { runSearch } from "../search.js";
-import { buildTestEngine } from "./helpers/buildEngine.js";
-import { ALL_NOTES, FUEL_TITLE, FUEL_TANK_TITLE, FUEL_OVERVIEW, BRAKE_TITLE, BRAKE_MENTION } from "./fixtures/notes.js";
+import { runSearch } from "../../search.js";
+import { buildTestEngine } from "../helpers/buildEngine.js";
+import { ALL_NOTES, FUEL_TITLE, FUEL_TANK_TITLE, FUEL_OVERVIEW, BRAKE_TITLE, BRAKE_MENTION } from "../fixtures/notes.js";
 
 describe("runSearch baseline", () => {
   let engine;
@@ -59,12 +44,6 @@ describe("runSearch baseline", () => {
   });
 
   it("prefers a multi-concept title match over a single-concept-repeated title match (coverage rerank)", async () => {
-    // Mirrors search.js's own documented "13-710" scenario: FUEL_TANK_TITLE
-    // genuinely matches BOTH concepts ("kraftstoff" via its "Kraftstofftank"
-    // title compound, and "einbauen" literally in its title) once each,
-    // while FUEL_OVERVIEW only repeats "kraftstoff"/"kraftstoffanlage" and
-    // never mentions "einbauen" anywhere. rerankByCoverage() should place
-    // the genuine two-concept match ahead of the repeated-single-concept one.
     const { results } = await search("kraftstoff einbauen");
     const paths = results.map((r) => r.notePath);
     expect(paths).toContain(FUEL_TANK_TITLE.notePath);
@@ -73,10 +52,6 @@ describe("runSearch baseline", () => {
   });
 
   it("does not let an incidental content-only verb mention count as concept coverage", async () => {
-    // FUEL_TITLE mentions "einbauen" once, incidentally, deep in its content
-    // body (its title/tags are only about "kraftstoff"/pressure-checking).
-    // conceptCoverage() deliberately excludes body content, so this should
-    // NOT be treated as a 2-concept match the way FUEL_TANK_TITLE is.
     const { results } = await search("kraftstoff einbauen");
     const tankResult = results.find((r) => r.notePath === FUEL_TANK_TITLE.notePath);
     const pressureResult = results.find((r) => r.notePath === FUEL_TITLE.notePath);
@@ -93,10 +68,6 @@ describe("runSearch baseline", () => {
   });
 
   it("bridges a separated separable-verb query to the literal infinitive (einbauen)", async () => {
-    // "wie baue ich den tank ein" never contains the literal token
-    // "einbauen" - synthesizeSeparableVerbs() must reconstruct it from the
-    // "ein" prefix + "baue" stem, gated by the vocabulary built from
-    // FUEL_TANK_TITLE's own content ("...Tank einbauen...").
     const { results, expandedTerms } = await search("wie baue ich den tank ein");
     expect(expandedTerms).toContain("einbauen");
     const paths = results.map((r) => r.notePath);
@@ -109,10 +80,6 @@ describe("runSearch baseline", () => {
   });
 
   it("escalates typo tolerance to find a hit a tolerance-0 search would miss", async () => {
-    // "Krafstoff" (missing the second "t") - tolerance 0 alone should not
-    // literally match "kraftstoff", but escalation up to the
-    // length-justified cap should still surface fuel-related notes and
-    // report a correction hint.
     const { results, correction } = await search("Krafstoff");
     expect(results.length).toBeGreaterThan(0);
     expect(correction).not.toBeNull();
