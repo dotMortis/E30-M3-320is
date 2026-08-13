@@ -204,6 +204,40 @@ function dictBase(w, dict) {
 // (each mapped to its dictionary base form) of length >= 2, or null if no
 // clean split is found. `dict` is a Set of folded known words (see
 // buildDictionary below). Verbatim from v1 — this part was already solid.
+// Memoizes decompound()'s TOP-LEVEL result (i.e. only calls made with the
+// default `depth`, from expandQuery()/expandQueryConcepts() below - NOT
+// decompound()'s own internal recursive sub-calls, which use a reduced
+// depth and would need a separate cache key to stay correct). A live
+// SearchEngine session can re-run the same query (typing then backspacing
+// back to an earlier substring, or retrying a typo) many times, and
+// decompound() is a real recursive brute-force search (O(token length x
+// FUGEN variants x recursion depth) - see its own doc-comment) that's
+// otherwise re-run from scratch on every one of those repeats for the same
+// token.
+//
+// Keyed by the `dict` Set INSTANCE (via WeakMap) rather than just the
+// token string, so a cache entry automatically becomes unreachable (and
+// eligible for GC) once a new `dict` is built on rebuild() - no separate
+// cache-invalidation call needed, and no risk of serving a decompound
+// result computed against a stale/rebuilt dictionary.
+const decompoundCache = new WeakMap();
+
+/** Cached wrapper around decompound() for the common case (default depth,
+ * i.e. a fresh top-level query token) - see decompoundCache's doc-comment
+ * above. decompound() itself is left uncached/pure, so its own unit tests
+ * and recursive sub-calls are unaffected. */
+export function decompoundCached(token, dict) {
+  let cache = decompoundCache.get(dict);
+  if (!cache) {
+    cache = new Map();
+    decompoundCache.set(dict, cache);
+  }
+  if (cache.has(token)) return cache.get(token);
+  const result = decompound(token, dict);
+  cache.set(token, result);
+  return result;
+}
+
 export function decompound(token, dict, depth = MAX_PARTS - 1) {
   if (token.length < MIN_TOKEN_TO_SPLIT) return null;
   if (depth <= 0) return null;
@@ -460,7 +494,7 @@ export function expandQuery(rawQuery, synonymMap, dict, vocabulary, compoundPart
       // the narrow runtime `dict` built only from this vault's own title/tag
       // words — see build-data.mjs) when this exact token was seen in the
       // vault; fall back to the live algorithm for novel query-only tokens.
-      const parts = precomputed[tok] || decompound(tok, dict);
+      const parts = precomputed[tok] || decompoundCached(tok, dict);
       if (parts) for (const p of parts) expanded.add(p);
     }
   }
@@ -517,7 +551,7 @@ export function expandQueryConcepts(rawQuery, synonymMap, dict, vocabulary, comp
     const synonyms = expandSynonyms(synonymMap, tok);
     for (const syn of synonyms) terms.add(syn);
     if (synonyms.length === 0) {
-      const parts = precomputed[tok] || decompound(tok, dict);
+      const parts = precomputed[tok] || decompoundCached(tok, dict);
       if (parts) for (const p of parts) terms.add(p);
     }
     const concept = { raw: tok, terms };

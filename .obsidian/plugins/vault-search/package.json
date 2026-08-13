@@ -4,18 +4,17 @@
   "private": true,
   "description": "Weighted, typo-tolerant, compound/path-aware search over the E30 M3/320is manual vault, backed by Orama (see .pipeline/rag/PLAN.md's Stage 2 notes).",
   "scripts": {
-    "build": "node build.mjs",
-    "build-data": "node scripts/build-data.mjs"
+    "build": "vite build",
+    "build-data": "node scripts/build-data.mjs",
+    "test": "vitest run"
   },
   "dependencies": {
     "@orama/orama": "^3.1.18",
     "@orama/stemmers": "^3.1.18"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0",
-    "all-the-german-words": "^1.1.0"
-  },
-  "allowScripts": {
-    "esbuild@0.24.2": true
+    "all-the-german-words": "^1.1.0",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
   }
 }

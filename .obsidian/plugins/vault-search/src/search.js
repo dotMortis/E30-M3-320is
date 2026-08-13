@@ -56,10 +56,14 @@ async function runOnce(db, term, tolerance) {
  * thin — cheap on a corpus this size, and avoids flat-tolerance noise on
  * queries that didn't need it.
  */
-async function escalatingSearch(db, term, cap) {
+async function escalatingSearch(db, term, cap, shouldAbort) {
   let result = await runOnce(db, term, 0);
   let toleranceUsed = 0;
   for (let t = 1; t <= cap && result.hits.length < 5; t++) {
+    // A newer query superseded this one (see runSearch's `shouldAbort` doc-
+    // comment) - stop paying for further tolerance passes; whatever we
+    // already have is about to be discarded by the caller anyway.
+    if (shouldAbort()) break;
     const widened = await runOnce(db, term, t);
     if (widened.hits.length > result.hits.length) {
       result = widened;
@@ -69,16 +73,59 @@ async function escalatingSearch(db, term, cap) {
   return { result, toleranceUsed };
 }
 
+// snippetFor() used to call fold() (4 .replace()s + toLowerCase() +
+// Unicode NFD-normalize + another .replace()) on an ENTIRE note's content,
+// for every one of up to 50 hits, on EVERY search - fine for a typical
+// vault note (a few KB) but wasteful for this vault's largest outlier
+// notes (tens of KB), especially now that search runs on every debounced
+// keystroke. Instead, fold content in chunks and stop as soon as a match
+// is found - for any note shorter than SNIPPET_SCAN_CHUNK_SIZE (the
+// overwhelming majority) this is exactly one fold() pass over the whole
+// content, identical in cost AND result to the old always-fold-everything
+// behaviour; only outlier-length notes benefit AND only pay the reduced
+// cost of scanning forward until a match turns up.
+const SNIPPET_SCAN_CHUNK_SIZE = 4000;
+// Hard cap: stop looking for a snippet match beyond this many characters
+// into a note. Accepted trade-off (see optimization plan's #2): a note
+// whose only matching term occurs deeper than this will show no snippet
+// instead of one. In practice Orama already matched the doc via a
+// title/tag/code/section field for it to be a hit at all, so a missing
+// body snippet on a rare, very long, deep-match note is a minor cosmetic
+// regression, not a lost search result.
+const SNIPPET_MAX_SCAN_CHARS = 40000;
+
 /** Builds a short matched-text snippet from a doc's plain content around the
  * earliest occurrence of any expanded query term. Returns "" if nothing hits. */
 function snippetFor(content, expandedTerms) {
   if (!content) return "";
-  const folded = fold(content);
+  const terms = expandedTerms.filter((t) => t.length >= 3);
+  if (terms.length === 0) return "";
+
+  const scanLimit = Math.min(content.length, SNIPPET_MAX_SCAN_CHARS);
+  // Overlap consecutive chunks by (longest term length - 1) so a match
+  // straddling a chunk boundary in the FOLDED text is never missed.
+  const longestTerm = terms.reduce((m, t) => Math.max(m, t.length), 0);
+  const overlap = Math.max(0, longestTerm - 1);
+
   let pos = -1;
-  for (const term of expandedTerms) {
-    if (term.length < 3) continue;
-    const p = folded.indexOf(term);
-    if (p !== -1 && (pos === -1 || p < pos)) pos = p;
+  for (let chunkStart = 0; chunkStart < scanLimit; chunkStart += SNIPPET_SCAN_CHUNK_SIZE) {
+    const chunkEnd = Math.min(content.length, chunkStart + SNIPPET_SCAN_CHUNK_SIZE + overlap);
+    const foldedChunk = fold(content.slice(chunkStart, chunkEnd));
+    let chunkPos = -1;
+    for (const term of terms) {
+      const p = foldedChunk.indexOf(term);
+      if (p !== -1 && (chunkPos === -1 || p < chunkPos)) chunkPos = p;
+    }
+    if (chunkPos !== -1) {
+      // Same original-vs-folded index approximation the pre-optimization
+      // implementation already relied on (see module history) - exact
+      // whenever no umlaut/ß expansion occurs before the match, which is
+      // the common case; chunking doesn't change this pre-existing
+      // behaviour, it only limits how much of the note gets folded.
+      pos = chunkStart + chunkPos;
+      break;
+    }
+    if (chunkEnd >= content.length) break;
   }
   if (pos === -1) return "";
   const start = Math.max(0, pos - 40);
@@ -161,7 +208,14 @@ function correctionHint(rawQuery, toleranceUsed, vocabulary) {
  * `vocabulary` is a Set of folded literal tokens across titles/tags (for
  * the correction hint only). `notePathAndContent` maps rowId -> {notePath,
  * content} for snippet building (kept out of the Orama doc payload to
- * avoid bloating search results with full page text).
+ * avoid bloating search results with full page text). `shouldAbort` is an
+ * optional zero-arg predicate the caller can pass to signal that a NEWER
+ * query has already superseded this one (see VaultSearchModal's
+ * `_queryToken` in main.js) - checked between escalation passes so a stale
+ * in-flight search stops issuing further Orama calls instead of always
+ * running the full tolerance-0/1/2 sequence to completion. Defaults to
+ * "never abort", so callers like rag-chat's `api.search()` (which isn't
+ * debounced/cancellable) are completely unaffected.
  *
  * Ranking note: Orama's hits already come back sorted by BM25 score, and
  * that alone can misrank multi-word queries in this vault — a generic verb
@@ -174,7 +228,17 @@ function correctionHint(rawQuery, toleranceUsed, vocabulary) {
  * corrects for that with a small bonus for matching more DISTINCT query
  * concepts, applied on top of (not instead of) Orama's own score.
  */
-export async function runSearch(db, rawQuery, limit, vocabulary, contentByRowId, synonymMap, dict, compoundParts) {
+export async function runSearch(
+  db,
+  rawQuery,
+  limit,
+  vocabulary,
+  contentByRowId,
+  synonymMap,
+  dict,
+  compoundParts,
+  shouldAbort = () => false
+) {
   const query = (rawQuery || "").trim();
   if (!query) return { results: [], correction: null, expandedTerms: [] };
 
@@ -184,7 +248,7 @@ export async function runSearch(db, rawQuery, limit, vocabulary, contentByRowId,
   const concepts = expandQueryConcepts(query, synonymMap, dict, vocabulary, compoundParts);
 
   const cap = maxJustifiedTolerance(contentWords);
-  const { result, toleranceUsed } = await escalatingSearch(db, term, cap);
+  const { result, toleranceUsed } = await escalatingSearch(db, term, cap, shouldAbort);
   const rankedHits = rerankByCoverage(result.hits, concepts);
 
   const results = rankedHits.slice(0, limit).map((hit, i) => {

@@ -14,20 +14,83 @@ import { createIndex, insertDocs } from "./schema.js";
 import { runSearch } from "./search.js";
 import { findTermRanges } from "./highlight.js";
 import { tokenize, stripForContent, buildSynonymMap, buildDictionary } from "./german.js";
-// Small, vault-filtered derivatives of OpenThesaurus + all-the-german-words
-// (see scripts/build-data.mjs) - bundled directly rather than the raw
-// multi-megabyte generic datasets, which never enter this bundle at all.
-import openThesaurusPairs from "../data/synonyms.json";
-import compoundParts from "../data/compound-parts.json";
+// data/synonyms.json + data/compound-parts.json are small, vault-filtered
+// derivatives of OpenThesaurus + all-the-german-words (see
+// scripts/build-data.mjs) - deliberately NOT statically imported here.
+// esbuild inlines a statically-imported JSON module as a JS array/object
+// LITERAL directly in the bundle; for these two files (~419KB + ~344KB)
+// that meant ~800KB of executable source V8 had to parse/compile on every
+// plugin load, on top of the actual code. Instead they're read as plain
+// JSON files at runtime (see SearchEngine._loadJsonDataFile(), mirroring
+// the existing _loadGlossaryTerms() pattern below) - same two files, still
+// shipped alongside main.js in this plugin's own folder, just loaded as
+// data instead of bundled as code.
 
 const RESULT_LIMIT = 50;
 const PREVIEW_DEBOUNCE_MS = 80;
+// How long to wait after the last keystroke before actually running a
+// search. Previously there was NO debounce here (only the preview pane
+// was debounced) - every keystroke triggered up to 3 full Orama searches
+// (see search.js's escalatingSearch), and fast typing on slower hardware
+// queued up multiple overlapping multi-pass searches whose results were
+// then immediately discarded by the stale-query guard below. 120ms is
+// short enough to feel instant to a typing user, long enough to collapse
+// a fast typist's keystrokes into a single search per pause.
+const QUERY_DEBOUNCE_MS = 120;
+// Index building used to `await this.app.vault.cachedRead(file)` one file
+// at a time in a plain `for` loop - every file's read had to finish before
+// the next one even started, even though these per-file reads are fully
+// independent of each other. Capping concurrency (rather than firing all
+// reads at once via a single Promise.all) avoids opening an unbounded
+// number of file handles/promises at once on a very large vault.
+const INDEX_BUILD_CONCURRENCY = 32;
+// Small LRU cache of full search results, keyed by (limit + normalized
+// query string) - see SearchEngine.search()/_getCachedSearch()/
+// _setCachedSearch() below. Retyping/backspacing to a previously-issued
+// query (common while typing, or when a query happens to match a prior
+// one after the debounce) re-runs the ENTIRE expansion pipeline (german.js)
+// and every Orama search pass from scratch with no cache today; a tiny
+// cache turns a repeat into an O(1) lookup instead. 20 entries comfortably
+// covers a single search-modal session's worth of back-and-forth without
+// holding onto meaningfully more memory.
+const SEARCH_CACHE_MAX_ENTRIES = 20;
+
+/** Runs `fn` over `items` with at most `limit` calls in flight at once,
+ * returning results in the SAME order as `items` (unlike Promise.all over
+ * a manually-chunked array, a fixed pool of workers keeps slower items
+ * from blocking faster ones behind them within the same chunk). Generic/
+ * dependency-free on purpose - this is the only place in the plugin that
+ * needs bounded concurrency. */
+async function mapWithConcurrency(items, limit, fn) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+  async function worker() {
+    for (;;) {
+      const i = nextIndex++;
+      if (i >= items.length) return;
+      results[i] = await fn(items[i], i);
+    }
+  }
+  const workerCount = Math.min(limit, items.length);
+  await Promise.all(Array.from({ length: workerCount }, worker));
+  return results;
+}
 
 // -------------------------------------------------------------- index build
 
-class SearchEngine {
-  constructor(app) {
+// Exported purely for testability (see __tests__/search-engine.build.test.js)
+// - harmless in production, same reasoning as VaultSearchModal's export
+// above (vite.config.mjs's Rollup output footer only keeps `.default`).
+export class SearchEngine {
+  constructor(app, pluginDir) {
     this.app = app;
+    // Directory of THIS plugin within the vault (e.g.
+    // ".obsidian/plugins/vault-search"), used to locate data/*.json
+    // relative to the plugin's own folder via vault.adapter.read() - see
+    // _loadJsonDataFile(). Passed in from VaultSearchPlugin.onload()'s
+    // `this.manifest.dir` (set by Obsidian's plugin loader); falls back to
+    // the conventional path if somehow unset (e.g. in a test double).
+    this.pluginDir = pluginDir || ".obsidian/plugins/vault-search";
     this.db = null;
     this.vocabulary = new Set();
     this.contentByRowId = new Map();
@@ -36,6 +99,10 @@ class SearchEngine {
     this.compoundParts = {};
     this.ready = false;
     this.building = null;
+    // Map's insertion order doubles as LRU recency order (see
+    // _getCachedSearch()/_setCachedSearch()) - re-inserting a key on
+    // access moves it to the "most recently used" end.
+    this._searchCache = new Map();
   }
 
   async ensureBuilt() {
@@ -51,7 +118,25 @@ class SearchEngine {
     this.db = null;
     this.vocabulary = new Set();
     this.contentByRowId = new Map();
+    this._searchCache.clear(); // stale results/expansions must not survive a rebuild
     await this.ensureBuilt();
+  }
+
+  _getCachedSearch(key) {
+    if (!this._searchCache.has(key)) return undefined;
+    const value = this._searchCache.get(key);
+    this._searchCache.delete(key);
+    this._searchCache.set(key, value); // mark as most-recently-used
+    return value;
+  }
+
+  _setCachedSearch(key, value) {
+    this._searchCache.delete(key);
+    this._searchCache.set(key, value);
+    if (this._searchCache.size > SEARCH_CACHE_MAX_ENTRIES) {
+      const oldestKey = this._searchCache.keys().next().value;
+      this._searchCache.delete(oldestKey);
+    }
   }
 
   async _loadGlossaryTerms() {
@@ -65,18 +150,43 @@ class SearchEngine {
     }
   }
 
+  /** Reads and JSON-parses a data file from this plugin's own folder (see
+   * `pluginDir` above) at runtime, instead of it being esbuild-inlined as
+   * a JS literal at build time (see the module docstring's note on
+   * data/synonyms.json + data/compound-parts.json). Falls back to
+   * `fallback` (and logs, doesn't throw) if the file is missing or
+   * unparseable, same graceful-degradation shape as _loadGlossaryTerms()
+   * above - a missing/corrupt data file should degrade search quality
+   * slightly, never crash index building. */
+  async _loadJsonDataFile(relPath, fallback) {
+    try {
+      const raw = await this.app.vault.adapter.read(`${this.pluginDir}/${relPath}`);
+      return JSON.parse(raw);
+    } catch (e) {
+      console.warn(`vault-search: could not load ${relPath}, continuing without it`, e);
+      return fallback;
+    }
+  }
+
   async _build() {
     const t0 = Date.now();
-    const glossaryTerms = await this._loadGlossaryTerms();
+    // These three are independent reads - fetch them concurrently rather
+    // than one after another.
+    const [glossaryTerms, openThesaurusPairs, compoundParts] = await Promise.all([
+      this._loadGlossaryTerms(),
+      this._loadJsonDataFile("data/synonyms.json", []),
+      this._loadJsonDataFile("data/compound-parts.json", {}),
+    ]);
     this.synonymMap = buildSynonymMap(glossaryTerms, openThesaurusPairs);
     this.compoundParts = compoundParts;
 
     const mdFiles = this.app.vault.getMarkdownFiles();
-    const docs = [];
-    const titleAndTagTokenLists = [];
-    const rawByRowId = new Map();
 
-    for (const file of mdFiles) {
+    // Pass 1 (concurrent, I/O-bound): extract frontmatter fields (cheap,
+    // synchronous - metadataCache is already in-memory) and read each
+    // file's content (the actual I/O) with up to INDEX_BUILD_CONCURRENCY
+    // reads in flight at once, instead of strictly one-at-a-time.
+    const docs = await mapWithConcurrency(mdFiles, INDEX_BUILD_CONCURRENCY, async (file) => {
       const cache = this.app.metadataCache.getFileCache(file) || {};
       const fm = cache.frontmatter || {};
       const titel = (fm.titel || fm.title || file.basename || "").toString();
@@ -96,24 +206,35 @@ class SearchEngine {
       }
       const content = stripForContent(raw);
 
-      const rowId = file.path;
-      docs.push({ rowId, notePath: file.path, code, titel, titleEn, section, tags, content });
-      rawByRowId.set(rowId, content);
+      return { rowId: file.path, notePath: file.path, code, titel, titleEn, section, tags, content };
+    });
 
-      titleAndTagTokenLists.push(tokenize(titel));
-      titleAndTagTokenLists.push(tokenize(titleEn));
-      titleAndTagTokenLists.push(tokenize(section));
-      for (const tag of tags) titleAndTagTokenLists.push(tokenize(tag));
+    // Pass 2 (sequential, CPU-only, order-independent): tokenize each
+    // file's fields into the dictionary/vocabulary inputs. Kept as a
+    // separate pass (rather than folded into pass 1's per-file callback)
+    // so `docs` stays in the original `mdFiles` order regardless of which
+    // read finished first - purely for determinism/debuggability, since
+    // neither buildDictionary() nor a Set's insertion order affects search
+    // results.
+    const titleAndTagTokenLists = [];
+    const rawByRowId = new Map();
+    for (const doc of docs) {
+      rawByRowId.set(doc.rowId, doc.content);
 
-      for (const tok of tokenize(titel)) this.vocabulary.add(tok);
-      for (const tok of tokenize(titleEn)) this.vocabulary.add(tok);
-      for (const tag of tags) for (const tok of tokenize(tag)) this.vocabulary.add(tok);
+      titleAndTagTokenLists.push(tokenize(doc.titel));
+      titleAndTagTokenLists.push(tokenize(doc.titleEn));
+      titleAndTagTokenLists.push(tokenize(doc.section));
+      for (const tag of doc.tags) titleAndTagTokenLists.push(tokenize(tag));
+
+      for (const tok of tokenize(doc.titel)) this.vocabulary.add(tok);
+      for (const tok of tokenize(doc.titleEn)) this.vocabulary.add(tok);
+      for (const tag of doc.tags) for (const tok of tokenize(tag)) this.vocabulary.add(tok);
       // Content tokens too (not just title/tags) - this vocabulary set also
       // gates query-side synthesis (synthesizeSeparableVerbs/
       // synthesizeJoinedCompounds in german.js), which needs to validate
       // candidates against real corpus words wherever they appear, not just
       // in titles (many repair-verb infinitives only appear in body text).
-      for (const tok of tokenize(content)) this.vocabulary.add(tok);
+      for (const tok of tokenize(doc.content)) this.vocabulary.add(tok);
     }
 
     this.dict = buildDictionary(titleAndTagTokenLists, this.synonymMap);
@@ -127,24 +248,44 @@ class SearchEngine {
     console.log(`vault-search: indexed ${docs.length} notes, ${this.vocabulary.size} vocab tokens, ${this.dict.size} dict words in ${ms}ms`);
   }
 
-  async search(query, limit) {
+  async search(query, limit, shouldAbort) {
     await this.ensureBuilt();
-    return runSearch(
+    const effectiveLimit = limit ?? RESULT_LIMIT;
+    const cacheKey = `${effectiveLimit}:${(query || "").trim()}`;
+    const cached = this._getCachedSearch(cacheKey);
+    if (cached) return cached;
+
+    const result = await runSearch(
       this.db,
       query,
-      limit ?? RESULT_LIMIT,
+      effectiveLimit,
       this.vocabulary,
       this.contentByRowId,
       this.synonymMap,
       this.dict,
-      this.compoundParts
+      this.compoundParts,
+      shouldAbort
     );
+    // Never cache a result a newer query already superseded (see
+    // search.js's `shouldAbort`) - it may reflect only a partial
+    // escalation pass and would otherwise incorrectly serve as the
+    // "final" answer if the exact same query string is retried later.
+    if (!shouldAbort || !shouldAbort()) {
+      this._setCachedSearch(cacheKey, result);
+    }
+    return result;
   }
 }
 
 // ---------------------------------------------------------------- the modal
 
-class VaultSearchModal extends Modal {
+// Exported (not just internal to the plugin) purely for testability - lets
+// __tests__/modal.smoke.test.js exercise debounce/cancellation behavior
+// directly. Harmless in production: vite.config.mjs's Rollup output footer
+// takes only `module.exports.default` (see vite.config.mjs's comment), so
+// this named export never reaches the bundled main.js Obsidian actually
+// loads.
+export class VaultSearchModal extends Modal {
   constructor(app, plugin) {
     super(app);
     this.plugin = plugin;
@@ -159,6 +300,7 @@ class VaultSearchModal extends Modal {
     this._previewToken = 0;
     this._previewComponent = null;
     this._queryToken = 0;
+    this._queryTimer = null;
   }
 
   onOpen() {
@@ -181,7 +323,7 @@ class VaultSearchModal extends Modal {
     this.previewEl = this.contentEl.createDiv({ cls: "vault-search-preview markdown-rendered" });
     this._setPreviewPlaceholder("");
 
-    this.inputEl.addEventListener("input", () => this._onQueryChanged());
+    this.inputEl.addEventListener("input", () => this._scheduleQueryChanged());
     this.scope.register([], "ArrowDown", (evt) => {
       evt.preventDefault();
       this._moveActive(1);
@@ -215,6 +357,10 @@ class VaultSearchModal extends Modal {
   }
 
   onClose() {
+    if (this._queryTimer) {
+      window.clearTimeout(this._queryTimer);
+      this._queryTimer = null;
+    }
     if (this._previewTimer) {
       window.clearTimeout(this._previewTimer);
       this._previewTimer = null;
@@ -226,12 +372,28 @@ class VaultSearchModal extends Modal {
     this.contentEl.empty();
   }
 
+  /** Debounces `_onQueryChanged()` so a burst of fast keystrokes collapses
+   * into a single search once typing pauses, instead of one (up to 3-pass)
+   * search per keystroke. `_onQueryChanged()` itself still guards against
+   * a stale response race via `_queryToken`, independent of this timer. */
+  _scheduleQueryChanged() {
+    if (this._queryTimer) window.clearTimeout(this._queryTimer);
+    this._queryTimer = window.setTimeout(() => {
+      this._queryTimer = null;
+      this._onQueryChanged();
+    }, QUERY_DEBOUNCE_MS);
+  }
+
   async _onQueryChanged() {
     if (!this.engine.ready) return;
     const raw = this.inputEl.value || "";
     const token = ++this._queryToken;
-    const { results, correction, expandedTerms } = await this.engine.search(raw, RESULT_LIMIT);
-    if (token !== this._queryToken) return; // a newer query superseded this one
+    // Passed down to runSearch (via engine.search) so escalatingSearch can
+    // stop issuing further tolerance passes once THIS query is no longer
+    // the latest one - see search.js's runSearch doc-comment.
+    const shouldAbort = () => token !== this._queryToken;
+    const { results, correction, expandedTerms } = await this.engine.search(raw, RESULT_LIMIT, shouldAbort);
+    if (shouldAbort()) return; // a newer query superseded this one
 
     this.results = results;
     this.correction = correction;
@@ -372,7 +534,7 @@ class VaultSearchModal extends Modal {
 
 export default class VaultSearchPlugin extends Plugin {
   onload() {
-    this.engine = new SearchEngine(this.app);
+    this.engine = new SearchEngine(this.app, this.manifest?.dir);
 
     // Public API for other plugins (e.g. rag-chat) — unchanged contract
     // from v1, see retriever.ts's FuzzySearchApi. Pure data in, pure data
