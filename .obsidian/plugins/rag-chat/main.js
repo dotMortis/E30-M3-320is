@@ -26,7 +26,7 @@ let node_fs = require("node:fs");
 let node_crypto = require("node:crypto");
 let node_os = require("node:os");
 node_os = __toESM(node_os, 1);
-//#region src/settings.ts
+//#region src/settings/types.ts
 var DEFAULT_SETTINGS = {
 	geminiApiKey: "",
 	embeddingModel: "gemini-embedding-2",
@@ -38,6 +38,8 @@ var DEFAULT_SETTINGS = {
 	enableFuzzySearchLeg: true,
 	maxAgentRounds: 4
 };
+//#endregion
+//#region src/settings/settings-tab.ts
 var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 	constructor(app, plugin) {
 		super(app, plugin);
@@ -7658,46 +7660,7 @@ function stemmer(r) {
 }
 var language = "german";
 //#endregion
-//#region src/orama-schema.ts
-/**
-* orama-schema.ts — TypeScript port of .pipeline/rag/build/orama_schema.mjs.
-* MUST stay in sync with that file (schemas + German tokenizer config); it
-* is the source of truth for how the shipped indices were built.
-*
-* ARCHITECTURE — split text/vector indices: GitHub hard-blocks any pushed
-* file over 100MB. A single hybrid index (BM25 + full 3072-dim vectors
-* together) measures ~165MB for this corpus, and Matryoshka-truncating
-* vectors to fit under 100MB in one file is lossy. Instead the shipped
-* index is split into:
-*   - ONE text-only index (rag-index-text.orama.msp): full corpus, BM25
-*     fulltext only, no `embedding` field.
-*   - N vector-only shards (rag-index-vectors-{i}.orama.msp, N from
-*     rag-manifest.json's vectorShardCount): full 3072-dim fidelity, no
-*     `text` field, split by row count to stay under 100MB per file.
-* Every row carries a `rowId` present in BOTH the text index and every
-* vector shard, used by retriever.ts's federatedHybridSearch to merge hits
-* back together (reimplementing Orama's own hybrid merge formula by hand -
-* safe because vector search returns raw, non-corpus-relative cosine
-* scores, so scores from separate shards are directly comparable; BM25/IDF
-* stays correct because the text index is never sharded).
-*
-* CRITICAL correctness note (discovered during Phase 3/5 QA, see PLAN.md):
-* Orama's `restoreFromFile`/`restore` cannot preserve custom tokenizer
-* components (stemmer functions and stopword lists aren't serializable) -
-* internally they create a placeholder db with the DEFAULT (English, no
-* stopwords) tokenizer, then `load()` the index data into it. A bare
-* `restoreFromFile` silently reverts to default English tokenization, which
-* reintroduces a real bug: the German preposition "hinter" (behind) prefix-
-* matches every "Hinterachse" (rear axle) page, badly polluting BM25
-* ranking. The fix (`loadTextIndex` below) is: restore via the library (to
-* get the data), re-export with `save()`, then `create()` a fresh db with
-* the correct German tokenizer and `load()` the exported data into THAT.
-* This only matters for the TEXT index (the only one with a fulltext-
-* tokenized field); vector shards have no fulltext field, so a bare
-* restoreFromFile is fine for them (`loadVectorShard`).
-*/
-/** Full-fidelity Gemini embedding dims (no Matryoshka truncation - see the
-* ARCHITECTURE note above for why this is safe to ship at full size). */
+//#region src/retrieval/orama-schema.ts
 var EMBEDDING_DIMS = 3072;
 var GERMAN_TOKENIZER = {
 	stemming: true,
@@ -7799,9 +7762,6 @@ var GERMAN_TOKENIZER = {
 		"jenes"
 	]
 };
-/** Metadata present on EVERY row in BOTH the text index and every vector
-* shard - so a hit from either side carries full citation info and can be
-* merged on `rowId` without a cross-index lookup. */
 var METADATA_FIELDS = {
 	rowId: "string",
 	seitencode: "string",
@@ -7818,7 +7778,6 @@ var TEXT_SCHEMA = {
 	text: "string"
 };
 ({ ...METADATA_FIELDS }), `${EMBEDDING_DIMS}`;
-/** Correctly restores the text index with the German tokenizer intact. */
 async function loadTextIndex(indexPath) {
 	const exported = await save(await restoreFromFile("binary", indexPath, "node"));
 	const db = await create({
@@ -7828,34 +7787,36 @@ async function loadTextIndex(indexPath) {
 	await load(db, exported);
 	return db;
 }
-/** Restores a vector-only shard. No custom tokenizer needed - there is no
-* fulltext field in this schema, so a bare restoreFromFile is safe here. */
 async function loadVectorShard(indexPath) {
 	return await restoreFromFile("binary", indexPath, "node");
 }
 //#endregion
-//#region src/http-retry.ts
-/**
-* http-retry.ts — shared resilience wrapper for the plugin's two live network
-* calls (embedQuery's embedContent in retriever.ts, generateWithTools's
-* generateContent in gemini.ts). Google's Gemini backend (especially preview
-* models like gemini-3.6-flash) occasionally returns a transient 429/5xx
-* under load - previously BOTH call sites used Obsidian's requestUrl
-* directly with its default throw-on-4xx/5xx behavior, so a single transient
-* blip immediately killed the whole chat turn with a bare
-* "Fehler: Request failed, status 503" and no retry at all. The Python
-* indexer (.pipeline/rag/embed_gemini.py's embed_with_retry) already solved
-* this for build-time embedding calls; this ports the same idea to the
-* shipped plugin's query-time calls.
-*
-* Uses requestUrl's `{ throw: false }` option to get the response object
-* (with a real `.status`) back even on 4xx/5xx, instead of parsing a thrown
-* Error's message string to decide whether to retry.
-*/
-/** Transient/server-load codes worth retrying. Anything else (400 bad
-* request, 401/403 auth, 404 model not found, etc.) is NOT retried - retrying
-* a structurally-wrong request just wastes the full backoff window before
-* failing anyway. */
+//#region src/retrieval/index-cache.ts
+var cached = null;
+var cachedPluginDir = null;
+async function getIndices(pluginDir, manifest) {
+	if (cached && cachedPluginDir === pluginDir) return cached;
+	const textDb = await loadTextIndex(`${pluginDir}/${manifest.textIndexFile}`);
+	const vectorDbs = await Promise.all(Array.from({ length: manifest.vectorShardCount }, (_, i) => loadVectorShard(`${pluginDir}/${manifest.vectorIndexFilePattern.replace("{i}", String(i))}`)));
+	const referenceChunksRaw = JSON.parse((0, node_fs.readFileSync)(`${pluginDir}/${manifest.referenceChunksFile}`, "utf-8"));
+	cached = {
+		textDb,
+		vectorDbs,
+		referenceChunks: new Map(Object.entries(referenceChunksRaw))
+	};
+	cachedPluginDir = pluginDir;
+	return cached;
+}
+//#endregion
+//#region src/gemini/history.ts
+function buildHistoryContents(history) {
+	return history.filter((t) => t.text.trim().length > 0).map((t) => ({
+		role: t.role === "assistant" ? "model" : "user",
+		parts: [{ text: t.text }]
+	}));
+}
+//#endregion
+//#region src/http/retry.ts
 var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
 	429,
 	500,
@@ -7868,12 +7829,6 @@ var RETRY_DELAY_MS = 4e3;
 function sleep(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-/** Best-effort extraction of a human-readable error message from a failed
-* response, so thrown errors are more useful than a bare status code (e.g.
-* "Request failed, status 503: The model is overloaded. Please try again
-* later." instead of just "Request failed, status 503"). Falls back to a
-* text snippet, then to nothing, rather than throwing while building an
-* error message. */
 function extractErrorMessage(response) {
 	try {
 		const jsonMsg = response.json?.error?.message;
@@ -7882,16 +7837,6 @@ function extractErrorMessage(response) {
 	const text = response.text?.trim();
 	return text ? text.slice(0, 300) : void 0;
 }
-/**
-* requestUrl wrapper with retry-with-fixed-backoff on transient errors.
-* Up to MAX_ATTEMPTS (3) total tries, waiting RETRY_DELAY_MS (4s) between
-* each retry - not exponential, since this is an interactive chat waiting on
-* a live UI, not a batch job (contrast with embed_gemini.py's exponential
-* backoff, which is fine for an unattended build). `opts.onStatus`, if
-* given, is called once per retry with a live progress label (mirrors
-* agent.ts's onStatus pattern) so the UI can show *why* it's still waiting
-* instead of looking stuck.
-*/
 async function requestUrlWithRetry(params, opts) {
 	const label = opts?.label ?? "Anfrage";
 	let lastResponse;
@@ -7912,338 +7857,7 @@ async function requestUrlWithRetry(params, opts) {
 	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
 }
 //#endregion
-//#region src/retriever.ts
-/** Query-time task prefix for gemini-embedding-2 (see PLAN.md - this model has
-* no task_type EmbedContentConfig param; steering is a text prefix instead). */
-var QUERY_PREFIX_TMPL = "task: search result | query: {content}";
-/** Large enough to capture "every" ranked candidate on this corpus size, so
-* the federated merge below sees the same full candidate set Orama's own
-* single-DB hybrid mode would internally, before slicing down to topK. */
-var CANDIDATE_POOL_LIMIT = 5e3;
-/**
-* NOTE (superseded, kept for history): this fixed 0.5/0.5 min-max score-sum
-* split used to mirror Orama's own search-hybrid.js mergeAndRankResults().
-* Benchmarked against 12 real natural-language queries (see
-* .pipeline/rag/PLAN.md's "Retrieval benchmark" section) it had a serious
-* flaw: min-max normalizing each leg to its OWN [0,1] range and summing
-* means a document that is the single BEST match on one leg (e.g. the
-* correct page, ranked #1 by the vector leg but entirely absent from BM25
-* because of German compound/separable-verb mismatches) caps at 0.5,
-* while a document that is merely mediocre on BOTH legs can approach 1.0.
-* This was confirmed to bury the correct answer for real queries even
-* after the similarity-threshold fix. Replaced by Reciprocal Rank Fusion
-* (see rrfMerge below), which does not have this pathology.
-*/
-/**
-* Reciprocal Rank Fusion: score = sum over legs of 1/(k + rank), rank is
-* 1-based within that leg's own ranking. Unlike min-max score fusion, a
-* document ranked #1 in ONE leg gets a strong, fixed contribution
-* regardless of whether/how it ranks in the other leg — it can't be
-* buried by a document that's merely mediocre-but-present on both legs.
-* Small k (1-10) was empirically best on this corpus size (~2822 rows);
-* the common literature default of k=60 assumes much larger candidate
-* pools and, benchmarked here, underperformed noticeably (see PLAN.md).
-*/
-function rrfMerge(textHitsSorted, vectorHitsSorted, k) {
-	const scores = /* @__PURE__ */ new Map();
-	textHitsSorted.forEach((h, i) => {
-		const rowId = h.document.rowId;
-		const existing = scores.get(rowId);
-		scores.set(rowId, {
-			score: (existing?.score ?? 0) + 1 / (k + i + 1),
-			doc: existing?.doc ?? h.document
-		});
-	});
-	vectorHitsSorted.forEach((h, i) => {
-		const rowId = h.document.rowId;
-		const existing = scores.get(rowId);
-		scores.set(rowId, {
-			score: (existing?.score ?? 0) + 1 / (k + i + 1),
-			doc: existing?.doc ?? h.document
-		});
-	});
-	return [...scores.values()].sort((a, b) => b.score - a.score);
-}
-function toCompactHits(hits) {
-	return hits.map((h) => ({
-		notePath: h.notePath,
-		seitencode: h.seitencode,
-		sektion: h.sektion,
-		titel: h.titel
-	}));
-}
-/** Validates the shipped manifest against the plugin's settings (embedding-parity
-* guard - see PLAN.md). Returns a list of human-readable warning strings (empty = OK). */
-function validateManifest(manifest, settings) {
-	const warnings = [];
-	if (manifest.embeddingModel !== settings.embeddingModel) warnings.push(`Index was built with embedding model "${manifest.embeddingModel}", but settings specify "${settings.embeddingModel}". Update settings or rebuild the index.`);
-	if (manifest.embeddingDims !== settings.outputDim) warnings.push(`Index was built at ${manifest.embeddingDims} dims (the shipped/query dims), but settings specify ${settings.outputDim}. These MUST match or vector search will silently return garbage. Fix settings.outputDim.`);
-	return warnings;
-}
-/** Embeds a user query via the Google gemini-embedding-2 REST API (non-streaming,
-* via Obsidian's CORS-safe requestUrl - no streaming needed here). Retries on
-* transient 429/5xx (see http-retry.ts); `onStatus`, if given, is called once
-* per retry with a live progress label for the UI. */
-async function embedQuery(query, settings, onStatus) {
-	if (!settings.geminiApiKey) throw new Error("Google API key (GEMINI_API_KEY) is required for query embeddings - set it in RAG Chat settings.");
-	const prefixed = QUERY_PREFIX_TMPL.replace("{content}", query);
-	const response = await requestUrlWithRetry({
-		url: `https://generativelanguage.googleapis.com/v1beta/models/${settings.embeddingModel}:embedContent`,
-		method: "POST",
-		headers: {
-			"x-goog-api-key": settings.geminiApiKey,
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			content: { parts: [{ text: prefixed }] },
-			outputDimensionality: settings.outputDim
-		})
-	}, {
-		onStatus,
-		label: "Embedding"
-	});
-	const values = response.json?.embedding?.values;
-	if (!Array.isArray(values)) throw new Error(`Unexpected embedContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
-	return values;
-}
-var cached = null;
-var cachedPluginDir = null;
-/** Loads (and caches) the split text index + all vector shards + the
-* reference-chunks.json sidecar from the plugin directory, per the
-* manifest's vectorShardCount/referenceChunksFile. */
-async function getIndices(pluginDir, manifest) {
-	if (cached && cachedPluginDir === pluginDir) return cached;
-	const textDb = await loadTextIndex(`${pluginDir}/${manifest.textIndexFile}`);
-	const vectorDbs = await Promise.all(Array.from({ length: manifest.vectorShardCount }, (_, i) => loadVectorShard(`${pluginDir}/${manifest.vectorIndexFilePattern.replace("{i}", String(i))}`)));
-	const referenceChunksRaw = JSON.parse((0, node_fs.readFileSync)(`${pluginDir}/${manifest.referenceChunksFile}`, "utf-8"));
-	cached = {
-		textDb,
-		vectorDbs,
-		referenceChunks: new Map(Object.entries(referenceChunksRaw))
-	};
-	cachedPluginDir = pluginDir;
-	return cached;
-}
-function maxScore(hits) {
-	return hits.reduce((m, h) => Math.max(m, h.score), 0);
-}
-/**
-* Runs a federated hybrid (BM25 + vector) search across the split indices
-* and returns typed, merged, ranked hits.
-*
-* BM25 stays correct because the text index is never sharded (single
-* corpus, single set of document-frequency stats). Vector hits from all
-* shards are concatenated and ranked together before fusion (vector search
-* returns raw, non-corpus-relative cosine similarities, so this is
-* equivalent to querying one unified vector index).
-*
-* The two legs are combined via Reciprocal Rank Fusion (rrfMerge above),
-* not min-max score-sum — see rrfMerge's docstring for why the previous
-* approach was replaced (empirically confirmed to bury single-leg-exclusive
-* correct answers under documents merely mediocre on both legs).
-*/
-async function federatedHybridSearch(indices, term, vector, settings) {
-	const textResult = await search(indices.textDb, {
-		mode: "fulltext",
-		term,
-		limit: CANDIDATE_POOL_LIMIT
-	});
-	const vectorHits = (await Promise.all(indices.vectorDbs.map((db) => search(db, {
-		mode: "vector",
-		vector: {
-			value: vector,
-			property: "embedding"
-		},
-		similarity: settings.similarity,
-		limit: CANDIDATE_POOL_LIMIT
-	})))).flatMap((r) => r.hits);
-	return rrfMerge([...textResult.hits].sort((a, b) => b.score - a.score).map((h) => ({
-		document: h.document,
-		score: h.score
-	})), [...vectorHits].sort((a, b) => b.score - a.score).map((h) => ({
-		document: h.document,
-		score: h.score
-	})), settings.rrfK).slice(0, settings.topK).map(({ score, doc }) => ({
-		score,
-		rowId: doc.rowId,
-		notePath: doc.notePath,
-		seitencode: doc.seitencode,
-		sektion: doc.sektion,
-		titel: doc.titel,
-		kind: doc.kind
-	}));
-}
-/** Short follow-up markers, e.g. "und was ist mit ...?" or "auch für ...?" -
-* a question starting with one of these AND being short is almost certainly
-* referring back to the previous turn rather than being self-contained. */
-var FOLLOWUP_MARKERS = [
-	"und was ist mit",
-	"was ist mit",
-	"und für",
-	"auch für",
-	"wie sieht es aus mit",
-	"und wie",
-	"und wo",
-	"und wieviel",
-	"und welche",
-	"was ist",
-	"und",
-	"auch"
-];
-var FOLLOWUP_MAX_WORDS = 6;
-/**
-* Deterministic (free, instant) query-time "planning" step: resolves short
-* follow-up questions against the previous user turn so retrieval sees a
-* self-contained query, e.g. "und was ist mit 16-03?" after a prior question
-* about tank removal becomes "<prior question> und was ist mit 16-03?".
-* Falls through to the raw question when it doesn't look like a follow-up,
-* or when there's no prior turn to resolve against. This is intentionally a
-* cheap heuristic, not an LLM call - it only seeds the free baseline
-* retrieval (see workflow.ts); if that's not enough, the agent loop's own
-* search_manual/search_manual_fuzzy tools (see agent.ts) let the model
-* re-query with a better phrasing itself instead of relying on a fixed
-* rewrite step.
-*/
-function resolveFollowupQuery(question, history) {
-	const trimmed = question.trim();
-	if (!trimmed) return trimmed;
-	const lower = trimmed.toLowerCase();
-	if (!(trimmed.split(/\s+/).length <= FOLLOWUP_MAX_WORDS && FOLLOWUP_MARKERS.some((marker) => lower.startsWith(marker)))) return trimmed;
-	const lastUserTurn = [...history].reverse().find((t) => t.role === "user" && t.text.trim());
-	if (!lastUserTurn) return trimmed;
-	return `${lastUserTurn.text.trim()} ${trimmed}`;
-}
-/** Relative weight given to each retrieval leg when merging. Vault Search's
-* hits aren't independently corroborated by BM25/vector similarity, so it's
-* kept as a meaningful-but-secondary signal - strong enough to surface a
-* document the hybrid legs missed entirely (the "tank einbauen" case), but
-* not strong enough to bury a well-corroborated hybrid hit under it. */
-var HYBRID_LEG_WEIGHT = .7;
-var FUZZY_LEG_WEIGHT = .3;
-/**
-* Merges Vault Search's independent fuzzy/typo/synonym-aware results into an
-* already-ranked hybrid (BM25+vector) hit list, by notePath. This is what
-* lets RAG chat recover documents that only the fuzzy search's decompounding/
-* typo-correction/colloquial-synonym logic would find (see the vault-search
-* plugin's runSearch()) - added as a genuine third leg on every query, not
-* just as a last-resort fallback, since it's cheap and independently useful.
-*/
-function mergeWithFuzzy(hybridHits, fuzzyHits, topK) {
-	const maxHybrid = maxScore(hybridHits);
-	const merged = /* @__PURE__ */ new Map();
-	for (const h of hybridHits) {
-		const normalized = maxHybrid > 0 ? h.score / maxHybrid : 0;
-		merged.set(h.notePath, {
-			...h,
-			score: normalized * HYBRID_LEG_WEIGHT
-		});
-	}
-	const n = fuzzyHits.length;
-	for (let i = 0; i < n; i++) {
-		const f = fuzzyHits[i];
-		const contribution = (n > 1 ? 1 - i / (n - 1) : 1) * FUZZY_LEG_WEIGHT;
-		const existing = merged.get(f.notePath);
-		if (existing) existing.score += contribution;
-		else merged.set(f.notePath, {
-			score: contribution,
-			rowId: `${f.notePath}::fuzzy`,
-			notePath: f.notePath,
-			seitencode: f.seitencode,
-			sektion: f.sektion,
-			titel: f.titel,
-			kind: "text"
-		});
-	}
-	return [...merged.values()].sort((a, b) => b.score - a.score).slice(0, topK);
-}
-/**
-* Parent-note expansion (see PLAN.md Phase 4): for page-note hits
-* (`kind: "text" | "multimodal"`), dedupe by notePath (the UNIQUE key -
-* seitencode alone has 47 known collisions across the vault, see PLAN.md)
-* and read each source note IN FULL via vault.read (the "Parent Note"
-* pattern - never truncate).
-*
-* For `kind: "reference"` hits (standalone docs like Sonderwerkzeuge.md -
-* see chunk.py's REFERENCE_DOCS), this does NOT read the whole file: those
-* documents run 14-81KB, far too large to inject in full on every matching
-* chunk hit the way a ~1-3KB page note is. Instead it looks up just the
-* matched CHUNK's text from the reference-chunks.json sidecar (`hit.rowId`
-* is stable across a hit's originating leg - text or vector-only), and
-* dedupes by `rowId` rather than `notePath` so multiple distinct relevant
-* chunks from the SAME reference doc (e.g. two different Sonderwerkzeuge
-* tool groups) are all kept, instead of collapsing to just the top-ranked
-* one the way same-notePath page-note hits correctly do.
-*/
-async function expandToParentNotes(hits, vault, referenceChunks) {
-	const seen = /* @__PURE__ */ new Set();
-	const blocks = [];
-	for (const hit of hits) {
-		if (hit.kind === "reference") {
-			if (seen.has(hit.rowId)) continue;
-			seen.add(hit.rowId);
-			const chunk = referenceChunks.get(hit.rowId);
-			if (!chunk) continue;
-			blocks.push({
-				notePath: hit.notePath,
-				seitencode: "",
-				sektion: hit.sektion,
-				titel: hit.titel,
-				fullText: chunk.text
-			});
-			continue;
-		}
-		if (seen.has(hit.notePath)) continue;
-		seen.add(hit.notePath);
-		const file = vault.getFileByPath(hit.notePath);
-		if (!file) continue;
-		const fullText = await vault.read(file);
-		blocks.push({
-			notePath: hit.notePath,
-			seitencode: hit.seitencode,
-			sektion: hit.sektion,
-			titel: hit.titel,
-			fullText
-		});
-	}
-	return blocks;
-}
-/** Assembles the <context> block fed to the generation model. `titel` is
-* included as an attribute (not just relied on being inline in `fullText`,
-* which page notes start with as "# <titel>" but a reference-doc chunk from
-* later in a large file may not) so the model can always identify which
-* document a chunk came from. Blocks with an empty `seitencode` are
-* reference-doc chunks - see gemini.ts's SYSTEM_PROMPT for the citation
-* format the model is instructed to use for those ("[Referenz: <titel>]"
-* instead of "[Seite <code>]"). */
-function buildContextXml(blocks) {
-	return `<context>\n${blocks.map((b) => `<document source="${b.notePath}" seitencode="${b.seitencode}" sektion="${b.sektion}" titel="${b.titel}">\n${b.fullText}\n</document>`).join("\n\n")}\n</context>`;
-}
-//#endregion
-//#region src/gemini.ts
-/**
-* Pinned BASE system instruction (see PLAN.md Phase 4/6 "System prompt").
-* Steers determinism via the prompt since temperature/top_p/top_k are
-* deprecated on gemini-3.6-flash and are never sent.
-*
-* MUST stay byte-identical to .pipeline/rag/gen_client.py's SYSTEM_PROMPT
-* (that file is a dev/test-only client, not wired into the shipped plugin -
-* see its own comment - but the prompt itself is a shared invariant).
-*
-* Deliberately contains NO tool descriptions - see buildToolsSuffix below.
-* An earlier version of this prompt described the agent's tools by name
-* unconditionally, which caused Gemini to attempt a functionCall (and fail
-* with finishReason "MALFORMED_FUNCTION_CALL") on any call that didn't
-* actually have those tools declared in `tools[]` - e.g. the final
-* tools-stripped call in agent.ts's driveLoop, or this dev/test-only client,
-* which never declares tools at all. The tool list is now appended
-* dynamically (generateWithTools below) so it always matches exactly what
-* was actually declared for that specific call.
-*
-* Unlike the original "context-only, refuse otherwise" prompt, this version
-* deliberately allows - and asks for - extending manual-grounded answers
-* with the model's own general knowledge and live web results, as long as
-* the two are never blended together unlabeled.
-*/
+//#region src/gemini/prompts.ts
 var SYSTEM_PROMPT = `Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
 
 Struktur jeder Antwort:
@@ -8271,10 +7885,6 @@ Struktur jeder Antwort:
 3. Nenne bei Web-Quellen die URL bzw. Domain, damit sie nachvollziehbar sind.
 
 Antworte auf Deutsch.`;
-/** Per-tool description lines, keyed by function name - appended to the
-* base SYSTEM_PROMPT (see buildToolsSuffix) only for tools actually present
-* in that call's declared `tools[]`, so the prompt never describes a tool
-* the model doesn't actually have access to this round. */
 var TOOL_DESCRIPTIONS = {
 	search_manual: "search_manual(query): durchsucht das Werkstatthandbuch (Hybrid-Suche: Volltext + Vektor) mit einer von dir gewählten Suchanfrage und liefert eine kompakte Liste möglicher Seiten (Titel, Seitencode, Sektion, notePath) - noch keinen vollen Seitentext.",
 	search_manual_fuzzy: "search_manual_fuzzy(query): durchsucht das Handbuch tippfehler- und synonymtolerant. Nützlich bei umgangssprachlichen Formulierungen oder wenn search_manual nichts Passendes liefert.",
@@ -8282,9 +7892,6 @@ var TOOL_DESCRIPTIONS = {
 	ask_user: "ask_user(question): stellt dem Nutzer eine kurze Rückfrage, falls die Frage mehrdeutig ist oder eine für die Antwort wichtige Information fehlt (z.B. Baujahr, Motorvariante, welches Bauteil genau). Nutze dies sparsam - nur wenn eine Rückfrage die Antwort deutlich verbessern würde."
 };
 var GOOGLE_SEARCH_DESCRIPTION = "google_search: durchsucht das Web nach aktuellen, öffentlich verfügbaren Informationen.";
-/** Builds the tool-description suffix appended to SYSTEM_PROMPT for a given
-* call, based on exactly what's being declared in `tools[]` this round -
-* see SYSTEM_PROMPT's doc for why this must never drift from reality. */
 function buildToolsSuffix(functionDeclarations, includeGoogleSearch) {
 	const lines = [];
 	if (includeGoogleSearch) lines.push(`- ${GOOGLE_SEARCH_DESCRIPTION}`);
@@ -8295,39 +7902,8 @@ function buildToolsSuffix(functionDeclarations, includeGoogleSearch) {
 	if (lines.length === 0) return "\n\nFür diese Antwort stehen dir keine Werkzeuge (auch keine Websuche) zur Verfügung - antworte jetzt direkt und vollständig mit den bisher verfügbaren Informationen.";
 	return "\n\nDir stehen für diese Anfrage folgende Werkzeuge zur Verfügung:\n" + lines.join("\n") + "\n\nDir steht pro Frage nur ein begrenztes Budget an Werkzeug-Aufrufen zur Verfügung (in der Regel wenige Runden) - suche gezielt und effizient, nicht plan- und ziellos. Wird das Budget aufgebraucht, antworte direkt mit dem, was du bis dahin gefunden hast.";
 }
-/** Maps prior chat turns onto Gemini's `contents[]` shape (role "assistant"
-* -> "model", per the API's naming). Empty-text turns (e.g. an in-progress
-* assistant turn, or a turn that only asked a since-resolved clarifying
-* question) are dropped - the API rejects empty parts. Exported for
-* agent.ts, which seeds each new question's contents with prior turns for
-* real multi-turn memory (only each turn's final text is replayed, not its
-* retrieved <context> or intermediate tool calls, to keep token cost from
-* growing unboundedly across a long session). */
-function buildHistoryContents(history) {
-	return history.filter((t) => t.text.trim().length > 0).map((t) => ({
-		role: t.role === "assistant" ? "model" : "user",
-		parts: [{ text: t.text }]
-	}));
-}
-/**
-* Non-streaming generateContent call used by every round of the agent loop
-* (see agent.ts). Non-streaming is required here because each round needs
-* to inspect the response for `functionCall` parts before deciding whether
-* to continue the loop - Gemini's streaming wire format interleaves partial
-* text deltas that can't be cleanly inspected mid-stream for this purpose.
-* As a consequence, the final answer is revealed to the user in one shot
-* rather than token-by-token (same trade-off the old self-critique step
-* already made) - per-round status updates (see agent.ts's onStatus calls)
-* provide progress feedback instead.
-*
-* `includeGoogleSearch` defaults to true; agent.ts sets it to false for the
-* final forced-answer call once the tool-call round budget is exhausted, to
-* guarantee a plain-text response with no further tool round-trips.
-*
-* `onStatus`, if given, is forwarded to the retry wrapper (see http-retry.ts)
-* so a transient 429/5xx from Google shows a live "retrying …" label instead
-* of the round just looking stuck.
-*/
+//#endregion
+//#region src/gemini/client.ts
 async function generateWithTools(contents, functionDeclarations, settings, opts) {
 	const apiKey = settings.geminiApiKey;
 	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
@@ -8375,33 +7951,186 @@ async function generateWithTools(contents, functionDeclarations, settings, opts)
 	};
 }
 //#endregion
-//#region src/agent.ts
-/**
-* agent.ts — the bounded agentic tool-use loop that replaced the old
-* deterministic "widen similarity / LLM query rewrite / self-critique" retry
-* stack (see workflow.ts's history for that removed logic). Instead of a
-* fixed sequence of hidden retries, the model itself is handed a small set
-* of tools and drives its own research loop, up to a hard round cap
-* (settings.maxAgentRounds) - see the tool table in gemini.ts's
-* SYSTEM_PROMPT for what each tool does and when the model should use it.
-*
-* Loop shape per round:
-*   1. Call Gemini (generateWithTools) with the running `contents[]` and the
-*      tool declarations.
-*   2. If the response has no functionCall parts, it's the final answer -
-*      return it (status "done").
-*   3. If one of the functionCalls is ask_user, PAUSE here: return status
-*      "awaiting_clarification" with a PendingAgentState capturing the
-*      exact contents/round/citation state so far. The caller (view.ts)
-*      shows the question and, on your next reply, calls resumeAgentLoop()
-*      to continue the SAME loop (not a fresh, independent turn) - the
-*      resumed round still counts against the original round budget.
-*   4. Otherwise, execute every requested tool call locally, append a
-*      functionResponse for each, and loop.
-*   5. If the round cap is hit while the model still wants to call tools,
-*      force one final tools-stripped call and return whatever text comes
-*      back (status "done") - see driveLoop's post-loop fallback.
-*/
+//#region src/retrieval/context-xml.ts
+function buildContextXml(blocks) {
+	return `<context>\n${blocks.map((b) => `<document source="${b.notePath}" seitencode="${b.seitencode}" sektion="${b.sektion}" titel="${b.titel}">\n${b.fullText}\n</document>`).join("\n\n")}\n</context>`;
+}
+//#endregion
+//#region src/retrieval/compact-hits.ts
+function toCompactHits(hits) {
+	return hits.map((h) => ({
+		notePath: h.notePath,
+		seitencode: h.seitencode,
+		sektion: h.sektion,
+		titel: h.titel
+	}));
+}
+//#endregion
+//#region src/retrieval/embeddings.ts
+var QUERY_PREFIX_TMPL = "task: search result | query: {content}";
+function validateManifest(manifest, settings) {
+	const warnings = [];
+	if (manifest.embeddingModel !== settings.embeddingModel) warnings.push(`Index was built with embedding model "${manifest.embeddingModel}", but settings specify "${settings.embeddingModel}". Update settings or rebuild the index.`);
+	if (manifest.embeddingDims !== settings.outputDim) warnings.push(`Index was built at ${manifest.embeddingDims} dims (the shipped/query dims), but settings specify ${settings.outputDim}. These MUST match or vector search will silently return garbage. Fix settings.outputDim.`);
+	return warnings;
+}
+async function embedQuery(query, settings, onStatus) {
+	if (!settings.geminiApiKey) throw new Error("Google API key (GEMINI_API_KEY) is required for query embeddings - set it in RAG Chat settings.");
+	const prefixed = QUERY_PREFIX_TMPL.replace("{content}", query);
+	const response = await requestUrlWithRetry({
+		url: `https://generativelanguage.googleapis.com/v1beta/models/${settings.embeddingModel}:embedContent`,
+		method: "POST",
+		headers: {
+			"x-goog-api-key": settings.geminiApiKey,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			content: { parts: [{ text: prefixed }] },
+			outputDimensionality: settings.outputDim
+		})
+	}, {
+		onStatus,
+		label: "Embedding"
+	});
+	const values = response.json?.embedding?.values;
+	if (!Array.isArray(values)) throw new Error(`Unexpected embedContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
+	return values;
+}
+//#endregion
+//#region src/retrieval/rrf.ts
+function rrfMerge(textHitsSorted, vectorHitsSorted, k) {
+	const scores = /* @__PURE__ */ new Map();
+	textHitsSorted.forEach((h, i) => {
+		const rowId = h.document.rowId;
+		const existing = scores.get(rowId);
+		scores.set(rowId, {
+			score: (existing?.score ?? 0) + 1 / (k + i + 1),
+			doc: existing?.doc ?? h.document
+		});
+	});
+	vectorHitsSorted.forEach((h, i) => {
+		const rowId = h.document.rowId;
+		const existing = scores.get(rowId);
+		scores.set(rowId, {
+			score: (existing?.score ?? 0) + 1 / (k + i + 1),
+			doc: existing?.doc ?? h.document
+		});
+	});
+	return [...scores.values()].sort((a, b) => b.score - a.score);
+}
+function maxScore(hits) {
+	return hits.reduce((m, h) => Math.max(m, h.score), 0);
+}
+//#endregion
+//#region src/retrieval/hybrid-search.ts
+var CANDIDATE_POOL_LIMIT = 5e3;
+async function federatedHybridSearch(indices, term, vector, settings) {
+	const textResult = await search(indices.textDb, {
+		mode: "fulltext",
+		term,
+		limit: CANDIDATE_POOL_LIMIT
+	});
+	const vectorHits = (await Promise.all(indices.vectorDbs.map((db) => search(db, {
+		mode: "vector",
+		vector: {
+			value: vector,
+			property: "embedding"
+		},
+		similarity: settings.similarity,
+		limit: CANDIDATE_POOL_LIMIT
+	})))).flatMap((r) => r.hits);
+	return rrfMerge([...textResult.hits].sort((a, b) => b.score - a.score).map((h) => ({
+		document: h.document,
+		score: h.score
+	})), [...vectorHits].sort((a, b) => b.score - a.score).map((h) => ({
+		document: h.document,
+		score: h.score
+	})), settings.rrfK).slice(0, settings.topK).map(({ score, doc }) => ({
+		score,
+		rowId: doc.rowId,
+		notePath: doc.notePath,
+		seitencode: doc.seitencode,
+		sektion: doc.sektion,
+		titel: doc.titel,
+		kind: doc.kind
+	}));
+}
+//#endregion
+//#region src/agent/execute-tool.ts
+async function executeTool(fc, ctx, state) {
+	switch (fc.name) {
+		case "search_manual": {
+			const query = String(fc.args?.query ?? "");
+			if (!query.trim()) return { error: "query darf nicht leer sein." };
+			const vector = await embedQuery(query, ctx.settings, ctx.onStatus);
+			return { hits: toCompactHits(await federatedHybridSearch(ctx.indices, query, vector, ctx.settings)) };
+		}
+		case "search_manual_fuzzy": {
+			if (!ctx.fuzzyApi) return { error: "Das vault-search-Plugin ist nicht installiert/aktiviert - Werkzeug nicht verfügbar." };
+			const query = String(fc.args?.query ?? "");
+			if (!query.trim()) return { error: "query darf nicht leer sein." };
+			const res = await ctx.fuzzyApi.search(query, 10);
+			return {
+				hits: res.results.map((h) => ({
+					notePath: h.notePath,
+					seitencode: h.seitencode,
+					sektion: h.sektion,
+					titel: h.titel
+				})),
+				correction: res.correction
+			};
+		}
+		case "get_manual_page": {
+			const notePath = String(fc.args?.notePath ?? "");
+			if (!notePath.trim()) return { error: "notePath darf nicht leer sein." };
+			const file = ctx.vault.getFileByPath(notePath);
+			if (!file) return { error: `Seite "${notePath}" nicht gefunden - evtl. verschoben oder gelöscht.` };
+			const fullText = await ctx.vault.read(file);
+			const seitencode = String(fc.args?.seitencode ?? "");
+			const sektion = String(fc.args?.sektion ?? "");
+			const titel = String(fc.args?.titel ?? notePath);
+			state.manualPages.set(notePath, {
+				notePath,
+				seitencode,
+				sektion,
+				titel,
+				fullText
+			});
+			return {
+				notePath,
+				seitencode,
+				sektion,
+				titel,
+				fullText
+			};
+		}
+		default: return { error: `Unbekanntes Werkzeug: ${fc.name}` };
+	}
+}
+//#endregion
+//#region src/agent/status-text.ts
+function mergeGrounding(map, chunks) {
+	for (const c of chunks) if (c.uri) map.set(c.uri, c);
+}
+function describeCall(fc) {
+	switch (fc.name) {
+		case "search_manual": return `durchsuche Handbuch nach "${String(fc.args?.query ?? "")}"`;
+		case "search_manual_fuzzy": return `durchsuche Handbuch (tippfehlertolerant) nach "${String(fc.args?.query ?? "")}"`;
+		case "get_manual_page": return `hole Seite ${String(fc.args?.seitencode ?? fc.args?.notePath ?? "")}`;
+		default: return `führe ${fc.name} aus`;
+	}
+}
+function describeResult(fc, response) {
+	if (typeof response.error === "string") return `Fehler: ${response.error}`;
+	switch (fc.name) {
+		case "search_manual":
+		case "search_manual_fuzzy": return `${Array.isArray(response.hits) ? response.hits.length : 0} Treffer`;
+		case "get_manual_page": return `Seite geladen (${String(response.seitencode ?? response.notePath ?? "")})`;
+		default: return "erledigt";
+	}
+}
+//#endregion
+//#region src/agent/tool-declarations.ts
 var FUNCTION_DECLARATIONS = [
 	{
 		name: "search_manual",
@@ -8459,83 +8188,8 @@ var FUNCTION_DECLARATIONS = [
 		}
 	}
 ];
-function mergeGrounding(map, chunks) {
-	for (const c of chunks) if (c.uri) map.set(c.uri, c);
-}
-function describeCall(fc) {
-	switch (fc.name) {
-		case "search_manual": return `durchsuche Handbuch nach "${String(fc.args?.query ?? "")}"`;
-		case "search_manual_fuzzy": return `durchsuche Handbuch (tippfehlertolerant) nach "${String(fc.args?.query ?? "")}"`;
-		case "get_manual_page": return `hole Seite ${String(fc.args?.seitencode ?? fc.args?.notePath ?? "")}`;
-		default: return `führe ${fc.name} aus`;
-	}
-}
-/** Follow-up status line emitted right after a tool actually ran, describing
-* its OUTCOME (hit count, error, page loaded) rather than just the fact it
-* was called - this is what actually explains, in the "Rechercheverlauf"
-* log (see view.ts), why the agent loop needed another round (e.g. "0
-* Treffer" made it obvious the model had to rephrase and try again). */
-function describeResult(fc, response) {
-	if (typeof response.error === "string") return `Fehler: ${response.error}`;
-	switch (fc.name) {
-		case "search_manual":
-		case "search_manual_fuzzy": return `${Array.isArray(response.hits) ? response.hits.length : 0} Treffer`;
-		case "get_manual_page": return `Seite geladen (${String(response.seitencode ?? response.notePath ?? "")})`;
-		default: return "erledigt";
-	}
-}
-async function executeTool(fc, ctx, state) {
-	switch (fc.name) {
-		case "search_manual": {
-			const query = String(fc.args?.query ?? "");
-			if (!query.trim()) return { error: "query darf nicht leer sein." };
-			const vector = await embedQuery(query, ctx.settings, ctx.onStatus);
-			return { hits: toCompactHits(await federatedHybridSearch(ctx.indices, query, vector, ctx.settings)) };
-		}
-		case "search_manual_fuzzy": {
-			if (!ctx.fuzzyApi) return { error: "Das vault-search-Plugin ist nicht installiert/aktiviert - Werkzeug nicht verfügbar." };
-			const query = String(fc.args?.query ?? "");
-			if (!query.trim()) return { error: "query darf nicht leer sein." };
-			const res = await ctx.fuzzyApi.search(query, 10);
-			return {
-				hits: res.results.map((h) => ({
-					notePath: h.notePath,
-					seitencode: h.seitencode,
-					sektion: h.sektion,
-					titel: h.titel
-				})),
-				correction: res.correction
-			};
-		}
-		case "get_manual_page": {
-			const notePath = String(fc.args?.notePath ?? "");
-			if (!notePath.trim()) return { error: "notePath darf nicht leer sein." };
-			const file = ctx.vault.getFileByPath(notePath);
-			if (!file) return { error: `Seite "${notePath}" nicht gefunden - evtl. verschoben oder gelöscht.` };
-			const fullText = await ctx.vault.read(file);
-			const seitencode = String(fc.args?.seitencode ?? "");
-			const sektion = String(fc.args?.sektion ?? "");
-			const titel = String(fc.args?.titel ?? notePath);
-			state.manualPages.set(notePath, {
-				notePath,
-				seitencode,
-				sektion,
-				titel,
-				fullText
-			});
-			return {
-				notePath,
-				seitencode,
-				sektion,
-				titel,
-				fullText
-			};
-		}
-		default: return { error: `Unbekanntes Werkzeug: ${fc.name}` };
-	}
-}
-/** Drives the round loop starting from `state` (either freshly seeded by
-* runAgentLoop, or resumed by resumeAgentLoop after a clarifying answer). */
+//#endregion
+//#region src/agent/loop.ts
 async function driveLoop(state, ctx) {
 	const maxRounds = ctx.settings.maxAgentRounds;
 	const declarations = ctx.settings.enableFuzzySearchLeg ? FUNCTION_DECLARATIONS : FUNCTION_DECLARATIONS.filter((d) => d.name !== "search_manual_fuzzy");
@@ -8615,10 +8269,6 @@ async function runAgentLoop(params) {
 		webCitations: /* @__PURE__ */ new Map()
 	}, ctx);
 }
-/** Resumes a paused ask_user loop with the user's reply, feeding it back as
-* that function call's response and continuing the SAME round budget (a
-* clarifying round still counts against maxAgentRounds - see
-* PendingAgentState's doc). */
 async function resumeAgentLoop(pending, userAnswer) {
 	const { state, ctx } = pending;
 	state.contents.push({
@@ -8629,6 +8279,99 @@ async function resumeAgentLoop(pending, userAnswer) {
 		} }]
 	});
 	return driveLoop(state, ctx);
+}
+//#endregion
+//#region src/retrieval/fuzzy-merge.ts
+var HYBRID_LEG_WEIGHT = .7;
+var FUZZY_LEG_WEIGHT = .3;
+function mergeWithFuzzy(hybridHits, fuzzyHits, topK) {
+	const maxHybrid = maxScore(hybridHits);
+	const merged = /* @__PURE__ */ new Map();
+	for (const h of hybridHits) {
+		const normalized = maxHybrid > 0 ? h.score / maxHybrid : 0;
+		merged.set(h.notePath, {
+			...h,
+			score: normalized * HYBRID_LEG_WEIGHT
+		});
+	}
+	const n = fuzzyHits.length;
+	for (let i = 0; i < n; i++) {
+		const f = fuzzyHits[i];
+		const contribution = (n > 1 ? 1 - i / (n - 1) : 1) * FUZZY_LEG_WEIGHT;
+		const existing = merged.get(f.notePath);
+		if (existing) existing.score += contribution;
+		else merged.set(f.notePath, {
+			score: contribution,
+			rowId: `${f.notePath}::fuzzy`,
+			notePath: f.notePath,
+			seitencode: f.seitencode,
+			sektion: f.sektion,
+			titel: f.titel,
+			kind: "text"
+		});
+	}
+	return [...merged.values()].sort((a, b) => b.score - a.score).slice(0, topK);
+}
+//#endregion
+//#region src/retrieval/followup.ts
+var FOLLOWUP_MARKERS = [
+	"und was ist mit",
+	"was ist mit",
+	"und für",
+	"auch für",
+	"wie sieht es aus mit",
+	"und wie",
+	"und wo",
+	"und wieviel",
+	"und welche",
+	"was ist",
+	"und",
+	"auch"
+];
+var FOLLOWUP_MAX_WORDS = 6;
+function resolveFollowupQuery(question, history) {
+	const trimmed = question.trim();
+	if (!trimmed) return trimmed;
+	const lower = trimmed.toLowerCase();
+	if (!(trimmed.split(/\s+/).length <= FOLLOWUP_MAX_WORDS && FOLLOWUP_MARKERS.some((marker) => lower.startsWith(marker)))) return trimmed;
+	const lastUserTurn = [...history].reverse().find((t) => t.role === "user" && t.text.trim());
+	if (!lastUserTurn) return trimmed;
+	return `${lastUserTurn.text.trim()} ${trimmed}`;
+}
+//#endregion
+//#region src/retrieval/parent-notes.ts
+async function expandToParentNotes(hits, vault, referenceChunks) {
+	const seen = /* @__PURE__ */ new Set();
+	const blocks = [];
+	for (const hit of hits) {
+		if (hit.kind === "reference") {
+			if (seen.has(hit.rowId)) continue;
+			seen.add(hit.rowId);
+			const chunk = referenceChunks.get(hit.rowId);
+			if (!chunk) continue;
+			blocks.push({
+				notePath: hit.notePath,
+				seitencode: "",
+				sektion: hit.sektion,
+				titel: hit.titel,
+				fullText: chunk.text
+			});
+			continue;
+		}
+		if (seen.has(hit.notePath)) continue;
+		seen.add(hit.notePath);
+		const file = vault.getFileByPath(hit.notePath);
+		if (!file) continue;
+		const fullText = await vault.read(file);
+		blocks.push({
+			notePath: hit.notePath,
+			seitencode: hit.seitencode,
+			sektion: hit.sektion,
+			titel: hit.titel,
+			fullText
+		});
+	}
+	return blocks;
 }
 //#endregion
 //#region src/workflow.ts
@@ -8689,38 +8432,94 @@ async function continueAnswer(pending, userAnswer) {
 	};
 }
 //#endregion
-//#region src/citation-links.ts
+//#region src/view/controller.ts
+function createChatSessionState() {
+	return {
+		turns: [],
+		pendingAgentState: null
+	};
+}
+function inputPlaceholder(state) {
+	return state.pendingAgentState !== null ? "Antwort auf die Rückfrage …" : "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)";
+}
+function applyResult(turn, state, result) {
+	turn.status = void 0;
+	if (result.status === "awaiting_clarification") {
+		state.pendingAgentState = result.pending;
+		turn.text = result.question;
+		turn.isClarifying = true;
+		turn.citations = [];
+		turn.webCitations = [];
+		turn.webGroundingChunks = [];
+		turn.webGroundingSupports = [];
+	} else {
+		turn.text = result.text.trim() || "Ich habe leider keine Antwort erhalten.";
+		turn.isClarifying = false;
+		turn.citations = result.manualCitations;
+		turn.webCitations = result.webCitations;
+		turn.webGroundingChunks = result.webGroundingChunks;
+		turn.webGroundingSupports = result.webGroundingSupports;
+	}
+}
+async function sendMessage(state, message, deps) {
+	const isResuming = state.pendingAgentState !== null;
+	const history = [...state.turns];
+	state.turns.push({
+		role: "user",
+		text: message
+	});
+	const assistantTurn = {
+		role: "assistant",
+		text: "",
+		status: isResuming ? "Setze Suche fort …" : "Analysiere Frage …"
+	};
+	state.turns.push(assistantTurn);
+	deps.onTurnStarted?.(assistantTurn);
+	const onStatus = (status) => {
+		assistantTurn.status = status;
+		(assistantTurn.statusLog ??= []).push(status);
+		deps.onStatus?.(status);
+	};
+	try {
+		let result;
+		if (isResuming && state.pendingAgentState) {
+			const pending = state.pendingAgentState;
+			state.pendingAgentState = null;
+			result = await continueAnswer(pending, message);
+		} else result = await answerQuestion({
+			question: message,
+			history,
+			settings: deps.settings,
+			vault: deps.vault,
+			indices: await deps.getIndices(),
+			fuzzyApi: deps.getFuzzyApi(),
+			onStatus
+		});
+		applyResult(assistantTurn, state, result);
+	} catch (err) {
+		state.pendingAgentState = null;
+		const message = err instanceof Error ? err.message : String(err);
+		assistantTurn.status = void 0;
+		assistantTurn.text = `Fehler: ${message}`;
+		assistantTurn.citations = [];
+		assistantTurn.webCitations = [];
+		assistantTurn.webGroundingChunks = [];
+		assistantTurn.webGroundingSupports = [];
+		deps.onError?.(message);
+	}
+}
+//#endregion
+//#region src/view/fuzzy-search-plugin.ts
+function getFuzzySearchApi(app) {
+	return (app.plugins?.plugins)?.["vault-search"]?.api ?? null;
+}
+//#endregion
+//#region src/citations/util.ts
 function escapeWikilinkPath(notePath) {
 	return notePath.replace(/\|/g, "\\|");
 }
-/**
-* Turns the model's inline "[Seite <code>]" / "[Seite <code1>, <code2>]"
-* citations (see gemini.ts's SYSTEM_PROMPT, which pins this exact bracket
-* format) into real Obsidian `[[wikilink]]`s pointing at the cited page's
-* `notePath`, so they render as clickable/hoverable internal links via
-* view.ts's MarkdownRenderer.render (+ its wireInternalLinks post-processing
-* pass, required for links to actually be clickable inside a custom
-* ItemView - see view.ts's doc) - the same navigation mechanism already
-* used by the "Quellen (Handbuch)" citation chips below the answer.
-*
-* Deliberately deterministic/code-driven rather than trusting the model to
-* reproduce a `notePath` verbatim inline: only codes that exactly match a
-* seitencode from THIS turn's actually-retrieved `citations` become links.
-*
-* Three outcomes per code:
-*  - Exactly one match: a normal `[[notePath|code]]` link.
-*  - Zero matches (hallucinated/typo'd - not among this turn's retrieved
-*    sources): wrapped in a `rag-chat-citation-unverified` span instead of
-*    linked or silently passed through, so it's visually obvious it
-*    couldn't be verified.
-*  - Multiple matches (the same seitencode genuinely collides across >1
-*    retrieved page - see PLAN.md's "47 seitencodes collide" note, e.g. a
-*    main manual section page and its torque-spec-appendix twin sharing a
-*    code): rendered as an expandable `<details>` listing every candidate
-*    as its own real link (labeled by `sektion`), so the user can pick the
-*    right one instead of either guessing silently or being told a real
-*    page is "unverified".
-*/
+//#endregion
+//#region src/citations/page-citations.ts
 function linkifyCitations(text, citations) {
 	if (citations.length === 0) return text;
 	const bySeitencode = /* @__PURE__ */ new Map();
@@ -8740,17 +8539,8 @@ function linkifyCitations(text, citations) {
 		}).join(", ")}]`;
 	});
 }
-/**
-* Sibling of linkifyCitations for the OTHER citation format the model uses
-* (see gemini.ts's SYSTEM_PROMPT): "[Referenz: <titel>]", for `<document>`
-* sources with no seitencode - standalone reference docs (Sonderwerkzeuge,
-* Sicherheitshinweise, Glossar, Technische Daten; see chunk.py's
-* REFERENCE_DOCS). Matched by `titel` instead of `seitencode` (reference
-* blocks all share the same empty seitencode, so bySeitencode collapses
-* them - titel is the only thing that actually disambiguates them). Same
-* verified/unverified/ambiguous shape as linkifyCitations, run as a
-* separate pass since the two formats never overlap in the same brackets.
-*/
+//#endregion
+//#region src/citations/reference-citations.ts
 function linkifyReferenceCitations(text, citations) {
 	const referenceBlocks = citations.filter((b) => !b.seitencode);
 	if (referenceBlocks.length === 0) return text;
@@ -8768,12 +8558,9 @@ function linkifyReferenceCitations(text, citations) {
 		return `[Referenz: [[${escapeWikilinkPath(matches[0].notePath)}|${titel}]]]`;
 	});
 }
+//#endregion
+//#region src/citations/web-citations.ts
 var LEADING_LIST_MARKER_RE = /^([ \t]*(?:[-*+]|\d+[.)])[ \t]+)/;
-/** Finds the single line containing `pos`, and splits it into a leading
-* list-marker/indentation prefix (kept OUTSIDE any link wrap, so a bullet's
-* "- " or "1. " marker never ends up inside `[...]` link text - which would
-* break that line's recognition as a list item entirely) and the rest of
-* the line's actual content. */
 function safeLineContentSpan(text, pos) {
 	let lineStart = pos;
 	while (lineStart > 0 && text[lineStart - 1] !== "\n") lineStart--;
@@ -8783,22 +8570,6 @@ function safeLineContentSpan(text, pos) {
 	const markerMatch = LEADING_LIST_MARKER_RE.exec(line);
 	return [lineStart + (markerMatch ? markerMatch[0].length : 0), lineEnd];
 }
-/**
-* Turns Gemini's Google Search grounding attributions (groundingSupports,
-* see gemini.ts's doc) into real inline links wrapping the actual cited
-* line of the model's answer, instead of the disconnected, unlabeled
-* "Quellen (Web)" list (whose chunk titles are usually just a bare domain
-* like "youtube.com" - useless for telling entries apart, see view.ts).
-*
-* Segment offsets are Google's choice for citation ATTRIBUTION, not for
-* safe Markdown splicing - they can land mid-token (e.g. inside a
-* "**bold**" run). To stay safe, each support is snapped OUTWARD to the
-* single full line containing its start offset (see safeLineContentSpan)
-* rather than wrapping the exact byte-precise span - trading a little
-* precision for guaranteed-valid Markdown. In this vault's typical
-* "- **Titel** – Kanal: X (YouTube)" bullet structure, that line already
-* IS the whole visible video entry, so the loss is minor in practice.
-*/
 function linkifyWebCitations(text, chunks, supports) {
 	if (chunks.length === 0 || supports.length === 0) return text;
 	const encoder = new TextEncoder();
@@ -8840,13 +8611,6 @@ function linkifyWebCitations(text, chunks, supports) {
 	}
 	return result;
 }
-/**
-* Best-effort human-readable snippet per cited URL, drawn from
-* groundingSupports' literal excerpt text (see GroundingSupport.text) -
-* used only to make the fallback "Quellen (Web)" list (view.ts) less
-* opaque than Google's generic per-chunk titles (often just a bare domain
-* like "youtube.com" for every entry, with nothing to tell them apart).
-*/
 function buildWebCitationSnippets(chunks, supports) {
 	const snippets = /* @__PURE__ */ new Map();
 	for (const support of supports) {
@@ -8859,17 +8623,143 @@ function buildWebCitationSnippets(chunks, supports) {
 	return snippets;
 }
 //#endregion
-//#region src/view.ts
+//#region src/view/render-citations.ts
+function renderManualCitations(turnEl, turn, app) {
+	if (!turn.citations || turn.citations.length === 0) return;
+	const citeEl = turnEl.createDiv({ cls: "rag-chat-citations" });
+	citeEl.createSpan({ text: "Quellen (Handbuch): " });
+	for (const block of turn.citations) {
+		const label = block.seitencode ? `${block.seitencode} (${block.sektion})` : `${block.titel} (${block.sektion})`;
+		citeEl.createEl("a", {
+			cls: "rag-chat-citation-link",
+			text: label
+		}).addEventListener("click", (evt) => {
+			evt.preventDefault();
+			app.workspace.openLinkText(block.notePath, "", false);
+		});
+	}
+}
+function renderWebCitations(turnEl, turn) {
+	if (!turn.webCitations || turn.webCitations.length === 0) return;
+	const snippets = buildWebCitationSnippets(turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []);
+	const webCiteEl = turnEl.createDiv({ cls: "rag-chat-citations rag-chat-web-citations" });
+	webCiteEl.createSpan({ text: "Quellen (Web): " });
+	for (const web of turn.webCitations) {
+		const row = webCiteEl.createSpan({ cls: "rag-chat-web-citation-row" });
+		row.createEl("a", {
+			cls: "rag-chat-citation-link rag-chat-web-citation-link",
+			text: web.title || web.uri,
+			attr: {
+				href: web.uri,
+				target: "_blank",
+				rel: "noopener"
+			}
+		});
+		const snippet = snippets.get(web.uri);
+		if (snippet) row.createSpan({
+			cls: "rag-chat-web-citation-snippet",
+			text: ` – "${snippet}"`
+		});
+	}
+}
+//#endregion
+//#region src/view/render-status-log.ts
+function showsStatus(turn) {
+	return turn.role === "assistant" && turn.text.length === 0 && Boolean(turn.status);
+}
+function renderStatusLog(turnEl, turn) {
+	const log = turn.statusLog;
+	const details = turnEl.createEl("details", { cls: "rag-chat-status-log" });
+	const summaryEl = details.createEl("summary", { text: `Rechercheverlauf (${log.length} Schritte)` });
+	const listEl = details.createEl("ul", { cls: "rag-chat-status-log-list" });
+	for (const line of log) listEl.createEl("li", {
+		cls: "rag-chat-status-log-item",
+		text: line
+	});
+	return {
+		listEl,
+		summaryEl
+	};
+}
+function appendStatusLogLine(elements, turn) {
+	const log = turn.statusLog;
+	if (!log || log.length === 0) return;
+	elements.listEl.createEl("li", {
+		cls: "rag-chat-status-log-item",
+		text: log[log.length - 1]
+	});
+	elements.summaryEl.setText(`Rechercheverlauf (${log.length} Schritte)`);
+}
+//#endregion
+//#region src/view/wire-links.ts
+function wireInternalLinks(el, app) {
+	const sourcePath = "";
+	el.querySelectorAll("a.internal-link").forEach((a) => {
+		a.addEventListener("click", (evt) => {
+			evt.preventDefault();
+			const href = a.getAttribute("href");
+			if (href) app.workspace.openLinkText(href, sourcePath, obsidian.Keymap.isModEvent(evt));
+		});
+		a.addEventListener("mouseover", (evt) => {
+			const href = a.getAttribute("href");
+			if (!href) return;
+			app.workspace.trigger("hover-link", {
+				event: evt,
+				source: "preview",
+				hoverParent: { hoverPopover: null },
+				targetEl: a,
+				linktext: href,
+				sourcePath
+			});
+		});
+	});
+}
+//#endregion
+//#region src/view/render-turns.ts
+function renderTurns(messagesEl, turns, app, component) {
+	messagesEl.empty();
+	const turnEls = /* @__PURE__ */ new Map();
+	const statusLogElements = /* @__PURE__ */ new Map();
+	for (const turn of turns) {
+		const cls = ["rag-chat-turn", `rag-chat-turn-${turn.role}`];
+		if (turn.isClarifying) cls.push("rag-chat-turn-clarifying");
+		const turnEl = messagesEl.createDiv({ cls: cls.join(" ") });
+		const status = showsStatus(turn);
+		const textEl = turnEl.createDiv({ cls: status ? "rag-chat-turn-text rag-chat-turn-status" : "rag-chat-turn-text" });
+		turnEls.set(turn, textEl);
+		if (status) textEl.setText(turn.status);
+		else if (turn.role === "assistant" && turn.text) {
+			const renderedText = linkifyReferenceCitations(linkifyCitations(linkifyWebCitations(turn.text, turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []), turn.citations ?? []), turn.citations ?? []);
+			obsidian.MarkdownRenderer.render(app, renderedText, textEl, "", component).then(() => {
+				wireInternalLinks(textEl, app);
+			});
+		} else textEl.setText(turn.text);
+		if (turn.isClarifying) turnEl.createDiv({
+			cls: "rag-chat-clarifying-hint",
+			text: "Antworte unten, um fortzufahren."
+		});
+		renderManualCitations(turnEl, turn, app);
+		renderWebCitations(turnEl, turn);
+		if (turn.statusLog && turn.statusLog.length > 0) statusLogElements.set(turn, renderStatusLog(turnEl, turn));
+	}
+	messagesEl.scrollTo({ top: messagesEl.scrollHeight });
+	return {
+		turnEls,
+		statusLogElements
+	};
+}
+//#endregion
+//#region src/view/view.ts
 var RAG_CHAT_VIEW_TYPE = "rag-chat-view";
 var RagChatView = class extends obsidian.ItemView {
 	constructor(leaf, plugin) {
 		super(leaf);
-		this.turns = [];
+		this.session = createChatSessionState();
 		this.busy = false;
-		this.turnEls = /* @__PURE__ */ new Map();
-		this.turnLogListEls = /* @__PURE__ */ new Map();
-		this.turnLogSummaryEls = /* @__PURE__ */ new Map();
-		this.pendingAgentState = null;
+		this.rendered = {
+			turnEls: /* @__PURE__ */ new Map(),
+			statusLogElements: /* @__PURE__ */ new Map()
+		};
 		this.plugin = plugin;
 	}
 	getViewType() {
@@ -8901,8 +8791,8 @@ var RagChatView = class extends obsidian.ItemView {
 			cls: "rag-chat-send",
 			text: "Fragen"
 		});
-		this.sendButton.addEventListener("click", () => this.handleSend());
-		this.renderTurns();
+		this.sendButton.addEventListener("click", () => void this.handleSend());
+		this.rerender();
 	}
 	async onClose() {
 		this.contentEl.empty();
@@ -8912,285 +8802,75 @@ var RagChatView = class extends obsidian.ItemView {
 		this.sendButton.disabled = busy;
 		this.sendButton.setText(busy ? "..." : "Fragen");
 	}
-	/** Looks up Vault Search's public search API (see that plugin's onload()),
-	* if the plugin is installed and enabled. Returns null otherwise - the
-	* fuzzy-search tool is best-effort, not a hard dependency. */
-	getFuzzySearchApi() {
-		return (this.app.plugins?.plugins)?.["vault-search"]?.api ?? null;
+	rerender() {
+		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+	}
+	updateTurnStatus(turn) {
+		const el = this.rendered.turnEls.get(turn);
+		if (!el) {
+			this.rerender();
+			return;
+		}
+		if (turn.role === "assistant" && turn.text.length === 0 && turn.status) {
+			el.classList.add("rag-chat-turn-status");
+			el.setText(turn.status);
+			this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight });
+		}
+		const logElements = this.rendered.statusLogElements.get(turn);
+		if (!logElements) {
+			this.rerender();
+			return;
+		}
+		appendStatusLogLine(logElements, turn);
 	}
 	async handleSend() {
 		if (this.busy) return;
 		const message = this.inputEl.value.trim();
 		if (!message) return;
 		this.inputEl.value = "";
-		const isResuming = this.pendingAgentState !== null;
-		const history = [...this.turns];
-		this.turns.push({
-			role: "user",
-			text: message
-		});
-		const assistantTurn = {
-			role: "assistant",
-			text: "",
-			status: isResuming ? "Setze Suche fort …" : "Analysiere Frage …"
-		};
-		this.turns.push(assistantTurn);
-		this.renderTurns();
 		this.setBusy(true);
+		let currentTurn = null;
 		try {
-			await this.answer(message, history, assistantTurn, isResuming);
-		} catch (err) {
-			this.pendingAgentState = null;
-			assistantTurn.status = void 0;
-			assistantTurn.text = `Fehler: ${err instanceof Error ? err.message : String(err)}`;
-			assistantTurn.citations = [];
-			assistantTurn.webCitations = [];
-			assistantTurn.webGroundingChunks = [];
-			assistantTurn.webGroundingSupports = [];
-			new obsidian.Notice(`RAG Chat error: ${err instanceof Error ? err.message : String(err)}`);
-			this.renderTurns();
-		} finally {
-			this.setBusy(false);
-			this.updateInputPlaceholder();
-		}
-	}
-	updateInputPlaceholder() {
-		this.inputEl.placeholder = this.pendingAgentState !== null ? "Antwort auf die Rückfrage …" : "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)";
-	}
-	async answer(message, history, turn, isResuming) {
-		const onStatus = (status) => {
-			turn.status = status;
-			(turn.statusLog ??= []).push(status);
-			this.updateTurnStatus(turn);
-		};
-		let result;
-		if (isResuming && this.pendingAgentState) {
-			const pending = this.pendingAgentState;
-			this.pendingAgentState = null;
-			result = await continueAnswer(pending, message);
-		} else {
-			const { settings } = this.plugin;
-			const manifest = await this.plugin.getManifest();
-			const indices = await getIndices(this.plugin.getPluginDirFullPath(), manifest);
-			const fuzzyApi = this.getFuzzySearchApi();
-			result = await answerQuestion({
-				question: message,
-				history,
-				settings,
+			await sendMessage(this.session, message, {
+				settings: this.plugin.settings,
 				vault: this.app.vault,
-				indices,
-				fuzzyApi,
-				onStatus
-			});
-		}
-		turn.status = void 0;
-		if (result.status === "awaiting_clarification") {
-			this.pendingAgentState = result.pending;
-			turn.text = result.question;
-			turn.isClarifying = true;
-			turn.citations = [];
-			turn.webCitations = [];
-			turn.webGroundingChunks = [];
-			turn.webGroundingSupports = [];
-		} else {
-			turn.text = result.text.trim() || "Ich habe leider keine Antwort erhalten.";
-			turn.isClarifying = false;
-			turn.citations = result.manualCitations;
-			turn.webCitations = result.webCitations;
-			turn.webGroundingChunks = result.webGroundingChunks;
-			turn.webGroundingSupports = result.webGroundingSupports;
-		}
-		this.renderTurns();
-	}
-	/** True while a turn should show its transient `status` label instead of
-	* `text` (i.e. nothing has actually arrived yet). */
-	showsStatus(turn) {
-		return turn.role === "assistant" && turn.text.length === 0 && Boolean(turn.status);
-	}
-	renderTurns() {
-		this.messagesEl.empty();
-		this.turnEls.clear();
-		this.turnLogListEls.clear();
-		this.turnLogSummaryEls.clear();
-		for (const turn of this.turns) {
-			const cls = ["rag-chat-turn", `rag-chat-turn-${turn.role}`];
-			if (turn.isClarifying) cls.push("rag-chat-turn-clarifying");
-			const turnEl = this.messagesEl.createDiv({ cls: cls.join(" ") });
-			const status = this.showsStatus(turn);
-			const textEl = turnEl.createDiv({ cls: status ? "rag-chat-turn-text rag-chat-turn-status" : "rag-chat-turn-text" });
-			this.turnEls.set(turn, textEl);
-			if (status) textEl.setText(turn.status);
-			else if (turn.role === "assistant" && turn.text) {
-				const renderedText = linkifyReferenceCitations(linkifyCitations(linkifyWebCitations(turn.text, turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []), turn.citations ?? []), turn.citations ?? []);
-				obsidian.MarkdownRenderer.render(this.app, renderedText, textEl, "", this).then(() => {
-					this.wireInternalLinks(textEl);
-				});
-			} else textEl.setText(turn.text);
-			if (turn.isClarifying) turnEl.createDiv({
-				cls: "rag-chat-clarifying-hint",
-				text: "Antworte unten, um fortzufahren."
-			});
-			if (turn.citations && turn.citations.length > 0) {
-				const citeEl = turnEl.createDiv({ cls: "rag-chat-citations" });
-				citeEl.createSpan({ text: "Quellen (Handbuch): " });
-				for (const block of turn.citations) {
-					const label = block.seitencode ? `${block.seitencode} (${block.sektion})` : `${block.titel} (${block.sektion})`;
-					citeEl.createEl("a", {
-						cls: "rag-chat-citation-link",
-						text: label
-					}).addEventListener("click", (evt) => {
-						evt.preventDefault();
-						this.app.workspace.openLinkText(block.notePath, "", false);
-					});
+				getIndices: async () => getIndices(this.plugin.getPluginDirFullPath(), await this.plugin.getManifest()),
+				getFuzzyApi: () => getFuzzySearchApi(this.app),
+				onTurnStarted: (turn) => {
+					currentTurn = turn;
+					this.rerender();
+				},
+				onStatus: () => {
+					if (currentTurn) this.updateTurnStatus(currentTurn);
+				},
+				onError: (message) => {
+					new obsidian.Notice(`RAG Chat error: ${message}`);
 				}
-			}
-			if (turn.webCitations && turn.webCitations.length > 0) {
-				const snippets = buildWebCitationSnippets(turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []);
-				const webCiteEl = turnEl.createDiv({ cls: "rag-chat-citations rag-chat-web-citations" });
-				webCiteEl.createSpan({ text: "Quellen (Web): " });
-				for (const web of turn.webCitations) {
-					const row = webCiteEl.createSpan({ cls: "rag-chat-web-citation-row" });
-					row.createEl("a", {
-						cls: "rag-chat-citation-link rag-chat-web-citation-link",
-						text: web.title || web.uri,
-						attr: {
-							href: web.uri,
-							target: "_blank",
-							rel: "noopener"
-						}
-					});
-					const snippet = snippets.get(web.uri);
-					if (snippet) row.createSpan({
-						cls: "rag-chat-web-citation-snippet",
-						text: ` – "${snippet}"`
-					});
-				}
-			}
-			if (turn.statusLog && turn.statusLog.length > 0) this.renderStatusLog(turnEl, turn);
-		}
-		this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight });
-	}
-	/**
-	* Attaches click/hover behavior to every `a.internal-link` rendered by
-	* MarkdownRenderer.render() inside `el` - a real Obsidian gotcha, not a
-	* bug in the rendered HTML: MarkdownRenderer.render() only produces
-	* static `<a class="internal-link">` markup, but Obsidian's automatic
-	* click-to-navigate/hover-to-preview behavior is only wired up for real
-	* MarkdownView/reading-view panes, NOT for custom ItemViews like this
-	* one (confirmed via the Obsidian forum and multiple production plugins
-	* hitting this exact issue - e.g. forum.obsidian.md/t/internal-links-
-	* dont-work-in-custom-view/90169). Without this, rendered wikilinks
-	* (see citation-links.ts) look right but silently do nothing on click.
-	* `<details class="rag-chat-citation-ambiguous">` candidate links (see
-	* linkifyCitations) are plain internal-links too, so they're covered by
-	* this same pass with no extra code.
-	*/
-	wireInternalLinks(el) {
-		const sourcePath = "";
-		el.querySelectorAll("a.internal-link").forEach((a) => {
-			a.addEventListener("click", (evt) => {
-				evt.preventDefault();
-				const href = a.getAttribute("href");
-				if (href) this.app.workspace.openLinkText(href, sourcePath, obsidian.Keymap.isModEvent(evt));
 			});
-			a.addEventListener("mouseover", (evt) => {
-				const href = a.getAttribute("href");
-				if (!href) return;
-				this.app.workspace.trigger("hover-link", {
-					event: evt,
-					source: "preview",
-					hoverParent: { hoverPopover: null },
-					targetEl: a,
-					linktext: href,
-					sourcePath
-				});
-			});
-		});
-	}
-	/** Renders a turn's accumulated status trail (baseline retrieval hit
-	* count, per-round tool calls + outcomes, retry countdowns - see
-	* agent.ts/workflow.ts's onStatus calls) as a collapsed-by-default
-	* <details> block, so it's available to explain *why* a question took
-	* several rounds without cluttering the answer by default. Stays
-	* attached (and reviewable) after the turn finishes, not just while it's
-	* in progress. */
-	renderStatusLog(turnEl, turn) {
-		const log = turn.statusLog;
-		const details = turnEl.createEl("details", { cls: "rag-chat-status-log" });
-		const summary = details.createEl("summary", { text: `Rechercheverlauf (${log.length} Schritte)` });
-		const list = details.createEl("ul", { cls: "rag-chat-status-log-list" });
-		for (const line of log) list.createEl("li", {
-			cls: "rag-chat-status-log-item",
-			text: line
-		});
-		this.turnLogListEls.set(turn, list);
-		this.turnLogSummaryEls.set(turn, summary);
-	}
-	/** Lightweight in-place update for a single turn's transient status label
-	* (fired once per agent-loop round) - avoids rebuilding the whole message
-	* list on every round. Falls back to a full renderTurns() if the turn has
-	* no cached element yet. */
-	updateTurnStatus(turn) {
-		const el = this.turnEls.get(turn);
-		if (!el) {
-			this.renderTurns();
-			return;
+		} finally {
+			this.rerender();
+			this.setBusy(false);
+			this.inputEl.placeholder = inputPlaceholder(this.session);
 		}
-		if (this.showsStatus(turn)) {
-			el.classList.add("rag-chat-turn-status");
-			el.setText(turn.status);
-			this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight });
-		}
-		this.appendStatusLogLine(turn);
-	}
-	/** Appends just the newest statusLog entry to a turn's already-rendered
-	* "Rechercheverlauf" <details> block (see renderStatusLog) - mirrors the
-	* patch-not-rebuild approach above for the status label itself. Falls
-	* back to a full renderTurns() the first time a turn gets a status line
-	* at all (no <details> block exists yet to append into). */
-	appendStatusLogLine(turn) {
-		const log = turn.statusLog;
-		if (!log || log.length === 0) return;
-		const list = this.turnLogListEls.get(turn);
-		const summary = this.turnLogSummaryEls.get(turn);
-		if (!list || !summary) {
-			this.renderTurns();
-			return;
-		}
-		list.createEl("li", {
-			cls: "rag-chat-status-log-item",
-			text: log[log.length - 1]
-		});
-		summary.setText(`Rechercheverlauf (${log.length} Schritte)`);
 	}
 };
 //#endregion
+//#region src/plugin/manifest.ts
+function getPluginDir(manifest) {
+	return manifest.dir ?? `.obsidian/plugins/${manifest.id}`;
+}
+function getPluginDirFullPath(vault, manifest) {
+	const relPath = getPluginDir(manifest);
+	if (vault.adapter instanceof obsidian.FileSystemAdapter) return vault.adapter.getFullPath(relPath);
+	return relPath;
+}
+async function readManifest(vault, pluginDir) {
+	const relPath = `${pluginDir}/rag-manifest.json`;
+	const raw = await vault.adapter.read(relPath);
+	return JSON.parse(raw);
+}
+//#endregion
 //#region src/secure-storage.ts
-/**
-* secure-storage.ts — at-rest encryption for API keys persisted in data.json.
-*
-* Obsidian plugins run entirely in the Electron *renderer* process with no
-* main-process code and no IPC bridge, so Electron's `safeStorage` module
-* (main-process only, see Electron docs) is NOT reachable here. Instead we
-* derive an AES-256 key via scrypt from a machine fingerprint built purely
-* from `node:os` values (no subprocesses, no new dependencies) and use
-* AES-256-GCM for authenticated encryption.
-*
-* This is intentionally machine-bound: moving the vault to different
-* hardware will make decryption fail (by design) - see decryptSecret's
-* thrown error, which callers should catch and treat as "not set".
-*
-* Security note: the `os.*` fingerprint (hostname/platform/arch/cpu
-* model/total memory/homedir) is weaker than a true hardware UUID (e.g.
-* identical VM clones could collide) but matches the actual threat model
-* here - preventing the API key from sitting in plaintext in a file that
-* might get synced/backed up/committed by accident - without the
-* complexity/subprocess risk of shelling out to platform-specific machine-id
-* commands.
-*
-* This module is intentionally pure (no `obsidian` import) so it can be
-* exercised with a plain Node script outside of Obsidian.
-*/
 var ENC_PREFIX = "enc:v1:";
 var KEY_LEN = 32;
 var SALT_LEN = 16;
@@ -9221,10 +8901,6 @@ function getMachineFingerprint() {
 async function deriveKey(salt) {
 	return await scrypt(getMachineFingerprint(), salt, KEY_LEN, SCRYPT_PARAMS);
 }
-/**
-* Encrypts `plain` for at-rest storage. Returns "" for an empty/unset input
-* (never encrypts an empty string) so DEFAULT_SETTINGS round-trips cleanly.
-*/
 async function encryptSecret(plain) {
 	if (!plain) return "";
 	const salt = (0, node_crypto.randomBytes)(SALT_LEN);
@@ -9240,12 +8916,6 @@ async function encryptSecret(plain) {
 		ciphertext
 	]).toString("base64");
 }
-/**
-* Decrypts a value produced by encryptSecret. Throws on any failure
-* (unrecognized format, wrong machine fingerprint, corrupted/tampered data -
-* the GCM auth tag check catches the latter two). Callers should catch and
-* treat the secret as "not set" rather than propagating the error.
-*/
 async function decryptSecret(stored) {
 	if (!stored) return "";
 	if (!stored.startsWith(ENC_PREFIX)) throw new Error("unrecognized secret format");
@@ -9261,9 +8931,6 @@ async function decryptSecret(stored) {
 }
 //#endregion
 //#region src/main.ts
-/** Settings fields that are encrypted at rest (see secure-storage.ts). Kept as
-* plaintext on `this.settings` in memory - only encrypted right before
-* saveData() and decrypted right after loadData(). */
 var ENCRYPTED_FIELDS = [{
 	field: "geminiApiKey",
 	label: "Google API key (GEMINI_API_KEY)"
@@ -9296,22 +8963,14 @@ var RagChatPlugin = class extends obsidian.Plugin {
 	}
 	onunload() {}
 	getPluginDir() {
-		return this.manifest.dir ?? `.obsidian/plugins/${this.manifest.id}`;
+		return getPluginDir(this.manifest);
 	}
-	/** Real filesystem path to the plugin directory (not vault-relative) -
-	* needed for Node's fs-based restoreFromFile/persistToFile (see
-	* orama-schema.ts). isDesktopOnly: true, so the adapter is always a
-	* FileSystemAdapter (never the mobile Capacitor adapter). */
 	getPluginDirFullPath() {
-		const relPath = this.getPluginDir();
-		if (this.app.vault.adapter instanceof obsidian.FileSystemAdapter) return this.app.vault.adapter.getFullPath(relPath);
-		return relPath;
+		return getPluginDirFullPath(this.app.vault, this.manifest);
 	}
 	async getManifest() {
 		if (this.manifestCache) return this.manifestCache;
-		const relPath = `${this.getPluginDir()}/rag-manifest.json`;
-		const raw = await this.app.vault.adapter.read(relPath);
-		this.manifestCache = JSON.parse(raw);
+		this.manifestCache = await readManifest(this.app.vault, this.getPluginDir());
 		return this.manifestCache;
 	}
 	async activateView() {

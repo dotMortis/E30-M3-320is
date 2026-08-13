@@ -1,0 +1,198 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { Vault } from "obsidian";
+import { fakeSettings } from "../fixtures/settings";
+import { TORQUE_BLOCK } from "../fixtures/context-blocks";
+
+const answerQuestion = vi.fn();
+const continueAnswer = vi.fn();
+vi.mock("../../workflow", () => ({ answerQuestion, continueAnswer }));
+
+let createChatSessionState: typeof import("../../view/controller").createChatSessionState;
+let inputPlaceholder: typeof import("../../view/controller").inputPlaceholder;
+let sendMessage: typeof import("../../view/controller").sendMessage;
+
+beforeEach(async () => {
+  vi.clearAllMocks();
+  ({ createChatSessionState, inputPlaceholder, sendMessage } = await import("../../view/controller"));
+});
+
+const baseDeps = {
+  settings: fakeSettings(),
+  vault: {} as unknown as Vault,
+  getIndices: async () => ({ textDb: {}, vectorDbs: [], referenceChunks: new Map() }) as any,
+  getFuzzyApi: () => null,
+};
+
+const DONE_RESULT = {
+  status: "done" as const,
+  text: "Zylinderkopfschrauben: 30 Nm.",
+  manualCitations: [TORQUE_BLOCK],
+  webCitations: [],
+  webGroundingChunks: [],
+  webGroundingSupports: [],
+};
+
+describe("createChatSessionState", () => {
+  it("returns an empty turns array and no pending state", () => {
+    const state = createChatSessionState();
+    expect(state.turns).toEqual([]);
+    expect(state.pendingAgentState).toBeNull();
+  });
+});
+
+describe("inputPlaceholder", () => {
+  it("returns the default placeholder when there is no pending clarification", () => {
+    const state = createChatSessionState();
+    expect(inputPlaceholder(state)).toContain("Frage zum Handbuch stellen");
+  });
+
+  it("returns the clarification-reply placeholder while awaiting an answer", () => {
+    const state = createChatSessionState();
+    state.pendingAgentState = { state: {}, ctx: {} } as any;
+    expect(inputPlaceholder(state)).toBe("Antwort auf die Rückfrage …");
+  });
+});
+
+describe("sendMessage", () => {
+  it("pushes a user turn followed by an assistant turn with an initial status", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    await sendMessage(state, "Anzugsdrehmoment?", baseDeps);
+    expect(state.turns[0]).toEqual({ role: "user", text: "Anzugsdrehmoment?" });
+    expect(state.turns[1].role).toBe("assistant");
+  });
+
+  it("calls onTurnStarted synchronously with the new assistant turn before the workflow resolves", async () => {
+    let resolveAnswer!: (v: typeof DONE_RESULT) => void;
+    answerQuestion.mockReturnValue(new Promise((resolve) => (resolveAnswer = resolve)));
+    const state = createChatSessionState();
+    const onTurnStarted = vi.fn();
+
+    const promise = sendMessage(state, "Frage?", { ...baseDeps, onTurnStarted });
+    expect(onTurnStarted).toHaveBeenCalledTimes(1);
+    expect(onTurnStarted.mock.calls[0][0]).toBe(state.turns[1]);
+
+    resolveAnswer(DONE_RESULT);
+    await promise;
+  });
+
+  it("passes history snapshotted BEFORE the new turns were pushed", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    state.turns.push({ role: "user", text: "Erste Frage" }, { role: "assistant", text: "Erste Antwort" });
+    await sendMessage(state, "Zweite Frage", baseDeps);
+    expect(answerQuestion).toHaveBeenCalledWith(
+      expect.objectContaining({
+        question: "Zweite Frage",
+        history: [{ role: "user", text: "Erste Frage" }, { role: "assistant", text: "Erste Antwort" }],
+      })
+    );
+  });
+
+  it("applies a 'done' result to the assistant turn", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    await sendMessage(state, "Frage?", baseDeps);
+    const turn = state.turns[1];
+    expect(turn.text).toBe(DONE_RESULT.text);
+    expect(turn.citations).toEqual([TORQUE_BLOCK]);
+    expect(turn.isClarifying).toBe(false);
+    expect(turn.status).toBeUndefined();
+  });
+
+  it("falls back to a default message when the final text is empty", async () => {
+    answerQuestion.mockResolvedValue({ ...DONE_RESULT, text: "   " });
+    const state = createChatSessionState();
+    await sendMessage(state, "Frage?", baseDeps);
+    expect(state.turns[1].text).toBe("Ich habe leider keine Antwort erhalten.");
+  });
+
+  it("applies an 'awaiting_clarification' result: sets isClarifying, question text, and pendingAgentState", async () => {
+    const pending = { state: {}, ctx: {} } as any;
+    answerQuestion.mockResolvedValue({ status: "awaiting_clarification", question: "Welches Baujahr?", pending });
+    const state = createChatSessionState();
+    await sendMessage(state, "Frage?", baseDeps);
+    const turn = state.turns[1];
+    expect(turn.isClarifying).toBe(true);
+    expect(turn.text).toBe("Welches Baujahr?");
+    expect(turn.citations).toEqual([]);
+    expect(state.pendingAgentState).toBe(pending);
+  });
+
+  it("uses continueAnswer instead of answerQuestion when a pending clarification exists", async () => {
+    const pending = { state: {}, ctx: {} } as any;
+    continueAnswer.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    state.pendingAgentState = pending;
+
+    await sendMessage(state, "1988", baseDeps);
+
+    expect(continueAnswer).toHaveBeenCalledWith(pending, "1988");
+    expect(answerQuestion).not.toHaveBeenCalled();
+    expect(state.pendingAgentState).toBeNull();
+  });
+
+  it("never calls getIndices/getFuzzyApi while resuming a paused clarification (index loading is skipped entirely)", async () => {
+    continueAnswer.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    state.pendingAgentState = { state: {}, ctx: {} } as any;
+    const getIndices = vi.fn(baseDeps.getIndices);
+    const getFuzzyApi = vi.fn(baseDeps.getFuzzyApi);
+
+    await sendMessage(state, "1988", { ...baseDeps, getIndices, getFuzzyApi });
+
+    expect(getIndices).not.toHaveBeenCalled();
+    expect(getFuzzyApi).not.toHaveBeenCalled();
+  });
+
+  it("uses the 'resuming' initial status label when a pending clarification exists", async () => {
+    continueAnswer.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    state.pendingAgentState = { state: {}, ctx: {} } as any;
+    let statusAtStart: string | undefined;
+    const onTurnStarted = vi.fn((turn) => {
+      statusAtStart = turn.status;
+    });
+    await sendMessage(state, "1988", { ...baseDeps, onTurnStarted });
+    expect(statusAtStart).toBe("Setze Suche fort …");
+  });
+
+  it("records onStatus calls into the assistant turn's statusLog and forwards them to deps.onStatus", async () => {
+    answerQuestion.mockImplementation(async ({ onStatus }: { onStatus?: (s: string) => void }) => {
+      onStatus?.("Durchsuche Handbuch …");
+      onStatus?.("Basis-Suche: 3 Seite(n) gefunden");
+      return DONE_RESULT;
+    });
+    const state = createChatSessionState();
+    const onStatus = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onStatus });
+    expect(state.turns[1].statusLog).toEqual(["Durchsuche Handbuch …", "Basis-Suche: 3 Seite(n) gefunden"]);
+    expect(onStatus).toHaveBeenCalledWith("Durchsuche Handbuch …");
+    expect(onStatus).toHaveBeenCalledWith("Basis-Suche: 3 Seite(n) gefunden");
+  });
+
+  it("sets an error message on the turn and calls onError when the workflow throws", async () => {
+    answerQuestion.mockRejectedValue(new Error("Google API key is required"));
+    const state = createChatSessionState();
+    const onError = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onError });
+    expect(state.turns[1].text).toBe("Fehler: Google API key is required");
+    expect(state.turns[1].citations).toEqual([]);
+    expect(onError).toHaveBeenCalledWith("Google API key is required");
+  });
+
+  it("clears pendingAgentState when the workflow throws, even while resuming", async () => {
+    continueAnswer.mockRejectedValue(new Error("boom"));
+    const state = createChatSessionState();
+    state.pendingAgentState = { state: {}, ctx: {} } as any;
+    await sendMessage(state, "1988", baseDeps);
+    expect(state.pendingAgentState).toBeNull();
+  });
+
+  it("stringifies a non-Error throw value", async () => {
+    answerQuestion.mockRejectedValue("plain string failure");
+    const state = createChatSessionState();
+    await sendMessage(state, "Frage?", baseDeps);
+    expect(state.turns[1].text).toBe("Fehler: plain string failure");
+  });
+});
