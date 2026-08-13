@@ -1,0 +1,15 @@
+{
+  "name": "rag-index-build",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Builds the committed Orama index from chunks.json (Phase 3 of .pipeline/rag/PLAN.md).",
+  "type": "module",
+  "scripts": {
+    "build": "node build_orama.mjs"
+  },
+  "dependencies": {
+    "@orama/orama": "^3.1.18",
+    "@orama/plugin-data-persistence": "^3.1.18",
+    "@orama/stemmers": "^3.1.18"
+  }
+}

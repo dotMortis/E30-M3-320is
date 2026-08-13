@@ -76,7 +76,40 @@ treffsicherer als die Standardsuche.
 > oder die Befehlspalette (**`Strg`+`P`** → „*Suche: In allen Dateien suchen*“).
 > Mit **`Strg`+`O`** springst du wie gewohnt über Titel oder BMW‑Code zu einer Seite.
 
-## 5. Zoom / Lupe für die Scans
+## 5. RAG‑Chat (KI‑gestützte Fragen)
+
+Zusätzlich zur Volltextsuche gibt es einen **KI‑Chat** (Plugin *RAG Chat*), der Fragen in
+normaler Sprache beantwortet und dabei **immer die genaue Handbuchseite zitiert** — z. B.
+„Anzugsdrehmoment Zylinderkopf?“ oder „welches Spezialwerkzeug für den
+Radialwellendichtring?“. Die Antwort stützt sich **ausschließlich** auf den Handbuchinhalt;
+fehlt eine Angabe im Handbuch, sagt der Chat das ausdrücklich, statt zu raten.
+
+- **Offline‑first:** Der Such‑Index (`rag-index.orama.msp`, im Plugin‑Ordner) ist bereits
+  fertig gebaut und im Repository enthalten — kein separater Build‑Schritt nötig, um den Chat
+  zu nutzen.
+- **Öffnen:** Symbol in der linken Randleiste, oder Befehlspalette (**`Strg`+`P`**) →
+  „*RAG: Frage stellen*“.
+- **API‑Schlüssel erforderlich** (unter Einstellungen → RAG Chat einzutragen):
+  - **Google‑Schlüssel** (`GEMINI_API_KEY`) — **zwingend nötig**, wird für die Frage‑Embeddings
+    verwendet (Zen bietet kein Embedding‑Modell an).
+  - **Zen‑Schlüssel** (`OPENCODE_API_KEY`) — für die eigentliche Antwortgenerierung, per
+    Voreinstellung aktiv (auf Google umschaltbar in den Einstellungen).
+  - Beide Schlüssel bleiben **lokal** in den Obsidian‑Einstellungen (`data.json`) dieses
+    Tresors gespeichert, niemals im Repository.
+- **Index neu bauen** (nur nötig, wenn sich Notizen/Scans ändern): im Ordner `.pipeline/rag/`
+  — Voraussetzung: `uv` (Python) und `node`/`npm` sind installiert, sowie eine `.env`‑Datei im
+  Projekt‑Root mit `GEMINI_API_KEY=...` und `OPENCODE_API_KEY=...`.
+  ```
+  cd .pipeline/rag
+  uv venv && uv pip install -r requirements.txt
+  .venv/bin/python3 build_rag_index.py --pilot 20   # Kostencheck (paar Cent) vor dem Vollbau
+  .venv/bin/python3 build_rag_index.py              # Vollbau (~$0.35-0.40, einmalig)
+  cd build && npm install && node build_orama.mjs   # baut den Index im Plugin-Ordner
+  ```
+  Die einmaligen Embedding‑Kosten trägt der Google‑Schlüssel (Cent‑Bereich); die
+  Chat‑Nutzung danach läuft über den Zen‑Schlüssel.
+
+## 6. Zoom / Lupe für die Scans
 
 - **Einfachster Weg:** im Lesemodus auf ein Bild klicken — Obsidian zeigt es vergrößert.
 - **Komfortabler Zoom (empfohlen):** Das Plugin **Image Toolkit** ist vorkonfiguriert. Aktivierung:
@@ -85,7 +118,7 @@ treffsicherer als die Standardsuche.
   3. **Durchsuchen** → **„Image Toolkit“** → **Installieren** → **Aktivieren**.
   4. Fertig — ein Klick auf ein Bild öffnet den Zoom‑Betrachter (Ziehen zum Verschieben, Mausrad zum Zoomen).
 
-## 6. Tipps
+## 7. Tipps
 
 - Der Tresor ist **eigenständig**: Scans und Notizen liegen zusammen in den Abschnittsordnern.
   Du kannst den **ganzen Projektordner** kopieren oder auf einen USB‑Stick ziehen — es funktioniert überall.

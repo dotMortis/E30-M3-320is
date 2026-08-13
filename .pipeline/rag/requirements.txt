@@ -1,0 +1,7 @@
+# Offline RAG indexer dependencies (dev-time only; nothing here ships in the Obsidian plugin).
+# Install with: uv pip install -r requirements.txt   (inside .pipeline/rag/.venv)
+
+google-genai>=0.5.0       # gemini-embedding-2 client (Google key, embeddings only)
+python-frontmatter>=1.1.0 # parse note YAML frontmatter + body
+tiktoken>=0.8.0           # token-aware chunking; falls back to chars/4 heuristic if unavailable
+requests>=2.32.0          # Zen generation smoke test (test_generate.py) + HTTP fallbacks

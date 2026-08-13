@@ -3,5 +3,6 @@
   "auto-reveal-active-file",
   "show-local-graph",
   "vault-search",
-  "websearch"
+  "websearch",
+  "rag-chat"
 ]

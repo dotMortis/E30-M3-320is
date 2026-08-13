@@ -10,6 +10,21 @@ __pycache__/
 *.pyc
 .venv/
 
+# RAG indexer build artifacts (resumable embedding cache; regenerable, never shipped)
+.pipeline/rag/embeddings-cache/
+.pipeline/rag/.venv/
+# Large intermediate JSON (raw float vectors, ~100MB+); regenerable from embeddings-cache/ +
+# chunk.py; the actually-shipped artifact is the compact Orama binary under the plugin dir.
+# (build_orama.mjs/orama_schema.mjs/orama_search.mjs, package.json, package-lock.json ARE
+# tracked - only the generated data files below are excluded.)
+.pipeline/rag/build/chunks.json
+.pipeline/rag/build/pre_embed.json
+.pipeline/rag/build/node_modules/
+
+# RAG plugin build tooling (node deps + local Obsidian settings/keys; never shipped)
+.obsidian/plugins/rag-chat/node_modules/
+.obsidian/plugins/rag-chat/data.json
+
 # Obsidian per-user state (keep the pre-configured settings, ignore local state)
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json

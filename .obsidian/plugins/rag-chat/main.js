@@ -1,0 +1,8136 @@
+//#region \0rolldown/runtime.js
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod), cb = null), mod.exports);
+var __copyProps = (to, from, except, desc) => {
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
+	}
+	return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
+	value: mod,
+	enumerable: true
+}) : target, mod));
+//#endregion
+let obsidian = require("obsidian");
+let node_https = require("node:https");
+node_https = __toESM(node_https, 1);
+//#region src/settings.ts
+var DEFAULT_SETTINGS = {
+	opencodeApiKey: "",
+	geminiApiKey: "",
+	genProvider: "zen",
+	embeddingModel: "gemini-embedding-2",
+	generationModel: "gemini-3.6-flash",
+	outputDim: 768,
+	topK: 8,
+	similarity: .75
+};
+var RagChatSettingTab = class extends obsidian.PluginSettingTab {
+	constructor(app, plugin) {
+		super(app, plugin);
+		this.plugin = plugin;
+	}
+	display() {
+		this.containerEl.empty();
+		const { containerEl } = this;
+		containerEl.createEl("h2", { text: "RAG Chat" });
+		containerEl.createEl("p", { text: "Embeddings always use Google (gemini-embedding-2) - Zen has no embedding model. Generation defaults to Zen (gemini-3.6-flash) and is switchable to Google below." });
+		new obsidian.Setting(containerEl).setName("Google API key (GEMINI_API_KEY)").setDesc("Required for query embeddings. Also used for generation if the provider below is set to Google.").addText((text) => text.setPlaceholder("AIza...").setValue(this.plugin.settings.geminiApiKey).onChange(async (value) => {
+			this.plugin.settings.geminiApiKey = value.trim();
+			await this.plugin.saveSettings();
+		}));
+		new obsidian.Setting(containerEl).setName("OpenCode Zen API key (OPENCODE_API_KEY)").setDesc("Used for generation when the provider below is set to Zen (the default).").addText((text) => text.setPlaceholder("sk-...").setValue(this.plugin.settings.opencodeApiKey).onChange(async (value) => {
+			this.plugin.settings.opencodeApiKey = value.trim();
+			await this.plugin.saveSettings();
+		}));
+		new obsidian.Setting(containerEl).setName("Generation provider").setDesc("Zen keeps the Google generation budget untouched; embeddings always go to Google regardless of this toggle.").addDropdown((dropdown) => dropdown.addOption("zen", "Zen (opencode.ai)").addOption("google", "Google").setValue(this.plugin.settings.genProvider).onChange(async (value) => {
+			this.plugin.settings.genProvider = value;
+			await this.plugin.saveSettings();
+		}));
+		new obsidian.Setting(containerEl).setName("Embedding model").setDesc("Must match the model the index was built with (see rag-manifest.json). Google-only.").addText((text) => text.setValue(this.plugin.settings.embeddingModel).onChange(async (value) => {
+			this.plugin.settings.embeddingModel = value.trim();
+			await this.plugin.saveSettings();
+		}));
+		new obsidian.Setting(containerEl).setName("Generation model").addText((text) => text.setValue(this.plugin.settings.generationModel).onChange(async (value) => {
+			this.plugin.settings.generationModel = value.trim();
+			await this.plugin.saveSettings();
+		}));
+		new obsidian.Setting(containerEl).setName("Output dimensions").setDesc("Must match rag-manifest.json's embeddingDims (768 for the shipped index) - not the 3072 build-time cache dims.").addText((text) => text.setValue(String(this.plugin.settings.outputDim)).onChange(async (value) => {
+			const n = parseInt(value, 10);
+			if (!Number.isNaN(n) && n > 0) {
+				this.plugin.settings.outputDim = n;
+				await this.plugin.saveSettings();
+			}
+		}));
+		new obsidian.Setting(containerEl).setName("Top K").setDesc("Number of retrieval hits to consider (before parent-note dedup).").addText((text) => text.setValue(String(this.plugin.settings.topK)).onChange(async (value) => {
+			const n = parseInt(value, 10);
+			if (!Number.isNaN(n) && n > 0) {
+				this.plugin.settings.topK = n;
+				await this.plugin.saveSettings();
+			}
+		}));
+		new obsidian.Setting(containerEl).setName("Similarity threshold").setDesc("Minimum vector similarity for hybrid/vector search (0-1).").addText((text) => text.setValue(String(this.plugin.settings.similarity)).onChange(async (value) => {
+			const n = parseFloat(value);
+			if (!Number.isNaN(n) && n >= 0 && n <= 1) {
+				this.plugin.settings.similarity = n;
+				await this.plugin.saveSettings();
+			}
+		}));
+	}
+};
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/tokenizer/languages.js
+var STEMMERS = {
+	arabic: "ar",
+	armenian: "am",
+	bulgarian: "bg",
+	czech: "cz",
+	danish: "dk",
+	dutch: "nl",
+	english: "en",
+	finnish: "fi",
+	french: "fr",
+	german: "de",
+	greek: "gr",
+	hungarian: "hu",
+	indian: "in",
+	indonesian: "id",
+	irish: "ie",
+	italian: "it",
+	lithuanian: "lt",
+	nepali: "np",
+	norwegian: "no",
+	portuguese: "pt",
+	romanian: "ro",
+	russian: "ru",
+	serbian: "rs",
+	slovenian: "ru",
+	spanish: "es",
+	swedish: "se",
+	tamil: "ta",
+	turkish: "tr",
+	ukrainian: "uk",
+	sanskrit: "sk"
+};
+var SPLITTERS = {
+	dutch: /[^A-Za-zàèéìòóù0-9_'-]+/gim,
+	english: /[^A-Za-zàèéìòóù0-9_'-]+/gim,
+	french: /[^a-z0-9äâàéèëêïîöôùüûœç-]+/gim,
+	italian: /[^A-Za-zàèéìòóù0-9_'-]+/gim,
+	norwegian: /[^a-z0-9_æøåÆØÅäÄöÖüÜ]+/gim,
+	portuguese: /[^a-z0-9à-úÀ-Ú]/gim,
+	russian: /[^a-z0-9а-яА-ЯёЁ]+/gim,
+	spanish: /[^a-z0-9A-Zá-úÁ-ÚñÑüÜ]+/gim,
+	swedish: /[^a-z0-9_åÅäÄöÖüÜ-]+/gim,
+	german: /[^a-z0-9A-ZäöüÄÖÜß]+/gim,
+	finnish: /[^a-z0-9äöÄÖ]+/gim,
+	danish: /[^a-z0-9æøåÆØÅ]+/gim,
+	hungarian: /[^a-z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ]+/gim,
+	romanian: /[^a-z0-9ăâîșțĂÂÎȘȚ]+/gim,
+	serbian: /[^a-z0-9čćžšđČĆŽŠĐ]+/gim,
+	turkish: /[^a-z0-9çÇğĞıİöÖşŞüÜ]+/gim,
+	lithuanian: /[^a-z0-9ąčęėįšųūžĄČĘĖĮŠŲŪŽ]+/gim,
+	arabic: /[^a-z0-9أ-ي]+/gim,
+	nepali: /[^a-z0-9अ-ह]+/gim,
+	irish: /[^a-z0-9áéíóúÁÉÍÓÚ]+/gim,
+	indian: /[^a-z0-9अ-ह]+/gim,
+	armenian: /[^a-z0-9ա-ֆ]+/gim,
+	greek: /[^a-z0-9α-ωά-ώ]+/gim,
+	indonesian: /[^a-z0-9]+/gim,
+	ukrainian: /[^a-z0-9а-яА-ЯіїєІЇЄ]+/gim,
+	slovenian: /[^a-z0-9čžšČŽŠ]+/gim,
+	bulgarian: /[^a-z0-9а-яА-Я]+/gim,
+	tamil: /[^a-z0-9அ-ஹ]+/gim,
+	sanskrit: /[^a-z0-9A-Zāīūṛḷṃṁḥśṣṭḍṇṅñḻḹṝ]+/gim,
+	czech: /[^A-Z0-9a-zěščřžýáíéúůóťďĚŠČŘŽÝÁÍÉÓÚŮŤĎ-]+/gim
+};
+var SUPPORTED_LANGUAGES = Object.keys(STEMMERS);
+function getLocale(language) {
+	return language !== void 0 && SUPPORTED_LANGUAGES.includes(language) ? STEMMERS[language] : void 0;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/utils.js
+var baseId = Date.now().toString().slice(5);
+var lastId = 0;
+var nano = BigInt(1e3);
+var milli = BigInt(1e6);
+var second = BigInt(1e9);
+/**
+* This value can be increased up to 100_000
+* But i don't know if this value change from nodejs to nodejs
+* So I will keep a safer value here.
+*/
+var MAX_ARGUMENT_FOR_STACK = 65535;
+/**
+* This method is needed to used because of issues like: https://github.com/oramasearch/orama/issues/301
+* that issue is caused because the array that is pushed is huge (>100k)
+*
+* @example
+* ```ts
+* safeArrayPush(myArray, [1, 2])
+* ```
+*/
+function safeArrayPush(arr, newArr) {
+	if (newArr.length < 65535) Array.prototype.push.apply(arr, newArr);
+	else {
+		const newArrLength = newArr.length;
+		for (let i = 0; i < newArrLength; i += MAX_ARGUMENT_FOR_STACK) Array.prototype.push.apply(arr, newArr.slice(i, i + MAX_ARGUMENT_FOR_STACK));
+	}
+}
+function sprintf(template, ...args) {
+	return template.replace(/%(?:(?<position>\d+)\$)?(?<width>-?\d*\.?\d*)(?<type>[dfs])/g, function(...replaceArgs) {
+		const { width: rawWidth, type, position } = replaceArgs[replaceArgs.length - 1];
+		const replacement = position ? args[Number.parseInt(position) - 1] : args.shift();
+		const width = rawWidth === "" ? 0 : Number.parseInt(rawWidth);
+		switch (type) {
+			case "d": return replacement.toString().padStart(width, "0");
+			case "f": {
+				let value = replacement;
+				const [padding, precision] = rawWidth.split(".").map((w) => Number.parseFloat(w));
+				if (typeof precision === "number" && precision >= 0) value = value.toFixed(precision);
+				return typeof padding === "number" && padding >= 0 ? value.toString().padStart(width, "0") : value.toString();
+			}
+			case "s": return width < 0 ? replacement.toString().padEnd(-width, " ") : replacement.toString().padStart(width, " ");
+			default: return replacement;
+		}
+	});
+}
+function isInsideWebWorker() {
+	return typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+}
+function isInsideNode() {
+	return typeof process !== "undefined" && process.release && process.release.name === "node";
+}
+function getNanosecondTimeViaPerformance() {
+	return BigInt(Math.floor(performance.now() * 1e6));
+}
+function formatNanoseconds(value) {
+	if (typeof value === "number") value = BigInt(value);
+	if (value < nano) return `${value}ns`;
+	else if (value < milli) return `${value / nano}μs`;
+	else if (value < second) return `${value / milli}ms`;
+	return `${value / second}s`;
+}
+function getNanosecondsTime() {
+	if (isInsideWebWorker()) return getNanosecondTimeViaPerformance();
+	if (isInsideNode()) return process.hrtime.bigint();
+	if (typeof process !== "undefined" && typeof process?.hrtime?.bigint === "function") return process.hrtime.bigint();
+	if (typeof performance !== "undefined") return getNanosecondTimeViaPerformance();
+	return BigInt(0);
+}
+function uniqueId() {
+	return `${baseId}-${lastId++}`;
+}
+function getOwnProperty(object, property) {
+	if (Object.hasOwn === void 0) return Object.prototype.hasOwnProperty.call(object, property) ? object[property] : void 0;
+	return Object.hasOwn(object, property) ? object[property] : void 0;
+}
+function sortTokenScorePredicate(a, b) {
+	if (b[1] === a[1]) return a[0] - b[0];
+	return b[1] - a[1];
+}
+function intersect(arrays) {
+	if (arrays.length === 0) return [];
+	else if (arrays.length === 1) return arrays[0];
+	for (let i = 1; i < arrays.length; i++) if (arrays[i].length < arrays[0].length) {
+		const tmp = arrays[0];
+		arrays[0] = arrays[i];
+		arrays[i] = tmp;
+	}
+	const set = /* @__PURE__ */ new Map();
+	for (const elem of arrays[0]) set.set(elem, 1);
+	for (let i = 1; i < arrays.length; i++) {
+		let found = 0;
+		for (const elem of arrays[i]) {
+			const count = set.get(elem);
+			if (count === i) {
+				set.set(elem, count + 1);
+				found++;
+			}
+		}
+		if (found === 0) return [];
+	}
+	return arrays[0].filter((e) => {
+		const count = set.get(e);
+		if (count !== void 0) set.set(e, 0);
+		return count === arrays.length;
+	});
+}
+function getDocumentProperties(doc, paths) {
+	const properties = {};
+	const pathsLength = paths.length;
+	for (let i = 0; i < pathsLength; i++) {
+		const path = paths[i];
+		const pathTokens = path.split(".");
+		let current = doc;
+		const pathTokensLength = pathTokens.length;
+		for (let j = 0; j < pathTokensLength; j++) {
+			current = current[pathTokens[j]];
+			if (typeof current === "object") {
+				if (current !== null && "lat" in current && "lon" in current && typeof current.lat === "number" && typeof current.lon === "number") {
+					current = properties[path] = current;
+					break;
+				} else if (!Array.isArray(current) && current !== null && j === pathTokensLength - 1) {
+					current = void 0;
+					break;
+				}
+			} else if ((current === null || typeof current !== "object") && j < pathTokensLength - 1) {
+				current = void 0;
+				break;
+			}
+		}
+		if (typeof current !== "undefined") properties[path] = current;
+	}
+	return properties;
+}
+function getNested(obj, path) {
+	return getDocumentProperties(obj, [path])[path];
+}
+var mapDistanceToMeters = {
+	cm: .01,
+	m: 1,
+	km: 1e3,
+	ft: .3048,
+	yd: .9144,
+	mi: 1609.344
+};
+function convertDistanceToMeters(distance, unit) {
+	const ratio = mapDistanceToMeters[unit];
+	if (ratio === void 0) throw new Error(createError("INVALID_DISTANCE_SUFFIX", distance).message);
+	return distance * ratio;
+}
+function removeVectorsFromHits(searchResult, vectorProperties) {
+	searchResult.hits = searchResult.hits.map((result) => ({
+		...result,
+		document: {
+			...result.document,
+			...vectorProperties.reduce((acc, prop) => {
+				const path = prop.split(".");
+				const lastKey = path.pop();
+				let obj = acc;
+				for (const key of path) {
+					obj[key] = obj[key] ?? {};
+					obj = obj[key];
+				}
+				obj[lastKey] = null;
+				return acc;
+			}, result.document)
+		}
+	}));
+}
+/**
+* Checks if the provided input is an async function or if the input is an array
+* containing at least one async function.
+*
+* @param func - A single function or an array of functions to check.
+*               Non-function values are ignored.
+* @returns `true` if the input is an async function or an array containing at least
+*          one async function, otherwise `false`.
+*/
+function isAsyncFunction(func) {
+	if (Array.isArray(func)) return func.some((item) => isAsyncFunction(item));
+	return func?.constructor?.name === "AsyncFunction";
+}
+var withIntersection = "intersection" in /* @__PURE__ */ new Set();
+function setIntersection(...sets) {
+	if (sets.length === 0) return /* @__PURE__ */ new Set();
+	if (sets.length === 1) return sets[0];
+	if (sets.length === 2) {
+		const set1 = sets[0];
+		const set2 = sets[1];
+		if (withIntersection) return set1.intersection(set2);
+		const result = /* @__PURE__ */ new Set();
+		const base = set1.size < set2.size ? set1 : set2;
+		const other = base === set1 ? set2 : set1;
+		for (const value of base) if (other.has(value)) result.add(value);
+		return result;
+	}
+	const min = {
+		index: 0,
+		size: sets[0].size
+	};
+	for (let i = 1; i < sets.length; i++) if (sets[i].size < min.size) {
+		min.index = i;
+		min.size = sets[i].size;
+	}
+	if (withIntersection) {
+		let base = sets[min.index];
+		for (let i = 0; i < sets.length; i++) {
+			if (i === min.index) continue;
+			base = base.intersection(sets[i]);
+		}
+		return base;
+	}
+	const base = sets[min.index];
+	for (let i = 0; i < sets.length; i++) {
+		if (i === min.index) continue;
+		const other = sets[i];
+		for (const value of base) if (!other.has(value)) base.delete(value);
+	}
+	return base;
+}
+var withUnion = "union" in /* @__PURE__ */ new Set();
+function setUnion(set1, set2) {
+	if (withUnion) {
+		if (set1) return set1.union(set2);
+		return set2;
+	}
+	if (!set1) return new Set(set2);
+	return /* @__PURE__ */ new Set([...set1, ...set2]);
+}
+function setDifference(set1, set2) {
+	const result = /* @__PURE__ */ new Set();
+	for (const value of set1) if (!set2.has(value)) result.add(value);
+	return result;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/errors.js
+var errors = {
+	NO_LANGUAGE_WITH_CUSTOM_TOKENIZER: "Do not pass the language option to create when using a custom tokenizer.",
+	LANGUAGE_NOT_SUPPORTED: `Language "%s" is not supported.\nSupported languages are:\n - ${SUPPORTED_LANGUAGES.join("\n - ")}`,
+	INVALID_STEMMER_FUNCTION_TYPE: `config.stemmer property must be a function.`,
+	MISSING_STEMMER: `As of version 1.0.0 @orama/orama does not ship non English stemmers by default. To solve this, please explicitly import and specify the "%s" stemmer from the package @orama/stemmers. See https://docs.orama.com/docs/orama-js/text-analysis/stemming for more information.`,
+	CUSTOM_STOP_WORDS_MUST_BE_FUNCTION_OR_ARRAY: "Custom stop words array must only contain strings.",
+	UNSUPPORTED_COMPONENT: `Unsupported component "%s".`,
+	COMPONENT_MUST_BE_FUNCTION: `The component "%s" must be a function.`,
+	COMPONENT_MUST_BE_FUNCTION_OR_ARRAY_FUNCTIONS: `The component "%s" must be a function or an array of functions.`,
+	INVALID_SCHEMA_TYPE: `Unsupported schema type "%s" at "%s". Expected "string", "boolean" or "number" or array of them.`,
+	DOCUMENT_ID_MUST_BE_STRING: `Document id must be of type "string". Got "%s" instead.`,
+	DOCUMENT_ALREADY_EXISTS: `A document with id "%s" already exists.`,
+	DOCUMENT_DOES_NOT_EXIST: `A document with id "%s" does not exists.`,
+	MISSING_DOCUMENT_PROPERTY: `Missing searchable property "%s".`,
+	INVALID_DOCUMENT_PROPERTY: `Invalid document property "%s": expected "%s", got "%s"`,
+	UNKNOWN_INDEX: `Invalid property name "%s". Expected a wildcard string ("*") or array containing one of the following properties: %s`,
+	INVALID_BOOST_VALUE: `Boost value must be a number greater than, or less than 0.`,
+	INVALID_FILTER_OPERATION: `You can only use one operation per filter, you requested %d.`,
+	SCHEMA_VALIDATION_FAILURE: `Cannot insert document due schema validation failure on "%s" property.`,
+	INVALID_SORT_SCHEMA_TYPE: `Unsupported sort schema type "%s" at "%s". Expected "string" or "number".`,
+	CANNOT_SORT_BY_ARRAY: `Cannot configure sort for "%s" because it is an array (%s).`,
+	UNABLE_TO_SORT_ON_UNKNOWN_FIELD: `Unable to sort on unknown field "%s". Allowed fields: %s`,
+	SORT_DISABLED: `Sort is disabled. Please read the documentation at https://docs.orama.com/docs/orama-js for more information.`,
+	UNKNOWN_GROUP_BY_PROPERTY: `Unknown groupBy property "%s".`,
+	INVALID_GROUP_BY_PROPERTY: `Invalid groupBy property "%s". Allowed types: "%s", but given "%s".`,
+	UNKNOWN_FILTER_PROPERTY: `Unknown filter property "%s".`,
+	UNKNOWN_VECTOR_PROPERTY: `Unknown vector property "%s". Make sure the property exists in the schema and is configured as a vector.`,
+	INVALID_VECTOR_SIZE: `Vector size must be a number greater than 0. Got "%s" instead.`,
+	INVALID_VECTOR_VALUE: `Vector value must be a number greater than 0. Got "%s" instead.`,
+	INVALID_INPUT_VECTOR: `Property "%s" was declared as a %s-dimensional vector, but got a %s-dimensional vector instead.\nInput vectors must be of the size declared in the schema, as calculating similarity between vectors of different sizes can lead to unexpected results.`,
+	WRONG_SEARCH_PROPERTY_TYPE: `Property "%s" is not searchable. Only "string" properties are searchable.`,
+	FACET_NOT_SUPPORTED: `Facet doens't support the type "%s".`,
+	INVALID_DISTANCE_SUFFIX: `Invalid distance suffix "%s". Valid suffixes are: cm, m, km, mi, yd, ft.`,
+	INVALID_SEARCH_MODE: `Invalid search mode "%s". Valid modes are: "fulltext", "vector", "hybrid".`,
+	MISSING_VECTOR_AND_SECURE_PROXY: `No vector was provided and no secure proxy was configured. Please provide a vector or configure an Orama Secure Proxy to perform hybrid search.`,
+	MISSING_TERM: `"term" is a required parameter when performing hybrid search. Please provide a search term.`,
+	INVALID_VECTOR_INPUT: `Invalid "vector" property. Expected an object with "value" and "property" properties, but got "%s" instead.`,
+	PLUGIN_CRASHED: `A plugin crashed during initialization. Please check the error message for more information:`,
+	PLUGIN_SECURE_PROXY_NOT_FOUND: `Could not find '@orama/secure-proxy-plugin' installed in your Orama instance.\nPlease install it before proceeding with creating an answer session.\nRead more at https://docs.orama.com/docs/orama-js/plugins/plugin-secure-proxy#plugin-secure-proxy\n`,
+	PLUGIN_SECURE_PROXY_MISSING_CHAT_MODEL: `Could not find a chat model defined in the secure proxy plugin configuration.\nPlease provide a chat model before proceeding with creating an answer session.\nRead more at https://docs.orama.com/docs/orama-js/plugins/plugin-secure-proxy#plugin-secure-proxy\n`,
+	ANSWER_SESSION_LAST_MESSAGE_IS_NOT_ASSISTANT: `The last message in the session is not an assistant message. Cannot regenerate non-assistant messages.`,
+	PLUGIN_COMPONENT_CONFLICT: `The component "%s" is already defined. The plugin "%s" is trying to redefine it.`
+};
+function createError(code, ...args) {
+	const error = new Error(sprintf(errors[code] ?? `Unsupported Orama Error code: ${code}`, ...args));
+	error.code = code;
+	if ("captureStackTrace" in Error.prototype) Error.captureStackTrace(error);
+	return error;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/defaults.js
+function formatElapsedTime(n) {
+	return {
+		raw: Number(n),
+		formatted: formatNanoseconds(n)
+	};
+}
+function getDocumentIndexId(doc) {
+	if (doc.id) {
+		if (typeof doc.id !== "string") throw createError("DOCUMENT_ID_MUST_BE_STRING", typeof doc.id);
+		return doc.id;
+	}
+	return uniqueId();
+}
+function validateSchema(doc, schema) {
+	for (const [prop, type] of Object.entries(schema)) {
+		const value = doc[prop];
+		if (typeof value === "undefined") continue;
+		if (type === "geopoint" && typeof value === "object" && typeof value.lon === "number" && typeof value.lat === "number") continue;
+		if (type === "enum" && (typeof value === "string" || typeof value === "number")) continue;
+		if (type === "enum[]" && Array.isArray(value)) {
+			const valueLength = value.length;
+			for (let i = 0; i < valueLength; i++) if (typeof value[i] !== "string" && typeof value[i] !== "number") return prop + "." + i;
+			continue;
+		}
+		if (isVectorType(type)) {
+			const vectorSize = getVectorSize(type);
+			if (!Array.isArray(value) || value.length !== vectorSize) throw createError("INVALID_INPUT_VECTOR", prop, vectorSize, value.length);
+			continue;
+		}
+		if (isArrayType(type)) {
+			if (!Array.isArray(value)) return prop;
+			const expectedType = getInnerType(type);
+			const valueLength = value.length;
+			for (let i = 0; i < valueLength; i++) if (typeof value[i] !== expectedType) return prop + "." + i;
+			continue;
+		}
+		if (typeof type === "object") {
+			if (!value || typeof value !== "object") return prop;
+			const subProp = validateSchema(value, type);
+			if (subProp) return prop + "." + subProp;
+			continue;
+		}
+		if (typeof value !== type) return prop;
+	}
+}
+var IS_ARRAY_TYPE = {
+	string: false,
+	number: false,
+	boolean: false,
+	enum: false,
+	geopoint: false,
+	"string[]": true,
+	"number[]": true,
+	"boolean[]": true,
+	"enum[]": true
+};
+var INNER_TYPE = {
+	"string[]": "string",
+	"number[]": "number",
+	"boolean[]": "boolean",
+	"enum[]": "enum"
+};
+function isVectorType(type) {
+	return typeof type === "string" && /^vector\[\d+\]$/.test(type);
+}
+function isArrayType(type) {
+	return typeof type === "string" && IS_ARRAY_TYPE[type];
+}
+function getInnerType(type) {
+	return INNER_TYPE[type];
+}
+function getVectorSize(type) {
+	const size = Number(type.slice(7, -1));
+	switch (true) {
+		case isNaN(size): throw createError("INVALID_VECTOR_VALUE", type);
+		case size <= 0: throw createError("INVALID_VECTOR_SIZE", type);
+		default: return size;
+	}
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/internal-document-id-store.js
+function createInternalDocumentIDStore() {
+	return {
+		idToInternalId: /* @__PURE__ */ new Map(),
+		internalIdToId: [],
+		save: save$5,
+		load: load$5
+	};
+}
+function save$5(store) {
+	return { internalIdToId: store.internalIdToId };
+}
+function load$5(orama, raw) {
+	const { internalIdToId } = raw;
+	orama.internalDocumentIDStore.idToInternalId.clear();
+	orama.internalDocumentIDStore.internalIdToId = [];
+	const internalIdToIdLength = internalIdToId.length;
+	for (let i = 0; i < internalIdToIdLength; i++) {
+		const internalIdItem = internalIdToId[i];
+		orama.internalDocumentIDStore.idToInternalId.set(internalIdItem, i + 1);
+		orama.internalDocumentIDStore.internalIdToId.push(internalIdItem);
+	}
+}
+function getInternalDocumentId(store, id) {
+	if (typeof id === "string") {
+		const internalId = store.idToInternalId.get(id);
+		if (internalId) return internalId;
+		const currentId = store.idToInternalId.size + 1;
+		store.idToInternalId.set(id, currentId);
+		store.internalIdToId.push(id);
+		return currentId;
+	}
+	if (id > store.internalIdToId.length) return getInternalDocumentId(store, id.toString());
+	return id;
+}
+function getDocumentIdFromInternalId(store, internalId) {
+	if (store.internalIdToId.length < internalId) throw new Error(`Invalid internalId ${internalId}`);
+	return store.internalIdToId[internalId - 1];
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/documents-store.js
+function create$4(_, sharedInternalDocumentStore) {
+	return {
+		sharedInternalDocumentStore,
+		docs: {},
+		count: 0
+	};
+}
+function get(store, id) {
+	const internalId = getInternalDocumentId(store.sharedInternalDocumentStore, id);
+	return store.docs[internalId];
+}
+function getMultiple(store, ids) {
+	const idsLength = ids.length;
+	const found = Array.from({ length: idsLength });
+	for (let i = 0; i < idsLength; i++) {
+		const internalId = getInternalDocumentId(store.sharedInternalDocumentStore, ids[i]);
+		found[i] = store.docs[internalId];
+	}
+	return found;
+}
+function getAll(store) {
+	return store.docs;
+}
+function store(store, id, internalId, doc) {
+	if (typeof store.docs[internalId] !== "undefined") return false;
+	store.docs[internalId] = doc;
+	store.count++;
+	return true;
+}
+function remove$2(store, id) {
+	const internalId = getInternalDocumentId(store.sharedInternalDocumentStore, id);
+	if (typeof store.docs[internalId] === "undefined") return false;
+	delete store.docs[internalId];
+	store.count--;
+	return true;
+}
+function count$1(store) {
+	return store.count;
+}
+function load$4(sharedInternalDocumentStore, raw) {
+	const rawDocument = raw;
+	return {
+		docs: rawDocument.docs,
+		count: rawDocument.count,
+		sharedInternalDocumentStore
+	};
+}
+function save$4(store) {
+	return {
+		docs: store.docs,
+		count: store.count
+	};
+}
+function createDocumentsStore() {
+	return {
+		create: create$4,
+		get,
+		getMultiple,
+		getAll,
+		store,
+		remove: remove$2,
+		count: count$1,
+		load: load$4,
+		save: save$4
+	};
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/plugins.js
+var AVAILABLE_PLUGIN_HOOKS = [
+	"beforeInsert",
+	"afterInsert",
+	"beforeRemove",
+	"afterRemove",
+	"beforeUpdate",
+	"afterUpdate",
+	"beforeUpsert",
+	"afterUpsert",
+	"beforeSearch",
+	"afterSearch",
+	"beforeInsertMultiple",
+	"afterInsertMultiple",
+	"beforeRemoveMultiple",
+	"afterRemoveMultiple",
+	"beforeUpdateMultiple",
+	"afterUpdateMultiple",
+	"beforeUpsertMultiple",
+	"afterUpsertMultiple",
+	"beforeLoad",
+	"afterLoad",
+	"afterCreate"
+];
+function getAllPluginsByHook(orama, hook) {
+	const pluginsToRun = [];
+	const pluginsLength = orama.plugins?.length;
+	if (!pluginsLength) return pluginsToRun;
+	for (let i = 0; i < pluginsLength; i++) try {
+		const plugin = orama.plugins[i];
+		if (typeof plugin[hook] === "function") pluginsToRun.push(plugin[hook]);
+	} catch (error) {
+		console.error("Caught error in getAllPluginsByHook:", error);
+		throw createError("PLUGIN_CRASHED");
+	}
+	return pluginsToRun;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/hooks.js
+var OBJECT_COMPONENTS = [
+	"tokenizer",
+	"index",
+	"documentsStore",
+	"sorter",
+	"pinning"
+];
+var FUNCTION_COMPONENTS = [
+	"validateSchema",
+	"getDocumentIndexId",
+	"getDocumentProperties",
+	"formatElapsedTime"
+];
+function runAfterSearch(hooks, db, params, language, results) {
+	if (hooks.some(isAsyncFunction)) return (async () => {
+		for (const hook of hooks) await hook(db, params, language, results);
+	})();
+	else for (const hook of hooks) hook(db, params, language, results);
+}
+function runBeforeSearch(hooks, db, params, language) {
+	if (hooks.some(isAsyncFunction)) return (async () => {
+		for (const hook of hooks) await hook(db, params, language);
+	})();
+	else for (const hook of hooks) hook(db, params, language);
+}
+function runAfterCreate(hooks, db) {
+	if (hooks.some(isAsyncFunction)) return (async () => {
+		for (const hook of hooks) await hook(db);
+	})();
+	else for (const hook of hooks) hook(db);
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/trees/avl.js
+var AVLNode = class AVLNode {
+	k;
+	v;
+	l = null;
+	r = null;
+	h = 1;
+	constructor(key, value) {
+		this.k = key;
+		this.v = new Set(value);
+	}
+	updateHeight() {
+		this.h = Math.max(AVLNode.getHeight(this.l), AVLNode.getHeight(this.r)) + 1;
+	}
+	static getHeight(node) {
+		return node ? node.h : 0;
+	}
+	getBalanceFactor() {
+		return AVLNode.getHeight(this.l) - AVLNode.getHeight(this.r);
+	}
+	rotateLeft() {
+		const newRoot = this.r;
+		this.r = newRoot.l;
+		newRoot.l = this;
+		this.updateHeight();
+		newRoot.updateHeight();
+		return newRoot;
+	}
+	rotateRight() {
+		const newRoot = this.l;
+		this.l = newRoot.r;
+		newRoot.r = this;
+		this.updateHeight();
+		newRoot.updateHeight();
+		return newRoot;
+	}
+	toJSON() {
+		return {
+			k: this.k,
+			v: Array.from(this.v),
+			l: this.l ? this.l.toJSON() : null,
+			r: this.r ? this.r.toJSON() : null,
+			h: this.h
+		};
+	}
+	static fromJSON(json) {
+		const node = new AVLNode(json.k, json.v);
+		node.l = json.l ? AVLNode.fromJSON(json.l) : null;
+		node.r = json.r ? AVLNode.fromJSON(json.r) : null;
+		node.h = json.h;
+		return node;
+	}
+};
+var AVLTree = class AVLTree {
+	root = null;
+	insertCount = 0;
+	constructor(key, value) {
+		if (key !== void 0 && value !== void 0) this.root = new AVLNode(key, value);
+	}
+	insert(key, value, rebalanceThreshold = 1e3) {
+		this.root = this.insertNode(this.root, key, value, rebalanceThreshold);
+	}
+	insertMultiple(key, value, rebalanceThreshold = 1e3) {
+		for (const v of value) this.insert(key, v, rebalanceThreshold);
+	}
+	rebalance() {
+		if (this.root) this.root = this.rebalanceNode(this.root);
+	}
+	toJSON() {
+		return {
+			root: this.root ? this.root.toJSON() : null,
+			insertCount: this.insertCount
+		};
+	}
+	static fromJSON(json) {
+		const tree = new AVLTree();
+		tree.root = json.root ? AVLNode.fromJSON(json.root) : null;
+		tree.insertCount = json.insertCount || 0;
+		return tree;
+	}
+	insertNode(node, key, value, rebalanceThreshold) {
+		if (node === null) return new AVLNode(key, [value]);
+		const path = [];
+		let current = node;
+		let parent = null;
+		while (current !== null) {
+			path.push({
+				parent,
+				node: current
+			});
+			if (key < current.k) {
+				if (current.l === null) {
+					current.l = new AVLNode(key, [value]);
+					path.push({
+						parent: current,
+						node: current.l
+					});
+					break;
+				} else {
+					parent = current;
+					current = current.l;
+				}
+			} else if (key > current.k) {
+				if (current.r === null) {
+					current.r = new AVLNode(key, [value]);
+					path.push({
+						parent: current,
+						node: current.r
+					});
+					break;
+				} else {
+					parent = current;
+					current = current.r;
+				}
+			} else {
+				current.v.add(value);
+				return node;
+			}
+		}
+		let needRebalance = false;
+		if (this.insertCount++ % rebalanceThreshold === 0) needRebalance = true;
+		for (let i = path.length - 1; i >= 0; i--) {
+			const { parent, node: currentNode } = path[i];
+			currentNode.updateHeight();
+			if (needRebalance) {
+				const rebalancedNode = this.rebalanceNode(currentNode);
+				if (parent) {
+					if (parent.l === currentNode) parent.l = rebalancedNode;
+					else if (parent.r === currentNode) parent.r = rebalancedNode;
+				} else node = rebalancedNode;
+			}
+		}
+		return node;
+	}
+	rebalanceNode(node) {
+		const balanceFactor = node.getBalanceFactor();
+		if (balanceFactor > 1) {
+			if (node.l && node.l.getBalanceFactor() >= 0) return node.rotateRight();
+			else if (node.l) {
+				node.l = node.l.rotateLeft();
+				return node.rotateRight();
+			}
+		}
+		if (balanceFactor < -1) {
+			if (node.r && node.r.getBalanceFactor() <= 0) return node.rotateLeft();
+			else if (node.r) {
+				node.r = node.r.rotateRight();
+				return node.rotateLeft();
+			}
+		}
+		return node;
+	}
+	find(key) {
+		const node = this.findNodeByKey(key);
+		return node ? node.v : null;
+	}
+	contains(key) {
+		return this.find(key) !== null;
+	}
+	getSize() {
+		let count = 0;
+		const stack = [];
+		let current = this.root;
+		while (current || stack.length > 0) {
+			while (current) {
+				stack.push(current);
+				current = current.l;
+			}
+			current = stack.pop();
+			count++;
+			current = current.r;
+		}
+		return count;
+	}
+	isBalanced() {
+		if (!this.root) return true;
+		const stack = [this.root];
+		while (stack.length > 0) {
+			const node = stack.pop();
+			const balanceFactor = node.getBalanceFactor();
+			if (Math.abs(balanceFactor) > 1) return false;
+			if (node.l) stack.push(node.l);
+			if (node.r) stack.push(node.r);
+		}
+		return true;
+	}
+	remove(key) {
+		this.root = this.removeNode(this.root, key);
+	}
+	removeDocument(key, id) {
+		const node = this.findNodeByKey(key);
+		if (!node) return;
+		if (node.v.size === 1) this.root = this.removeNode(this.root, key);
+		else node.v = new Set([...node.v.values()].filter((v) => v !== id));
+	}
+	findNodeByKey(key) {
+		let node = this.root;
+		while (node) if (key < node.k) node = node.l;
+		else if (key > node.k) node = node.r;
+		else return node;
+		return null;
+	}
+	removeNode(node, key) {
+		if (node === null) return null;
+		const path = [];
+		let current = node;
+		while (current !== null && current.k !== key) {
+			path.push(current);
+			if (key < current.k) current = current.l;
+			else current = current.r;
+		}
+		if (current === null) return node;
+		if (current.l === null || current.r === null) {
+			const child = current.l ? current.l : current.r;
+			if (path.length === 0) node = child;
+			else {
+				const parent = path[path.length - 1];
+				if (parent.l === current) parent.l = child;
+				else parent.r = child;
+			}
+		} else {
+			let successorParent = current;
+			let successor = current.r;
+			while (successor.l !== null) {
+				successorParent = successor;
+				successor = successor.l;
+			}
+			current.k = successor.k;
+			current.v = successor.v;
+			if (successorParent.l === successor) successorParent.l = successor.r;
+			else successorParent.r = successor.r;
+			current = successorParent;
+		}
+		path.push(current);
+		for (let i = path.length - 1; i >= 0; i--) {
+			const currentNode = path[i];
+			currentNode.updateHeight();
+			const rebalancedNode = this.rebalanceNode(currentNode);
+			if (i > 0) {
+				const parent = path[i - 1];
+				if (parent.l === currentNode) parent.l = rebalancedNode;
+				else if (parent.r === currentNode) parent.r = rebalancedNode;
+			} else node = rebalancedNode;
+		}
+		return node;
+	}
+	rangeSearch(min, max) {
+		const result = /* @__PURE__ */ new Set();
+		const stack = [];
+		let current = this.root;
+		while (current || stack.length > 0) {
+			while (current) {
+				stack.push(current);
+				current = current.l;
+			}
+			current = stack.pop();
+			if (current.k >= min && current.k <= max) for (const value of current.v) result.add(value);
+			if (current.k > max) break;
+			current = current.r;
+		}
+		return result;
+	}
+	greaterThan(key, inclusive = false) {
+		const result = /* @__PURE__ */ new Set();
+		const stack = [];
+		let current = this.root;
+		while (current || stack.length > 0) {
+			while (current) {
+				stack.push(current);
+				current = current.r;
+			}
+			current = stack.pop();
+			if (inclusive && current.k >= key || !inclusive && current.k > key) for (const value of current.v) result.add(value);
+			else if (current.k <= key) break;
+			current = current.l;
+		}
+		return result;
+	}
+	lessThan(key, inclusive = false) {
+		const result = /* @__PURE__ */ new Set();
+		const stack = [];
+		let current = this.root;
+		while (current || stack.length > 0) {
+			while (current) {
+				stack.push(current);
+				current = current.l;
+			}
+			current = stack.pop();
+			if (inclusive && current.k <= key || !inclusive && current.k < key) for (const value of current.v) result.add(value);
+			else if (current.k > key) break;
+			current = current.r;
+		}
+		return result;
+	}
+};
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/trees/flat.js
+var FlatTree = class FlatTree {
+	numberToDocumentId;
+	constructor() {
+		this.numberToDocumentId = /* @__PURE__ */ new Map();
+	}
+	insert(key, value) {
+		if (this.numberToDocumentId.has(key)) this.numberToDocumentId.get(key).add(value);
+		else this.numberToDocumentId.set(key, /* @__PURE__ */ new Set([value]));
+	}
+	find(key) {
+		const idSet = this.numberToDocumentId.get(key);
+		return idSet ? Array.from(idSet) : null;
+	}
+	remove(key) {
+		this.numberToDocumentId.delete(key);
+	}
+	removeDocument(id, key) {
+		const idSet = this.numberToDocumentId.get(key);
+		if (idSet) {
+			idSet.delete(id);
+			if (idSet.size === 0) this.numberToDocumentId.delete(key);
+		}
+	}
+	contains(key) {
+		return this.numberToDocumentId.has(key);
+	}
+	getSize() {
+		let size = 0;
+		for (const idSet of this.numberToDocumentId.values()) size += idSet.size;
+		return size;
+	}
+	filter(operation) {
+		const operationKeys = Object.keys(operation);
+		if (operationKeys.length !== 1) throw new Error("Invalid operation");
+		const operationType = operationKeys[0];
+		switch (operationType) {
+			case "eq": {
+				const value = operation[operationType];
+				const idSet = this.numberToDocumentId.get(value);
+				return idSet ? Array.from(idSet) : [];
+			}
+			case "in": {
+				const values = operation[operationType];
+				const resultSet = /* @__PURE__ */ new Set();
+				for (const value of values) {
+					const idSet = this.numberToDocumentId.get(value);
+					if (idSet) for (const id of idSet) resultSet.add(id);
+				}
+				return Array.from(resultSet);
+			}
+			case "nin": {
+				const excludeValues = new Set(operation[operationType]);
+				const resultSet = /* @__PURE__ */ new Set();
+				for (const [key, idSet] of this.numberToDocumentId.entries()) if (!excludeValues.has(key)) for (const id of idSet) resultSet.add(id);
+				return Array.from(resultSet);
+			}
+			default: throw new Error("Invalid operation");
+		}
+	}
+	filterArr(operation) {
+		const operationKeys = Object.keys(operation);
+		if (operationKeys.length !== 1) throw new Error("Invalid operation");
+		const operationType = operationKeys[0];
+		switch (operationType) {
+			case "containsAll": {
+				const idSets = operation[operationType].map((value) => this.numberToDocumentId.get(value) ?? /* @__PURE__ */ new Set());
+				if (idSets.length === 0) return [];
+				const intersection = idSets.reduce((prev, curr) => {
+					return new Set([...prev].filter((id) => curr.has(id)));
+				});
+				return Array.from(intersection);
+			}
+			case "containsAny": {
+				const idSets = operation[operationType].map((value) => this.numberToDocumentId.get(value) ?? /* @__PURE__ */ new Set());
+				if (idSets.length === 0) return [];
+				const union = idSets.reduce((prev, curr) => {
+					return /* @__PURE__ */ new Set([...prev, ...curr]);
+				});
+				return Array.from(union);
+			}
+			default: throw new Error("Invalid operation");
+		}
+	}
+	static fromJSON(json) {
+		if (!json.numberToDocumentId) throw new Error("Invalid Flat Tree JSON");
+		const tree = new FlatTree();
+		for (const [key, ids] of json.numberToDocumentId) tree.numberToDocumentId.set(key, new Set(ids));
+		return tree;
+	}
+	toJSON() {
+		return { numberToDocumentId: Array.from(this.numberToDocumentId.entries()).map(([key, idSet]) => [key, Array.from(idSet)]) };
+	}
+};
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/levenshtein.js
+/**
+* Inspired by:
+* https://github.com/Yomguithereal/talisman/blob/86ae55cbd040ff021d05e282e0e6c71f2dde21f8/src/metrics/levenshtein.js#L218-L340
+*/
+function _boundedLevenshtein(term, word, tolerance) {
+	if (tolerance < 0) return -1;
+	if (term === word) return 0;
+	const m = term.length;
+	const n = word.length;
+	if (m === 0) return n <= tolerance ? n : -1;
+	if (n === 0) return m <= tolerance ? m : -1;
+	const diff = Math.abs(m - n);
+	if (term.startsWith(word)) return diff <= tolerance ? diff : -1;
+	if (word.startsWith(term)) return 0;
+	if (diff > tolerance) return -1;
+	const matrix = [];
+	for (let i = 0; i <= m; i++) {
+		matrix[i] = [i];
+		for (let j = 1; j <= n; j++) matrix[i][j] = i === 0 ? j : 0;
+	}
+	for (let i = 1; i <= m; i++) {
+		let rowMin = Infinity;
+		for (let j = 1; j <= n; j++) {
+			if (term[i - 1] === word[j - 1]) matrix[i][j] = matrix[i - 1][j - 1];
+			else matrix[i][j] = Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + 1);
+			rowMin = Math.min(rowMin, matrix[i][j]);
+		}
+		if (rowMin > tolerance) return -1;
+	}
+	return matrix[m][n] <= tolerance ? matrix[m][n] : -1;
+}
+function syncBoundedLevenshtein(term, w, tolerance) {
+	const distance = _boundedLevenshtein(term, w, tolerance);
+	return {
+		distance,
+		isBounded: distance >= 0
+	};
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/trees/radix.js
+var RadixNode = class RadixNode {
+	k;
+	s;
+	c = /* @__PURE__ */ new Map();
+	d = /* @__PURE__ */ new Set();
+	e;
+	w = "";
+	constructor(key, subWord, end) {
+		this.k = key;
+		this.s = subWord;
+		this.e = end;
+	}
+	updateParent(parent) {
+		this.w = parent.w + this.s;
+	}
+	addDocument(docID) {
+		this.d.add(docID);
+	}
+	removeDocument(docID) {
+		return this.d.delete(docID);
+	}
+	findAllWords(output, term, exact, tolerance) {
+		const stack = [this];
+		while (stack.length > 0) {
+			const node = stack.pop();
+			if (node.e) {
+				const { w, d: docIDs } = node;
+				if (exact && w !== term) continue;
+				if (getOwnProperty(output, w) !== null) {
+					if (tolerance) {
+						if (Math.abs(term.length - w.length) <= tolerance && syncBoundedLevenshtein(term, w, tolerance).isBounded) output[w] = [];
+						else continue;
+					} else output[w] = [];
+				}
+				if (getOwnProperty(output, w) != null && docIDs.size > 0) {
+					const docs = output[w];
+					for (const docID of docIDs) if (!docs.includes(docID)) docs.push(docID);
+				}
+			}
+			if (node.c.size > 0) stack.push(...node.c.values());
+		}
+		return output;
+	}
+	insert(word, docId) {
+		let node = this;
+		let i = 0;
+		const wordLength = word.length;
+		while (i < wordLength) {
+			const currentCharacter = word[i];
+			const childNode = node.c.get(currentCharacter);
+			if (childNode) {
+				const edgeLabel = childNode.s;
+				const edgeLabelLength = edgeLabel.length;
+				let j = 0;
+				while (j < edgeLabelLength && i + j < wordLength && edgeLabel[j] === word[i + j]) j++;
+				if (j === edgeLabelLength) {
+					node = childNode;
+					i += j;
+					if (i === wordLength) {
+						if (!childNode.e) childNode.e = true;
+						childNode.addDocument(docId);
+						return;
+					}
+					continue;
+				}
+				const commonPrefix = edgeLabel.slice(0, j);
+				const newEdgeLabel = edgeLabel.slice(j);
+				const newWordLabel = word.slice(i + j);
+				const inbetweenNode = new RadixNode(commonPrefix[0], commonPrefix, false);
+				node.c.set(commonPrefix[0], inbetweenNode);
+				inbetweenNode.updateParent(node);
+				childNode.s = newEdgeLabel;
+				childNode.k = newEdgeLabel[0];
+				inbetweenNode.c.set(newEdgeLabel[0], childNode);
+				childNode.updateParent(inbetweenNode);
+				if (newWordLabel) {
+					const newNode = new RadixNode(newWordLabel[0], newWordLabel, true);
+					newNode.addDocument(docId);
+					inbetweenNode.c.set(newWordLabel[0], newNode);
+					newNode.updateParent(inbetweenNode);
+				} else {
+					inbetweenNode.e = true;
+					inbetweenNode.addDocument(docId);
+				}
+				return;
+			} else {
+				const newNode = new RadixNode(currentCharacter, word.slice(i), true);
+				newNode.addDocument(docId);
+				node.c.set(currentCharacter, newNode);
+				newNode.updateParent(node);
+				return;
+			}
+		}
+		if (!node.e) node.e = true;
+		node.addDocument(docId);
+	}
+	_findLevenshtein(term, index, tolerance, originalTolerance, output) {
+		const stack = [{
+			node: this,
+			index,
+			tolerance
+		}];
+		while (stack.length > 0) {
+			const { node, index, tolerance } = stack.pop();
+			if (node.w.startsWith(term)) {
+				node.findAllWords(output, term, false, 0);
+				continue;
+			}
+			if (tolerance < 0) continue;
+			if (node.e) {
+				const { w, d: docIDs } = node;
+				if (w) {
+					if (syncBoundedLevenshtein(term, w, originalTolerance).isBounded) output[w] = [];
+					if (getOwnProperty(output, w) !== void 0 && docIDs.size > 0) {
+						const docs = new Set(output[w]);
+						for (const docID of docIDs) docs.add(docID);
+						output[w] = Array.from(docs);
+					}
+				}
+			}
+			if (index >= term.length) continue;
+			const currentChar = term[index];
+			if (node.c.has(currentChar)) {
+				const childNode = node.c.get(currentChar);
+				stack.push({
+					node: childNode,
+					index: index + 1,
+					tolerance
+				});
+			}
+			stack.push({
+				node,
+				index: index + 1,
+				tolerance: tolerance - 1
+			});
+			for (const [character, childNode] of node.c) {
+				stack.push({
+					node: childNode,
+					index,
+					tolerance: tolerance - 1
+				});
+				if (character !== currentChar) stack.push({
+					node: childNode,
+					index: index + 1,
+					tolerance: tolerance - 1
+				});
+			}
+		}
+	}
+	find(params) {
+		const { term, exact, tolerance } = params;
+		if (tolerance && !exact) {
+			const output = {};
+			this._findLevenshtein(term, 0, tolerance, tolerance, output);
+			return output;
+		} else {
+			let node = this;
+			let i = 0;
+			const termLength = term.length;
+			while (i < termLength) {
+				const character = term[i];
+				const childNode = node.c.get(character);
+				if (childNode) {
+					const edgeLabel = childNode.s;
+					const edgeLabelLength = edgeLabel.length;
+					let j = 0;
+					while (j < edgeLabelLength && i + j < termLength && edgeLabel[j] === term[i + j]) j++;
+					if (j === edgeLabelLength) {
+						node = childNode;
+						i += j;
+					} else if (i + j === termLength) {
+						if (j === termLength - i) {
+							if (exact) return {};
+							else {
+								const output = {};
+								childNode.findAllWords(output, term, exact, tolerance);
+								return output;
+							}
+						} else return {};
+					} else return {};
+				} else return {};
+			}
+			const output = {};
+			node.findAllWords(output, term, exact, tolerance);
+			return output;
+		}
+	}
+	contains(term) {
+		let node = this;
+		let i = 0;
+		const termLength = term.length;
+		while (i < termLength) {
+			const character = term[i];
+			const childNode = node.c.get(character);
+			if (childNode) {
+				const edgeLabel = childNode.s;
+				const edgeLabelLength = edgeLabel.length;
+				let j = 0;
+				while (j < edgeLabelLength && i + j < termLength && edgeLabel[j] === term[i + j]) j++;
+				if (j < edgeLabelLength) return false;
+				i += edgeLabelLength;
+				node = childNode;
+			} else return false;
+		}
+		return true;
+	}
+	removeWord(term) {
+		if (!term) return false;
+		let node = this;
+		const termLength = term.length;
+		const stack = [];
+		for (let i = 0; i < termLength; i++) {
+			const character = term[i];
+			if (node.c.has(character)) {
+				const childNode = node.c.get(character);
+				stack.push({
+					parent: node,
+					character
+				});
+				i += childNode.s.length - 1;
+				node = childNode;
+			} else return false;
+		}
+		node.d.clear();
+		node.e = false;
+		while (stack.length > 0 && node.c.size === 0 && !node.e && node.d.size === 0) {
+			const { parent, character } = stack.pop();
+			parent.c.delete(character);
+			node = parent;
+		}
+		return true;
+	}
+	removeDocumentByWord(term, docID, exact = true) {
+		if (!term) return true;
+		let node = this;
+		const termLength = term.length;
+		for (let i = 0; i < termLength; i++) {
+			const character = term[i];
+			if (node.c.has(character)) {
+				const childNode = node.c.get(character);
+				i += childNode.s.length - 1;
+				node = childNode;
+				if (exact && node.w !== term) {} else node.removeDocument(docID);
+			} else return false;
+		}
+		return true;
+	}
+	static getCommonPrefix(a, b) {
+		const len = Math.min(a.length, b.length);
+		let i = 0;
+		while (i < len && a.charCodeAt(i) === b.charCodeAt(i)) i++;
+		return a.slice(0, i);
+	}
+	toJSON() {
+		return {
+			w: this.w,
+			s: this.s,
+			e: this.e,
+			k: this.k,
+			d: Array.from(this.d),
+			c: Array.from(this.c?.entries())?.map(([key, node]) => [key, node.toJSON()])
+		};
+	}
+	static fromJSON(json) {
+		const node = new RadixNode(json.k, json.s, json.e);
+		node.w = json.w;
+		node.d = new Set(json.d);
+		node.c = new Map(json?.c?.map(([key, nodeJson]) => [key, RadixNode.fromJSON(nodeJson)]) || []);
+		return node;
+	}
+};
+var RadixTree = class RadixTree extends RadixNode {
+	constructor() {
+		super("", "", false);
+	}
+	static fromJSON(json) {
+		const tree = new RadixTree();
+		tree.w = json.w;
+		tree.s = json.s;
+		tree.e = json.e;
+		tree.k = json.k;
+		tree.d = new Set(json.d);
+		tree.c = new Map(json?.c?.map(([key, nodeJson]) => [key, RadixNode.fromJSON(nodeJson)]) || []);
+		return tree;
+	}
+	toJSON() {
+		return super.toJSON();
+	}
+};
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/trees/bkd.js
+var K = 2;
+var EARTH_RADIUS = 6371e3;
+var BKDNode = class BKDNode {
+	point;
+	docIDs;
+	left;
+	right;
+	parent;
+	constructor(point, docIDs) {
+		this.point = point;
+		this.docIDs = new Set(docIDs);
+		this.left = null;
+		this.right = null;
+		this.parent = null;
+	}
+	toJSON() {
+		return {
+			point: this.point,
+			docIDs: Array.from(this.docIDs),
+			left: this.left ? this.left.toJSON() : null,
+			right: this.right ? this.right.toJSON() : null
+		};
+	}
+	static fromJSON(json, parent = null) {
+		const node = new BKDNode(json.point, json.docIDs);
+		node.parent = parent;
+		if (json.left) node.left = BKDNode.fromJSON(json.left, node);
+		if (json.right) node.right = BKDNode.fromJSON(json.right, node);
+		return node;
+	}
+};
+var BKDTree = class BKDTree {
+	root;
+	nodeMap;
+	constructor() {
+		this.root = null;
+		this.nodeMap = /* @__PURE__ */ new Map();
+	}
+	getPointKey(point) {
+		return `${point.lon},${point.lat}`;
+	}
+	insert(point, docIDs) {
+		const pointKey = this.getPointKey(point);
+		const existingNode = this.nodeMap.get(pointKey);
+		if (existingNode) {
+			docIDs.forEach((id) => existingNode.docIDs.add(id));
+			return;
+		}
+		const newNode = new BKDNode(point, docIDs);
+		this.nodeMap.set(pointKey, newNode);
+		if (this.root == null) {
+			this.root = newNode;
+			return;
+		}
+		let node = this.root;
+		let depth = 0;
+		while (true) {
+			if (depth % K === 0) {
+				if (point.lon < node.point.lon) {
+					if (node.left == null) {
+						node.left = newNode;
+						newNode.parent = node;
+						return;
+					}
+					node = node.left;
+				} else {
+					if (node.right == null) {
+						node.right = newNode;
+						newNode.parent = node;
+						return;
+					}
+					node = node.right;
+				}
+			} else if (point.lat < node.point.lat) {
+				if (node.left == null) {
+					node.left = newNode;
+					newNode.parent = node;
+					return;
+				}
+				node = node.left;
+			} else {
+				if (node.right == null) {
+					node.right = newNode;
+					newNode.parent = node;
+					return;
+				}
+				node = node.right;
+			}
+			depth++;
+		}
+	}
+	contains(point) {
+		const pointKey = this.getPointKey(point);
+		return this.nodeMap.has(pointKey);
+	}
+	getDocIDsByCoordinates(point) {
+		const pointKey = this.getPointKey(point);
+		const node = this.nodeMap.get(pointKey);
+		if (node) return Array.from(node.docIDs);
+		return null;
+	}
+	removeDocByID(point, docID) {
+		const pointKey = this.getPointKey(point);
+		const node = this.nodeMap.get(pointKey);
+		if (node) {
+			node.docIDs.delete(docID);
+			if (node.docIDs.size === 0) {
+				this.nodeMap.delete(pointKey);
+				this.deleteNode(node);
+			}
+		}
+	}
+	deleteNode(node) {
+		const parent = node.parent;
+		const child = node.left ? node.left : node.right;
+		if (child) child.parent = parent;
+		if (parent) {
+			if (parent.left === node) parent.left = child;
+			else if (parent.right === node) parent.right = child;
+		} else {
+			this.root = child;
+			if (this.root) this.root.parent = null;
+		}
+	}
+	searchByRadius(center, radius, inclusive = true, sort = "asc", highPrecision = false) {
+		const distanceFn = highPrecision ? BKDTree.vincentyDistance : BKDTree.haversineDistance;
+		const stack = [{
+			node: this.root,
+			depth: 0
+		}];
+		const result = [];
+		while (stack.length > 0) {
+			const { node, depth } = stack.pop();
+			if (node == null) continue;
+			const dist = distanceFn(center, node.point);
+			if (inclusive ? dist <= radius : dist > radius) result.push({
+				point: node.point,
+				docIDs: Array.from(node.docIDs)
+			});
+			if (node.left != null) stack.push({
+				node: node.left,
+				depth: depth + 1
+			});
+			if (node.right != null) stack.push({
+				node: node.right,
+				depth: depth + 1
+			});
+		}
+		if (sort) result.sort((a, b) => {
+			const distA = distanceFn(center, a.point);
+			const distB = distanceFn(center, b.point);
+			return sort.toLowerCase() === "asc" ? distA - distB : distB - distA;
+		});
+		return result;
+	}
+	searchByPolygon(polygon, inclusive = true, sort = null, highPrecision = false) {
+		const stack = [{
+			node: this.root,
+			depth: 0
+		}];
+		const result = [];
+		while (stack.length > 0) {
+			const { node, depth } = stack.pop();
+			if (node == null) continue;
+			if (node.left != null) stack.push({
+				node: node.left,
+				depth: depth + 1
+			});
+			if (node.right != null) stack.push({
+				node: node.right,
+				depth: depth + 1
+			});
+			const isInsidePolygon = BKDTree.isPointInPolygon(polygon, node.point);
+			if (isInsidePolygon && inclusive || !isInsidePolygon && !inclusive) result.push({
+				point: node.point,
+				docIDs: Array.from(node.docIDs)
+			});
+		}
+		const centroid = BKDTree.calculatePolygonCentroid(polygon);
+		if (sort) {
+			const distanceFn = highPrecision ? BKDTree.vincentyDistance : BKDTree.haversineDistance;
+			result.sort((a, b) => {
+				const distA = distanceFn(centroid, a.point);
+				const distB = distanceFn(centroid, b.point);
+				return sort.toLowerCase() === "asc" ? distA - distB : distB - distA;
+			});
+		}
+		return result;
+	}
+	toJSON() {
+		return { root: this.root ? this.root.toJSON() : null };
+	}
+	static fromJSON(json) {
+		const tree = new BKDTree();
+		if (json.root) {
+			tree.root = BKDNode.fromJSON(json.root);
+			tree.buildNodeMap(tree.root);
+		}
+		return tree;
+	}
+	buildNodeMap(node) {
+		if (node == null) return;
+		const pointKey = this.getPointKey(node.point);
+		this.nodeMap.set(pointKey, node);
+		if (node.left) this.buildNodeMap(node.left);
+		if (node.right) this.buildNodeMap(node.right);
+	}
+	static calculatePolygonCentroid(polygon) {
+		let totalArea = 0;
+		let centroidX = 0;
+		let centroidY = 0;
+		const polygonLength = polygon.length;
+		for (let i = 0, j = polygonLength - 1; i < polygonLength; j = i++) {
+			const xi = polygon[i].lon;
+			const yi = polygon[i].lat;
+			const xj = polygon[j].lon;
+			const yj = polygon[j].lat;
+			const areaSegment = xi * yj - xj * yi;
+			totalArea += areaSegment;
+			centroidX += (xi + xj) * areaSegment;
+			centroidY += (yi + yj) * areaSegment;
+		}
+		totalArea /= 2;
+		const centroidCoordinate = 6 * totalArea;
+		centroidX /= centroidCoordinate;
+		centroidY /= centroidCoordinate;
+		return {
+			lon: centroidX,
+			lat: centroidY
+		};
+	}
+	static isPointInPolygon(polygon, point) {
+		let isInside = false;
+		const x = point.lon;
+		const y = point.lat;
+		const polygonLength = polygon.length;
+		for (let i = 0, j = polygonLength - 1; i < polygonLength; j = i++) {
+			const xi = polygon[i].lon;
+			const yi = polygon[i].lat;
+			const xj = polygon[j].lon;
+			const yj = polygon[j].lat;
+			if (yi > y !== yj > y && x < (xj - xi) * (y - yi) / (yj - yi) + xi) isInside = !isInside;
+		}
+		return isInside;
+	}
+	static haversineDistance(coord1, coord2) {
+		const P = Math.PI / 180;
+		const lat1 = coord1.lat * P;
+		const lat2 = coord2.lat * P;
+		const deltaLat = (coord2.lat - coord1.lat) * P;
+		const deltaLon = (coord2.lon - coord1.lon) * P;
+		const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+		return EARTH_RADIUS * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+	}
+	static vincentyDistance(coord1, coord2) {
+		const a = 6378137;
+		const f = 1 / 298.257223563;
+		const b = .9966471893352525 * a;
+		const P = Math.PI / 180;
+		const lat1 = coord1.lat * P;
+		const lat2 = coord2.lat * P;
+		const deltaLon = (coord2.lon - coord1.lon) * P;
+		const U1 = Math.atan(.9966471893352525 * Math.tan(lat1));
+		const U2 = Math.atan(.9966471893352525 * Math.tan(lat2));
+		const sinU1 = Math.sin(U1);
+		const cosU1 = Math.cos(U1);
+		const sinU2 = Math.sin(U2);
+		const cosU2 = Math.cos(U2);
+		let lambda = deltaLon;
+		let prevLambda;
+		let iterationLimit = 1e3;
+		let sinSigma;
+		let cosSigma;
+		let sigma;
+		let sinAlpha;
+		let cos2Alpha;
+		let cos2SigmaM;
+		do {
+			const sinLambda = Math.sin(lambda);
+			const cosLambda = Math.cos(lambda);
+			sinSigma = Math.sqrt(cosU2 * sinLambda * (cosU2 * sinLambda) + (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) * (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda));
+			if (sinSigma === 0) return 0;
+			cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda;
+			sigma = Math.atan2(sinSigma, cosSigma);
+			sinAlpha = cosU1 * cosU2 * sinLambda / sinSigma;
+			cos2Alpha = 1 - sinAlpha * sinAlpha;
+			cos2SigmaM = cosSigma - 2 * sinU1 * sinU2 / cos2Alpha;
+			if (isNaN(cos2SigmaM)) cos2SigmaM = 0;
+			const C = f / 16 * cos2Alpha * (4 + f * (4 - 3 * cos2Alpha));
+			prevLambda = lambda;
+			lambda = deltaLon + (1 - C) * f * sinAlpha * (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+		} while (Math.abs(lambda - prevLambda) > 1e-12 && --iterationLimit > 0);
+		if (iterationLimit === 0) return NaN;
+		const uSquared = cos2Alpha * (a * a - b * b) / (b * b);
+		const A = 1 + uSquared / 16384 * (4096 + uSquared * (-768 + uSquared * (320 - 175 * uSquared)));
+		const B = uSquared / 1024 * (256 + uSquared * (-128 + uSquared * (74 - 47 * uSquared)));
+		const deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) - B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
+		return b * A * (sigma - deltaSigma);
+	}
+};
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/trees/bool.js
+var BoolNode = class BoolNode {
+	true;
+	false;
+	constructor() {
+		this.true = /* @__PURE__ */ new Set();
+		this.false = /* @__PURE__ */ new Set();
+	}
+	insert(value, bool) {
+		if (bool) this.true.add(value);
+		else this.false.add(value);
+	}
+	delete(value, bool) {
+		if (bool) this.true.delete(value);
+		else this.false.delete(value);
+	}
+	getSize() {
+		return this.true.size + this.false.size;
+	}
+	toJSON() {
+		return {
+			true: Array.from(this.true),
+			false: Array.from(this.false)
+		};
+	}
+	static fromJSON(json) {
+		const node = new BoolNode();
+		node.true = new Set(json.true);
+		node.false = new Set(json.false);
+		return node;
+	}
+};
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/algorithms.js
+function BM25(tf, matchingCount, docsCount, fieldLength, averageFieldLength, { k, b, d }) {
+	return Math.log(1 + (docsCount - matchingCount + .5) / (matchingCount + .5)) * (d + tf * (k + 1)) / (tf + k * (1 - b + b * fieldLength / averageFieldLength));
+}
+var VectorIndex = class VectorIndex {
+	size;
+	vectors = /* @__PURE__ */ new Map();
+	constructor(size) {
+		this.size = size;
+	}
+	add(internalDocumentId, value) {
+		if (!(value instanceof Float32Array)) value = new Float32Array(value);
+		const magnitude = getMagnitude(value, this.size);
+		this.vectors.set(internalDocumentId, [magnitude, value]);
+	}
+	remove(internalDocumentId) {
+		this.vectors.delete(internalDocumentId);
+	}
+	find(vector, similarity, whereFiltersIDs) {
+		if (!(vector instanceof Float32Array)) vector = new Float32Array(vector);
+		return findSimilarVectors(vector, whereFiltersIDs, this.vectors, this.size, similarity);
+	}
+	toJSON() {
+		const vectors = [];
+		for (const [id, [magnitude, vector]] of this.vectors) vectors.push([id, [magnitude, Array.from(vector)]]);
+		return {
+			size: this.size,
+			vectors
+		};
+	}
+	static fromJSON(json) {
+		const raw = json;
+		const index = new VectorIndex(raw.size);
+		for (const [id, [magnitude, vector]] of raw.vectors) index.vectors.set(id, [magnitude, new Float32Array(vector)]);
+		return index;
+	}
+};
+function getMagnitude(vector, vectorLength) {
+	let magnitude = 0;
+	for (let i = 0; i < vectorLength; i++) magnitude += vector[i] * vector[i];
+	return Math.sqrt(magnitude);
+}
+function findSimilarVectors(targetVector, keys, vectors, length, threshold) {
+	const targetMagnitude = getMagnitude(targetVector, length);
+	const similarVectors = [];
+	const base = keys ? keys : vectors.keys();
+	for (const vectorId of base) {
+		const entry = vectors.get(vectorId);
+		if (!entry) continue;
+		const magnitude = entry[0];
+		const vector = entry[1];
+		let dotProduct = 0;
+		for (let i = 0; i < length; i++) dotProduct += targetVector[i] * vector[i];
+		const similarity = dotProduct / (targetMagnitude * magnitude);
+		if (similarity >= threshold) similarVectors.push([vectorId, similarity]);
+	}
+	return similarVectors;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/index.js
+function insertDocumentScoreParameters(index, prop, id, tokens, docsCount) {
+	const internalId = getInternalDocumentId(index.sharedInternalDocumentStore, id);
+	index.avgFieldLength[prop] = ((index.avgFieldLength[prop] ?? 0) * (docsCount - 1) + tokens.length) / docsCount;
+	index.fieldLengths[prop][internalId] = tokens.length;
+	index.frequencies[prop][internalId] = {};
+}
+function insertTokenScoreParameters(index, prop, id, tokens, token) {
+	let tokenFrequency = 0;
+	for (const t of tokens) if (t === token) tokenFrequency++;
+	const internalId = getInternalDocumentId(index.sharedInternalDocumentStore, id);
+	const tf = tokenFrequency / tokens.length;
+	index.frequencies[prop][internalId][token] = tf;
+	if (!(token in index.tokenOccurrences[prop])) index.tokenOccurrences[prop][token] = 0;
+	index.tokenOccurrences[prop][token] = (index.tokenOccurrences[prop][token] ?? 0) + 1;
+}
+function removeDocumentScoreParameters(index, prop, id, docsCount) {
+	const internalId = getInternalDocumentId(index.sharedInternalDocumentStore, id);
+	if (docsCount > 1) index.avgFieldLength[prop] = (index.avgFieldLength[prop] * docsCount - index.fieldLengths[prop][internalId]) / (docsCount - 1);
+	else index.avgFieldLength[prop] = void 0;
+	index.fieldLengths[prop][internalId] = void 0;
+	index.frequencies[prop][internalId] = void 0;
+}
+function removeTokenScoreParameters(index, prop, token) {
+	index.tokenOccurrences[prop][token]--;
+}
+function create$3(orama, sharedInternalDocumentStore, schema, index, prefix = "") {
+	if (!index) index = {
+		sharedInternalDocumentStore,
+		indexes: {},
+		vectorIndexes: {},
+		searchableProperties: [],
+		searchablePropertiesWithTypes: {},
+		frequencies: {},
+		tokenOccurrences: {},
+		avgFieldLength: {},
+		fieldLengths: {}
+	};
+	for (const [prop, type] of Object.entries(schema)) {
+		const path = `${prefix}${prefix ? "." : ""}${prop}`;
+		if (typeof type === "object" && !Array.isArray(type)) {
+			create$3(orama, sharedInternalDocumentStore, type, index, path);
+			continue;
+		}
+		if (isVectorType(type)) {
+			index.searchableProperties.push(path);
+			index.searchablePropertiesWithTypes[path] = type;
+			index.vectorIndexes[path] = {
+				type: "Vector",
+				node: new VectorIndex(getVectorSize(type)),
+				isArray: false
+			};
+		} else {
+			const isArray = /\[/.test(type);
+			switch (type) {
+				case "boolean":
+				case "boolean[]":
+					index.indexes[path] = {
+						type: "Bool",
+						node: new BoolNode(),
+						isArray
+					};
+					break;
+				case "number":
+				case "number[]":
+					index.indexes[path] = {
+						type: "AVL",
+						node: new AVLTree(0, []),
+						isArray
+					};
+					break;
+				case "string":
+				case "string[]":
+					index.indexes[path] = {
+						type: "Radix",
+						node: new RadixTree(),
+						isArray
+					};
+					index.avgFieldLength[path] = 0;
+					index.frequencies[path] = {};
+					index.tokenOccurrences[path] = {};
+					index.fieldLengths[path] = {};
+					break;
+				case "enum":
+				case "enum[]":
+					index.indexes[path] = {
+						type: "Flat",
+						node: new FlatTree(),
+						isArray
+					};
+					break;
+				case "geopoint":
+					index.indexes[path] = {
+						type: "BKD",
+						node: new BKDTree(),
+						isArray
+					};
+					break;
+				default: throw createError("INVALID_SCHEMA_TYPE", Array.isArray(type) ? "array" : type, path);
+			}
+			index.searchableProperties.push(path);
+			index.searchablePropertiesWithTypes[path] = type;
+		}
+	}
+	return index;
+}
+function insertScalarBuilder(implementation, index, prop, internalId, language, tokenizer, docsCount, options) {
+	return (value) => {
+		const { type, node } = index.indexes[prop];
+		switch (type) {
+			case "Bool":
+				node[value ? "true" : "false"].add(internalId);
+				break;
+			case "AVL": {
+				const avlRebalanceThreshold = options?.avlRebalanceThreshold ?? 1;
+				node.insert(value, internalId, avlRebalanceThreshold);
+				break;
+			}
+			case "Radix": {
+				const tokens = tokenizer.tokenize(value, language, prop, false);
+				implementation.insertDocumentScoreParameters(index, prop, internalId, tokens, docsCount);
+				for (const token of tokens) {
+					implementation.insertTokenScoreParameters(index, prop, internalId, tokens, token);
+					node.insert(token, internalId);
+				}
+				break;
+			}
+			case "Flat":
+				node.insert(value, internalId);
+				break;
+			case "BKD": node.insert(value, [internalId]);
+		}
+	};
+}
+function insert$1(implementation, index, prop, id, internalId, value, schemaType, language, tokenizer, docsCount, options) {
+	if (isVectorType(schemaType)) return insertVector(index, prop, value, id, internalId);
+	const insertScalar = insertScalarBuilder(implementation, index, prop, internalId, language, tokenizer, docsCount, options);
+	if (!isArrayType(schemaType)) return insertScalar(value);
+	const elements = value;
+	const elementsLength = elements.length;
+	for (let i = 0; i < elementsLength; i++) insertScalar(elements[i]);
+}
+function insertVector(index, prop, value, id, internalDocumentId) {
+	index.vectorIndexes[prop].node.add(internalDocumentId, value);
+}
+function removeScalar(implementation, index, prop, id, internalId, value, schemaType, language, tokenizer, docsCount) {
+	if (isVectorType(schemaType)) {
+		index.vectorIndexes[prop].node.remove(internalId);
+		return true;
+	}
+	const { type, node } = index.indexes[prop];
+	switch (type) {
+		case "AVL":
+			node.removeDocument(value, internalId);
+			return true;
+		case "Bool":
+			node[value ? "true" : "false"].delete(internalId);
+			return true;
+		case "Radix": {
+			const tokens = tokenizer.tokenize(value, language, prop);
+			implementation.removeDocumentScoreParameters(index, prop, id, docsCount);
+			for (const token of tokens) {
+				implementation.removeTokenScoreParameters(index, prop, token);
+				node.removeDocumentByWord(token, internalId);
+			}
+			return true;
+		}
+		case "Flat":
+			node.removeDocument(internalId, value);
+			return true;
+		case "BKD":
+			node.removeDocByID(value, internalId);
+			return false;
+	}
+}
+function remove$1(implementation, index, prop, id, internalId, value, schemaType, language, tokenizer, docsCount) {
+	if (!isArrayType(schemaType)) return removeScalar(implementation, index, prop, id, internalId, value, schemaType, language, tokenizer, docsCount);
+	const innerSchemaType = getInnerType(schemaType);
+	const elements = value;
+	const elementsLength = elements.length;
+	for (let i = 0; i < elementsLength; i++) removeScalar(implementation, index, prop, id, internalId, elements[i], innerSchemaType, language, tokenizer, docsCount);
+	return true;
+}
+function calculateResultScores(index, prop, term, ids, docsCount, bm25Relevance, resultsMap, boostPerProperty, whereFiltersIDs, keywordMatchesMap) {
+	const documentIDs = Array.from(ids);
+	const avgFieldLength = index.avgFieldLength[prop];
+	const fieldLengths = index.fieldLengths[prop];
+	const oramaOccurrences = index.tokenOccurrences[prop];
+	const oramaFrequencies = index.frequencies[prop];
+	const termOccurrences = typeof oramaOccurrences[term] === "number" ? oramaOccurrences[term] ?? 0 : 0;
+	const documentIDsLength = documentIDs.length;
+	for (let k = 0; k < documentIDsLength; k++) {
+		const internalId = documentIDs[k];
+		if (whereFiltersIDs && !whereFiltersIDs.has(internalId)) continue;
+		if (!keywordMatchesMap.has(internalId)) keywordMatchesMap.set(internalId, /* @__PURE__ */ new Map());
+		const propertyMatches = keywordMatchesMap.get(internalId);
+		propertyMatches.set(prop, (propertyMatches.get(prop) || 0) + 1);
+		const bm25 = BM25(oramaFrequencies?.[internalId]?.[term] ?? 0, termOccurrences, docsCount, fieldLengths[internalId], avgFieldLength, bm25Relevance);
+		if (resultsMap.has(internalId)) resultsMap.set(internalId, resultsMap.get(internalId) + bm25 * boostPerProperty);
+		else resultsMap.set(internalId, bm25 * boostPerProperty);
+	}
+}
+function search$1(index, term, tokenizer, language, propertiesToSearch, exact, tolerance, boost, relevance, docsCount, whereFiltersIDs, threshold = 0) {
+	const tokens = tokenizer.tokenize(term, language);
+	const keywordsCount = tokens.length || 1;
+	const keywordMatchesMap = /* @__PURE__ */ new Map();
+	const tokenFoundMap = /* @__PURE__ */ new Map();
+	const resultsMap = /* @__PURE__ */ new Map();
+	for (const prop of propertiesToSearch) {
+		if (!(prop in index.indexes)) continue;
+		const tree = index.indexes[prop];
+		const { type } = tree;
+		if (type !== "Radix") throw createError("WRONG_SEARCH_PROPERTY_TYPE", prop);
+		const boostPerProperty = boost[prop] ?? 1;
+		if (boostPerProperty <= 0) throw createError("INVALID_BOOST_VALUE", boostPerProperty);
+		if (tokens.length === 0 && !term) tokens.push("");
+		const tokenLength = tokens.length;
+		for (let i = 0; i < tokenLength; i++) {
+			const token = tokens[i];
+			const searchResult = tree.node.find({
+				term: token,
+				exact,
+				tolerance
+			});
+			const termsFound = Object.keys(searchResult);
+			if (termsFound.length > 0) tokenFoundMap.set(token, true);
+			const termsFoundLength = termsFound.length;
+			for (let j = 0; j < termsFoundLength; j++) {
+				const word = termsFound[j];
+				const ids = searchResult[word];
+				calculateResultScores(index, prop, word, ids, docsCount, relevance, resultsMap, boostPerProperty, whereFiltersIDs, keywordMatchesMap);
+			}
+		}
+	}
+	const results = Array.from(resultsMap.entries()).map(([id, score]) => [id, score]).sort((a, b) => b[1] - a[1]);
+	if (results.length === 0) return [];
+	if (threshold === 1) return results;
+	if (threshold === 0) {
+		if (keywordsCount === 1) return results;
+		for (const token of tokens) if (!tokenFoundMap.get(token)) return [];
+		return results.filter(([id]) => {
+			const propertyMatches = keywordMatchesMap.get(id);
+			if (!propertyMatches) return false;
+			return Array.from(propertyMatches.values()).some((matches) => matches === keywordsCount);
+		});
+	}
+	const fullMatches = results.filter(([id]) => {
+		const propertyMatches = keywordMatchesMap.get(id);
+		if (!propertyMatches) return false;
+		return Array.from(propertyMatches.values()).some((matches) => matches === keywordsCount);
+	});
+	if (fullMatches.length > 0) {
+		const remainingResults = results.filter(([id]) => !fullMatches.some(([fid]) => fid === id));
+		const additionalResults = Math.ceil(remainingResults.length * threshold);
+		return [...fullMatches, ...remainingResults.slice(0, additionalResults)];
+	}
+	return results;
+}
+function searchByWhereClause(index, tokenizer, filters, language) {
+	if ("and" in filters && filters.and && Array.isArray(filters.and)) {
+		const andFilters = filters.and;
+		if (andFilters.length === 0) return /* @__PURE__ */ new Set();
+		return setIntersection(...andFilters.map((filter) => searchByWhereClause(index, tokenizer, filter, language)));
+	}
+	if ("or" in filters && filters.or && Array.isArray(filters.or)) {
+		const orFilters = filters.or;
+		if (orFilters.length === 0) return /* @__PURE__ */ new Set();
+		return orFilters.map((filter) => searchByWhereClause(index, tokenizer, filter, language)).reduce((acc, set) => setUnion(acc, set), /* @__PURE__ */ new Set());
+	}
+	if ("not" in filters && filters.not) {
+		const notFilter = filters.not;
+		const allDocs = /* @__PURE__ */ new Set();
+		const docsStore = index.sharedInternalDocumentStore;
+		for (let i = 1; i <= docsStore.internalIdToId.length; i++) allDocs.add(i);
+		return setDifference(allDocs, searchByWhereClause(index, tokenizer, notFilter, language));
+	}
+	const filterKeys = Object.keys(filters);
+	const filtersMap = filterKeys.reduce((acc, key) => ({
+		[key]: /* @__PURE__ */ new Set(),
+		...acc
+	}), {});
+	for (const param of filterKeys) {
+		const operation = filters[param];
+		if (typeof index.indexes[param] === "undefined") throw createError("UNKNOWN_FILTER_PROPERTY", param);
+		const { node, type, isArray } = index.indexes[param];
+		if (type === "Bool") {
+			const idx = node;
+			const filteredIDs = operation ? idx.true : idx.false;
+			filtersMap[param] = setUnion(filtersMap[param], filteredIDs);
+			continue;
+		}
+		if (type === "BKD") {
+			let reqOperation;
+			if ("radius" in operation) reqOperation = "radius";
+			else if ("polygon" in operation) reqOperation = "polygon";
+			else throw new Error(`Invalid operation ${operation}`);
+			if (reqOperation === "radius") {
+				const { value, coordinates, unit = "m", inside = true, highPrecision = false } = operation[reqOperation];
+				const distanceInMeters = convertDistanceToMeters(value, unit);
+				const ids = node.searchByRadius(coordinates, distanceInMeters, inside, void 0, highPrecision);
+				filtersMap[param] = addGeoResult(filtersMap[param], ids);
+			} else {
+				const { coordinates, inside = true, highPrecision = false } = operation[reqOperation];
+				const ids = node.searchByPolygon(coordinates, inside, void 0, highPrecision);
+				filtersMap[param] = addGeoResult(filtersMap[param], ids);
+			}
+			continue;
+		}
+		if (type === "Radix" && (typeof operation === "string" || Array.isArray(operation))) {
+			for (const raw of [operation].flat()) {
+				const term = tokenizer.tokenize(raw, language, param);
+				for (const t of term) {
+					const filteredIDsResults = node.find({
+						term: t,
+						exact: true
+					});
+					filtersMap[param] = addFindResult(filtersMap[param], filteredIDsResults);
+				}
+			}
+			continue;
+		}
+		const operationKeys = Object.keys(operation);
+		if (operationKeys.length > 1) throw createError("INVALID_FILTER_OPERATION", operationKeys.length);
+		if (type === "Flat") {
+			const results = new Set(isArray ? node.filterArr(operation) : node.filter(operation));
+			filtersMap[param] = setUnion(filtersMap[param], results);
+			continue;
+		}
+		if (type === "AVL") {
+			const operationOpt = operationKeys[0];
+			const operationValue = operation[operationOpt];
+			let filteredIDs;
+			switch (operationOpt) {
+				case "gt":
+					filteredIDs = node.greaterThan(operationValue, false);
+					break;
+				case "gte":
+					filteredIDs = node.greaterThan(operationValue, true);
+					break;
+				case "lt":
+					filteredIDs = node.lessThan(operationValue, false);
+					break;
+				case "lte":
+					filteredIDs = node.lessThan(operationValue, true);
+					break;
+				case "eq":
+					filteredIDs = node.find(operationValue) ?? /* @__PURE__ */ new Set();
+					break;
+				case "between": {
+					const [min, max] = operationValue;
+					filteredIDs = node.rangeSearch(min, max);
+					break;
+				}
+				default: throw createError("INVALID_FILTER_OPERATION", operationOpt);
+			}
+			filtersMap[param] = setUnion(filtersMap[param], filteredIDs);
+		}
+	}
+	return setIntersection(...Object.values(filtersMap));
+}
+function getSearchableProperties(index) {
+	return index.searchableProperties;
+}
+function getSearchablePropertiesWithTypes(index) {
+	return index.searchablePropertiesWithTypes;
+}
+function load$3(sharedInternalDocumentStore, raw) {
+	const { indexes: rawIndexes, vectorIndexes: rawVectorIndexes, searchableProperties, searchablePropertiesWithTypes, frequencies, tokenOccurrences, avgFieldLength, fieldLengths } = raw;
+	const indexes = {};
+	const vectorIndexes = {};
+	for (const prop of Object.keys(rawIndexes)) {
+		const { node, type, isArray } = rawIndexes[prop];
+		switch (type) {
+			case "Radix":
+				indexes[prop] = {
+					type: "Radix",
+					node: RadixTree.fromJSON(node),
+					isArray
+				};
+				break;
+			case "Flat":
+				indexes[prop] = {
+					type: "Flat",
+					node: FlatTree.fromJSON(node),
+					isArray
+				};
+				break;
+			case "AVL":
+				indexes[prop] = {
+					type: "AVL",
+					node: AVLTree.fromJSON(node),
+					isArray
+				};
+				break;
+			case "BKD":
+				indexes[prop] = {
+					type: "BKD",
+					node: BKDTree.fromJSON(node),
+					isArray
+				};
+				break;
+			case "Bool":
+				indexes[prop] = {
+					type: "Bool",
+					node: BoolNode.fromJSON(node),
+					isArray
+				};
+				break;
+			default: indexes[prop] = rawIndexes[prop];
+		}
+	}
+	for (const idx of Object.keys(rawVectorIndexes)) vectorIndexes[idx] = {
+		type: "Vector",
+		isArray: false,
+		node: VectorIndex.fromJSON(rawVectorIndexes[idx])
+	};
+	return {
+		sharedInternalDocumentStore,
+		indexes,
+		vectorIndexes,
+		searchableProperties,
+		searchablePropertiesWithTypes,
+		frequencies,
+		tokenOccurrences,
+		avgFieldLength,
+		fieldLengths
+	};
+}
+function save$3(index) {
+	const { indexes, vectorIndexes, searchableProperties, searchablePropertiesWithTypes, frequencies, tokenOccurrences, avgFieldLength, fieldLengths } = index;
+	const dumpVectorIndexes = {};
+	for (const idx of Object.keys(vectorIndexes)) dumpVectorIndexes[idx] = vectorIndexes[idx].node.toJSON();
+	const savedIndexes = {};
+	for (const name of Object.keys(indexes)) {
+		const { type, node, isArray } = indexes[name];
+		if (type === "Flat" || type === "Radix" || type === "AVL" || type === "BKD" || type === "Bool") savedIndexes[name] = {
+			type,
+			node: node.toJSON(),
+			isArray
+		};
+		else {
+			savedIndexes[name] = indexes[name];
+			savedIndexes[name].node = savedIndexes[name].node.toJSON();
+		}
+	}
+	return {
+		indexes: savedIndexes,
+		vectorIndexes: dumpVectorIndexes,
+		searchableProperties,
+		searchablePropertiesWithTypes,
+		frequencies,
+		tokenOccurrences,
+		avgFieldLength,
+		fieldLengths
+	};
+}
+function createIndex() {
+	return {
+		create: create$3,
+		insert: insert$1,
+		remove: remove$1,
+		insertDocumentScoreParameters,
+		insertTokenScoreParameters,
+		removeDocumentScoreParameters,
+		removeTokenScoreParameters,
+		calculateResultScores,
+		search: search$1,
+		searchByWhereClause,
+		getSearchableProperties,
+		getSearchablePropertiesWithTypes,
+		load: load$3,
+		save: save$3
+	};
+}
+function addGeoResult(set, ids) {
+	if (!set) set = /* @__PURE__ */ new Set();
+	const idsLength = ids.length;
+	for (let i = 0; i < idsLength; i++) {
+		const entry = ids[i].docIDs;
+		const idsLength = entry.length;
+		for (let j = 0; j < idsLength; j++) set.add(entry[j]);
+	}
+	return set;
+}
+function createGeoTokenScores(ids, centerPoint, highPrecision = false) {
+	const distanceFn = highPrecision ? BKDTree.vincentyDistance : BKDTree.haversineDistance;
+	const results = [];
+	const distances = [];
+	for (const { point } of ids) distances.push(distanceFn(centerPoint, point));
+	const maxDistance = Math.max(...distances);
+	let index = 0;
+	for (const { docIDs } of ids) {
+		const score = maxDistance - distances[index] + 1;
+		for (const docID of docIDs) results.push([docID, score]);
+		index++;
+	}
+	results.sort((a, b) => b[1] - a[1]);
+	return results;
+}
+function isGeosearchOnlyQuery(filters, index) {
+	const filterKeys = Object.keys(filters);
+	if (filterKeys.length !== 1) return { isGeoOnly: false };
+	const param = filterKeys[0];
+	const operation = filters[param];
+	if (typeof index.indexes[param] === "undefined") return { isGeoOnly: false };
+	const { type } = index.indexes[param];
+	if (type === "BKD" && operation && ("radius" in operation || "polygon" in operation)) return {
+		isGeoOnly: true,
+		geoProperty: param,
+		geoOperation: operation
+	};
+	return { isGeoOnly: false };
+}
+function searchByGeoWhereClause(index, filters) {
+	const indexTyped = index;
+	const geoInfo = isGeosearchOnlyQuery(filters, indexTyped);
+	if (!geoInfo.isGeoOnly || !geoInfo.geoProperty || !geoInfo.geoOperation) return null;
+	const { node } = indexTyped.indexes[geoInfo.geoProperty];
+	const operation = geoInfo.geoOperation;
+	const bkdNode = node;
+	let results;
+	if ("radius" in operation) {
+		const { value, coordinates, unit = "m", inside = true, highPrecision = false } = operation.radius;
+		const centerPoint = coordinates;
+		const distanceInMeters = convertDistanceToMeters(value, unit);
+		results = bkdNode.searchByRadius(centerPoint, distanceInMeters, inside, "asc", highPrecision);
+		return createGeoTokenScores(results, centerPoint, highPrecision);
+	} else if ("polygon" in operation) {
+		const { coordinates, inside = true, highPrecision = false } = operation.polygon;
+		results = bkdNode.searchByPolygon(coordinates, inside, "asc", highPrecision);
+		const centroid = BKDTree.calculatePolygonCentroid(coordinates);
+		return createGeoTokenScores(results, centroid, highPrecision);
+	}
+	return null;
+}
+function addFindResult(set, filteredIDsResults) {
+	if (!set) set = /* @__PURE__ */ new Set();
+	const keys = Object.keys(filteredIDsResults);
+	const keysLength = keys.length;
+	for (let i = 0; i < keysLength; i++) {
+		const ids = filteredIDsResults[keys[i]];
+		const idsLength = ids.length;
+		for (let j = 0; j < idsLength; j++) set.add(ids[j]);
+	}
+	return set;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/sorter.js
+function innerCreate(orama, sharedInternalDocumentStore, schema, sortableDeniedProperties, prefix) {
+	const sorter = {
+		language: orama.tokenizer.language,
+		sharedInternalDocumentStore,
+		enabled: true,
+		isSorted: true,
+		sortableProperties: [],
+		sortablePropertiesWithTypes: {},
+		sorts: {}
+	};
+	for (const [prop, type] of Object.entries(schema)) {
+		const path = `${prefix}${prefix ? "." : ""}${prop}`;
+		if (sortableDeniedProperties.includes(path)) continue;
+		if (typeof type === "object" && !Array.isArray(type)) {
+			const ret = innerCreate(orama, sharedInternalDocumentStore, type, sortableDeniedProperties, path);
+			safeArrayPush(sorter.sortableProperties, ret.sortableProperties);
+			sorter.sorts = {
+				...sorter.sorts,
+				...ret.sorts
+			};
+			sorter.sortablePropertiesWithTypes = {
+				...sorter.sortablePropertiesWithTypes,
+				...ret.sortablePropertiesWithTypes
+			};
+			continue;
+		}
+		if (!isVectorType(type)) switch (type) {
+			case "boolean":
+			case "number":
+			case "string":
+				sorter.sortableProperties.push(path);
+				sorter.sortablePropertiesWithTypes[path] = type;
+				sorter.sorts[path] = {
+					docs: /* @__PURE__ */ new Map(),
+					orderedDocsToRemove: /* @__PURE__ */ new Map(),
+					orderedDocs: [],
+					type
+				};
+				break;
+			case "geopoint":
+			case "enum": continue;
+			case "enum[]":
+			case "boolean[]":
+			case "number[]":
+			case "string[]": continue;
+			default: throw createError("INVALID_SORT_SCHEMA_TYPE", Array.isArray(type) ? "array" : type, path);
+		}
+	}
+	return sorter;
+}
+function create$2(orama, sharedInternalDocumentStore, schema, config) {
+	if (!(config?.enabled !== false)) return { disabled: true };
+	return innerCreate(orama, sharedInternalDocumentStore, schema, (config || {}).unsortableProperties || [], "");
+}
+function insert(sorter, prop, id, value) {
+	if (!sorter.enabled) return;
+	sorter.isSorted = false;
+	const internalId = getInternalDocumentId(sorter.sharedInternalDocumentStore, id);
+	const s = sorter.sorts[prop];
+	if (s.orderedDocsToRemove.has(internalId)) ensureOrderedDocsAreDeletedByProperty(sorter, prop);
+	s.docs.set(internalId, s.orderedDocs.length);
+	s.orderedDocs.push([internalId, value]);
+}
+function ensureIsSorted(sorter) {
+	if (sorter.isSorted || !sorter.enabled) return;
+	const properties = Object.keys(sorter.sorts);
+	for (const prop of properties) ensurePropertyIsSorted(sorter, prop);
+	sorter.isSorted = true;
+}
+function stringSort(language, value, d) {
+	return value[1].localeCompare(d[1], getLocale(language));
+}
+function numberSort(value, d) {
+	return value[1] - d[1];
+}
+function booleanSort(value, d) {
+	return d[1] ? -1 : 1;
+}
+function ensurePropertyIsSorted(sorter, prop) {
+	const s = sorter.sorts[prop];
+	let predicate;
+	switch (s.type) {
+		case "string":
+			predicate = stringSort.bind(null, sorter.language);
+			break;
+		case "number":
+			predicate = numberSort.bind(null);
+			break;
+		case "boolean": predicate = booleanSort.bind(null);
+	}
+	s.orderedDocs.sort(predicate);
+	const orderedDocsLength = s.orderedDocs.length;
+	for (let i = 0; i < orderedDocsLength; i++) {
+		const docId = s.orderedDocs[i][0];
+		s.docs.set(docId, i);
+	}
+}
+function ensureOrderedDocsAreDeleted(sorter) {
+	const properties = Object.keys(sorter.sorts);
+	for (const prop of properties) ensureOrderedDocsAreDeletedByProperty(sorter, prop);
+}
+function ensureOrderedDocsAreDeletedByProperty(sorter, prop) {
+	const s = sorter.sorts[prop];
+	if (!s.orderedDocsToRemove.size) return;
+	s.orderedDocs = s.orderedDocs.filter((doc) => !s.orderedDocsToRemove.has(doc[0]));
+	s.orderedDocsToRemove.clear();
+}
+function remove(sorter, prop, id) {
+	if (!sorter.enabled) return;
+	const s = sorter.sorts[prop];
+	const internalId = getInternalDocumentId(sorter.sharedInternalDocumentStore, id);
+	if (!s.docs.get(internalId)) return;
+	s.docs.delete(internalId);
+	s.orderedDocsToRemove.set(internalId, true);
+}
+function sortBy(sorter, docIds, by) {
+	if (!sorter.enabled) throw createError("SORT_DISABLED");
+	const property = by.property;
+	const isDesc = by.order === "DESC";
+	const s = sorter.sorts[property];
+	if (!s) throw createError("UNABLE_TO_SORT_ON_UNKNOWN_FIELD", property, sorter.sortableProperties.join(", "));
+	ensureOrderedDocsAreDeletedByProperty(sorter, property);
+	ensureIsSorted(sorter);
+	docIds.sort((a, b) => {
+		const indexOfA = s.docs.get(getInternalDocumentId(sorter.sharedInternalDocumentStore, a[0]));
+		const indexOfB = s.docs.get(getInternalDocumentId(sorter.sharedInternalDocumentStore, b[0]));
+		const isAIndexed = typeof indexOfA !== "undefined";
+		const isBIndexed = typeof indexOfB !== "undefined";
+		if (!isAIndexed && !isBIndexed) return 0;
+		if (!isAIndexed) return 1;
+		if (!isBIndexed) return -1;
+		return isDesc ? indexOfB - indexOfA : indexOfA - indexOfB;
+	});
+	return docIds;
+}
+function getSortableProperties(sorter) {
+	if (!sorter.enabled) return [];
+	return sorter.sortableProperties;
+}
+function getSortablePropertiesWithTypes(sorter) {
+	if (!sorter.enabled) return {};
+	return sorter.sortablePropertiesWithTypes;
+}
+function load$2(sharedInternalDocumentStore, raw) {
+	const rawDocument = raw;
+	if (!rawDocument.enabled) return { enabled: false };
+	const sorts = Object.keys(rawDocument.sorts).reduce((acc, prop) => {
+		const { docs, orderedDocs, type } = rawDocument.sorts[prop];
+		acc[prop] = {
+			docs: new Map(Object.entries(docs).map(([k, v]) => [+k, v])),
+			orderedDocsToRemove: /* @__PURE__ */ new Map(),
+			orderedDocs,
+			type
+		};
+		return acc;
+	}, {});
+	return {
+		sharedInternalDocumentStore,
+		language: rawDocument.language,
+		sortableProperties: rawDocument.sortableProperties,
+		sortablePropertiesWithTypes: rawDocument.sortablePropertiesWithTypes,
+		sorts,
+		enabled: true,
+		isSorted: rawDocument.isSorted
+	};
+}
+function save$2(sorter) {
+	if (!sorter.enabled) return { enabled: false };
+	ensureOrderedDocsAreDeleted(sorter);
+	ensureIsSorted(sorter);
+	const sorts = Object.keys(sorter.sorts).reduce((acc, prop) => {
+		const { docs, orderedDocs, type } = sorter.sorts[prop];
+		acc[prop] = {
+			docs: Object.fromEntries(docs.entries()),
+			orderedDocs,
+			type
+		};
+		return acc;
+	}, {});
+	return {
+		language: sorter.language,
+		sortableProperties: sorter.sortableProperties,
+		sortablePropertiesWithTypes: sorter.sortablePropertiesWithTypes,
+		sorts,
+		enabled: sorter.enabled,
+		isSorted: sorter.isSorted
+	};
+}
+function createSorter() {
+	return {
+		create: create$2,
+		insert,
+		remove,
+		save: save$2,
+		load: load$2,
+		sortBy,
+		getSortableProperties,
+		getSortablePropertiesWithTypes
+	};
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/tokenizer/diacritics.js
+var DIACRITICS_CHARCODE_START = 192;
+var DIACRITICS_CHARCODE_END = 383;
+var CHARCODE_REPLACE_MAPPING = [
+	65,
+	65,
+	65,
+	65,
+	65,
+	65,
+	65,
+	67,
+	69,
+	69,
+	69,
+	69,
+	73,
+	73,
+	73,
+	73,
+	69,
+	78,
+	79,
+	79,
+	79,
+	79,
+	79,
+	null,
+	79,
+	85,
+	85,
+	85,
+	85,
+	89,
+	80,
+	115,
+	97,
+	97,
+	97,
+	97,
+	97,
+	97,
+	97,
+	99,
+	101,
+	101,
+	101,
+	101,
+	105,
+	105,
+	105,
+	105,
+	101,
+	110,
+	111,
+	111,
+	111,
+	111,
+	111,
+	null,
+	111,
+	117,
+	117,
+	117,
+	117,
+	121,
+	112,
+	121,
+	65,
+	97,
+	65,
+	97,
+	65,
+	97,
+	67,
+	99,
+	67,
+	99,
+	67,
+	99,
+	67,
+	99,
+	68,
+	100,
+	68,
+	100,
+	69,
+	101,
+	69,
+	101,
+	69,
+	101,
+	69,
+	101,
+	69,
+	101,
+	71,
+	103,
+	71,
+	103,
+	71,
+	103,
+	71,
+	103,
+	72,
+	104,
+	72,
+	104,
+	73,
+	105,
+	73,
+	105,
+	73,
+	105,
+	73,
+	105,
+	73,
+	105,
+	73,
+	105,
+	74,
+	106,
+	75,
+	107,
+	107,
+	76,
+	108,
+	76,
+	108,
+	76,
+	108,
+	76,
+	108,
+	76,
+	108,
+	78,
+	110,
+	78,
+	110,
+	78,
+	110,
+	110,
+	78,
+	110,
+	79,
+	111,
+	79,
+	111,
+	79,
+	111,
+	79,
+	111,
+	82,
+	114,
+	82,
+	114,
+	82,
+	114,
+	83,
+	115,
+	83,
+	115,
+	83,
+	115,
+	83,
+	115,
+	84,
+	116,
+	84,
+	116,
+	84,
+	116,
+	85,
+	117,
+	85,
+	117,
+	85,
+	117,
+	85,
+	117,
+	85,
+	117,
+	85,
+	117,
+	87,
+	119,
+	89,
+	121,
+	89,
+	90,
+	122,
+	90,
+	122,
+	90,
+	122,
+	115
+];
+function replaceChar(charCode) {
+	if (charCode < DIACRITICS_CHARCODE_START || charCode > DIACRITICS_CHARCODE_END) return charCode;
+	/* c8 ignore next  */
+	return CHARCODE_REPLACE_MAPPING[charCode - DIACRITICS_CHARCODE_START] || charCode;
+}
+function replaceDiacritics(str) {
+	const stringCharCode = [];
+	for (let idx = 0; idx < str.length; idx++) stringCharCode[idx] = replaceChar(str.charCodeAt(idx));
+	return String.fromCharCode(...stringCharCode);
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/tokenizer/english-stemmer.js
+var step2List = {
+	ational: "ate",
+	tional: "tion",
+	enci: "ence",
+	anci: "ance",
+	izer: "ize",
+	bli: "ble",
+	alli: "al",
+	entli: "ent",
+	eli: "e",
+	ousli: "ous",
+	ization: "ize",
+	ation: "ate",
+	ator: "ate",
+	alism: "al",
+	iveness: "ive",
+	fulness: "ful",
+	ousness: "ous",
+	aliti: "al",
+	iviti: "ive",
+	biliti: "ble",
+	logi: "log"
+};
+var step3List = {
+	icate: "ic",
+	ative: "",
+	alize: "al",
+	iciti: "ic",
+	ical: "ic",
+	ful: "",
+	ness: ""
+};
+var mgr0 = "^([^aeiou][^aeiouy]*)?[aeiouy][aeiou]*[^aeiou][^aeiouy]*";
+var meq1 = "^([^aeiou][^aeiouy]*)?[aeiouy][aeiou]*[^aeiou][^aeiouy]*([aeiouy][aeiou]*)?$";
+var mgr1 = "^([^aeiou][^aeiouy]*)?[aeiouy][aeiou]*[^aeiou][^aeiouy]*[aeiouy][aeiou]*[^aeiou][^aeiouy]*";
+var s_v = "^([^aeiou][^aeiouy]*)?[aeiouy]";
+function stemmer$1(w) {
+	let stem;
+	let suffix;
+	let re;
+	let re2;
+	let re3;
+	let re4;
+	if (w.length < 3) return w;
+	const firstch = w.substring(0, 1);
+	if (firstch == "y") w = firstch.toUpperCase() + w.substring(1);
+	re = /^(.+?)(ss|i)es$/;
+	re2 = /^(.+?)([^s])s$/;
+	if (re.test(w)) w = w.replace(re, "$1$2");
+	else if (re2.test(w)) w = w.replace(re2, "$1$2");
+	re = /^(.+?)eed$/;
+	re2 = /^(.+?)(ed|ing)$/;
+	if (re.test(w)) {
+		const fp = re.exec(w);
+		re = new RegExp(mgr0);
+		if (re.test(fp[1])) {
+			re = /.$/;
+			w = w.replace(re, "");
+		}
+	} else if (re2.test(w)) {
+		stem = re2.exec(w)[1];
+		re2 = new RegExp(s_v);
+		if (re2.test(stem)) {
+			w = stem;
+			re2 = /(at|bl|iz)$/;
+			re3 = /* @__PURE__ */ new RegExp("([^aeiouylsz])\\1$");
+			re4 = /* @__PURE__ */ new RegExp("^[^aeiou][^aeiouy]*[aeiouy][^aeiouwxy]$");
+			if (re2.test(w)) w = w + "e";
+			else if (re3.test(w)) {
+				re = /.$/;
+				w = w.replace(re, "");
+			} else if (re4.test(w)) w = w + "e";
+		}
+	}
+	re = /^(.+?)y$/;
+	if (re.test(w)) {
+		stem = re.exec(w)?.[1];
+		re = new RegExp(s_v);
+		if (stem && re.test(stem)) w = stem + "i";
+	}
+	re = /^(.+?)(ational|tional|enci|anci|izer|bli|alli|entli|eli|ousli|ization|ation|ator|alism|iveness|fulness|ousness|aliti|iviti|biliti|logi)$/;
+	if (re.test(w)) {
+		const fp = re.exec(w);
+		stem = fp?.[1];
+		suffix = fp?.[2];
+		re = new RegExp(mgr0);
+		if (stem && re.test(stem)) w = stem + step2List[suffix];
+	}
+	re = /^(.+?)(icate|ative|alize|iciti|ical|ful|ness)$/;
+	if (re.test(w)) {
+		const fp = re.exec(w);
+		stem = fp?.[1];
+		suffix = fp?.[2];
+		re = new RegExp(mgr0);
+		if (stem && re.test(stem)) w = stem + step3List[suffix];
+	}
+	re = /^(.+?)(al|ance|ence|er|ic|able|ible|ant|ement|ment|ent|ou|ism|ate|iti|ous|ive|ize)$/;
+	re2 = /^(.+?)(s|t)(ion)$/;
+	if (re.test(w)) {
+		stem = re.exec(w)?.[1];
+		re = new RegExp(mgr1);
+		if (stem && re.test(stem)) w = stem;
+	} else if (re2.test(w)) {
+		const fp = re2.exec(w);
+		stem = fp?.[1] ?? "" + fp?.[2] ?? "";
+		re2 = new RegExp(mgr1);
+		if (re2.test(stem)) w = stem;
+	}
+	re = /^(.+?)e$/;
+	if (re.test(w)) {
+		stem = re.exec(w)?.[1];
+		re = new RegExp(mgr1);
+		re2 = new RegExp(meq1);
+		re3 = /* @__PURE__ */ new RegExp("^[^aeiou][^aeiouy]*[aeiouy][^aeiouwxy]$");
+		if (stem && (re.test(stem) || re2.test(stem) && !re3.test(stem))) w = stem;
+	}
+	re = /ll$/;
+	re2 = new RegExp(mgr1);
+	if (re.test(w) && re2.test(w)) {
+		re = /.$/;
+		w = w.replace(re, "");
+	}
+	if (firstch == "y") w = firstch.toLowerCase() + w.substring(1);
+	return w;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/tokenizer/index.js
+function normalizeToken(prop, token, withCache = true) {
+	const key = `${this.language}:${prop}:${token}`;
+	if (withCache && this.normalizationCache.has(key)) return this.normalizationCache.get(key);
+	if (this.stopWords?.includes(token)) {
+		if (withCache) this.normalizationCache.set(key, "");
+		return "";
+	}
+	if (this.stemmer && !this.stemmerSkipProperties.has(prop)) token = this.stemmer(token);
+	token = replaceDiacritics(token);
+	if (withCache) this.normalizationCache.set(key, token);
+	return token;
+}
+/* c8 ignore next 10 */
+function trim(text) {
+	while (text[text.length - 1] === "") text.pop();
+	while (text[0] === "") text.shift();
+	return text;
+}
+function tokenize(input, language, prop, withCache = true) {
+	if (language && language !== this.language) throw createError("LANGUAGE_NOT_SUPPORTED", language);
+	/* c8 ignore next 3 */
+	if (typeof input !== "string") return [input];
+	const normalizeToken = this.normalizeToken.bind(this, prop ?? "");
+	let tokens;
+	if (prop && this.tokenizeSkipProperties.has(prop)) tokens = [normalizeToken(input, withCache)];
+	else {
+		const splitRule = SPLITTERS[this.language];
+		tokens = input.toLowerCase().split(splitRule).map((t) => normalizeToken(t, withCache)).filter(Boolean);
+	}
+	const trimTokens = trim(tokens);
+	if (!this.allowDuplicates) return Array.from(new Set(trimTokens));
+	return trimTokens;
+}
+function createTokenizer(config = {}) {
+	if (!config.language) config.language = "english";
+	else if (!SUPPORTED_LANGUAGES.includes(config.language)) throw createError("LANGUAGE_NOT_SUPPORTED", config.language);
+	let stemmer;
+	if (config.stemming || config.stemmer && !("stemming" in config)) {
+		if (config.stemmer) {
+			if (typeof config.stemmer !== "function") throw createError("INVALID_STEMMER_FUNCTION_TYPE");
+			stemmer = config.stemmer;
+		} else if (config.language === "english") stemmer = stemmer$1;
+		else throw createError("MISSING_STEMMER", config.language);
+	}
+	let stopWords;
+	if (config.stopWords !== false) {
+		stopWords = [];
+		if (Array.isArray(config.stopWords)) stopWords = config.stopWords;
+		else if (typeof config.stopWords === "function") stopWords = config.stopWords(stopWords);
+		else if (config.stopWords) throw createError("CUSTOM_STOP_WORDS_MUST_BE_FUNCTION_OR_ARRAY");
+		if (!Array.isArray(stopWords)) throw createError("CUSTOM_STOP_WORDS_MUST_BE_FUNCTION_OR_ARRAY");
+		for (const s of stopWords) if (typeof s !== "string") throw createError("CUSTOM_STOP_WORDS_MUST_BE_FUNCTION_OR_ARRAY");
+	}
+	const tokenizer = {
+		tokenize,
+		language: config.language,
+		stemmer,
+		stemmerSkipProperties: new Set(config.stemmerSkipProperties ? [config.stemmerSkipProperties].flat() : []),
+		tokenizeSkipProperties: new Set(config.tokenizeSkipProperties ? [config.tokenizeSkipProperties].flat() : []),
+		stopWords,
+		allowDuplicates: Boolean(config.allowDuplicates),
+		normalizeToken,
+		normalizationCache: /* @__PURE__ */ new Map()
+	};
+	tokenizer.tokenize = tokenize.bind(tokenizer);
+	tokenizer.normalizeToken = normalizeToken;
+	return tokenizer;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/pinning.js
+function create$1(sharedInternalDocumentStore) {
+	return {
+		sharedInternalDocumentStore,
+		rules: /* @__PURE__ */ new Map()
+	};
+}
+function addRule(store, rule) {
+	if (store.rules.has(rule.id)) throw new Error(`PINNING_RULE_ALREADY_EXISTS: A pinning rule with id "${rule.id}" already exists. Use updateRule to modify it.`);
+	store.rules.set(rule.id, rule);
+}
+function updateRule(store, rule) {
+	if (!store.rules.has(rule.id)) throw new Error(`PINNING_RULE_NOT_FOUND: Cannot update pinning rule with id "${rule.id}" because it does not exist. Use addRule to create it.`);
+	store.rules.set(rule.id, rule);
+}
+function removeRule(store, ruleId) {
+	return store.rules.delete(ruleId);
+}
+function getRule(store, ruleId) {
+	return store.rules.get(ruleId);
+}
+function getAllRules(store) {
+	return Array.from(store.rules.values());
+}
+function matchesCondition(term, condition) {
+	const normalizedTerm = term.toLowerCase().trim();
+	const normalizedPattern = condition.pattern.toLowerCase().trim();
+	switch (condition.anchoring) {
+		case "is": return normalizedTerm === normalizedPattern;
+		case "starts_with": return normalizedTerm.startsWith(normalizedPattern);
+		case "contains": return normalizedTerm.includes(normalizedPattern);
+		default: return false;
+	}
+}
+function matchesRule(term, rule) {
+	if (!term) return false;
+	return rule.conditions.every((condition) => matchesCondition(term, condition));
+}
+function getMatchingRules(store, term) {
+	if (!term) return [];
+	const matchingRules = [];
+	for (const rule of store.rules.values()) if (matchesRule(term, rule)) matchingRules.push(rule);
+	return matchingRules;
+}
+function load$1(sharedInternalDocumentStore, raw) {
+	return {
+		sharedInternalDocumentStore,
+		rules: new Map(raw?.rules ?? [])
+	};
+}
+function save$1(store) {
+	return { rules: Array.from(store.rules.entries()) };
+}
+function createPinning() {
+	return {
+		create: create$1,
+		addRule,
+		updateRule,
+		removeRule,
+		getRule,
+		getAllRules,
+		getMatchingRules,
+		load: load$1,
+		save: save$1
+	};
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/methods/create.js
+function validateComponents(components) {
+	const defaultComponents = {
+		formatElapsedTime,
+		getDocumentIndexId,
+		getDocumentProperties,
+		validateSchema
+	};
+	for (const rawKey of FUNCTION_COMPONENTS) {
+		const key = rawKey;
+		if (components[key]) {
+			if (typeof components[key] !== "function") throw createError("COMPONENT_MUST_BE_FUNCTION", key);
+		} else components[key] = defaultComponents[key];
+	}
+	for (const rawKey of Object.keys(components)) if (!OBJECT_COMPONENTS.includes(rawKey) && !FUNCTION_COMPONENTS.includes(rawKey)) throw createError("UNSUPPORTED_COMPONENT", rawKey);
+}
+function create({ schema, sort, language, components, id, plugins }) {
+	if (!components) components = {};
+	for (const plugin of plugins ?? []) {
+		if (!("getComponents" in plugin)) continue;
+		if (typeof plugin.getComponents !== "function") continue;
+		const pluginComponents = plugin.getComponents(schema);
+		const keys = Object.keys(pluginComponents);
+		for (const key of keys) if (components[key]) throw createError("PLUGIN_COMPONENT_CONFLICT", key, plugin.name);
+		components = {
+			...components,
+			...pluginComponents
+		};
+	}
+	if (!id) id = uniqueId();
+	let tokenizer = components.tokenizer;
+	let index = components.index;
+	let documentsStore = components.documentsStore;
+	let sorter = components.sorter;
+	let pinning = components.pinning;
+	if (!tokenizer) tokenizer = createTokenizer({ language: language ?? "english" });
+	else if (!tokenizer.tokenize) tokenizer = createTokenizer(tokenizer);
+	else tokenizer = tokenizer;
+	if (components.tokenizer && language) throw createError("NO_LANGUAGE_WITH_CUSTOM_TOKENIZER");
+	const internalDocumentStore = createInternalDocumentIDStore();
+	index ||= createIndex();
+	sorter ||= createSorter();
+	documentsStore ||= createDocumentsStore();
+	pinning ||= createPinning();
+	validateComponents(components);
+	const { getDocumentProperties, getDocumentIndexId, validateSchema, formatElapsedTime } = components;
+	const orama = {
+		data: {},
+		caches: {},
+		schema,
+		tokenizer,
+		index,
+		sorter,
+		documentsStore,
+		pinning,
+		internalDocumentIDStore: internalDocumentStore,
+		getDocumentProperties,
+		getDocumentIndexId,
+		validateSchema,
+		beforeInsert: [],
+		afterInsert: [],
+		beforeRemove: [],
+		afterRemove: [],
+		beforeUpdate: [],
+		afterUpdate: [],
+		beforeUpsert: [],
+		afterUpsert: [],
+		beforeSearch: [],
+		afterSearch: [],
+		beforeInsertMultiple: [],
+		afterInsertMultiple: [],
+		beforeRemoveMultiple: [],
+		afterRemoveMultiple: [],
+		beforeUpdateMultiple: [],
+		afterUpdateMultiple: [],
+		beforeUpsertMultiple: [],
+		afterUpsertMultiple: [],
+		afterCreate: [],
+		formatElapsedTime,
+		id,
+		plugins,
+		version: getVersion()
+	};
+	orama.data = {
+		index: orama.index.create(orama, internalDocumentStore, schema),
+		docs: orama.documentsStore.create(orama, internalDocumentStore),
+		sorting: orama.sorter.create(orama, internalDocumentStore, schema, sort),
+		pinning: orama.pinning.create(internalDocumentStore)
+	};
+	for (const hook of AVAILABLE_PLUGIN_HOOKS) orama[hook] = (orama[hook] ?? []).concat(getAllPluginsByHook(orama, hook));
+	const afterCreate = orama["afterCreate"];
+	if (afterCreate) runAfterCreate(afterCreate, orama);
+	return orama;
+}
+function getVersion() {
+	return "{{VERSION}}";
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/methods/docs.js
+function count(db) {
+	return db.documentsStore.count(db.data.docs);
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/facets.js
+function sortAsc(a, b) {
+	return a[1] - b[1];
+}
+function sortDesc(a, b) {
+	return b[1] - a[1];
+}
+function sortingPredicateBuilder(order = "desc") {
+	return order.toLowerCase() === "asc" ? sortAsc : sortDesc;
+}
+function getFacets(orama, results, facetsConfig) {
+	const facets = {};
+	const allIDs = results.map(([id]) => id);
+	const allDocs = orama.documentsStore.getMultiple(orama.data.docs, allIDs);
+	const facetKeys = Object.keys(facetsConfig);
+	const properties = orama.index.getSearchablePropertiesWithTypes(orama.data.index);
+	for (const facet of facetKeys) {
+		let values;
+		if (properties[facet] === "number") {
+			const { ranges } = facetsConfig[facet];
+			const rangesLength = ranges.length;
+			const tmp = Array.from({ length: rangesLength });
+			for (let i = 0; i < rangesLength; i++) {
+				const range = ranges[i];
+				tmp[i] = [`${range.from}-${range.to}`, 0];
+			}
+			values = Object.fromEntries(tmp);
+		}
+		facets[facet] = {
+			count: 0,
+			values: values ?? {}
+		};
+	}
+	const allDocsLength = allDocs.length;
+	for (let i = 0; i < allDocsLength; i++) {
+		const doc = allDocs[i];
+		for (const facet of facetKeys) {
+			const facetValue = facet.includes(".") ? getNested(doc, facet) : doc[facet];
+			const propertyType = properties[facet];
+			const facetValues = facets[facet].values;
+			switch (propertyType) {
+				case "number": {
+					const ranges = facetsConfig[facet].ranges;
+					calculateNumberFacetBuilder(ranges, facetValues)(facetValue);
+					break;
+				}
+				case "number[]": {
+					const alreadyInsertedValues = /* @__PURE__ */ new Set();
+					const ranges = facetsConfig[facet].ranges;
+					const calculateNumberFacet = calculateNumberFacetBuilder(ranges, facetValues, alreadyInsertedValues);
+					for (const v of facetValue) calculateNumberFacet(v);
+					break;
+				}
+				case "boolean":
+				case "enum":
+				case "string":
+					calculateBooleanStringOrEnumFacetBuilder(facetValues, propertyType)(facetValue);
+					break;
+				case "boolean[]":
+				case "enum[]":
+				case "string[]": {
+					const calculateBooleanStringOrEnumFacet = calculateBooleanStringOrEnumFacetBuilder(facetValues, propertyType === "boolean[]" ? "boolean" : "string", /* @__PURE__ */ new Set());
+					for (const v of facetValue) calculateBooleanStringOrEnumFacet(v);
+					break;
+				}
+				default: throw createError("FACET_NOT_SUPPORTED", propertyType);
+			}
+		}
+	}
+	for (const facet of facetKeys) {
+		const currentFacet = facets[facet];
+		currentFacet.count = Object.keys(currentFacet.values).length;
+		if (properties[facet] === "string") {
+			const stringFacetDefinition = facetsConfig[facet];
+			const sortingPredicate = sortingPredicateBuilder(stringFacetDefinition.sort);
+			currentFacet.values = Object.fromEntries(Object.entries(currentFacet.values).sort(sortingPredicate).slice(stringFacetDefinition.offset ?? 0, stringFacetDefinition.limit ?? 10));
+		}
+	}
+	return facets;
+}
+function calculateNumberFacetBuilder(ranges, values, alreadyInsertedValues) {
+	return (facetValue) => {
+		for (const range of ranges) {
+			const value = `${range.from}-${range.to}`;
+			if (alreadyInsertedValues?.has(value)) continue;
+			if (facetValue >= range.from && facetValue <= range.to) {
+				if (values[value] === void 0) values[value] = 1;
+				else {
+					values[value]++;
+					alreadyInsertedValues?.add(value);
+				}
+			}
+		}
+	};
+}
+function calculateBooleanStringOrEnumFacetBuilder(values, propertyType, alreadyInsertedValues) {
+	const defaultValue = propertyType === "boolean" ? "false" : "";
+	return (facetValue) => {
+		const value = facetValue?.toString() ?? defaultValue;
+		if (alreadyInsertedValues?.has(value)) return;
+		values[value] = (values[value] ?? 0) + 1;
+		alreadyInsertedValues?.add(value);
+	};
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/groups.js
+var DEFAULT_REDUCE = {
+	reducer: (_, acc, res, index) => {
+		acc[index] = res;
+		return acc;
+	},
+	getInitialValue: (length) => Array.from({ length })
+};
+var ALLOWED_TYPES = [
+	"string",
+	"number",
+	"boolean"
+];
+function getGroups(orama, results, groupBy) {
+	const properties = groupBy.properties;
+	const propertiesLength = properties.length;
+	const schemaProperties = orama.index.getSearchablePropertiesWithTypes(orama.data.index);
+	for (let i = 0; i < propertiesLength; i++) {
+		const property = properties[i];
+		if (typeof schemaProperties[property] === "undefined") throw createError("UNKNOWN_GROUP_BY_PROPERTY", property);
+		if (!ALLOWED_TYPES.includes(schemaProperties[property])) throw createError("INVALID_GROUP_BY_PROPERTY", property, ALLOWED_TYPES.join(", "), schemaProperties[property]);
+	}
+	const allIDs = results.map(([id]) => getDocumentIdFromInternalId(orama.internalDocumentIDStore, id));
+	const allDocs = orama.documentsStore.getMultiple(orama.data.docs, allIDs);
+	const allDocsLength = allDocs.length;
+	const returnedCount = groupBy.maxResult || Number.MAX_SAFE_INTEGER;
+	const listOfValues = [];
+	const g = {};
+	for (let i = 0; i < propertiesLength; i++) {
+		const groupByKey = properties[i];
+		const group = {
+			property: groupByKey,
+			perValue: {}
+		};
+		const values = /* @__PURE__ */ new Set();
+		for (let j = 0; j < allDocsLength; j++) {
+			const doc = allDocs[j];
+			const value = getNested(doc, groupByKey);
+			if (typeof value === "undefined") continue;
+			const keyValue = typeof value !== "boolean" ? value : "" + value;
+			const perValue = group.perValue[keyValue] ?? {
+				indexes: [],
+				count: 0
+			};
+			if (perValue.count >= returnedCount) continue;
+			perValue.indexes.push(j);
+			perValue.count++;
+			group.perValue[keyValue] = perValue;
+			values.add(value);
+		}
+		listOfValues.push(Array.from(values));
+		g[groupByKey] = group;
+	}
+	const combinations = calculateCombination(listOfValues);
+	const combinationsLength = combinations.length;
+	const groups = [];
+	for (let i = 0; i < combinationsLength; i++) {
+		const combination = combinations[i];
+		const combinationLength = combination.length;
+		const group = {
+			values: [],
+			indexes: []
+		};
+		const indexes = [];
+		for (let j = 0; j < combinationLength; j++) {
+			const value = combination[j];
+			const property = properties[j];
+			indexes.push(g[property].perValue[typeof value !== "boolean" ? value : "" + value].indexes);
+			group.values.push(value);
+		}
+		group.indexes = intersect(indexes).sort((a, b) => a - b);
+		if (group.indexes.length === 0) continue;
+		groups.push(group);
+	}
+	const groupsLength = groups.length;
+	const res = Array.from({ length: groupsLength });
+	for (let i = 0; i < groupsLength; i++) {
+		const group = groups[i];
+		const reduce = groupBy.reduce || DEFAULT_REDUCE;
+		const docs = group.indexes.map((index) => {
+			return {
+				id: allIDs[index],
+				score: results[index][1],
+				document: allDocs[index]
+			};
+		});
+		const func = reduce.reducer.bind(null, group.values);
+		const initialValue = reduce.getInitialValue(group.indexes.length);
+		const aggregationValue = docs.reduce(func, initialValue);
+		res[i] = {
+			values: group.values,
+			result: aggregationValue
+		};
+	}
+	return res;
+}
+function calculateCombination(arrs, index = 0) {
+	if (index + 1 === arrs.length) return arrs[index].map((item) => [item]);
+	const head = arrs[index];
+	const c = calculateCombination(arrs, index + 1);
+	const combinations = [];
+	for (const value of head) for (const combination of c) {
+		const result = [value];
+		safeArrayPush(result, combination);
+		combinations.push(result);
+	}
+	return combinations;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/components/pinning-manager.js
+/**
+* Apply pinning rules to search results.
+* This function modifies the uniqueDocsArray by:
+* 1. Finding matching pin rules based on the search term
+* 2. Inserting pinned documents at their specified positions
+* 3. Assigning high scores to pinned documents to maintain their positions
+*/
+function applyPinningRules(orama, pinningStore, uniqueDocsArray, searchTerm) {
+	const matchingRules = getMatchingRules(pinningStore, searchTerm);
+	if (matchingRules.length === 0) return uniqueDocsArray;
+	const allPromotions = matchingRules.flatMap((rule) => rule.consequence.promote);
+	allPromotions.sort((a, b) => a.position - b.position);
+	const pinnedInternalIds = /* @__PURE__ */ new Set();
+	const promotionsMap = /* @__PURE__ */ new Map();
+	const positionsTaken = /* @__PURE__ */ new Set();
+	for (const promotion of allPromotions) {
+		const internalId = getInternalDocumentId(orama.internalDocumentIDStore, promotion.doc_id);
+		if (internalId === void 0) continue;
+		if (promotionsMap.has(internalId)) {
+			const existingPosition = promotionsMap.get(internalId);
+			if (promotion.position < existingPosition) promotionsMap.set(internalId, promotion.position);
+			continue;
+		}
+		if (positionsTaken.has(promotion.position)) continue;
+		pinnedInternalIds.add(internalId);
+		promotionsMap.set(internalId, promotion.position);
+		positionsTaken.add(promotion.position);
+	}
+	if (promotionsMap.size === 0) return uniqueDocsArray;
+	const unpinnedResults = uniqueDocsArray.filter(([id]) => !pinnedInternalIds.has(id));
+	const BASE_PIN_SCORE = 1e6;
+	const pinnedResults = [];
+	for (const [internalId, position] of promotionsMap.entries()) if (uniqueDocsArray.find(([id]) => id === internalId)) pinnedResults.push([internalId, BASE_PIN_SCORE - position]);
+	else if (orama.documentsStore.get(orama.data.docs, internalId)) pinnedResults.push([internalId, 0]);
+	pinnedResults.sort((a, b) => {
+		return (promotionsMap.get(a[0]) ?? Infinity) - (promotionsMap.get(b[0]) ?? Infinity);
+	});
+	const finalResults = [];
+	const pinnedByPosition = /* @__PURE__ */ new Map();
+	for (const pinnedResult of pinnedResults) {
+		const position = promotionsMap.get(pinnedResult[0]);
+		pinnedByPosition.set(position, pinnedResult);
+	}
+	let unpinnedIndex = 0;
+	let currentPosition = 0;
+	while (currentPosition < unpinnedResults.length + pinnedResults.length) if (pinnedByPosition.has(currentPosition)) {
+		finalResults.push(pinnedByPosition.get(currentPosition));
+		currentPosition++;
+	} else if (unpinnedIndex < unpinnedResults.length) {
+		finalResults.push(unpinnedResults[unpinnedIndex]);
+		unpinnedIndex++;
+		currentPosition++;
+	} else break;
+	for (const [position, pinnedResult] of pinnedByPosition.entries()) if (position >= finalResults.length) finalResults.push(pinnedResult);
+	return finalResults;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/methods/search-fulltext.js
+function innerFullTextSearch(orama, params, language) {
+	const { term, properties } = params;
+	const index = orama.data.index;
+	let propertiesToSearch = orama.caches["propertiesToSearch"];
+	if (!propertiesToSearch) {
+		const propertiesToSearchWithTypes = orama.index.getSearchablePropertiesWithTypes(index);
+		propertiesToSearch = orama.index.getSearchableProperties(index);
+		propertiesToSearch = propertiesToSearch.filter((prop) => propertiesToSearchWithTypes[prop].startsWith("string"));
+		orama.caches["propertiesToSearch"] = propertiesToSearch;
+	}
+	if (properties && properties !== "*") {
+		for (const prop of properties) if (!propertiesToSearch.includes(prop)) throw createError("UNKNOWN_INDEX", prop, propertiesToSearch.join(", "));
+		propertiesToSearch = propertiesToSearch.filter((prop) => properties.includes(prop));
+	}
+	const hasFilters = Object.keys(params.where ?? {}).length > 0;
+	let whereFiltersIDs;
+	if (hasFilters) whereFiltersIDs = orama.index.searchByWhereClause(index, orama.tokenizer, params.where, language);
+	let uniqueDocsIDs;
+	const threshold = params.threshold !== void 0 && params.threshold !== null ? params.threshold : 1;
+	if (term || properties) {
+		const docsCount = count(orama);
+		uniqueDocsIDs = orama.index.search(index, term || "", orama.tokenizer, language, propertiesToSearch, params.exact || false, params.tolerance || 0, params.boost || {}, applyDefault(params.relevance), docsCount, whereFiltersIDs, threshold);
+		if (params.exact && term) {
+			const searchTerms = term.trim().split(/\s+/);
+			uniqueDocsIDs = uniqueDocsIDs.filter(([docId]) => {
+				const doc = orama.documentsStore.get(orama.data.docs, docId);
+				if (!doc) return false;
+				for (const prop of propertiesToSearch) {
+					const propValue = getPropValue(doc, prop);
+					if (typeof propValue === "string") {
+						if (searchTerms.every((searchTerm) => {
+							return new RegExp(`\\b${escapeRegex(searchTerm)}\\b`).test(propValue);
+						})) return true;
+					}
+				}
+				return false;
+			});
+		}
+	} else if (hasFilters) {
+		const geoResults = searchByGeoWhereClause(index, params.where);
+		if (geoResults) uniqueDocsIDs = geoResults;
+		else uniqueDocsIDs = (whereFiltersIDs ? Array.from(whereFiltersIDs) : []).map((k) => [+k, 0]);
+	} else uniqueDocsIDs = Object.keys(orama.documentsStore.getAll(orama.data.docs)).map((k) => [+k, 0]);
+	return uniqueDocsIDs;
+}
+function escapeRegex(str) {
+	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+function getPropValue(obj, path) {
+	const keys = path.split(".");
+	let value = obj;
+	for (const key of keys) if (value && typeof value === "object" && key in value) value = value[key];
+	else return;
+	return value;
+}
+function fullTextSearch(orama, params, language) {
+	const timeStart = getNanosecondsTime();
+	function performSearchLogic() {
+		const vectorProperties = Object.keys(orama.data.index.vectorIndexes);
+		const shouldCalculateFacets = params.facets && Object.keys(params.facets).length > 0;
+		const { limit = 10, offset = 0, distinctOn, includeVectors = false } = params;
+		const isPreflight = params.preflight === true;
+		let uniqueDocsArray = innerFullTextSearch(orama, params, language);
+		if (params.sortBy) {
+			if (typeof params.sortBy === "function") {
+				const ids = uniqueDocsArray.map(([id]) => id);
+				const docsWithIdAndScore = orama.documentsStore.getMultiple(orama.data.docs, ids).map((d, i) => [
+					uniqueDocsArray[i][0],
+					uniqueDocsArray[i][1],
+					d
+				]);
+				docsWithIdAndScore.sort(params.sortBy);
+				uniqueDocsArray = docsWithIdAndScore.map(([id, score]) => [id, score]);
+			} else uniqueDocsArray = orama.sorter.sortBy(orama.data.sorting, uniqueDocsArray, params.sortBy).map(([id, score]) => [getInternalDocumentId(orama.internalDocumentIDStore, id), score]);
+		} else uniqueDocsArray = uniqueDocsArray.sort(sortTokenScorePredicate);
+		uniqueDocsArray = applyPinningRules(orama, orama.data.pinning, uniqueDocsArray, params.term);
+		let results;
+		if (!isPreflight) results = distinctOn ? fetchDocumentsWithDistinct(orama, uniqueDocsArray, offset, limit, distinctOn) : fetchDocuments(orama, uniqueDocsArray, offset, limit);
+		const searchResult = {
+			elapsed: {
+				formatted: "",
+				raw: 0
+			},
+			hits: [],
+			count: uniqueDocsArray.length
+		};
+		if (typeof results !== "undefined") {
+			searchResult.hits = results.filter(Boolean);
+			if (!includeVectors) removeVectorsFromHits(searchResult, vectorProperties);
+		}
+		if (shouldCalculateFacets) searchResult.facets = getFacets(orama, uniqueDocsArray, params.facets);
+		if (params.groupBy) searchResult.groups = getGroups(orama, uniqueDocsArray, params.groupBy);
+		searchResult.elapsed = orama.formatElapsedTime(getNanosecondsTime() - timeStart);
+		return searchResult;
+	}
+	async function executeSearchAsync() {
+		if (orama.beforeSearch) await runBeforeSearch(orama.beforeSearch, orama, params, language);
+		const searchResult = performSearchLogic();
+		if (orama.afterSearch) await runAfterSearch(orama.afterSearch, orama, params, language, searchResult);
+		return searchResult;
+	}
+	if (orama.beforeSearch?.length || orama.afterSearch?.length) return executeSearchAsync();
+	return performSearchLogic();
+}
+var defaultBM25Params = {
+	k: 1.2,
+	b: .75,
+	d: .5
+};
+function applyDefault(bm25Relevance) {
+	const r = bm25Relevance ?? {};
+	r.k = r.k ?? defaultBM25Params.k;
+	r.b = r.b ?? defaultBM25Params.b;
+	r.d = r.d ?? defaultBM25Params.d;
+	return r;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/methods/search-vector.js
+function innerVectorSearch(orama, params, language) {
+	const vector = params.vector;
+	if (vector && (!("value" in vector) || !("property" in vector))) throw createError("INVALID_VECTOR_INPUT", Object.keys(vector).join(", "));
+	const vectorIndex = orama.data.index.vectorIndexes[vector.property];
+	if (!vectorIndex) throw createError("UNKNOWN_VECTOR_PROPERTY", vector.property);
+	const vectorSize = vectorIndex.node.size;
+	if (vector?.value.length !== vectorSize) {
+		if (vector?.property === void 0 || vector?.value.length === void 0) throw createError("INVALID_INPUT_VECTOR", "undefined", vectorSize, "undefined");
+		throw createError("INVALID_INPUT_VECTOR", vector.property, vectorSize, vector.value.length);
+	}
+	const index = orama.data.index;
+	let whereFiltersIDs;
+	if (Object.keys(params.where ?? {}).length > 0) whereFiltersIDs = orama.index.searchByWhereClause(index, orama.tokenizer, params.where, language);
+	return vectorIndex.node.find(vector.value, params.similarity ?? .8, whereFiltersIDs);
+}
+function searchVector(orama, params, language = "english") {
+	const timeStart = getNanosecondsTime();
+	function performSearchLogic() {
+		let results = innerVectorSearch(orama, params, language).sort(sortTokenScorePredicate);
+		results = applyPinningRules(orama, orama.data.pinning, results, void 0);
+		let facetsResults = [];
+		if (params.facets && Object.keys(params.facets).length > 0) facetsResults = getFacets(orama, results, params.facets);
+		const vectorProperty = params.vector.property;
+		const includeVectors = params.includeVectors ?? false;
+		const limit = params.limit ?? 10;
+		const offset = params.offset ?? 0;
+		const docs = Array.from({ length: limit });
+		for (let i = 0; i < limit; i++) {
+			const result = results[i + offset];
+			if (!result) break;
+			const doc = orama.data.docs.docs[result[0]];
+			if (doc) {
+				if (!includeVectors) doc[vectorProperty] = null;
+				const newDoc = {
+					id: getDocumentIdFromInternalId(orama.internalDocumentIDStore, result[0]),
+					score: result[1],
+					document: doc
+				};
+				docs[i] = newDoc;
+			}
+		}
+		let groups = [];
+		if (params.groupBy) groups = getGroups(orama, results, params.groupBy);
+		const elapsedTime = getNanosecondsTime() - timeStart;
+		return {
+			count: results.length,
+			hits: docs.filter(Boolean),
+			elapsed: {
+				raw: Number(elapsedTime),
+				formatted: formatNanoseconds(elapsedTime)
+			},
+			...facetsResults ? { facets: facetsResults } : {},
+			...groups ? { groups } : {}
+		};
+	}
+	async function executeSearchAsync() {
+		if (orama.beforeSearch) await runBeforeSearch(orama.beforeSearch, orama, params, language);
+		const results = performSearchLogic();
+		if (orama.afterSearch) await runAfterSearch(orama.afterSearch, orama, params, language, results);
+		return results;
+	}
+	if (orama.beforeSearch?.length || orama.afterSearch?.length) return executeSearchAsync();
+	return performSearchLogic();
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/methods/search-hybrid.js
+function innerHybridSearch(orama, params, language) {
+	const fullTextIDs = minMaxScoreNormalization(innerFullTextSearch(orama, params, language));
+	const vectorIDs = innerVectorSearch(orama, params, language);
+	const hybridWeights = params.hybridWeights;
+	return mergeAndRankResults(fullTextIDs, vectorIDs, params.term ?? "", hybridWeights);
+}
+function hybridSearch$1(orama, params, language) {
+	const timeStart = getNanosecondsTime();
+	function performSearchLogic() {
+		let uniqueTokenScores = innerHybridSearch(orama, params, language);
+		uniqueTokenScores = applyPinningRules(orama, orama.data.pinning, uniqueTokenScores, params.term);
+		let facetsResults;
+		if (params.facets && Object.keys(params.facets).length > 0) facetsResults = getFacets(orama, uniqueTokenScores, params.facets);
+		let groups;
+		if (params.groupBy) groups = getGroups(orama, uniqueTokenScores, params.groupBy);
+		const offset = params.offset ?? 0;
+		const limit = params.limit ?? 10;
+		const results = fetchDocuments(orama, uniqueTokenScores, offset, limit).filter(Boolean);
+		const timeEnd = getNanosecondsTime();
+		const returningResults = {
+			count: uniqueTokenScores.length,
+			elapsed: {
+				raw: Number(timeEnd - timeStart),
+				formatted: formatNanoseconds(timeEnd - timeStart)
+			},
+			hits: results,
+			...facetsResults ? { facets: facetsResults } : {},
+			...groups ? { groups } : {}
+		};
+		if (!(params.includeVectors ?? false)) removeVectorsFromHits(returningResults, Object.keys(orama.data.index.vectorIndexes));
+		return returningResults;
+	}
+	async function executeSearchAsync() {
+		if (orama.beforeSearch) await runBeforeSearch(orama.beforeSearch, orama, params, language);
+		const results = performSearchLogic();
+		if (orama.afterSearch) await runAfterSearch(orama.afterSearch, orama, params, language, results);
+		return results;
+	}
+	if (orama.beforeSearch?.length || orama.afterSearch?.length) return executeSearchAsync();
+	return performSearchLogic();
+}
+function extractScore(token) {
+	return token[1];
+}
+function minMaxScoreNormalization(results) {
+	const maxScore = Math.max.apply(Math, results.map(extractScore));
+	return results.map(([id, score]) => [id, score / maxScore]);
+}
+function normalizeScore(score, maxScore) {
+	return score / maxScore;
+}
+function hybridScoreBuilder(textWeight, vectorWeight) {
+	return (textScore, vectorScore) => textScore * textWeight + vectorScore * vectorWeight;
+}
+function mergeAndRankResults(textResults, vectorResults, query, hybridWeights) {
+	const maxTextScore = Math.max.apply(Math, textResults.map(extractScore));
+	const maxVectorScore = Math.max.apply(Math, vectorResults.map(extractScore));
+	const { text: textWeight, vector: vectorWeight } = hybridWeights && hybridWeights.text && hybridWeights.vector ? hybridWeights : getQueryWeights(query);
+	const mergedResults = /* @__PURE__ */ new Map();
+	const textResultsLength = textResults.length;
+	const hybridScore = hybridScoreBuilder(textWeight, vectorWeight);
+	for (let i = 0; i < textResultsLength; i++) {
+		const [id, score] = textResults[i];
+		const hybridScoreValue = hybridScore(normalizeScore(score, maxTextScore), 0);
+		mergedResults.set(id, hybridScoreValue);
+	}
+	const vectorResultsLength = vectorResults.length;
+	for (let i = 0; i < vectorResultsLength; i++) {
+		const [resultId, score] = vectorResults[i];
+		const normalizedScore = normalizeScore(score, maxVectorScore);
+		const existingRes = mergedResults.get(resultId) ?? 0;
+		mergedResults.set(resultId, existingRes + hybridScore(0, normalizedScore));
+	}
+	return [...mergedResults].sort((a, b) => b[1] - a[1]);
+}
+function getQueryWeights(query) {
+	return {
+		text: .5,
+		vector: .5
+	};
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/methods/search.js
+function search(orama, params, language) {
+	const mode = params.mode ?? "fulltext";
+	if (mode === "fulltext") return fullTextSearch(orama, params, language);
+	if (mode === "vector") return searchVector(orama, params);
+	if (mode === "hybrid") return hybridSearch$1(orama, params);
+	throw createError("INVALID_SEARCH_MODE", mode);
+}
+function fetchDocumentsWithDistinct(orama, uniqueDocsArray, offset, limit, distinctOn) {
+	const docs = orama.data.docs;
+	const values = /* @__PURE__ */ new Map();
+	const results = [];
+	const resultIDs = /* @__PURE__ */ new Set();
+	const uniqueDocsArrayLength = uniqueDocsArray.length;
+	let count = 0;
+	for (let i = 0; i < uniqueDocsArrayLength; i++) {
+		const idAndScore = uniqueDocsArray[i];
+		if (typeof idAndScore === "undefined") continue;
+		const [id, score] = idAndScore;
+		if (resultIDs.has(id)) continue;
+		const doc = orama.documentsStore.get(docs, id);
+		const value = getNested(doc, distinctOn);
+		if (typeof value === "undefined" || values.has(value)) continue;
+		values.set(value, true);
+		count++;
+		if (count <= offset) continue;
+		results.push({
+			id: getDocumentIdFromInternalId(orama.internalDocumentIDStore, id),
+			score,
+			document: doc
+		});
+		resultIDs.add(id);
+		if (count >= offset + limit) break;
+	}
+	return results;
+}
+function fetchDocuments(orama, uniqueDocsArray, offset, limit) {
+	const docs = orama.data.docs;
+	const results = Array.from({ length: limit });
+	const resultIDs = /* @__PURE__ */ new Set();
+	for (let i = offset; i < limit + offset; i++) {
+		const idAndScore = uniqueDocsArray[i];
+		if (typeof idAndScore === "undefined") break;
+		const [id, score] = idAndScore;
+		if (!resultIDs.has(id)) {
+			const fullDoc = orama.documentsStore.get(docs, id);
+			results[i] = {
+				id: getDocumentIdFromInternalId(orama.internalDocumentIDStore, id),
+				score,
+				document: fullDoc
+			};
+			resultIDs.add(id);
+		}
+	}
+	return results;
+}
+//#endregion
+//#region node_modules/@orama/orama/dist/browser/methods/serialization.js
+function load(orama, raw) {
+	orama.internalDocumentIDStore.load(orama, raw.internalDocumentIDStore);
+	orama.data.index = orama.index.load(orama.internalDocumentIDStore, raw.index);
+	orama.data.docs = orama.documentsStore.load(orama.internalDocumentIDStore, raw.docs);
+	orama.data.sorting = orama.sorter.load(orama.internalDocumentIDStore, raw.sorting);
+	orama.data.pinning = orama.pinning.load(orama.internalDocumentIDStore, raw.pinning);
+	orama.tokenizer.language = raw.language;
+}
+function save(orama) {
+	return {
+		internalDocumentIDStore: orama.internalDocumentIDStore.save(orama.internalDocumentIDStore),
+		index: orama.index.save(orama.data.index),
+		docs: orama.documentsStore.save(orama.data.docs),
+		sorting: orama.sorter.save(orama.data.sorting),
+		pinning: orama.pinning.save(orama.data.pinning),
+		language: orama.tokenizer.language
+	};
+}
+new TextEncoder();
+var CHUNK_SIZE = 4096;
+function utf8DecodeJs(bytes, inputOffset, byteLength) {
+	let offset = inputOffset;
+	const end = offset + byteLength;
+	const units = [];
+	let result = "";
+	while (offset < end) {
+		const byte1 = bytes[offset++];
+		if ((byte1 & 128) === 0) units.push(byte1);
+		else if ((byte1 & 224) === 192) {
+			const byte2 = bytes[offset++] & 63;
+			units.push((byte1 & 31) << 6 | byte2);
+		} else if ((byte1 & 240) === 224) {
+			const byte2 = bytes[offset++] & 63;
+			const byte3 = bytes[offset++] & 63;
+			units.push((byte1 & 31) << 12 | byte2 << 6 | byte3);
+		} else if ((byte1 & 248) === 240) {
+			const byte2 = bytes[offset++] & 63;
+			const byte3 = bytes[offset++] & 63;
+			const byte4 = bytes[offset++] & 63;
+			let unit = (byte1 & 7) << 18 | byte2 << 12 | byte3 << 6 | byte4;
+			if (unit > 65535) {
+				unit -= 65536;
+				units.push(unit >>> 10 & 1023 | 55296);
+				unit = 56320 | unit & 1023;
+			}
+			units.push(unit);
+		} else units.push(byte1);
+		if (units.length >= CHUNK_SIZE) {
+			result += String.fromCharCode(...units);
+			units.length = 0;
+		}
+	}
+	if (units.length > 0) result += String.fromCharCode(...units);
+	return result;
+}
+var sharedTextDecoder = new TextDecoder();
+var TEXT_DECODER_THRESHOLD = 200;
+function utf8DecodeTD(bytes, inputOffset, byteLength) {
+	const stringBytes = bytes.subarray(inputOffset, inputOffset + byteLength);
+	return sharedTextDecoder.decode(stringBytes);
+}
+function utf8Decode(bytes, inputOffset, byteLength) {
+	if (byteLength > TEXT_DECODER_THRESHOLD) return utf8DecodeTD(bytes, inputOffset, byteLength);
+	else return utf8DecodeJs(bytes, inputOffset, byteLength);
+}
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/ExtData.mjs
+/**
+* ExtData is used to handle Extension Types that are not registered to ExtensionCodec.
+*/
+var ExtData = class {
+	type;
+	data;
+	constructor(type, data) {
+		this.type = type;
+		this.data = data;
+	}
+};
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/DecodeError.mjs
+var DecodeError = class DecodeError extends Error {
+	constructor(message) {
+		super(message);
+		const proto = Object.create(DecodeError.prototype);
+		Object.setPrototypeOf(this, proto);
+		Object.defineProperty(this, "name", {
+			configurable: true,
+			enumerable: false,
+			value: DecodeError.name
+		});
+	}
+};
+function setInt64(view, offset, value) {
+	const high = Math.floor(value / 4294967296);
+	const low = value;
+	view.setUint32(offset, high);
+	view.setUint32(offset + 4, low);
+}
+function getInt64(view, offset) {
+	const high = view.getInt32(offset);
+	const low = view.getUint32(offset + 4);
+	return high * 4294967296 + low;
+}
+function getUint64(view, offset) {
+	const high = view.getUint32(offset);
+	const low = view.getUint32(offset + 4);
+	return high * 4294967296 + low;
+}
+var TIMESTAMP32_MAX_SEC = 4294967295;
+var TIMESTAMP64_MAX_SEC = 17179869183;
+function encodeTimeSpecToTimestamp({ sec, nsec }) {
+	if (sec >= 0 && nsec >= 0 && sec <= TIMESTAMP64_MAX_SEC) {
+		if (nsec === 0 && sec <= TIMESTAMP32_MAX_SEC) {
+			const rv = /* @__PURE__ */ new Uint8Array(4);
+			new DataView(rv.buffer).setUint32(0, sec);
+			return rv;
+		} else {
+			const secHigh = sec / 4294967296;
+			const secLow = sec & 4294967295;
+			const rv = /* @__PURE__ */ new Uint8Array(8);
+			const view = new DataView(rv.buffer);
+			view.setUint32(0, nsec << 2 | secHigh & 3);
+			view.setUint32(4, secLow);
+			return rv;
+		}
+	} else {
+		const rv = /* @__PURE__ */ new Uint8Array(12);
+		const view = new DataView(rv.buffer);
+		view.setUint32(0, nsec);
+		setInt64(view, 4, sec);
+		return rv;
+	}
+}
+function encodeDateToTimeSpec(date) {
+	const msec = date.getTime();
+	const sec = Math.floor(msec / 1e3);
+	const nsec = (msec - sec * 1e3) * 1e6;
+	const nsecInSec = Math.floor(nsec / 1e9);
+	return {
+		sec: sec + nsecInSec,
+		nsec: nsec - nsecInSec * 1e9
+	};
+}
+function encodeTimestampExtension(object) {
+	if (object instanceof Date) return encodeTimeSpecToTimestamp(encodeDateToTimeSpec(object));
+	else return null;
+}
+function decodeTimestampToTimeSpec(data) {
+	const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+	switch (data.byteLength) {
+		case 4: return {
+			sec: view.getUint32(0),
+			nsec: 0
+		};
+		case 8: {
+			const nsec30AndSecHigh2 = view.getUint32(0);
+			const secLow32 = view.getUint32(4);
+			return {
+				sec: (nsec30AndSecHigh2 & 3) * 4294967296 + secLow32,
+				nsec: nsec30AndSecHigh2 >>> 2
+			};
+		}
+		case 12: return {
+			sec: getInt64(view, 4),
+			nsec: view.getUint32(0)
+		};
+		default: throw new DecodeError(`Unrecognized data size for timestamp (expected 4, 8, or 12): ${data.length}`);
+	}
+}
+function decodeTimestampExtension(data) {
+	const timeSpec = decodeTimestampToTimeSpec(data);
+	return /* @__PURE__ */ new Date(timeSpec.sec * 1e3 + timeSpec.nsec / 1e6);
+}
+var timestampExtension = {
+	type: -1,
+	encode: encodeTimestampExtension,
+	decode: decodeTimestampExtension
+};
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/ExtensionCodec.mjs
+var ExtensionCodec = class ExtensionCodec {
+	static defaultCodec = new ExtensionCodec();
+	__brand;
+	builtInEncoders = [];
+	builtInDecoders = [];
+	encoders = [];
+	decoders = [];
+	constructor() {
+		this.register(timestampExtension);
+	}
+	register({ type, encode, decode }) {
+		if (type >= 0) {
+			this.encoders[type] = encode;
+			this.decoders[type] = decode;
+		} else {
+			const index = -1 - type;
+			this.builtInEncoders[index] = encode;
+			this.builtInDecoders[index] = decode;
+		}
+	}
+	tryToEncode(object, context) {
+		for (let i = 0; i < this.builtInEncoders.length; i++) {
+			const encodeExt = this.builtInEncoders[i];
+			if (encodeExt != null) {
+				const data = encodeExt(object, context);
+				if (data != null) return new ExtData(-1 - i, data);
+			}
+		}
+		for (let i = 0; i < this.encoders.length; i++) {
+			const encodeExt = this.encoders[i];
+			if (encodeExt != null) {
+				const data = encodeExt(object, context);
+				if (data != null) return new ExtData(i, data);
+			}
+		}
+		if (object instanceof ExtData) return object;
+		return null;
+	}
+	decode(data, type, context) {
+		const decodeExt = type < 0 ? this.builtInDecoders[-1 - type] : this.decoders[type];
+		if (decodeExt) return decodeExt(data, type, context);
+		else return new ExtData(type, data);
+	}
+};
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/utils/typedArrays.mjs
+function isArrayBufferLike(buffer) {
+	return buffer instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && buffer instanceof SharedArrayBuffer;
+}
+function ensureUint8Array(buffer) {
+	if (buffer instanceof Uint8Array) return buffer;
+	else if (ArrayBuffer.isView(buffer)) return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+	else if (isArrayBufferLike(buffer)) return new Uint8Array(buffer);
+	else return Uint8Array.from(buffer);
+}
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/utils/prettyByte.mjs
+function prettyByte(byte) {
+	return `${byte < 0 ? "-" : ""}0x${Math.abs(byte).toString(16).padStart(2, "0")}`;
+}
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/CachedKeyDecoder.mjs
+var DEFAULT_MAX_KEY_LENGTH = 16;
+var DEFAULT_MAX_LENGTH_PER_KEY = 16;
+var CachedKeyDecoder = class {
+	hit = 0;
+	miss = 0;
+	caches;
+	maxKeyLength;
+	maxLengthPerKey;
+	constructor(maxKeyLength = DEFAULT_MAX_KEY_LENGTH, maxLengthPerKey = DEFAULT_MAX_LENGTH_PER_KEY) {
+		this.maxKeyLength = maxKeyLength;
+		this.maxLengthPerKey = maxLengthPerKey;
+		this.caches = [];
+		for (let i = 0; i < this.maxKeyLength; i++) this.caches.push([]);
+	}
+	canBeCached(byteLength) {
+		return byteLength > 0 && byteLength <= this.maxKeyLength;
+	}
+	find(bytes, inputOffset, byteLength) {
+		const records = this.caches[byteLength - 1];
+		FIND_CHUNK: for (const record of records) {
+			const recordBytes = record.bytes;
+			for (let j = 0; j < byteLength; j++) if (recordBytes[j] !== bytes[inputOffset + j]) continue FIND_CHUNK;
+			return record.str;
+		}
+		return null;
+	}
+	store(bytes, value) {
+		const records = this.caches[bytes.length - 1];
+		const record = {
+			bytes,
+			str: value
+		};
+		if (records.length >= this.maxLengthPerKey) records[Math.random() * records.length | 0] = record;
+		else records.push(record);
+	}
+	decode(bytes, inputOffset, byteLength) {
+		const cachedValue = this.find(bytes, inputOffset, byteLength);
+		if (cachedValue != null) {
+			this.hit++;
+			return cachedValue;
+		}
+		this.miss++;
+		const str = utf8DecodeJs(bytes, inputOffset, byteLength);
+		const slicedCopyOfBytes = Uint8Array.prototype.slice.call(bytes, inputOffset, inputOffset + byteLength);
+		this.store(slicedCopyOfBytes, str);
+		return str;
+	}
+};
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/Decoder.mjs
+var STATE_ARRAY = "array";
+var STATE_MAP_KEY = "map_key";
+var STATE_MAP_VALUE = "map_value";
+var mapKeyConverter = (key) => {
+	if (typeof key === "string" || typeof key === "number") return key;
+	throw new DecodeError("The type of key must be string or number but " + typeof key);
+};
+var StackPool = class {
+	stack = [];
+	stackHeadPosition = -1;
+	get length() {
+		return this.stackHeadPosition + 1;
+	}
+	top() {
+		return this.stack[this.stackHeadPosition];
+	}
+	pushArrayState(size) {
+		const state = this.getUninitializedStateFromPool();
+		state.type = STATE_ARRAY;
+		state.position = 0;
+		state.size = size;
+		state.array = new Array(size);
+	}
+	pushMapState(size) {
+		const state = this.getUninitializedStateFromPool();
+		state.type = STATE_MAP_KEY;
+		state.readCount = 0;
+		state.size = size;
+		state.map = {};
+	}
+	getUninitializedStateFromPool() {
+		this.stackHeadPosition++;
+		if (this.stackHeadPosition === this.stack.length) this.stack.push({
+			type: void 0,
+			size: 0,
+			array: void 0,
+			position: 0,
+			readCount: 0,
+			map: void 0,
+			key: null
+		});
+		return this.stack[this.stackHeadPosition];
+	}
+	release(state) {
+		if (this.stack[this.stackHeadPosition] !== state) throw new Error("Invalid stack state. Released state is not on top of the stack.");
+		if (state.type === STATE_ARRAY) {
+			const partialState = state;
+			partialState.size = 0;
+			partialState.array = void 0;
+			partialState.position = 0;
+			partialState.type = void 0;
+		}
+		if (state.type === STATE_MAP_KEY || state.type === STATE_MAP_VALUE) {
+			const partialState = state;
+			partialState.size = 0;
+			partialState.map = void 0;
+			partialState.readCount = 0;
+			partialState.type = void 0;
+		}
+		this.stackHeadPosition--;
+	}
+	reset() {
+		this.stack.length = 0;
+		this.stackHeadPosition = -1;
+	}
+};
+var HEAD_BYTE_REQUIRED = -1;
+var EMPTY_VIEW = /* @__PURE__ */ new DataView(/* @__PURE__ */ new ArrayBuffer(0));
+var EMPTY_BYTES = new Uint8Array(EMPTY_VIEW.buffer);
+try {
+	EMPTY_VIEW.getInt8(0);
+} catch (e) {
+	if (!(e instanceof RangeError)) throw new Error("This module is not supported in the current JavaScript engine because DataView does not throw RangeError on out-of-bounds access");
+}
+var MORE_DATA = /* @__PURE__ */ new RangeError("Insufficient data");
+var sharedCachedKeyDecoder = new CachedKeyDecoder();
+var Decoder = class Decoder {
+	extensionCodec;
+	context;
+	useBigInt64;
+	rawStrings;
+	maxStrLength;
+	maxBinLength;
+	maxArrayLength;
+	maxMapLength;
+	maxExtLength;
+	keyDecoder;
+	mapKeyConverter;
+	totalPos = 0;
+	pos = 0;
+	view = EMPTY_VIEW;
+	bytes = EMPTY_BYTES;
+	headByte = HEAD_BYTE_REQUIRED;
+	stack = new StackPool();
+	entered = false;
+	constructor(options) {
+		this.extensionCodec = options?.extensionCodec ?? ExtensionCodec.defaultCodec;
+		this.context = options?.context;
+		this.useBigInt64 = options?.useBigInt64 ?? false;
+		this.rawStrings = options?.rawStrings ?? false;
+		this.maxStrLength = options?.maxStrLength ?? 4294967295;
+		this.maxBinLength = options?.maxBinLength ?? 4294967295;
+		this.maxArrayLength = options?.maxArrayLength ?? 4294967295;
+		this.maxMapLength = options?.maxMapLength ?? 4294967295;
+		this.maxExtLength = options?.maxExtLength ?? 4294967295;
+		this.keyDecoder = options?.keyDecoder !== void 0 ? options.keyDecoder : sharedCachedKeyDecoder;
+		this.mapKeyConverter = options?.mapKeyConverter ?? mapKeyConverter;
+	}
+	clone() {
+		return new Decoder({
+			extensionCodec: this.extensionCodec,
+			context: this.context,
+			useBigInt64: this.useBigInt64,
+			rawStrings: this.rawStrings,
+			maxStrLength: this.maxStrLength,
+			maxBinLength: this.maxBinLength,
+			maxArrayLength: this.maxArrayLength,
+			maxMapLength: this.maxMapLength,
+			maxExtLength: this.maxExtLength,
+			keyDecoder: this.keyDecoder
+		});
+	}
+	reinitializeState() {
+		this.totalPos = 0;
+		this.headByte = HEAD_BYTE_REQUIRED;
+		this.stack.reset();
+	}
+	setBuffer(buffer) {
+		const bytes = ensureUint8Array(buffer);
+		this.bytes = bytes;
+		this.view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+		this.pos = 0;
+	}
+	appendBuffer(buffer) {
+		if (this.headByte === HEAD_BYTE_REQUIRED && !this.hasRemaining(1)) this.setBuffer(buffer);
+		else {
+			const remainingData = this.bytes.subarray(this.pos);
+			const newData = ensureUint8Array(buffer);
+			const newBuffer = new Uint8Array(remainingData.length + newData.length);
+			newBuffer.set(remainingData);
+			newBuffer.set(newData, remainingData.length);
+			this.setBuffer(newBuffer);
+		}
+	}
+	hasRemaining(size) {
+		return this.view.byteLength - this.pos >= size;
+	}
+	createExtraByteError(posToShow) {
+		const { view, pos } = this;
+		return /* @__PURE__ */ new RangeError(`Extra ${view.byteLength - pos} of ${view.byteLength} byte(s) found at buffer[${posToShow}]`);
+	}
+	/**
+	* @throws {@link DecodeError}
+	* @throws {@link RangeError}
+	*/
+	decode(buffer) {
+		if (this.entered) return this.clone().decode(buffer);
+		try {
+			this.entered = true;
+			this.reinitializeState();
+			this.setBuffer(buffer);
+			const object = this.doDecodeSync();
+			if (this.hasRemaining(1)) throw this.createExtraByteError(this.pos);
+			return object;
+		} finally {
+			this.entered = false;
+		}
+	}
+	*decodeMulti(buffer) {
+		if (this.entered) {
+			yield* this.clone().decodeMulti(buffer);
+			return;
+		}
+		try {
+			this.entered = true;
+			this.reinitializeState();
+			this.setBuffer(buffer);
+			while (this.hasRemaining(1)) yield this.doDecodeSync();
+		} finally {
+			this.entered = false;
+		}
+	}
+	async decodeAsync(stream) {
+		if (this.entered) return this.clone().decodeAsync(stream);
+		try {
+			this.entered = true;
+			let decoded = false;
+			let object;
+			for await (const buffer of stream) {
+				if (decoded) {
+					this.entered = false;
+					throw this.createExtraByteError(this.totalPos);
+				}
+				this.appendBuffer(buffer);
+				try {
+					object = this.doDecodeSync();
+					decoded = true;
+				} catch (e) {
+					if (!(e instanceof RangeError)) throw e;
+				}
+				this.totalPos += this.pos;
+			}
+			if (decoded) {
+				if (this.hasRemaining(1)) throw this.createExtraByteError(this.totalPos);
+				return object;
+			}
+			const { headByte, pos, totalPos } = this;
+			throw new RangeError(`Insufficient data in parsing ${prettyByte(headByte)} at ${totalPos} (${pos} in the current buffer)`);
+		} finally {
+			this.entered = false;
+		}
+	}
+	decodeArrayStream(stream) {
+		return this.decodeMultiAsync(stream, true);
+	}
+	decodeStream(stream) {
+		return this.decodeMultiAsync(stream, false);
+	}
+	async *decodeMultiAsync(stream, isArray) {
+		if (this.entered) {
+			yield* this.clone().decodeMultiAsync(stream, isArray);
+			return;
+		}
+		try {
+			this.entered = true;
+			let isArrayHeaderRequired = isArray;
+			let arrayItemsLeft = -1;
+			for await (const buffer of stream) {
+				if (isArray && arrayItemsLeft === 0) throw this.createExtraByteError(this.totalPos);
+				this.appendBuffer(buffer);
+				if (isArrayHeaderRequired) {
+					arrayItemsLeft = this.readArraySize();
+					isArrayHeaderRequired = false;
+					this.complete();
+				}
+				try {
+					while (true) {
+						yield this.doDecodeSync();
+						if (--arrayItemsLeft === 0) break;
+					}
+				} catch (e) {
+					if (!(e instanceof RangeError)) throw e;
+				}
+				this.totalPos += this.pos;
+			}
+		} finally {
+			this.entered = false;
+		}
+	}
+	doDecodeSync() {
+		DECODE: while (true) {
+			const headByte = this.readHeadByte();
+			let object;
+			if (headByte >= 224) object = headByte - 256;
+			else if (headByte < 192) {
+				if (headByte < 128) object = headByte;
+				else if (headByte < 144) {
+					const size = headByte - 128;
+					if (size !== 0) {
+						this.pushMapState(size);
+						this.complete();
+						continue DECODE;
+					} else object = {};
+				} else if (headByte < 160) {
+					const size = headByte - 144;
+					if (size !== 0) {
+						this.pushArrayState(size);
+						this.complete();
+						continue DECODE;
+					} else object = [];
+				} else {
+					const byteLength = headByte - 160;
+					object = this.decodeString(byteLength, 0);
+				}
+			} else if (headByte === 192) object = null;
+			else if (headByte === 194) object = false;
+			else if (headByte === 195) object = true;
+			else if (headByte === 202) object = this.readF32();
+			else if (headByte === 203) object = this.readF64();
+			else if (headByte === 204) object = this.readU8();
+			else if (headByte === 205) object = this.readU16();
+			else if (headByte === 206) object = this.readU32();
+			else if (headByte === 207) {
+				if (this.useBigInt64) object = this.readU64AsBigInt();
+				else object = this.readU64();
+			} else if (headByte === 208) object = this.readI8();
+			else if (headByte === 209) object = this.readI16();
+			else if (headByte === 210) object = this.readI32();
+			else if (headByte === 211) {
+				if (this.useBigInt64) object = this.readI64AsBigInt();
+				else object = this.readI64();
+			} else if (headByte === 217) {
+				const byteLength = this.lookU8();
+				object = this.decodeString(byteLength, 1);
+			} else if (headByte === 218) {
+				const byteLength = this.lookU16();
+				object = this.decodeString(byteLength, 2);
+			} else if (headByte === 219) {
+				const byteLength = this.lookU32();
+				object = this.decodeString(byteLength, 4);
+			} else if (headByte === 220) {
+				const size = this.readU16();
+				if (size !== 0) {
+					this.pushArrayState(size);
+					this.complete();
+					continue DECODE;
+				} else object = [];
+			} else if (headByte === 221) {
+				const size = this.readU32();
+				if (size !== 0) {
+					this.pushArrayState(size);
+					this.complete();
+					continue DECODE;
+				} else object = [];
+			} else if (headByte === 222) {
+				const size = this.readU16();
+				if (size !== 0) {
+					this.pushMapState(size);
+					this.complete();
+					continue DECODE;
+				} else object = {};
+			} else if (headByte === 223) {
+				const size = this.readU32();
+				if (size !== 0) {
+					this.pushMapState(size);
+					this.complete();
+					continue DECODE;
+				} else object = {};
+			} else if (headByte === 196) {
+				const size = this.lookU8();
+				object = this.decodeBinary(size, 1);
+			} else if (headByte === 197) {
+				const size = this.lookU16();
+				object = this.decodeBinary(size, 2);
+			} else if (headByte === 198) {
+				const size = this.lookU32();
+				object = this.decodeBinary(size, 4);
+			} else if (headByte === 212) object = this.decodeExtension(1, 0);
+			else if (headByte === 213) object = this.decodeExtension(2, 0);
+			else if (headByte === 214) object = this.decodeExtension(4, 0);
+			else if (headByte === 215) object = this.decodeExtension(8, 0);
+			else if (headByte === 216) object = this.decodeExtension(16, 0);
+			else if (headByte === 199) {
+				const size = this.lookU8();
+				object = this.decodeExtension(size, 1);
+			} else if (headByte === 200) {
+				const size = this.lookU16();
+				object = this.decodeExtension(size, 2);
+			} else if (headByte === 201) {
+				const size = this.lookU32();
+				object = this.decodeExtension(size, 4);
+			} else throw new DecodeError(`Unrecognized type byte: ${prettyByte(headByte)}`);
+			this.complete();
+			const stack = this.stack;
+			while (stack.length > 0) {
+				const state = stack.top();
+				if (state.type === STATE_ARRAY) {
+					state.array[state.position] = object;
+					state.position++;
+					if (state.position === state.size) {
+						object = state.array;
+						stack.release(state);
+					} else continue DECODE;
+				} else if (state.type === STATE_MAP_KEY) {
+					if (object === "__proto__") throw new DecodeError("The key __proto__ is not allowed");
+					state.key = this.mapKeyConverter(object);
+					state.type = STATE_MAP_VALUE;
+					continue DECODE;
+				} else {
+					state.map[state.key] = object;
+					state.readCount++;
+					if (state.readCount === state.size) {
+						object = state.map;
+						stack.release(state);
+					} else {
+						state.key = null;
+						state.type = STATE_MAP_KEY;
+						continue DECODE;
+					}
+				}
+			}
+			return object;
+		}
+	}
+	readHeadByte() {
+		if (this.headByte === HEAD_BYTE_REQUIRED) this.headByte = this.readU8();
+		return this.headByte;
+	}
+	complete() {
+		this.headByte = HEAD_BYTE_REQUIRED;
+	}
+	readArraySize() {
+		const headByte = this.readHeadByte();
+		switch (headByte) {
+			case 220: return this.readU16();
+			case 221: return this.readU32();
+			default: if (headByte < 160) return headByte - 144;
+			else throw new DecodeError(`Unrecognized array type byte: ${prettyByte(headByte)}`);
+		}
+	}
+	pushMapState(size) {
+		if (size > this.maxMapLength) throw new DecodeError(`Max length exceeded: map length (${size}) > maxMapLengthLength (${this.maxMapLength})`);
+		this.stack.pushMapState(size);
+	}
+	pushArrayState(size) {
+		if (size > this.maxArrayLength) throw new DecodeError(`Max length exceeded: array length (${size}) > maxArrayLength (${this.maxArrayLength})`);
+		this.stack.pushArrayState(size);
+	}
+	decodeString(byteLength, headerOffset) {
+		if (!this.rawStrings || this.stateIsMapKey()) return this.decodeUtf8String(byteLength, headerOffset);
+		return this.decodeBinary(byteLength, headerOffset);
+	}
+	/**
+	* @throws {@link RangeError}
+	*/
+	decodeUtf8String(byteLength, headerOffset) {
+		if (byteLength > this.maxStrLength) throw new DecodeError(`Max length exceeded: UTF-8 byte length (${byteLength}) > maxStrLength (${this.maxStrLength})`);
+		if (this.bytes.byteLength < this.pos + headerOffset + byteLength) throw MORE_DATA;
+		const offset = this.pos + headerOffset;
+		let object;
+		if (this.stateIsMapKey() && this.keyDecoder?.canBeCached(byteLength)) object = this.keyDecoder.decode(this.bytes, offset, byteLength);
+		else object = utf8Decode(this.bytes, offset, byteLength);
+		this.pos += headerOffset + byteLength;
+		return object;
+	}
+	stateIsMapKey() {
+		if (this.stack.length > 0) return this.stack.top().type === STATE_MAP_KEY;
+		return false;
+	}
+	/**
+	* @throws {@link RangeError}
+	*/
+	decodeBinary(byteLength, headOffset) {
+		if (byteLength > this.maxBinLength) throw new DecodeError(`Max length exceeded: bin length (${byteLength}) > maxBinLength (${this.maxBinLength})`);
+		if (!this.hasRemaining(byteLength + headOffset)) throw MORE_DATA;
+		const offset = this.pos + headOffset;
+		const object = this.bytes.subarray(offset, offset + byteLength);
+		this.pos += headOffset + byteLength;
+		return object;
+	}
+	decodeExtension(size, headOffset) {
+		if (size > this.maxExtLength) throw new DecodeError(`Max length exceeded: ext length (${size}) > maxExtLength (${this.maxExtLength})`);
+		const extType = this.view.getInt8(this.pos + headOffset);
+		const data = this.decodeBinary(size, headOffset + 1);
+		return this.extensionCodec.decode(data, extType, this.context);
+	}
+	lookU8() {
+		return this.view.getUint8(this.pos);
+	}
+	lookU16() {
+		return this.view.getUint16(this.pos);
+	}
+	lookU32() {
+		return this.view.getUint32(this.pos);
+	}
+	readU8() {
+		const value = this.view.getUint8(this.pos);
+		this.pos++;
+		return value;
+	}
+	readI8() {
+		const value = this.view.getInt8(this.pos);
+		this.pos++;
+		return value;
+	}
+	readU16() {
+		const value = this.view.getUint16(this.pos);
+		this.pos += 2;
+		return value;
+	}
+	readI16() {
+		const value = this.view.getInt16(this.pos);
+		this.pos += 2;
+		return value;
+	}
+	readU32() {
+		const value = this.view.getUint32(this.pos);
+		this.pos += 4;
+		return value;
+	}
+	readI32() {
+		const value = this.view.getInt32(this.pos);
+		this.pos += 4;
+		return value;
+	}
+	readU64() {
+		const value = getUint64(this.view, this.pos);
+		this.pos += 8;
+		return value;
+	}
+	readI64() {
+		const value = getInt64(this.view, this.pos);
+		this.pos += 8;
+		return value;
+	}
+	readU64AsBigInt() {
+		const value = this.view.getBigUint64(this.pos);
+		this.pos += 8;
+		return value;
+	}
+	readI64AsBigInt() {
+		const value = this.view.getBigInt64(this.pos);
+		this.pos += 8;
+		return value;
+	}
+	readF32() {
+		const value = this.view.getFloat32(this.pos);
+		this.pos += 4;
+		return value;
+	}
+	readF64() {
+		const value = this.view.getFloat64(this.pos);
+		this.pos += 8;
+		return value;
+	}
+};
+//#endregion
+//#region node_modules/@msgpack/msgpack/dist.esm/decode.mjs
+/**
+* It decodes a single MessagePack object in a buffer.
+*
+* This is a synchronous decoding function.
+* See other variants for asynchronous decoding: {@link decodeAsync}, {@link decodeMultiStream}, or {@link decodeArrayStream}.
+*
+* @throws {@link RangeError} if the buffer is incomplete, including the case where the buffer is empty.
+* @throws {@link DecodeError} if the buffer contains invalid data.
+*/
+function decode(buffer, options) {
+	return new Decoder(options).decode(buffer);
+}
+//#endregion
+//#region node_modules/dpack/lib/serialize.js
+var require_serialize = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var PROPERTY_CODE = 0;
+	var TYPE_CODE = 3;
+	var STRING_CODE = 2;
+	var NUMBER_CODE = 1;
+	var SEQUENCE_CODE = 7;
+	var NULL = 0;
+	var FALSE = 3;
+	var TRUE = 4;
+	var UNDEFINED = 5;
+	var DEFAULT_TYPE = 6;
+	var ARRAY_TYPE = 7;
+	var REFERENCING_TYPE = 8;
+	var NUMBER_TYPE = 9;
+	var METADATA_TYPE = 11;
+	var REFERENCING_POSITION = 13;
+	var ERROR_METADATA = 500;
+	var OPEN_SEQUENCE = 12;
+	var END_SEQUENCE = 14;
+	var DEFERRED_REFERENCE = 15;
+	var nextId = 1;
+	var iteratorSymbol = typeof Symbol !== "undefined" ? Symbol.iterator : "__iterator_symbol__";
+	function createSerializer(options) {
+		if (!options) options = {};
+		var extendedTypes = options.converterByConstructor;
+		if (!extendedTypes) extendedTypes = /* @__PURE__ */ new Map();
+		extendedTypes.set(Map, {
+			name: "Map",
+			toValue: writeMap
+		});
+		extendedTypes.set(Set, {
+			name: "Set",
+			toValue: writeSet
+		});
+		extendedTypes.set(Date, {
+			name: "Date",
+			toValue: writeDate
+		});
+		options.outlet || options.avoidShareUpdate;
+		var charEncoder = typeof global != "undefined" && global.Buffer && !(options && options.encoding === "utf16le") ? exports.nodeCharEncoder(options) : browserCharEncoder(options);
+		var writeString = charEncoder.writeString;
+		var writeToken = charEncoder.writeToken;
+		var startSequence = charEncoder.startSequence;
+		var endSequence = charEncoder.endSequence;
+		var writeBuffer = charEncoder.writeBuffer;
+		options.forProperty;
+		var propertyUsed;
+		if (options.shared) {
+			propertyUsed = options.shared.propertyUsed;
+			options.shared.propertyUsed;
+		}
+		var pendingEncodings = [];
+		var property;
+		var bufferSymbol = exports.bufferSymbol || "_bufferSymbol_";
+		var targetSymbol = exports.targetSymbol || "_targetSymbol_";
+		var serializerId = nextId++;
+		var writers = [
+			0,
+			1,
+			2,
+			3,
+			4,
+			5,
+			writeAsDefault,
+			writeAsArray,
+			writeAsReferencing,
+			writeAsNumber,
+			writeOnlyNull
+		];
+		function writeNumber(number) {
+			writeToken(NUMBER_CODE, number);
+		}
+		function writeInlineString(string) {
+			writeToken(STRING_CODE, string.length);
+			writeString(string);
+		}
+		function writeAsReferencing(value) {
+			var type, values = property.values;
+			if (values) {
+				if (values.resetTo > -1 && values.serializer !== serializerId) {
+					values.serializer = serializerId;
+					if (values.resetTo < values.length) values.length = values.resetTo;
+					writeToken(TYPE_CODE, REFERENCING_POSITION);
+					writeToken(NUMBER_CODE, values.resetTo);
+				}
+				var reference = values.indexOf(value);
+				if (reference > -1) return writeNumber(reference);
+			}
+			if ((type = typeof value) === "string" || type === "object" && value) {
+				if (property.writeSharedValue) {
+					if (property.writeSharedValue(value, writeToken, serializerId)) return;
+				} else if (values) {
+					var index = values.length;
+					if (index < 12) values[index] = value;
+				}
+			}
+			if (type === "string") writeInlineString(value);
+			else writeAsDefault(value);
+		}
+		function writeAsNumber(number) {
+			var type = typeof number;
+			if (type === "number") {
+				if (number >>> 0 === number || number > 0 && number < 70368744177664 && number % 1 === 0) writeToken(NUMBER_CODE, number);
+				else writeInlineString(number.toString());
+			} else if (type === "object") writeAsDefault(number);
+			else writeTypedValue(number);
+		}
+		function writeTypedValue(value) {
+			if (value === null) writeToken(TYPE_CODE, NULL);
+			else if (value === false) writeToken(TYPE_CODE, FALSE);
+			else if (value === true) writeToken(TYPE_CODE, TRUE);
+			else if (value === void 0) writeToken(TYPE_CODE, UNDEFINED);
+			else writeTypedNonConstant(value);
+		}
+		function writeTypedNonConstant(value) {
+			var type = typeof value;
+			var extendedType;
+			if (type === "object") {
+				if (value) {
+					var constructor = value.constructor;
+					if (constructor === Object) {} else if (constructor === Array) type = "array";
+					else {
+						extendedType = extendedTypes.get(constructor);
+						if (extendedType && extendedType.toValue) {
+							value = extendedType.toValue(value);
+							type = typeof value;
+							if (value && type === "object" && value.constructor === Array) type = "array";
+							if (property.type === type) {
+								if (property.extendedType !== extendedType) {
+									property.extendedType = extendedType;
+									writeToken(TYPE_CODE, METADATA_TYPE);
+									writeInlineString(extendedType.name);
+								}
+								return writers[property.code](value);
+							}
+						} else extendedType = false;
+					}
+				} else type = "undefined";
+			} else if (type === "boolean") type = "undefined";
+			else if (type === "function") {
+				value = value.toString();
+				type = "string";
+			}
+			property = writeProperty(null, type, extendedType);
+			writers[property.code](value);
+		}
+		function writeOnlyNull() {
+			writeToken(TYPE_CODE, NULL);
+		}
+		function writeAsDefault(value, isRoot) {
+			var type = typeof value;
+			if (type === "object") {
+				if (!value) return writeToken(TYPE_CODE, NULL);
+			} else if (type === "string") return writeInlineString(value);
+			else if (type === "number" && (value >>> 0 === value || value > 0 && value < 70368744177664 && value % 1 === 0)) return writeToken(NUMBER_CODE, value);
+			else return writeTypedValue(value);
+			var object = value;
+			var constructor = object.constructor;
+			var notPlainObject;
+			if (object[targetSymbol]) return writeBlockReference(value);
+			else if (constructor === Object) notPlainObject = false;
+			else if (constructor === Array) {
+				property = writeProperty(property.key, "array");
+				return writers[property.code](value);
+			} else {
+				if (object.then) return writeBlockReference(value);
+				extendedType = extendedTypes.get(constructor);
+				if (extendedType) {
+					if (extendedType.toValue) return writeTypedValue(object);
+				} else {
+					if (object[iteratorSymbol]) {
+						property = writeProperty(property.key, "array");
+						return writeAsIterable(object, isRoot);
+					}
+					extendedTypes.set(constructor, extendedType = { name: constructor.name });
+				}
+				if (property.constructs !== constructor) {
+					writeToken(TYPE_CODE, METADATA_TYPE);
+					writeInlineString(extendedType.name);
+					property.constructs = constructor;
+				}
+				notPlainObject = true;
+			}
+			var thisProperty = property;
+			if (thisProperty.resetTo < thisProperty.length && thisProperty.serializer != serializerId) {
+				thisProperty.length = thisProperty.resetTo;
+				thisProperty.serializer = serializerId;
+			}
+			startSequence();
+			var i = 0;
+			var resumeIndex = -2;
+			var propertyIndex = 0;
+			for (var key in object) {
+				if (notPlainObject && !object.hasOwnProperty(key)) continue;
+				var value = object[key];
+				type = typeof value;
+				property = thisProperty[propertyIndex];
+				var constructor;
+				var extendedType = false;
+				if (type === "object") {
+					if (value) {
+						constructor = value.constructor;
+						if (constructor === Object) {} else if (constructor === Array) type = "array";
+						else {
+							extendedType = extendedTypes.get(constructor);
+							if (extendedType && extendedType.toValue) {
+								value = extendedType.toValue(value);
+								type = typeof value;
+								if (value && type === "object" && value.constructor === Array) type = "array";
+							} else if (value[iteratorSymbol] && !value.then) type = "array";
+							else extendedType = false;
+						}
+					} else type = "undefined";
+				}
+				if (!property || property.key !== key || property.type !== type && type !== "boolean" && type !== "undefined" && !(type === "string" && property.type !== "number") || extendedType && property.extendedType !== constructor) {
+					var lastPropertyIndex = propertyIndex;
+					if (resumeIndex > -2) propertyIndex = resumeIndex;
+					do
+						property = thisProperty[++propertyIndex];
+					while (property && (property.key !== key || property.type !== type && type !== "boolean" && type !== "undefined" && !(type === "string" && property.type !== "number") || extendedType && property.extendedType !== constructor));
+					if (property) {
+						writeToken(PROPERTY_CODE, propertyIndex);
+						if (resumeIndex === -2) resumeIndex = lastPropertyIndex - 1;
+					} else if (thisProperty.getProperty) {
+						property = thisProperty.getProperty(value, key, type, extendedType, writeProperty, writeToken, lastPropertyIndex);
+						propertyIndex = property.index;
+						if (lastPropertyIndex !== propertyIndex && resumeIndex === -2) resumeIndex = lastPropertyIndex - 1;
+					} else {
+						if (lastPropertyIndex === thisProperty.length) propertyIndex = lastPropertyIndex;
+						else {
+							writeToken(PROPERTY_CODE, propertyIndex = thisProperty.length);
+							if (resumeIndex === -2) resumeIndex = lastPropertyIndex - 1;
+						}
+						if (propertyIndex < thisProperty.resetTo) {
+							debugger;
+							throw new Error("overwriting frozen property");
+						}
+						property = thisProperty[propertyIndex] = writeProperty(key, type, extendedType);
+					}
+				}
+				if (propertyUsed) propertyUsed(property, object, serializerId, i);
+				var code = property.code;
+				if (code > 7) {
+					if (code === 8) writeAsReferencing(value);
+					else writeAsNumber(value);
+				} else if (code === 6) writeAsDefault(value);
+				else writeAsArray(value);
+				propertyIndex++;
+				i++;
+			}
+			property = thisProperty;
+			endSequence(i);
+		}
+		function writeProperty(key, type, extendedType) {
+			var property = [];
+			property.key = key;
+			property.type = type;
+			if (type === "string") {
+				writeToken(TYPE_CODE, REFERENCING_TYPE);
+				property.values = [];
+				property.code = REFERENCING_TYPE;
+			} else if (type === "number") {
+				writeToken(TYPE_CODE, NUMBER_TYPE);
+				property.code = NUMBER_TYPE;
+			} else if (type === "object") {
+				writeToken(TYPE_CODE, DEFAULT_TYPE);
+				property.code = DEFAULT_TYPE;
+			} else if (type === "array") {
+				writeToken(TYPE_CODE, ARRAY_TYPE);
+				property.code = ARRAY_TYPE;
+			} else if (type === "boolean" || type === "undefined") {
+				property.type = "object";
+				writeToken(TYPE_CODE, DEFAULT_TYPE);
+				property.code = DEFAULT_TYPE;
+			} else {
+				writeToken(TYPE_CODE, DEFAULT_TYPE);
+				property.code = 10;
+				console.error("Unable to write value of type " + type);
+			}
+			if (typeof key === "string") writeInlineString(key);
+			else if (!(key === null && (type === "object" || type === "array"))) writeAsDefault(key);
+			if (extendedType) {
+				property.extendedType = extendedType;
+				writeToken(TYPE_CODE, METADATA_TYPE);
+				writeInlineString(extendedType.name);
+			}
+			return property;
+		}
+		function writeAsIterable(iterable, isRoot, iterator) {
+			try {
+				if (!iterator) {
+					writeToken(SEQUENCE_CODE, OPEN_SEQUENCE);
+					iterator = iterable[iteratorSymbol]();
+				}
+				var arrayProperty = property;
+				property = arrayProperty.child || (arrayProperty.child = arrayProperty);
+				var result;
+				while (!(result = iterator.next()).done) {
+					writers[property.code](result.value, arrayProperty);
+					if (isRoot && charEncoder.hasWritten) {
+						charEncoder.hasWritten = false;
+						property = arrayProperty;
+						pendingEncodings.unshift({ then: function(callback) {
+							writeAsIterable(null, true, iterator);
+							return callback();
+						} });
+						return;
+					}
+				}
+			} catch (error) {
+				writeToken(TYPE_CODE, METADATA_TYPE);
+				writeToken(NUMBER_CODE, ERROR_METADATA);
+				writeAsDefault(Object.assign(new (typeof error == "object" && error ? error.constructor : Error)(), {
+					name: error && error.name,
+					message: error && error.message || error
+				}));
+				throw error;
+			}
+			if (property !== arrayProperty.child) arrayProperty.child = property;
+			property = arrayProperty;
+			writeToken(SEQUENCE_CODE, END_SEQUENCE);
+		}
+		function writeAsArray(array) {
+			if (!array) writeTypedValue(array);
+			else if (array[targetSymbol]) return writeBlockReference(array);
+			else if (array.constructor === Array) {
+				var length = array.length;
+				var needsClosing;
+				if (length > 11) {
+					writeToken(SEQUENCE_CODE, OPEN_SEQUENCE);
+					needsClosing = true;
+				} else writeToken(SEQUENCE_CODE, length);
+				var arrayProperty = property;
+				property = arrayProperty[0];
+				if (arrayProperty.resetTo < arrayProperty.length && arrayProperty.serializer != serializerId) {
+					arrayProperty.length = arrayProperty.resetTo;
+					arrayProperty.serializer = serializerId;
+				}
+				var propertyIndex = 0;
+				for (var i = 0; i < length; i++) {
+					var value = array[i];
+					var type = typeof value;
+					if (type === "object") {
+						if (value) {
+							var constructor = value.constructor;
+							if (constructor === Object) {} else if (constructor === Array) type = "array";
+							else {
+								var extendedType = extendedTypes.get(constructor);
+								if (extendedType && extendedType.toValue) {
+									value = extendedType.toValue(value);
+									type = typeof value;
+									if (value && type === "object" && value.constructor === Array) type = "array";
+								} else extendedType = false;
+							}
+						} else type = "undefined";
+					}
+					if (!property) {
+						if (arrayProperty.getProperty) property = arrayProperty.getProperty(value, null, type, extendedType, writeProperty, writeToken, 0);
+						else {
+							if (type === "string" || type === "number" || type === "array") property = writeProperty(null, type, extendedType);
+							else {
+								property = [];
+								property.type = type;
+								property.key = null;
+								property.code = DEFAULT_TYPE;
+							}
+							arrayProperty[0] = property;
+						}
+					} else if (property.type !== type && type !== "boolean" && type !== "undefined" && !(type === "string" && property.type !== "number") || extendedType && property.extendedType !== constructor) {
+						propertyIndex = -1;
+						do
+							property = arrayProperty[++propertyIndex];
+						while (property && (property.type !== type && type !== "boolean" && type !== "undefined" && !(type === "string" && property.type !== "number") || extendedType && property.extendedType !== constructor));
+						if (property) writeToken(PROPERTY_CODE, propertyIndex);
+						else if (arrayProperty.getProperty) property = arrayProperty.getProperty(value, null, type, extendedType, writeProperty, writeToken, -1);
+						else {
+							writeToken(PROPERTY_CODE, propertyIndex);
+							property = writeProperty(null, type, extendedType);
+							arrayProperty[propertyIndex] = property;
+						}
+					}
+					if (propertyUsed) propertyUsed(property, array, serializerId, i);
+					var code = property.code;
+					if (code > 7) {
+						if (code === 8) writeAsReferencing(value);
+						else writeAsNumber(value);
+					} else if (code === 6) writeAsDefault(value);
+					else writeAsArray(value);
+				}
+				if (needsClosing) writeToken(SEQUENCE_CODE, END_SEQUENCE);
+				property = arrayProperty;
+			} else if (typeof array == "object" && array[iteratorSymbol]) return writeAsIterable(array);
+			else if (type === "string") return writeInlineString(value);
+			else if (type === "number" && (value >>> 0 === value || value > 0 && value < 70368744177664 && value % 1 === 0)) return writeToken(NUMBER_CODE, value);
+			else writeTypedValue(array);
+		}
+		function writeBlockReference(block, writer) {
+			writeToken(SEQUENCE_CODE, DEFERRED_REFERENCE);
+			var blockProperty = property;
+			var lazyPromise = block[targetSymbol] ? { then } : { then: function(callback) {
+				return block.then(function(value) {
+					block = value;
+					then(callback);
+				}, function(error) {
+					block = Object.assign(new (typeof error == "object" && error ? error.constructor : Error)(), {
+						name: error && error.name,
+						message: error && error.message || error
+					});
+					if (!blockProperty.upgrade) {
+						writeToken(TYPE_CODE, METADATA_TYPE);
+						writeToken(NUMBER_CODE, ERROR_METADATA);
+					}
+					then(callback);
+				});
+			} };
+			function then(callback) {
+				if (options.forBlock && block) options.forBlock(block, blockProperty);
+				else {
+					var buffer = block && block[bufferSymbol] && block[bufferSymbol](blockProperty);
+					if (buffer) writeBuffer(buffer);
+					else {
+						property = blockProperty;
+						var lastPendingEncodings = pendingEncodings;
+						pendingEncodings = [];
+						writeAsDefault(block, true);
+						lastPendingEncodings.unshift.apply(lastPendingEncodings, pendingEncodings);
+						pendingEncodings = lastPendingEncodings;
+					}
+				}
+				callback();
+			}
+			pendingEncodings.push(lazyPromise);
+		}
+		var serializer = {
+			serialize: function(value, sharedProperty) {
+				var buffer = value && value[bufferSymbol] && value[bufferSymbol](sharedProperty);
+				if (buffer) {
+					charEncoder.writeBuffer(buffer);
+					return;
+				}
+				if (sharedProperty) {
+					property = sharedProperty;
+					writers[property.code](value);
+				} else {
+					property = [];
+					property.key = null;
+					writeAsDefault(value, true);
+				}
+			},
+			getSerialized: function() {
+				if (pendingEncodings.length > 0) {
+					var promises = [];
+					while (pendingEncodings.length > 0) {
+						var finished = false;
+						var promise = pendingEncodings.shift().then(function() {
+							finished = true;
+						});
+						if (!finished) promises.push(promise);
+					}
+					if (promises.length > 0) return Promise.all(promises).then(function() {
+						return serializer.getSerialized();
+					});
+				}
+				if (options && options.encoding === "utf16le") return Buffer.from(charEncoder.getSerialized(), "utf16le");
+				return charEncoder.getSerialized();
+			},
+			flush: charEncoder.flush,
+			setOffset: charEncoder.setOffset,
+			finish: charEncoder.finish,
+			pendingEncodings,
+			getWriters: function() {
+				return {
+					writeProperty,
+					writeToken,
+					writeAsDefault,
+					writeBuffer
+				};
+			}
+		};
+		return serializer;
+	}
+	function serialize(value, options) {
+		var serializer = createSerializer(options);
+		var sharedProperty = options && options.shared;
+		var buffer;
+		if (sharedProperty && sharedProperty.startWrite) sharedProperty.startWrite(options.avoidShareUpdate, value);
+		serializer.serialize(value, sharedProperty);
+		buffer = serializer.getSerialized();
+		if (sharedProperty && sharedProperty.endWrite) sharedProperty.endWrite(options.avoidShareUpdate, value);
+		if (serializer.finish) serializer.finish();
+		var sizeTable = value && value[exports.sizeTableSymbol];
+		if (sizeTable) buffer.sizeTable = sizeTable;
+		if (options && options.lazy) return Buffer.concat([value[exports.sizeTableSymbol], buffer]);
+		return buffer;
+	}
+	exports.serialize = serialize;
+	exports.createSerializer = createSerializer;
+	function browserCharEncoder() {
+		var serialized = "";
+		function writeToken(type, number) {
+			var serializedToken;
+			if (number < 16) serializedToken = String.fromCharCode((type << 4 | number) ^ 64);
+			else if (number < 1024) serializedToken = String.fromCharCode((type << 4) + (number >>> 6), (number & 63) + 64);
+			else if (number < 65536) serializedToken = String.fromCharCode((type << 4) + (number >>> 12), number >>> 6 & 63, (number & 63) + 64);
+			else if (number < 4194304) serializedToken = String.fromCharCode((type << 4) + (number >>> 18), number >>> 12 & 63, number >>> 6 & 63, (number & 63) + 64);
+			else if (number < 268435456) serializedToken = String.fromCharCode((type << 4) + (number >>> 24), number >>> 18 & 63, number >>> 12 & 63, number >>> 6 & 63, (number & 63) + 64);
+			else if (number < 4294967296) serializedToken = String.fromCharCode((type << 4) + (number >>> 30), number >>> 24 & 63, number >>> 18 & 63, number >>> 12 & 63, number >>> 6 & 63, (number & 63) + 64);
+			else if (number < 17179869184) serializedToken = String.fromCharCode((type << 4) + (number / 1073741824 >>> 0), number >>> 24 & 63, number >>> 18 & 63, number >>> 12 & 63, number >>> 6 & 63, (number & 63) + 64);
+			else if (number < 1099511627776) serializedToken = String.fromCharCode((type << 4) + (number / 68719476736 >>> 0), number / 1073741824 & 63, number >>> 24 & 63, number >>> 18 & 63, number >>> 12 & 63, number >>> 6 & 63, (number & 63) + 64);
+			else if (number < 70368744177664) serializedToken = String.fromCharCode((type << 4) + (number / 4398046511104 >>> 0), number / 68719476736 & 63, number / 1073741824 & 63, number >>> 24 & 63, number >>> 18 & 63, number >>> 12 & 63, number >>> 6 & 63, (number & 63) + 64);
+			else throw new Error("Too big of number");
+			serialized += serializedToken;
+		}
+		function writeString(string) {
+			serialized += string;
+		}
+		function getSerialized() {
+			return serialized;
+		}
+		return {
+			writeToken,
+			writeString,
+			getSerialized,
+			startSequence: function() {
+				writeToken(SEQUENCE_CODE, OPEN_SEQUENCE);
+			},
+			endSequence: function() {
+				writeToken(SEQUENCE_CODE, END_SEQUENCE);
+			},
+			getOffset: function() {
+				return -1;
+			}
+		};
+	}
+	var ArrayFrom = Array.from || function(iterable, keyValue) {
+		var array = [];
+		var keyValue = iterable.constructor === Map;
+		iterable.forEach(function(key, value) {
+			if (keyValue) array.push([value, key]);
+			else array.push(key);
+		});
+		return array;
+	};
+	function writeMap(map) {
+		var keyValues = ArrayFrom(map);
+		for (var i = 0, length = keyValues.length; i < length; i++) {
+			var keyValue = keyValues[i];
+			keyValues[i] = {
+				key: keyValue[0],
+				value: keyValue[1]
+			};
+		}
+		return keyValues;
+	}
+	function writeSet(set) {
+		return ArrayFrom(set);
+	}
+	function writeDate(date) {
+		return date.getTime();
+	}
+}));
+//#endregion
+//#region node_modules/dpack/lib/serialize-stream.js
+var require_serialize_stream = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var { Transform: Transform$1 } = require("stream");
+	var { createSerializer } = require_serialize();
+	var DPackSerializeStream = class extends Transform$1 {
+		constructor(options) {
+			options = options || {};
+			super(options);
+			this.options = options;
+			this.continueWriting = true;
+		}
+		write(value) {
+			const serializer = this.serializer || (this.serializer = createSerializer({ asBlock: true }));
+			serializer.serialize(value);
+			const buffer = serializer.getSerialized();
+			if (buffer.then) {
+				buffer.then((buffer) => this.push(buffer));
+				this.serializer = null;
+			} else serializer.flush(this);
+		}
+		end(value) {
+			if (value) {
+				this.options.outlet = this;
+				(this.serializer || (this.serializer = createSerializer(this.options))).serialize(value);
+			}
+			if (this.serializer.pendingEncodings.length > 0) {
+				this.endWhenDone = true;
+				this.writeNext();
+			} else {
+				this.serializer.flush();
+				this.push(null);
+			}
+		}
+		writeBytes(buffer) {
+			try {
+				this.continueWriting = this.push(buffer);
+			} catch (error) {
+				throw error;
+			}
+		}
+		_read() {
+			this.continueWriting = true;
+			if (!this.pausedForPromise && this.serializer && this.endWhenDone && this.serializer.pendingEncodings.length > 0) this.writeNext();
+		}
+		writeNext() {
+			var isSync;
+			do {
+				var hasMoreToSend = this.serializer.pendingEncodings.length > 0;
+				isSync = null;
+				if (hasMoreToSend) {
+					this.serializer.pendingEncodings.shift().then(() => {
+						if (isSync === false) {
+							this.pausedForPromise = false;
+							if (this.continueWriting || this.serializer.pendingEncodings.length === 0) this.writeNext();
+							else this.serializer.flush();
+						} else isSync = true;
+					}, (error) => {
+						console.error(error);
+						this.push(error.toString());
+						this.push(null);
+					});
+					if (!isSync) {
+						isSync = false;
+						this.pausedForPromise = true;
+						this.serializer.flush();
+					} else if (!this.continueWriting && this.serializer.pendingEncodings.length > 0) {
+						this.serializer.flush();
+						return;
+					}
+				} else if (this.endWhenDone) {
+					this.serializer.flush();
+					this.push("]");
+					this.push(null);
+				}
+			} while (isSync);
+		}
+	};
+	exports.createSerializeStream = () => {
+		return new DPackSerializeStream();
+	};
+}));
+//#endregion
+//#region node_modules/dpack/lib/parse.js
+var require_parse = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var FALSE = 3;
+	var TRUE = 4;
+	var DEFAULT_TYPE = 6;
+	var ARRAY_TYPE = 7;
+	var REFERENCING_TYPE = 8;
+	var NUMBER_TYPE = 9;
+	var METADATA_TYPE = 11;
+	var REFERENCING_POSITION = 13;
+	var TYPE_DEFINITION = 14;
+	var ERROR_METADATA = 500;
+	var OPEN_SEQUENCE = 12;
+	var END_SEQUENCE = 14;
+	var DEFERRED_REFERENCE = 15;
+	function createParser(options) {
+		if (!options) options = {};
+		var offset;
+		var source;
+		var isPartial;
+		var classByName = options.classByName || /* @__PURE__ */ new Map();
+		classByName.set("Map", readMap);
+		classByName.set("Set", readSet);
+		classByName.set("Date", readDate);
+		var pausedState;
+		var deferredReads;
+		function pause(state, lastRead) {
+			state.previous = pausedState;
+			state.resume = true;
+			pausedState = state;
+			if (!isPartial) throw new Error("Unexpected end of dpack stream");
+			if (!parser.onResume) parser.onResume = function(nextString, isPartialString, rebuildString) {
+				var resumeState = pausedState;
+				pausedState = null;
+				parser.onResume = null;
+				if (lastRead < source.length) source = source.slice(lastRead) + nextString;
+				else if (rebuildString) source = nextString.slice(0, 1) + nextString.slice(1);
+				else source = nextString;
+				isPartial = isPartialString;
+				disposedChars += lastRead;
+				offset = 0;
+				return resumeState.reader ? resumeState.reader(resumeState) : readSequence(resumeState.length, resumeState);
+			};
+			return state.object;
+		}
+		function readSequence(length, thisProperty) {
+			var propertyState = 0;
+			thisProperty = thisProperty || [];
+			var property, isArray, object, value, i = 0, propertyIndex = 0;
+			if (thisProperty.resume) {
+				property = thisProperty.previous;
+				if (property) {
+					var value = property.reader ? property.reader(property) : readSequence(property.length, property);
+					var values = property.values;
+					if (values) {
+						if (pausedState) pausedState.values = values;
+						else if (value.nextPosition > -1) values[values.nextPosition++] = value;
+						else values.push(value);
+					}
+				}
+				if (thisProperty.code && thisProperty.code !== thisProperty.thisProperty.code) thisProperty.resume = false;
+				else {
+					i = thisProperty.i || 0;
+					object = thisProperty.object;
+					propertyState = thisProperty.propertyState || 0;
+					propertyIndex = thisProperty.propertyIndex || 0;
+					thisProperty = thisProperty.thisProperty;
+				}
+			}
+			isArray = thisProperty.code === ARRAY_TYPE;
+			object = object || (thisProperty.constructs ? new thisProperty.constructs() : isArray ? [] : {});
+			for (; i < length;) {
+				var type, number;
+				var lastRead = offset;
+				var token = source.charCodeAt(offset++);
+				if (token >= 48) {
+					if (token > 12288) {
+						type = token >>> 12 ^ 4;
+						number = token & 4095;
+					} else {
+						type = token >>> 4 ^ 4;
+						number = token & 15;
+					}
+				} else {
+					type = token >>> 4 & 11;
+					number = token & 15;
+					token = source.charCodeAt(offset++);
+					number = (number << 6) + (token & 63);
+					if (!(token >= 64)) {
+						token = source.charCodeAt(offset++);
+						number = (number << 6) + (token & 63);
+						if (!(token >= 64)) {
+							token = source.charCodeAt(offset++);
+							number = (number << 6) + (token & 63);
+							if (!(token >= 64)) {
+								token = source.charCodeAt(offset++);
+								number = (number << 6) + (token & 63);
+								if (!(token >= 64)) {
+									token = source.charCodeAt(offset++);
+									number = number * 64 + (token & 63);
+									if (!(token >= 64)) {
+										token = source.charCodeAt(offset++);
+										number = number * 64 + (token & 63);
+										if (!(token >= 64)) {
+											token = source.charCodeAt(offset++);
+											number = number * 64 + (token & 63);
+											if (!(token >= 0)) {
+												if (offset > source.length) return pause({
+													length,
+													thisProperty,
+													i,
+													object,
+													propertyIndex,
+													propertyState
+												}, lastRead);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if (type === 0) {
+					propertyIndex = number;
+					propertyState = 0;
+					continue;
+				}
+				property = thisProperty[propertyIndex];
+				if (type === 3) {
+					if (number < 6) {
+						if (number < 3) {
+							if (number === 0) value = null;
+							else value = "Unknown token, type: " + type + " number: " + number;
+						} else if (number === TRUE) value = true;
+						else if (number === FALSE) value = false;
+						else value = void 0;
+					} else {
+						if (number <= NUMBER_TYPE) {
+							if (propertyState === 1) {
+								propertyIndex++;
+								i++;
+								property = thisProperty[propertyIndex];
+							}
+							if (propertyIndex < thisProperty.resetTo) throw new Error("Overwriting frozen property");
+							if (property) {
+								if (!property.resume) {
+									value = property.key;
+									property = thisProperty[propertyIndex] = [];
+									property.key = value;
+								}
+							} else {
+								property = thisProperty[propertyIndex] = [];
+								property.key = null;
+							}
+							property.code = number;
+							property.parent = thisProperty;
+							propertyState = 2;
+							if (number === REFERENCING_TYPE) property.values = [];
+							else if (number === ARRAY_TYPE) {
+								property[0] = [];
+								property[0].key = null;
+								property[0].code = DEFAULT_TYPE;
+								property[0].parent = property;
+							}
+						} else propertyState = number;
+						continue;
+					}
+				} else if (type === 2) {
+					value = source.slice(offset, offset += number);
+					if (offset > source.length) return pause({
+						length,
+						thisProperty,
+						i,
+						object,
+						propertyIndex,
+						propertyState
+					}, lastRead);
+					if (propertyState < 2) {
+						if (property.code === NUMBER_TYPE) value = +value;
+					}
+				} else if (type === 1) value = number;
+				else if (number > 13) {
+					if (number === END_SEQUENCE) return object;
+					else if (number === DEFERRED_REFERENCE) {
+						value = readSequence(0, property);
+						propertyState = 0;
+						if (options.forDeferred) value = options.forDeferred(value, property);
+						else (deferredReads || (deferredReads = [])).push({
+							property,
+							value
+						});
+					}
+				} else {
+					if (number >= OPEN_SEQUENCE) number = 2e9;
+					if (propertyState > 1) {
+						if (propertyState === 2) {
+							propertyState = 0;
+							value = readSequence(number, property);
+						} else if (propertyState === METADATA_TYPE) value = readSequence(number, [{
+							key: null,
+							code: 6
+						}]);
+						else if (property.resume && (property.code || DEFAULT_TYPE) === property.thisProperty.code) value = readSequence(number, property.thisProperty);
+						else value = readSequence(number, property);
+					} else value = readSequence(number, property);
+					if (pausedState) {
+						if (value === void 0) {
+							pausedState = null;
+							parser.onResume = null;
+							return pause({
+								length,
+								thisProperty,
+								i,
+								object,
+								property,
+								propertyIndex,
+								previousProperty,
+								propertyState
+							}, lastRead);
+						} else pausedState.values = property.values instanceof Array ? property.values : void 0;
+					}
+				}
+				if (!property) throw new Error("No property defined for slot" + (thisProperty.key ? " in " + thisProperty.key : ""));
+				if (propertyState < 2 && property && property.code === REFERENCING_TYPE) {
+					var values = property.values;
+					if (typeof value === "number") {
+						value = values[number];
+						if (value === void 0 && !(number in values)) throw new Error("Referencing value that has not been read yet");
+					} else if ((type === 2 || type === 7) && values) {
+						if (values.nextPosition > -1) {
+							if (property.recordValueReference) property.recordValueReference(values);
+							values[values.nextPosition++] = value;
+						} else values.push(value);
+					}
+				}
+				if (propertyState > 1) {
+					if (propertyState === 2) property.key = value;
+					else if (propertyState === METADATA_TYPE) {
+						if (typeof value === "string") {
+							var extendedType = classByName.get(value);
+							if (extendedType) {
+								if (extendedType.fromValue) property.fromValue = extendedType.fromValue;
+								else property.constructs = extendedType;
+							} else if (options.errorOnUnknownClass) throw new Error("Attempt to deserialize to unknown class " + parameter);
+							property.extendedType = extendedType;
+						} else {
+							property.metadata = value;
+							if (value === ERROR_METADATA) property.fromValue = onError;
+						}
+					} else if (propertyState === REFERENCING_POSITION) {
+						var values = property.values || (property.values = []);
+						values.nextPosition = value;
+					} else if (propertyState === TYPE_DEFINITION) {} else throw new Error("Unknown property type " + propertyState);
+					propertyState = 1;
+					continue;
+				} else propertyState = 0;
+				if (property.fromValue) value = property.fromValue(value);
+				if (isArray && property.key === null) object.push(value);
+				else if (value !== void 0) object[property.key] = value;
+				i++;
+				if (!isArray) propertyIndex++;
+			}
+			return object;
+		}
+		var nonParsingError;
+		function onError(error) {
+			var g = typeof global != "undefined" ? global : window;
+			if (error && error.name && g[error.name]) error = new g[error.name](error.message);
+			else if (typeof error == "string") error = new Error(error);
+			if (options.onError) options.onError(error);
+			else {
+				nonParsingError = true;
+				throw error;
+			}
+		}
+		var disposedChars = 0;
+		function read(property) {
+			try {
+				if (property && property.resume) {
+					var previous = property.previous;
+					value = readSequence(previous.length, previous);
+					value = property.object || value;
+					property = property.property;
+				} else {
+					property = property || [options && options.shared || {
+						key: null,
+						code: 6
+					}];
+					var value = readSequence(1, property)[property[0].key];
+				}
+				while (true) {
+					if (pausedState) return pause({
+						reader: read,
+						object: value,
+						property
+					});
+					if (!deferredReads) return value;
+					var index = deferredReads.index || 0;
+					var deferredRead = deferredReads[index];
+					deferredReads.index = index + 1;
+					if (!deferredRead) {
+						deferredReads = deferredReads.parent;
+						continue;
+					}
+					var target = deferredRead.value;
+					var parentDeferredReads = deferredReads;
+					deferredReads = [];
+					deferredReads.parent = parentDeferredReads;
+					var targetProperty = deferredRead.property;
+					var result = readSequence(1, property = [{
+						resume: true,
+						key: null,
+						thisProperty: targetProperty,
+						object: target
+					}]);
+					result = result.null || result[targetProperty.key];
+					if (result != target) {
+						Object.assign(target, result);
+						if (pausedState && pausedState.object === result) pausedState.object = target;
+						if (result && result.constructor === Array) {
+							target.length = result.length;
+							Object.setPrototypeOf(target, Object.getPrototypeOf(result));
+						}
+					}
+				}
+			} catch (error) {
+				if (!nonParsingError) error.message = "DPack parsing error: " + error.message + " at position: " + (offset + disposedChars) + " near: " + source.slice(offset - 10, offset + 10);
+				throw error;
+			}
+		}
+		var parser = {
+			setSource: function(string, startOffset, isPartialString) {
+				source = string;
+				offset = startOffset || 0;
+				disposedChars = 0;
+				isPartial = isPartialString;
+				return this;
+			},
+			hasMoreData: function() {
+				return source.length > offset;
+			},
+			isPaused: function() {
+				return pausedState;
+			},
+			hasUnfulfilledReferences: function() {
+				return deferredReads && deferredReads.length > deferredReads.index;
+			},
+			getOffset: function() {
+				return offset + disposedChars;
+			},
+			read
+		};
+		return parser;
+	}
+	exports.parse = function(stringOrBuffer, options) {
+		var source;
+		if (typeof stringOrBuffer === "string") source = stringOrBuffer;
+		else if (stringOrBuffer && stringOrBuffer.toString) source = stringOrBuffer.toString(options && options.encoding || "utf8");
+		else return stringOrBuffer;
+		var parser = createParser(options).setSource(source);
+		if (options && options.shared) return parser.read([options.shared]);
+		return parser.read();
+	};
+	exports.createParser = createParser;
+	var readMap = { fromValue: function(entries) {
+		var map = /* @__PURE__ */ new Map();
+		for (var i = 0, l = entries.length; i < l; i++) {
+			var entry = entries[i];
+			map.set(entry.key, entry.value);
+		}
+		return map;
+	} };
+	var readSet = { fromValue: function(values) {
+		var set = new Set(values);
+		if (set.size === 0 && values.length > 0) for (var i = 0, l = values.length; i < l; i++) set.add(values[i]);
+		return set;
+	} };
+	var readDate = { fromValue: function(time) {
+		return new Date(time);
+	} };
+}));
+//#endregion
+//#region node_modules/dpack/lib/parse-stream.js
+var require_parse_stream = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var Transform = require("stream").Transform;
+	var createParser = require_parse().createParser;
+	var DEFAULT_OPTIONS = { objectMode: true };
+	var DPackParseStream = class extends Transform {
+		constructor(options) {
+			if (options) options.objectMode = true;
+			else options = DEFAULT_OPTIONS;
+			super(options);
+			this.parser = createParser(options);
+			this.waitingValues = [];
+		}
+		_transform(chunk, encoding, callback) {
+			var value;
+			try {
+				var sourceString = chunk.toString();
+				var parser = this.parser;
+				if (parser.onResume) {
+					value = parser.onResume(sourceString, true);
+					if (!parser.isPaused()) this.sendValue(value);
+				} else parser.setSource(sourceString, 0, true);
+				while (parser.hasMoreData()) {
+					value = parser.read();
+					if (parser.isPaused()) break;
+					else this.sendValue(value);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+			if (callback) callback();
+		}
+		sendValue(value) {
+			if (this.parser.hasUnfulfilledReferences()) {
+				if (value !== void 0) this.waitingValues.push(value);
+			} else {
+				while (this.waitingValues.length > 0) this.push(this.waitingValues.shift());
+				if (value !== void 0) this.push(value);
+			}
+		}
+	};
+	exports.createParseStream = () => new DPackParseStream();
+}));
+//#endregion
+//#region node_modules/dpack/lib/node-encoder.js
+var require_node_encoder = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var PREFERRED_MAX_BUFFER_SIZE = 32768;
+	var availableBuffers = [];
+	function nodeCharEncoder(options) {
+		var offset = options.startOffset || 0;
+		var bufferSize;
+		var outlet = options.outlet;
+		var buffer = availableBuffers.pop();
+		if (buffer && buffer.length > offset + 128) bufferSize = buffer.length;
+		else {
+			bufferSize = (offset >> 12 << 12) + 8192;
+			buffer = Buffer.allocUnsafeSlow(bufferSize);
+		}
+		var encoding = options.encoding;
+		var sequences = [];
+		function makeRoom(bytesNeeded) {
+			if (outlet) {
+				outlet.writeBytes(buffer.slice(0, offset));
+				if (bufferSize < PREFERRED_MAX_BUFFER_SIZE || bytesNeeded > PREFERRED_MAX_BUFFER_SIZE) bufferSize = Math.max(bufferSize * 4, bytesNeeded);
+				buffer = Buffer.allocUnsafeSlow(bufferSize);
+				offset = 0;
+				sequences = [];
+				encoder.hasWritten = true;
+			} else {
+				bufferSize = Math.max(bufferSize * 4, bufferSize + bytesNeeded, 8192);
+				var oldBuffer = buffer;
+				buffer = Buffer.allocUnsafeSlow(bufferSize);
+				oldBuffer.copy(buffer, 0, 0, offset);
+			}
+		}
+		function flush(specifiedOutlet) {
+			(specifiedOutlet || outlet).writeBytes(buffer.slice(0, offset));
+			if (offset + 128 > buffer.length) buffer = Buffer.allocUnsafeSlow(bufferSize = Math.min(Math.max((offset >> 10 << 10) + 8192, bufferSize), 32768));
+			else {
+				buffer = buffer.slice(offset);
+				bufferSize = buffer.length;
+			}
+			offset = 0;
+			sequences = [];
+		}
+		function writeToken(type, number) {
+			if (number < 16) buffer[offset++] = (type << 4) + number ^ 64;
+			else if (number < 1024) {
+				buffer[offset++] = (type << 4) + (number >>> 6);
+				buffer[offset++] = (number & 63) + 64;
+			} else if (number < 65536) {
+				buffer[offset++] = (type << 4) + (number >>> 12);
+				buffer[offset++] = number >>> 6 & 63;
+				buffer[offset++] = (number & 63) + 64;
+			} else if (number < 4194304) {
+				buffer[offset++] = (type << 4) + (number >>> 18);
+				buffer[offset++] = number >>> 12 & 63;
+				buffer[offset++] = number >>> 6 & 63;
+				buffer[offset++] = (number & 63) + 64;
+			} else if (number < 268435456) {
+				buffer[offset++] = (type << 4) + (number >>> 24);
+				buffer[offset++] = number >>> 18 & 63;
+				buffer[offset++] = number >>> 12 & 63;
+				buffer[offset++] = number >>> 6 & 63;
+				buffer[offset++] = (number & 63) + 64;
+			} else if (number < 4294967296) {
+				buffer[offset++] = (type << 4) + (number >>> 30);
+				buffer[offset++] = number >>> 24 & 63;
+				buffer[offset++] = number >>> 18 & 63;
+				buffer[offset++] = number >>> 12 & 63;
+				buffer[offset++] = number >>> 6 & 63;
+				buffer[offset++] = (number & 63) + 64;
+			} else if (number < 17179869184) {
+				buffer[offset++] = (type << 4) + (number / 1073741824 >>> 0);
+				buffer[offset++] = number >>> 24 & 63;
+				buffer[offset++] = number >>> 18 & 63;
+				buffer[offset++] = number >>> 12 & 63;
+				buffer[offset++] = number >>> 6 & 63;
+				buffer[offset++] = (number & 63) + 64;
+			} else if (number < 1099511627776) {
+				buffer[offset++] = (type << 4) + (number / 68719476736 >>> 0);
+				buffer[offset++] = number / 1073741824 & 63;
+				buffer[offset++] = number >>> 24 & 63;
+				buffer[offset++] = number >>> 18 & 63;
+				buffer[offset++] = number >>> 12 & 63;
+				buffer[offset++] = number >>> 6 & 63;
+				buffer[offset++] = (number & 63) + 64;
+			} else if (number < 70368744177664) {
+				buffer[offset++] = (type << 4) + (number / 4398046511104 >>> 0);
+				buffer[offset++] = number / 68719476736 & 63;
+				buffer[offset++] = number / 1073741824 & 63;
+				buffer[offset++] = number >>> 24 & 63;
+				buffer[offset++] = number >>> 18 & 63;
+				buffer[offset++] = number >>> 12 & 63;
+				buffer[offset++] = number >>> 6 & 63;
+				buffer[offset++] = (number & 63) + 64;
+			} else throw new Error("Invalid number " + number);
+			if (offset > bufferSize - 10) makeRoom(0);
+		}
+		function writeBuffer(source) {
+			var sourceLength = source.length;
+			if (sourceLength + offset + 10 > bufferSize) makeRoom(sourceLength + 10);
+			source.copy(buffer, offset);
+			offset += sourceLength;
+		}
+		function writeString(string) {
+			var maxStringLength = string.length * 3 + 10;
+			if (offset + maxStringLength > bufferSize) makeRoom(maxStringLength + 10);
+			var bytesWritten = encoding ? buffer.write(string, offset, buffer.length, encoding) : buffer.utf8Write(string, offset, buffer.length);
+			offset += bytesWritten;
+		}
+		function getSerialized() {
+			return buffer.slice(0, offset);
+		}
+		function insertBuffer(headerBuffer, position) {
+			var headerLength = headerBuffer.length;
+			if (offset + headerLength + 10 > bufferSize) makeRoom(headerLength + 10);
+			buffer.copy(buffer, headerLength + position, position, offset);
+			headerBuffer.copy(buffer, position);
+			offset += headerLength;
+		}
+		var encoder = {
+			writeToken,
+			writeString,
+			writeBuffer,
+			getSerialized,
+			insertBuffer,
+			flush,
+			startSequence() {
+				var currentOffset = offset;
+				buffer[offset++] = 60;
+				sequences.push(currentOffset);
+				if (offset > bufferSize - 10) makeRoom(0);
+			},
+			endSequence(length) {
+				var startOffset = sequences.pop();
+				if (length < 12 && startOffset > -1) {
+					buffer[startOffset] = 48 + length;
+					return;
+				}
+				buffer[offset++] = 62;
+			},
+			finish() {
+				if (buffer.length - offset > 144) availableBuffers.push(buffer.slice(offset));
+			},
+			getOffset() {
+				return offset;
+			},
+			setOffset(newOffset) {
+				offset = newOffset;
+			}
+		};
+		return encoder;
+	}
+	exports.nodeCharEncoder = nodeCharEncoder;
+}));
+//#endregion
+//#region node_modules/dpack/lib/Options.js
+var require_Options = /* @__PURE__ */ __commonJSMin(((exports) => {
+	function Options() {
+		this.classByName = /* @__PURE__ */ new Map();
+		this.converterByConstructor = /* @__PURE__ */ new Map();
+	}
+	Options.prototype.addExtension = function(Class, name, options) {
+		if (name && Class.name !== name) Class.name = name;
+		this.classByName.set(Class.name, options && options.fromArray ? options : Class);
+		this.converterByConstructor.set(Class, options && options.toArray ? options : Class);
+	};
+	exports.Options = Options;
+}));
+//#endregion
+//#region node_modules/dpack/lib/shared.js
+var require_shared = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var createSerializer = require_serialize().createSerializer;
+	require_serialize().serialize;
+	var createParser = require_parse().createParser;
+	require_Options().Options;
+	var PROPERTY_CODE = 0;
+	var TYPE_CODE = 3;
+	var SEQUENCE_CODE = 7;
+	var DEFAULT_TYPE = 6;
+	var ARRAY_TYPE = 7;
+	var REFERENCING_TYPE = 8;
+	var NUMBER_TYPE = 9;
+	var TYPE_DEFINITION = 14;
+	var UNSTRUCTURED_MARKER = 11;
+	var OPEN_SEQUENCE = 12;
+	var END_SEQUENCE = 14;
+	exports.createSharedStructure = createSharedStructure;
+	exports.readSharedStructure = readSharedStructure;
+	function readSharedStructure(from) {
+		var parser = createParser();
+		var sharedProperty = [];
+		sharedProperty.code = 6;
+		sharedProperty.key = null;
+		parser.setSource(from + "p").read([sharedProperty]);
+		setupShared(sharedProperty);
+		sharedProperty.serialized = from;
+		return sharedProperty;
+	}
+	function setupShared(property) {
+		property.resetTo = property.length;
+		property.upgrade = upgrade;
+		property.type = types[property.code];
+		property.isFrozen = true;
+		Object.defineProperty(property, "serialized", { get() {
+			return this._serialized || (this._serialized = serializeSharedStructure(this));
+		} });
+		if (typeof property.values === "object" && property.values) {
+			property.values.resetTo = property.values.length;
+			property.lastIndex = property.values.length;
+		}
+		for (var i = 0, l = property.length; i < l; i++) {
+			property[i].index = i;
+			property[i].resumeIndex = i;
+			setupShared(property[i]);
+		}
+	}
+	function upgrade(property) {
+		if (!property) return 1;
+		var compatibility;
+		if (property) {
+			if (property.insertedFrom === this && property.insertedVersion === this.version && (property.recordUpdate || property.isFrozen || property.length == 0 && property.code == this.code && property.values == null)) return 0;
+			var changedCode;
+			if (this.code !== property.code) changedCode = true;
+			if (property.upgrade) {
+				var compatibility = copyProperty(this, property);
+				if (changedCode) compatibility = 2;
+				if (property.isFrozen && compatibility > 0) return 2;
+				property.insertedFrom = this;
+				property.insertedVersion = this.version;
+				if (compatibility === 2) {
+					debugger;
+					console.error("Inserting incompatible block into property");
+					return 2;
+				} else return 0;
+			} else {
+				property.insertedFrom = this;
+				property.insertedVersion = this.version;
+				property.length = 0;
+				property.values = null;
+				if (property.fromValue) property.fromValue = null;
+				return 1;
+			}
+		} else if (this.length > 0) blockBuffer = Buffer.concat([this.serialized, blockBuffer]);
+		return 1;
+	}
+	var typeToCode = {
+		string: REFERENCING_TYPE,
+		number: NUMBER_TYPE,
+		object: DEFAULT_TYPE,
+		boolean: DEFAULT_TYPE,
+		undefined: DEFAULT_TYPE,
+		array: ARRAY_TYPE
+	};
+	var lastPropertyOnObject = /* @__PURE__ */ new WeakMap();
+	function createSharedStructure(from, options) {
+		var instanceProperty = [];
+		instanceProperty.key = null;
+		instanceProperty.code = 6;
+		instanceProperty.type = "object";
+		let activeList = [];
+		activeList.iteration = 0;
+		var previousAvoidShareUpdate;
+		class Shared extends Array {
+			constructor(instanceProperty) {
+				super();
+				this.key = typeof instanceProperty.key == "string" ? isolateString(instanceProperty.key) : instanceProperty.key;
+				this.type = instanceProperty.type;
+				this.code = instanceProperty.code;
+				this.count = 0;
+				this.comesAfter = [];
+				if (this.code == REFERENCING_TYPE) {
+					this.values = [];
+					this.values.resetTo = 512;
+					this.values.nextPosition = 512;
+					this.previousValues = /* @__PURE__ */ new Map();
+					this.lastIndex = 0;
+					this.repetitions = 0;
+				}
+			}
+			newProperty(instance) {
+				return new Shared(instance);
+			}
+			getProperty(value, key, type, extendedType, writeProperty, writeToken, lastPropertyIndex) {
+				let property;
+				if (this.insertedFrom) {
+					propertySearch(this.insertedFrom);
+					if (property) {
+						if (lastPropertyIndex !== property.index) writeToken(PROPERTY_CODE, propertyIndex);
+						return property;
+					}
+					if (this.insertedFrom.getProperty) return this.insertedFrom.getProperty(value, key, type, extendedType, writeProperty, writeToken, lastPropertyIndex);
+					else debugger;
+				}
+				this.recordUpdate();
+				let propertyIndex = this.length;
+				if (lastPropertyIndex !== propertyIndex) writeToken(PROPERTY_CODE, propertyIndex);
+				if (type === "boolean" || type === "undefined") type = "object";
+				property = this[propertyIndex] = new Shared({
+					key,
+					type,
+					code: typeToCode[type]
+				});
+				property.parent = this;
+				property.index = propertyIndex;
+				return property;
+				function propertySearch(parentProperty) {
+					let propertyIndex = -1;
+					do
+						property = parentProperty[++propertyIndex];
+					while (property && (property.key !== key || property.type !== type && type !== "boolean" && type !== "undefined" || extendedType && property.extendedType !== constructor));
+				}
+			}
+			writeSharedValue(value, writeToken, serializerId) {
+				let valueEntry = this.previousValues.get(value);
+				if (valueEntry) {
+					if (valueEntry.serializer == serializerId) this.repetitions++;
+					else {
+						valueEntry.serializations++;
+						valueEntry.serializer = serializerId;
+					}
+				} else this.previousValues.set(value, valueEntry = {
+					serializations: 1,
+					serializer: serializerId
+				});
+				if (!this.active) {
+					this.active = 2;
+					activeList.push(this);
+				}
+				return false;
+			}
+			propertyUsed(property, object, serializerId, i) {
+				if (property.lastSerializer !== serializerId) {
+					property.lastSerializer = serializerId;
+					property.count++;
+				}
+				if (i !== 0) {
+					let lastProperty = lastPropertyOnObject.get(object);
+					if (lastProperty && property.comesAfter.indexOf(lastProperty) === -1) property.comesAfter.push(lastProperty);
+				}
+				lastPropertyOnObject.set(object, property);
+			}
+			recordUpdate() {
+				var property = this;
+				do {
+					property.version = (property.version || 0) + 1;
+					if (property.insertedFrom) property.insertedFrom = null;
+					if (property._serialized) property._serialized = null;
+				} while (property = property.parent);
+			}
+			readingBlock(parse) {
+				try {
+					return parse();
+				} finally {
+					this.readReset();
+					if (this.length > 500) debugger;
+				}
+			}
+			startWrite(avoidShareUpdate, value) {
+				activeList.iteration++;
+				if (value && value.constructor === Array) {
+					if (this.code !== ARRAY_TYPE && this.version > 0) throw new Error("Can not change the root type of a shared object to an array");
+					if (this.code != ARRAY_TYPE) this.recordUpdate();
+					this.code = ARRAY_TYPE;
+					this.type = "array";
+				}
+				if (this.writing) return;
+				else this.writing = true;
+			}
+			endWrite() {
+				if (this.writing) this.writing = false;
+				else return;
+				let iterations = this.iterations = (this.iterations || 0) + 1;
+				for (let i = 0; i < activeList.length; i++) {
+					let activeSharedProperty = activeList[i];
+					let previousValues = activeSharedProperty.previousValues;
+					if (previousValues && previousValues.size && !activeSharedProperty.isFrozen) {
+						if (!currentAvoidShareUpdate) {
+							if (activeSharedProperty.values.length == 0 && iterations > ((activeSharedProperty.repetitions || 0) + 10) * 5) {
+								console.log("changing referenceable to default", activeSharedProperty.key);
+								activeSharedProperty.previousValues = null;
+								activeSharedProperty.code = DEFAULT_TYPE;
+								activeSharedProperty.type = "object";
+								activeSharedProperty.recordUpdate();
+								activeList.splice(i--, 1);
+								previousValues = [];
+							}
+							for (let [value, entry] of previousValues) {
+								let values = activeSharedProperty.values;
+								if ((entry.serializations + 3) * 8 < iterations - (entry.startingIteration || (entry.startingIteration = iterations)) || values.length > 500) previousValues.delete(value);
+								if (entry.serializations > 50 && entry.serializations * 3 > iterations) {
+									values[activeSharedProperty.lastIndex++] = value;
+									activeSharedProperty.recordUpdate();
+									console.log("adding value", value, "to", activeSharedProperty.key);
+									previousValues.delete(value);
+								}
+							}
+						}
+					} else {
+						activeSharedProperty.active = 0;
+						activeList.splice(i--, 1);
+					}
+				}
+				if (activeList.hasUpdates) {
+					activeList.hasUpdates = false;
+					this.version++;
+					if (!this._serialized) this._serialized = null;
+					if (options && options.onUpdate) options.onUpdate();
+				}
+				currentAvoidShareUpdate = previousAvoidShareUpdate;
+			}
+			upgrade(property) {
+				return upgrade.call(this, property);
+			}
+			get serialized() {
+				return this._serialized || (this._serialized = serializeSharedStructure(this));
+			}
+			serializeCommonStructure(embedded) {
+				var usageThreshold = Math.sqrt(activeList.iteration);
+				return serializeSharedStructure(this, (childProperty) => childProperty.count >= usageThreshold, embedded);
+			}
+		}
+		var sharedStructure = new Shared(instanceProperty);
+		sharedStructure.version = 0;
+		sharedStructure.freeze = function() {
+			this.isFrozen = true;
+			this.reset();
+		};
+		if (from) {
+			var parser = createParser({
+				forDeferred(block, property) {
+					property.isBlock = true;
+					return block;
+				},
+				parseDeferreds: true
+			});
+			var readProperty = [];
+			readProperty.code = 6;
+			readProperty.key = null;
+			parser.setSource(from + "p").read([readProperty]);
+			copyProperty(readProperty, sharedStructure);
+			activeList.hasUpdates = false;
+			sharedStructure.version = 1;
+		}
+		sharedStructure.key = null;
+		return sharedStructure;
+	}
+	var types = {
+		6: "object",
+		7: "array",
+		8: "string",
+		9: "number"
+	};
+	var currentAvoidShareUpdate;
+	function serializeSharedStructure(property, condition, embedded) {
+		var serializer = createSerializer();
+		var writers = serializer.getWriters();
+		serializeSharedProperty(property, !embedded, !embedded);
+		function serializeSharedProperty(property, expectsObjectWithNullKey, isRoot) {
+			if (property.insertedFrom && property.insertedFrom.serializeCommonStructure) {
+				property = property.insertedFrom;
+				return writers.writeBuffer(property.serializeCommonStructure(!isRoot));
+			}
+			var isArray = property.code === ARRAY_TYPE;
+			var commonProperties = condition ? orderProperties(property.filter(condition)) : property;
+			var length = commonProperties.length;
+			if (!(expectsObjectWithNullKey && property.code === DEFAULT_TYPE)) {
+				let key = isRoot ? null : property.key;
+				writers.writeProperty(key, types[property.code]);
+				if (length === 0 && key === null && (property.code === DEFAULT_TYPE || property.code === ARRAY_TYPE)) writers.writeToken(SEQUENCE_CODE, 0);
+			}
+			if (isRoot && length > 0) writers.writeToken(TYPE_CODE, TYPE_DEFINITION);
+			if (length > 0) {
+				writers.writeToken(SEQUENCE_CODE, OPEN_SEQUENCE);
+				for (var i = 0; i < length; i++) {
+					var childProperty = commonProperties[i];
+					childProperty.index = i;
+					if (isArray && i > 0) writers.writeToken(PROPERTY_CODE, i);
+					serializeSharedProperty(childProperty, commonProperties.code === ARRAY_TYPE && i === 0, false, condition);
+				}
+				writers.writeToken(SEQUENCE_CODE, END_SEQUENCE);
+			}
+			var first = true;
+			if (property.lastIndex > 0) for (var i = 0, l = property.lastIndex; i < l; i++) {
+				var value = property.values[i];
+				if (first) first = false;
+				else writers.writeToken(PROPERTY_CODE, property.index);
+				writers.writeAsDefault(value);
+			}
+		}
+		return serializer.getSerialized();
+	}
+	function copyProperty(source, target, freezeTarget, startingIndex) {
+		var compatibility = 0;
+		target.code = source.code;
+		target.type = source.type || types[source.code];
+		if (freezeTarget) {
+			target.isFrozen = true;
+			if (target.previousValues) target.previousValues = null;
+		}
+		let sourceLength = source.resetTo > -1 ? source.resetTo : source.length;
+		if (target.resetTo > -1 && target.resetTo < target.length) target.length = target.resetTo;
+		for (var i = startingIndex || 0; i < sourceLength; i++) {
+			var targetChild = target[i];
+			var childProperty = source[i];
+			if (targetChild && (targetChild.key != childProperty.key || targetChild.extendedType != childProperty.extendedType || targetChild.code != childProperty.code && !(targetChild.code == 8 && childProperty.code === 6 && (!targetChild.values || !targetChild.values.length)))) {
+				if (target.isFrozen) return 2;
+				compatibility = 2;
+			}
+			if (!targetChild) {
+				if (target.isFrozen) return 2;
+				var targetChild = [];
+				targetChild.code = childProperty.code;
+				if (target.newProperty) targetChild = target.newProperty(targetChild);
+				target[i] = targetChild;
+				if (childProperty.metadata) targetChild.metadata = childProperty.metadata;
+				if (childProperty.insertedFrom) {
+					targetChild.insertedFrom = childProperty.insertedFrom;
+					targetChild.insertedVersion = childProperty.insertedVersion;
+				}
+				targetChild.parent = target;
+			}
+			targetChild.key = childProperty.key;
+			if (childProperty.values && childProperty.values.length > 0) {
+				if (childProperty.values.resetTo > -1) childProperty.values.length = childProperty.values.resetTo;
+				if (!targetChild.values || childProperty.values.length > (targetChild.values.resetTo > -1 ? targetChild.values.resetTo : targetChild.values.length)) {
+					targetChild.values = childProperty.values.slice(0);
+					targetChild.values.nextPosition = childProperty.values.length;
+					if (targetChild.values.length >= 12) targetChild.previousValues = null;
+					if (compatibility == 0) compatibility = 1;
+				}
+			}
+			var childCompatibility = copyProperty(childProperty, targetChild, freezeTarget);
+			if (childCompatibility > compatibility) compatibility = childCompatibility;
+		}
+		if ((target.resetTo > -1 ? target.resetTo : target.length) > sourceLength) {
+			if (target.recordUpdate) {
+				source.metadata = UNSTRUCTURED_MARKER;
+				source.recordUpdate();
+			} else if (target.isFrozen) return 2;
+		}
+		return compatibility;
+	}
+	function isolateString(string) {
+		return string.slice(0, 1) + string.slice(1);
+	}
+	function orderProperties(properties) {
+		var ordered = [];
+		var traversed = /* @__PURE__ */ new Set();
+		function addProperty(property) {
+			if (traversed.has(property)) return;
+			traversed.add(property);
+			for (var propertyBefore of property.comesAfter) addProperty(propertyBefore);
+			ordered.push(property);
+		}
+		for (let property of properties) addProperty(property);
+		return ordered;
+	}
+}));
+//#endregion
+//#region node_modules/dpack/lib/Block.js
+var require_Block = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var makeSymbol = typeof Symbol !== "undefined" ? Symbol : function(name) {
+		return "symbol-" + name;
+	};
+	var nextVersion = 1;
+	var bufferSymbol = makeSymbol("buffer");
+	var sizeTableSymbol = makeSymbol("sizeTable");
+	makeSymbol("header");
+	var parsedSymbol = makeSymbol("parsed");
+	var sharedSymbol = makeSymbol("shared");
+	var targetSymbol = makeSymbol("target");
+	var freezeObjects = process.env.NODE_ENV != "production";
+	var DEFAULT_TYPE = 6;
+	var ARRAY_TYPE = 7;
+	function Block() {}
+	var serializeModule = require_serialize();
+	exports.Block = Block;
+	exports.bufferSymbol = serializeModule.bufferSymbol = bufferSymbol;
+	exports.parsedSymbol = parsedSymbol;
+	exports.sharedSymbol = sharedSymbol;
+	exports.targetSymbol = serializeModule.targetSymbol = targetSymbol;
+	exports.sizeTableSymbol = serializeModule.sizeTableSymbol = sizeTableSymbol;
+	var serialize = serializeModule.serialize;
+	var createSerializer = serializeModule.createSerializer;
+	exports.asBlock = asBlock;
+	function asBlock(object, shared) {
+		if (object && object[targetSymbol]) return object;
+		if (Array.isArray(object)) {
+			let target = [];
+			target.parsed = object;
+			target.shared = shared;
+			return new Proxy(target, onDemandHandler);
+		}
+		return new Proxy({
+			parsed: object,
+			shared
+		}, onDemandHandler);
+	}
+	exports.isBlock = isBlock;
+	function isBlock(object) {
+		return object && object[targetSymbol];
+	}
+	exports.makeBlockFromBuffer = makeBlockFromBuffer;
+	function makeBlockFromBuffer(buffer, shared) {
+		var dpackBuffer, sizeTableBuffer;
+		if (buffer[0] < 128) dpackBuffer = buffer;
+		else {
+			var type = buffer[0] >> 6;
+			var dpackOffset;
+			if (type === 2) dpackOffset = buffer.readUInt16BE(0) & 16383;
+			else dpackOffset = buffer.readUInt32BE(0) & 1073741823;
+			dpackBuffer = buffer.slice(dpackOffset);
+			sizeTableBuffer = buffer.slice(0, dpackOffset);
+		}
+		var target = {
+			dpackBuffer,
+			sizeTableBuffer,
+			shared,
+			reassign: function(buffer) {
+				this.buffer = buffer;
+			}
+		};
+		buffer.owner = target;
+		return new Proxy(target, onDemandHandler);
+	}
+	exports.getLazyHeader = function(block) {
+		return block[sizeTableSymbol];
+	};
+	var onDemandHandler = {
+		get: function(target, key) {
+			if (specialGetters.hasOwnProperty(key)) return specialGetters[key].call(target);
+			var parsed = target.parsed;
+			if (!parsed) parsed = getParsed(target);
+			return parsed[key];
+		},
+		set: function(target, key, value) {
+			if (typeof key === "symbol") {
+				target[key] = value;
+				makeSymbolGetter(key);
+				return true;
+			}
+			throw new Error("No changes are allowed on frozen parsed object, Use dpack copy() function to modify");
+		},
+		deleteProperty: function() {
+			throw new Error("No changes are allowed on frozen parsed object, Use dpack copy() function to modify");
+		},
+		getOwnPropertyDescriptor: function(target, key) {
+			var parsed = getParsed(target);
+			return Object.getOwnPropertyDescriptor(parsed, key);
+		},
+		has: function(target, key) {
+			return key in getParsed(target);
+		},
+		ownKeys: function(target) {
+			var parsed = getParsed(target);
+			var keys = Object.keys(parsed);
+			if (Array.isArray(parsed)) keys.push("length");
+			return keys;
+		},
+		getPrototypeOf: function(target) {
+			var parsed = getParsed(target);
+			return Object.getPrototypeOf(parsed);
+		}
+	};
+	exports.reassignBuffers = reassignBuffers;
+	function reassignBuffers(block, newParentNodeBuffer, parentArrayBuffer) {
+		var target = block[targetSymbol];
+		var buffer = target.dpackBuffer;
+		if (!parentArrayBuffer) parentArrayBuffer = buffer.buffer;
+		if (buffer && buffer.buffer === parentArrayBuffer) {
+			var byteOffset = buffer.byteOffset;
+			target.dpackBuffer = newParentNodeBuffer.slice(byteOffset, byteOffset + buffer.length);
+		}
+		var buffer = target.sizeTableBuffer;
+		if (buffer && buffer.buffer === parentArrayBuffer) {
+			var byteOffset = buffer.byteOffset;
+			target.sizeTableBuffer = newParentNodeBuffer.slice(byteOffset, byteOffset + buffer.length);
+		}
+		if (target.parsed) {
+			var parsed = target.parsed;
+			for (var key in parsed) {
+				var value = parsed[key];
+				if (isBlock(value)) reassignBuffers(value, newParentNodeBuffer, parentArrayBuffer);
+			}
+		}
+	}
+	var copyOnWriteHandler = {
+		get: function(target, key) {
+			if (specialGetters.hasOwnProperty(key)) return specialGetters[key].call(target);
+			var cachedParsed = target.cachedParsed;
+			if (cachedParsed && cachedParsed.hasOwnProperty(key) && !(key == "length" && Array.isArray(cachedParsed))) return cachedParsed[key];
+			var parsed = target.parsed;
+			if (!parsed) parsed = getParsed(target);
+			var value = parsed[key];
+			if (value && value[targetSymbol]) {
+				if (!cachedParsed) target.cachedParsed = cachedParsed = parsed instanceof Array ? [] : {};
+				cachedParsed[key] = value = copyWithParent(value, target);
+			}
+			return value;
+		},
+		changed: function(target) {
+			target.dpackBuffer = null;
+			target.sizeTableBuffer = null;
+			target.shared = null;
+			var parsed = target.parsed;
+			if (!parsed) parsed = getParsed(target);
+			if (!target.copied) {
+				var cachedParsed = target.cachedParsed;
+				var copied = target.parsed = target.cachedParsed = parsed instanceof Array ? [] : {};
+				for (var key in parsed) {
+					var value = cachedParsed && cachedParsed[key];
+					if (!value) {
+						value = parsed[key];
+						if (value && value[targetSymbol]) value = copyWithParent(value, target);
+					}
+					copied[key] = value;
+				}
+				parsed = copied;
+				target.copied = true;
+			}
+			target.version = nextVersion++;
+			return parsed;
+		},
+		checkVersion: function(target) {
+			var cachedParsed = target.cachedParsed;
+			let version = target.version || 0;
+			if (cachedParsed) for (let key in cachedParsed) {
+				var value = cachedParsed[key];
+				if (value && value[targetSymbol]) version = Math.max(version, this.checkVersion(value[targetSymbol]));
+			}
+			if (version != (target.version || 0)) {
+				this.changed(target);
+				target.version = version;
+			}
+			return version;
+		},
+		set: function(target, key, value, proxy) {
+			if (specialSetters.hasOwnProperty(key)) {
+				specialSetters[key].call(target, value);
+				return true;
+			}
+			var parsed = copyOnWriteHandler.changed(target);
+			parsed[key] = value;
+			return true;
+		},
+		deleteProperty: function(target, key) {
+			var parsed = copyOnWriteHandler.changed(target);
+			return delete parsed[key];
+		},
+		getOwnPropertyDescriptor: function(target, key) {
+			var parsed = getParsed(target);
+			return Object.getOwnPropertyDescriptor(parsed, key);
+		},
+		has: function(target, key) {
+			return key in getParsed(target);
+		},
+		ownKeys: function(target) {
+			var parsed = getParsed(target);
+			var keys = Object.keys(parsed);
+			if (Array.isArray(parsed)) keys.push("length");
+			if (target.copied) {
+				for (var key in target.copied) if (keys.indexOf(key) === -1) keys.push(key);
+			}
+			return keys;
+		},
+		getPrototypeOf: function(target) {
+			var parsed = getParsed(target);
+			return Object.getPrototypeOf(parsed);
+		}
+	};
+	var specialGetters = {};
+	specialGetters[bufferSymbol] = function() {
+		return function(property, randomAccess) {
+			var propertyIsShared = property && property.upgrade;
+			var buffer;
+			if (this.cachedParsed && this.dpackBuffer) copyOnWriteHandler.checkVersion(this);
+			if (!(this.shared && this.shared.upgrade) && propertyIsShared) {
+				if (this.dpackBuffer) {
+					this.sizeTableBuffer = null;
+					return inSeparateProperty(this.dpackBuffer, true);
+				} else return getSerialized(this, this.shared = property);
+			}
+			if (!this.dpackBuffer) getSerialized(this, this.shared);
+			if (this.shared && this.shared.upgrade && this.shared !== property) {
+				var compatibility = this.shared.upgrade(property, randomAccess);
+				if (compatibility > 0) {
+					this.sizeTableBuffer = null;
+					var sharedBuffer = this.shared.serialized;
+					if (sharedBuffer.length > 0) {
+						if (compatibility == 2 && !(property.isFrozen && property.resetTo === 0)) sharedBuffer = inSeparateProperty(sharedBuffer);
+						buffer = Buffer.concat([sharedBuffer, this.dpackBuffer]);
+						buffer.mustSequence = true;
+						return buffer;
+					}
+				}
+			} else if (property) {
+				if (!propertyIsShared) property.length = 0;
+				if (property.insertedFrom) property.insertedFrom = null;
+			}
+			return this.dpackBuffer;
+			function inSeparateProperty(dpackBuffer) {
+				var serializer = createSerializer();
+				var isArray = dpackBuffer[0] === 119;
+				var writeToken = serializer.getWriters().writeToken;
+				if (isArray) dpackBuffer = dpackBuffer.slice(1);
+				writeToken(0, 1e3);
+				writeToken(3, isArray ? ARRAY_TYPE : DEFAULT_TYPE);
+				if (property && property.key !== null) serializer.serialize(property.key);
+				dpackBuffer = Buffer.concat([serializer.getSerialized(), dpackBuffer]);
+				dpackBuffer.mustSequence = true;
+				return dpackBuffer;
+			}
+		}.bind(this);
+	};
+	specialGetters[targetSymbol] = function() {
+		return this;
+	};
+	specialGetters[sharedSymbol] = function() {
+		return this.shared;
+	};
+	specialGetters[parsedSymbol] = function() {
+		return this.parsed || getParsed(this);
+	};
+	specialGetters[sizeTableSymbol] = function() {
+		if (!this.dpackBuffer) getSerialized(this);
+		return this.sizeTableBuffer;
+	};
+	specialGetters.then = function() {};
+	specialGetters.toJSON = function() {
+		return valueOf;
+	};
+	specialGetters.valueOf = function() {
+		return valueOf;
+	};
+	specialGetters.entries = function() {
+		return entries;
+	};
+	function entries() {
+		return this[parsedSymbol].entries();
+	}
+	specialGetters[Symbol.iterator] = function() {
+		var parsed = this.parsed || getParsed(this);
+		return parsed && parsed[Symbol.iterator] && iterator;
+	};
+	function iterator() {
+		var parsed = this[parsedSymbol];
+		return parsed && parsed[Symbol.iterator] ? parsed[Symbol.iterator]() : [][Symbol.iterator]();
+	}
+	specialGetters.constructor = function() {
+		if (this.parsed) return this.parsed.constructor;
+		if (this.dpackBuffer) {
+			let firstByte = this.dpackBuffer[0];
+			if (firstByte >= 48 && firstByte <= 60) {
+				if (this.shared) {
+					if (this.shared.code == DEFAULT_TYPE) return Object;
+					else if (this.shared.code == ARRAY_TYPE) return Array;
+				} else return Object;
+			} else if (firstByte === 119) return Array;
+		}
+		return getParsed(this).constructor;
+	};
+	function makeSymbolGetter(symbol) {
+		if (!specialGetters[symbol]) specialGetters[symbol] = function() {
+			return this[symbol];
+		};
+	}
+	function valueOf() {
+		return this[parsedSymbol];
+	}
+	function copy(source) {
+		return copyWithParent(source);
+	}
+	function copyWithParent(source, parent) {
+		if (!isBlock(source)) return source;
+		let isArray = Array.isArray(source);
+		let target = isArray ? [] : {};
+		Object.defineProperties(target, {
+			parsed: {
+				get() {
+					return source[parsedSymbol];
+				},
+				set(value) {
+					Object.defineProperty(this, "parsed", {
+						value,
+						writable: true,
+						enumerable: true
+					});
+				},
+				configurable: true
+			},
+			shared: {
+				get() {
+					return source[sharedSymbol];
+				},
+				set(value) {
+					Object.defineProperty(this, "shared", {
+						value,
+						writable: true,
+						enumerable: true
+					});
+					this.dpackBuffer = null;
+					this.sizeTableBuffer = null;
+				},
+				configurable: true
+			},
+			dpackBuffer: {
+				get() {
+					return source[targetSymbol].dpackBuffer;
+				},
+				set(value) {
+					Object.defineProperty(this, "dpackBuffer", {
+						value,
+						writable: true,
+						enumerable: true
+					});
+				},
+				configurable: true
+			},
+			sizeTableBuffer: {
+				get() {
+					return source[sizeTableSymbol];
+				},
+				set(value) {
+					Object.defineProperty(this, "sizeTableBuffer", {
+						value,
+						writable: true,
+						enumerable: true
+					});
+				},
+				configurable: true
+			}
+		});
+		if (isArray) Object.define;
+		return new Proxy(target, copyOnWriteHandler);
+	}
+	exports.copy = copy;
+	var specialSetters = {};
+	function getParsed(target) {
+		var parsed = target.parsed;
+		if (parsed) return parsed;
+		var sizeTableBuffer = target.sizeTableBuffer;
+		var dpackBuffer = target.dpackBuffer;
+		if (!sizeTableBuffer) return target.parsed = parse(dpackBuffer, {
+			freezeObjects,
+			shared: target.shared
+		});
+		var totalSizeTableLength = sizeTableBuffer.length;
+		var rootBlockLength;
+		var type = sizeTableBuffer[0] >> 6;
+		var offset;
+		if (type === 2) {
+			rootBlockLength = sizeTableBuffer.readUInt16BE(4);
+			offset = 6;
+		} else {
+			rootBlockLength = sizeTableBuffer.readUIntBE(10, 6);
+			offset = 16;
+		}
+		var childSizeTables = [];
+		var childDpackBlocks = [];
+		var dpackChildOffset = rootBlockLength;
+		while (offset < totalSizeTableLength) {
+			var type = sizeTableBuffer[offset] >> 6;
+			var sizeTableLength;
+			var dpackLength;
+			if (type < 2) {
+				if (type == 0) {
+					sizeTableLength = 1;
+					dpackLength = sizeTableBuffer[offset];
+				} else {
+					sizeTableLength = 2;
+					dpackLength = sizeTableBuffer.readUInt16BE(offset) & 16383;
+				}
+			} else if (type === 2) {
+				sizeTableLength = sizeTableBuffer.readUInt16BE(offset) & 16383;
+				dpackLength = sizeTableBuffer.readUInt16BE(offset + 2);
+			} else {
+				sizeTableLength = sizeTableBuffer.readUInt32BE(offset) & 1073741823;
+				dpackLength = sizeTableBuffer.readUIntBE(offset + 4, 6);
+			}
+			childSizeTables.push(type < 2 || type == 3 && sizeTableLength == 16 ? void 0 : sizeTableBuffer.slice(offset, offset + sizeTableLength));
+			offset += sizeTableLength;
+			childDpackBlocks.push(dpackBuffer.slice(dpackChildOffset, dpackChildOffset += dpackLength));
+		}
+		var blockIndex = 0;
+		return target.parsed = parse(target.dpackBuffer.slice(0, rootBlockLength), childDpackBlocks.length > 0 ? {
+			shared: target.shared,
+			forDeferred: function(value, property) {
+				let target = new value.constructor();
+				target.dpackBuffer = childDpackBlocks[blockIndex];
+				target.sizeTableBuffer = childSizeTables[blockIndex++];
+				target.shared = property ? property.upgrade ? property : {
+					code: property.code,
+					key: null,
+					type: property.type
+				} : null;
+				return new Proxy(target, onDemandHandler);
+			},
+			freezeObjects
+		} : { shared: target.shared });
+	}
+	function getSerialized(target, shareProperty) {
+		var childBlocks = [];
+		var childSizeTables = [];
+		var childDpackSizes = 0;
+		var mustSequence;
+		var serializerOptions = {
+			forBlock: function(block, property) {
+				var dpackBuffer = block[bufferSymbol](property, true);
+				if (dpackBuffer.mustSequence) {
+					mustSequence = true;
+					childBlocks.push(dpackBuffer);
+					return dpackBuffer;
+				}
+				var sizeTableBuffer = block[sizeTableSymbol];
+				if (!sizeTableBuffer) {
+					var bufferLength = dpackBuffer.length;
+					if (bufferLength < 64) sizeTableBuffer = Buffer.from([bufferLength]);
+					else if (bufferLength < 16384) sizeTableBuffer = Buffer.from([bufferLength >> 8 | 64, bufferLength & 255]);
+					else {
+						sizeTableBuffer = Buffer.allocUnsafe(16);
+						sizeTableBuffer.writeUInt32BE(3221225488);
+						sizeTableBuffer.writeUIntBE(bufferLength, 4, 6);
+						sizeTableBuffer.writeUIntBE(bufferLength, 10, 6);
+					}
+				}
+				childSizeTables.push(sizeTableBuffer);
+				childDpackSizes += dpackBuffer.length;
+				childBlocks.push(dpackBuffer);
+				return dpackBuffer;
+			},
+			shared: shareProperty,
+			freezeObjects
+		};
+		var rootBlock = serialize(target.parsed, serializerOptions);
+		if (childBlocks.length == 0) return target.dpackBuffer = rootBlock;
+		childBlocks.unshift(rootBlock);
+		var dpackBuffer = target.dpackBuffer = Buffer.concat(childBlocks);
+		if (mustSequence) return dpackBuffer;
+		var ourSizeBlock = Buffer.allocUnsafe(dpackBuffer.length >= 65536 ? 16 : 6);
+		childSizeTables.unshift(ourSizeBlock);
+		ourSizeBlock = target.sizeTableBuffer = Buffer.concat(childSizeTables);
+		if (dpackBuffer.length >= 65536) {
+			ourSizeBlock.writeUInt32BE(ourSizeBlock.length + 3221225472, 0);
+			ourSizeBlock.writeUIntBE(dpackBuffer.length, 4, 6);
+			ourSizeBlock.writeUIntBE(rootBlock.length, 10, 6);
+		} else {
+			ourSizeBlock.writeUInt16BE(ourSizeBlock.length | 32768, 0);
+			ourSizeBlock.writeUInt16BE(dpackBuffer.length, 2);
+			ourSizeBlock.writeUInt16BE(rootBlock.length, 4);
+		}
+		return dpackBuffer;
+	}
+	var parse = require_parse().parse;
+	require_shared().serializeSharedBlock;
+	exports.parseLazy = function(buffer, options) {
+		if (buffer[0] & 128 || buffer[0] >> 4 === 3 || buffer[0] === 119) return makeBlockFromBuffer(buffer, options && options.shared);
+		else return parse(buffer, options);
+	};
+}));
+//#endregion
+//#region node_modules/@orama/plugin-data-persistence/dist/errors.js
+var import_dpack = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports) => {
+	exports.createSerializeStream = require_serialize_stream().createSerializeStream;
+	exports.createParseStream = require_parse_stream().createParseStream;
+	var serialize = require_serialize();
+	serialize.nodeCharEncoder = require_node_encoder().nodeCharEncoder;
+	var parse = require_parse();
+	require_Options().Options;
+	exports.serialize = serialize.serialize;
+	exports.parse = parse.parse;
+	exports.createSerializer = serialize.createSerializer;
+	exports.createParser = parse.createParser;
+	var Block = require_Block();
+	exports.parseLazy = Block.parseLazy;
+	exports.asBlock = Block.asBlock;
+	exports.isBlock = Block.isBlock;
+	exports.copy = Block.copy;
+	exports.reassignBuffers = Block.reassignBuffers;
+	exports.createSharedStructure = require_shared().createSharedStructure;
+	exports.readSharedStructure = require_shared().readSharedStructure;
+})))(), 1);
+function capitalize(word) {
+	return `${word.slice(0, 1).toUpperCase()}${word.slice(1).toLowerCase()}`;
+}
+function UNSUPPORTED_FORMAT(format) {
+	return `Unsupported serialization format: ${format}`;
+}
+function FILESYSTEM_NOT_SUPPORTED_ON_RUNTIME(runtime) {
+	return `Filesystem access is not supported on ${capitalize(runtime)}`;
+}
+//#endregion
+//#region node_modules/@orama/plugin-data-persistence/dist/utils.js
+function detectRuntime() {
+	/* c8 ignore next 11 */ if (typeof process !== "undefined" && process.versions !== void 0) return "node";
+	else if (typeof Deno !== "undefined") return "deno";
+	else if (typeof Bun !== "undefined") return "bun";
+	else if (typeof window !== "undefined") return "browser";
+	return "unknown";
+}
+//#endregion
+//#region node_modules/seqproto/dist/esm/index.js
+var TYPE_FLOAT = 0;
+var TYPE_UINT32 = 1;
+var TYPE_INT32 = 2;
+var POW_2_32 = 2 ** 32;
+function createDes(buffer) {
+	const n32 = Math.floor(buffer.byteLength / 4);
+	return {
+		index: 0,
+		buffer,
+		uint32Array: new Uint32Array(buffer, 0, n32),
+		float32Array: new Float32Array(buffer, 0, n32),
+		setBuffer: function(buffer, byteOffset, byteLength) {
+			if (typeof byteOffset === "number" && typeof byteLength === "number") {
+				this.index = Math.floor(byteOffset / 4);
+				const n32 = this.index + Math.ceil(byteLength / 4);
+				this.buffer = buffer;
+				this.uint32Array = new Uint32Array(buffer, 0, n32);
+				this.float32Array = new Float32Array(buffer, 0, n32);
+				return;
+			}
+			const n32 = Math.floor(buffer.byteLength / 4);
+			this.buffer = buffer;
+			this.index = 0;
+			this.uint32Array = new Uint32Array(buffer, 0, n32);
+			this.float32Array = new Float32Array(buffer, 0, n32);
+		},
+		deserializeBoolean,
+		deserializeUInt32,
+		deserializeFloat32,
+		deserializeNumber,
+		deserializeString,
+		deserializeArray,
+		deserializeIterable,
+		getArrayElements,
+		unsafeDeserializeUint32Array
+	};
+}
+function deserializeBoolean() {
+	return this.uint32Array[this.index++] === 1;
+}
+function deserializeUInt32() {
+	return this.uint32Array[this.index++];
+}
+function deserializeFloat32() {
+	return this.float32Array[this.index++];
+}
+function deserializeNumber() {
+	const type = this.uint32Array[this.index++];
+	if (type === TYPE_FLOAT) return this.deserializeFloat32();
+	else if (type === TYPE_UINT32) return this.deserializeUInt32();
+	else if (type === TYPE_INT32) return this.uint32Array[this.index++] - POW_2_32;
+	else throw new Error("Unknown type");
+}
+new TextEncoder();
+var textDecoder = new TextDecoder();
+function deserializeString() {
+	const len = this.uint32Array[this.index++];
+	const decoded = textDecoder.decode(new Uint8Array(this.buffer, this.index * 4, len));
+	this.index += Math.ceil(len / 4);
+	return decoded;
+}
+function deserializeArray(deserialize) {
+	const len = this.deserializeUInt32();
+	const arr = new Array(len);
+	for (let i = 0; i < len; i++) arr[i] = deserialize(this);
+	return arr;
+}
+function deserializeIterable(deserialize) {
+	const len = this.deserializeUInt32();
+	const aGeneratorObject = (function* (des) {
+		for (let i = 0; i < len; i++) yield deserialize(des);
+	})(this);
+	return { [Symbol.iterator]() {
+		return aGeneratorObject;
+	} };
+}
+function unsafeDeserializeUint32Array() {
+	const byteLength = this.uint32Array[this.index++];
+	const d = new Uint32Array(this.buffer, this.index * 4, byteLength);
+	this.index += byteLength;
+	return d;
+}
+function getArrayElements(indexes, deserialize) {
+	const currentIndex = this.index + 1;
+	const l = indexes.length;
+	const arr = new Array(l);
+	for (let i = 0; i < l; i++) {
+		const indexOffset = currentIndex + indexes[i] * 2;
+		const start = this.uint32Array[indexOffset];
+		const end = this.uint32Array[indexOffset + 1];
+		arr[i] = deserialize(this, start * 4, end);
+	}
+	return arr;
+}
+//#endregion
+//#region node_modules/@orama/plugin-data-persistence/dist/seqproto.js
+function deserializeStringArray(des) {
+	const len = des.deserializeUInt32();
+	const arr = new Array(len);
+	for (let i = 0; i < len; i++) arr[i] = des.deserializeString();
+	return arr;
+}
+function deserializeNumberArray(des) {
+	const len = des.deserializeUInt32();
+	const arr = new Array(len);
+	for (let i = 0; i < len; i++) arr[i] = des.deserializeNumber();
+	return arr;
+}
+function deserializeIndexNode(des) {
+	const nodeType = des.deserializeUInt32();
+	if (nodeType === 1) {
+		const w = des.deserializeString();
+		const s = des.deserializeString();
+		const e = des.deserializeBoolean();
+		const k = des.deserializeString();
+		const d = deserializeNumberArray(des);
+		const childrenLen = des.deserializeUInt32();
+		const c = [];
+		for (let i = 0; i < childrenLen; i++) {
+			const key = des.deserializeString();
+			const child = deserializeIndexNode(des);
+			c.push([key, child]);
+		}
+		return {
+			w: w || "",
+			s: s || "",
+			e,
+			k: k || "",
+			d,
+			c
+		};
+	} else if (nodeType === 2) {
+		const numberToDocumentIdLen = des.deserializeUInt32();
+		const numberToDocumentId = [];
+		for (let i = 0; i < numberToDocumentIdLen; i++) {
+			const key = des.deserializeString();
+			const ids = deserializeStringArray(des);
+			numberToDocumentId.push([key, ids]);
+		}
+		return { numberToDocumentId };
+	} else return deserializeValue(des);
+}
+function deserializeStringToNumberMap(des) {
+	const len = des.deserializeUInt32();
+	const map = {};
+	for (let i = 0; i < len; i++) {
+		const key = des.deserializeString();
+		map[key] = des.deserializeNumber();
+	}
+	return map;
+}
+function deserializeFrequencies(des) {
+	const fieldCount = des.deserializeUInt32();
+	const frequencies = {};
+	for (let i = 0; i < fieldCount; i++) {
+		const field = des.deserializeString();
+		const docCount = des.deserializeUInt32();
+		const docFreqs = {};
+		for (let j = 0; j < docCount; j++) {
+			const docId = des.deserializeString();
+			docFreqs[docId] = deserializeStringToNumberMap(des);
+		}
+		frequencies[field] = docFreqs;
+	}
+	return frequencies;
+}
+function deserializeTokenOccurrences(des) {
+	const fieldCount = des.deserializeUInt32();
+	const tokenOccurrences = {};
+	for (let i = 0; i < fieldCount; i++) {
+		const field = des.deserializeString();
+		tokenOccurrences[field] = deserializeStringToNumberMap(des);
+	}
+	return tokenOccurrences;
+}
+function deserializeValue(des) {
+	const type = des.deserializeUInt32();
+	if (type === 0) return null;
+	if (type === 1) return void 0;
+	if (type === 2) return des.deserializeString();
+	if (type === 3) return des.deserializeNumber();
+	if (type === 4) return des.deserializeBoolean();
+	if (type === 5) {
+		const len = des.deserializeUInt32();
+		const arr = new Array(len);
+		for (let i = 0; i < len; i++) arr[i] = deserializeValue(des);
+		return arr;
+	}
+	if (type === 6) {
+		const len = des.deserializeUInt32();
+		const obj = {};
+		for (let i = 0; i < len; i++) {
+			const key = des.deserializeString();
+			obj[key] = deserializeValue(des);
+		}
+		return obj;
+	}
+	throw new Error(`Unknown type: ${type}`);
+}
+/**
+* Deserialize a previously serialized snapshot with schema-aware deserialization.
+*/ function deserializeOramaInstance(buffer) {
+	const des = createDes(buffer);
+	const version = des.deserializeUInt32();
+	if (version === 1) return deserializeValue(des);
+	if (version !== 2) throw new Error(`Unsupported seqproto Orama serialization version: ${version}`);
+	const raw = {};
+	const idStoreLen = des.deserializeUInt32();
+	const internalIdToId = new Array(idStoreLen);
+	for (let i = 0; i < idStoreLen; i++) internalIdToId[i] = des.deserializeString();
+	raw.internalDocumentIDStore = { internalIdToId };
+	const docCount = des.deserializeUInt32();
+	const docsLength = des.deserializeUInt32();
+	const docs = {};
+	for (let i = 0; i < docsLength; i++) {
+		const docId = des.deserializeString();
+		const doc = {};
+		const fieldCount = des.deserializeUInt32();
+		for (let j = 0; j < fieldCount; j++) {
+			const field = des.deserializeString();
+			const arrayInfo = des.deserializeUInt32();
+			if (arrayInfo & 2147483648) {
+				const len = arrayInfo & 2147483647;
+				const arr = new Array(len);
+				for (let k = 0; k < len; k++) arr[k] = des.deserializeString();
+				doc[field] = arr;
+			} else doc[field] = des.deserializeString();
+		}
+		docs[docId] = doc;
+	}
+	raw.docs = {
+		docs,
+		count: docCount
+	};
+	const indexCount = des.deserializeUInt32();
+	const indexes = {};
+	for (let i = 0; i < indexCount; i++) {
+		const key = des.deserializeString();
+		const type = des.deserializeString();
+		const isArray = des.deserializeBoolean();
+		const nodeType = des.deserializeUInt32();
+		let node;
+		if (nodeType === 1) {
+			const w = des.deserializeString();
+			const s = des.deserializeString();
+			const e = des.deserializeBoolean();
+			const k = des.deserializeString();
+			const dLen = des.deserializeUInt32();
+			const d = new Array(dLen);
+			for (let j = 0; j < dLen; j++) d[j] = des.deserializeNumber();
+			const cLen = des.deserializeUInt32();
+			const c = new Array(cLen);
+			for (let j = 0; j < cLen; j++) {
+				const cKey = des.deserializeString();
+				const child = deserializeIndexNode(des);
+				c[j] = [cKey, child];
+			}
+			node = {
+				w,
+				s,
+				e,
+				k,
+				d,
+				c
+			};
+		} else if (nodeType === 2) {
+			const ntdiLen = des.deserializeUInt32();
+			const numberToDocumentId = new Array(ntdiLen);
+			for (let j = 0; j < ntdiLen; j++) {
+				const key = des.deserializeString();
+				const idsLen = des.deserializeUInt32();
+				const ids = new Array(idsLen);
+				for (let k = 0; k < idsLen; k++) ids[k] = des.deserializeString();
+				numberToDocumentId[j] = [key, ids];
+			}
+			node = { numberToDocumentId };
+		} else node = {};
+		indexes[key] = {
+			type,
+			isArray,
+			node
+		};
+	}
+	const searchPropLen = des.deserializeUInt32();
+	const searchableProperties = new Array(searchPropLen);
+	for (let i = 0; i < searchPropLen; i++) searchableProperties[i] = des.deserializeString();
+	const propsWithTypesLen = des.deserializeUInt32();
+	const searchablePropertiesWithTypes = {};
+	for (let i = 0; i < propsWithTypesLen; i++) {
+		const key = des.deserializeString();
+		searchablePropertiesWithTypes[key] = des.deserializeString();
+	}
+	const frequencies = deserializeFrequencies(des);
+	const tokenOccurrences = deserializeTokenOccurrences(des);
+	const avgFLLen = des.deserializeUInt32();
+	const avgFieldLength = {};
+	for (let i = 0; i < avgFLLen; i++) {
+		const key = des.deserializeString();
+		avgFieldLength[key] = des.deserializeNumber();
+	}
+	const fieldLengthsLen = des.deserializeUInt32();
+	const fieldLengths = {};
+	for (let i = 0; i < fieldLengthsLen; i++) {
+		const field = des.deserializeString();
+		const dataLen = des.deserializeUInt32();
+		const fieldData = {};
+		for (let j = 0; j < dataLen; j++) {
+			const key = des.deserializeString();
+			fieldData[key] = des.deserializeNumber();
+		}
+		fieldLengths[field] = fieldData;
+	}
+	raw.index = {
+		indexes,
+		vectorIndexes: {},
+		searchableProperties,
+		searchablePropertiesWithTypes,
+		frequencies,
+		tokenOccurrences,
+		avgFieldLength,
+		fieldLengths
+	};
+	raw.language = des.deserializeString();
+	const pinningRulesLen = des.deserializeUInt32();
+	const pinningRules = new Array(pinningRulesLen);
+	for (let i = 0; i < pinningRulesLen; i++) {
+		const ruleId = des.deserializeString();
+		const rule = deserializeValue(des);
+		pinningRules[i] = [ruleId, rule];
+	}
+	raw.pinning = { rules: pinningRules };
+	raw.sorting = {};
+	return raw;
+}
+//#endregion
+//#region node_modules/@orama/plugin-data-persistence/dist/index.js
+var hexFromMap = {
+	0: 0,
+	1: 1,
+	2: 2,
+	3: 3,
+	4: 4,
+	5: 5,
+	6: 6,
+	7: 7,
+	8: 8,
+	9: 9,
+	a: 10,
+	b: 11,
+	c: 12,
+	d: 13,
+	e: 14,
+	f: 15
+};
+Object.keys(hexFromMap);
+/* c8 ignore next 13 */ function slowHexToBuffer(hex) {
+	const bytes = new Uint8Array(Math.floor(hex.length / 2));
+	hex = hex.toLowerCase();
+	for (let i = 0; i < hex.length; i++) {
+		const a = hexFromMap[hex[i * 2]];
+		const b = hexFromMap[hex[i * 2 + 1]];
+		if (a === void 0 || b === void 0) break;
+		bytes[i] = a << 4 | b;
+	}
+	return bytes;
+}
+async function restore(format, data, runtime) {
+	if (!runtime) runtime = detectRuntime();
+	const db = create({ schema: { __placeholder: "string" } });
+	let deserialized;
+	switch (format) {
+		case "json":
+			deserialized = JSON.parse(data.toString());
+			break;
+		case "dpack":
+			deserialized = import_dpack.parse(data);
+			break;
+		case "binary":
+			if (runtime === "node") data = Buffer.from(data.toString(), "hex");
+			else data = slowHexToBuffer(data);
+			deserialized = decode(data);
+			break;
+		case "seqproto":
+			{
+				let ab;
+				if (data instanceof ArrayBuffer) ab = data;
+				else if (ArrayBuffer.isView(data)) {
+					const view = data;
+					const slice = view.buffer.slice(view.byteOffset, view.byteOffset + view.byteLength);
+					const copy = new Uint8Array(view.byteLength);
+					copy.set(new Uint8Array(slice));
+					ab = copy.buffer;
+				} else if (typeof data === "string") {
+					const buf = Buffer.from(data, "binary");
+					const slice = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+					const copy = new Uint8Array(buf.byteLength);
+					copy.set(new Uint8Array(slice));
+					ab = copy.buffer;
+				} else throw new Error("Unsupported data type for seqproto restore");
+				deserialized = deserializeOramaInstance(ab);
+			}
+			break;
+		default: throw new Error(UNSUPPORTED_FORMAT(format));
+	}
+	load(db, deserialized);
+	return db;
+}
+//#endregion
+//#region node_modules/@orama/plugin-data-persistence/dist/server.js
+var DEFAULT_DB_NAME = `orama_bump_${+/* @__PURE__ */ new Date()}`;
+var _fs;
+async function restoreFromFile(format = "binary", path, runtime) {
+	if (!runtime) runtime = detectRuntime();
+	if (!_fs) _fs = await loadFileSystem(runtime);
+	if (!path) path = await getDefaultOutputFilename(format, runtime);
+	const data = await _fs.readFile(path);
+	if (format === "binary" && data instanceof Buffer) return restoreFromBinaryData(data, runtime);
+	return restore(format, data, runtime);
+}
+async function loadFileSystem(runtime) {
+	switch (runtime) {
+		case "node": {
+			const { readFile, writeFile } = await import("node:fs/promises");
+			const { resolve } = await import("node:path");
+			return {
+				cwd: process.cwd,
+				resolve,
+				readFile,
+				writeFile
+			};
+		}
+		/* c8 ignore next 13 */ case "deno": {
+			const { resolve } = await import(
+				/* webpackIgnore: true */
+				"https://deno.land/std/path/mod.ts"
+);
+			const { cwd, readTextFile: readFile, writeTextFile: writeFile } = Deno;
+			return {
+				cwd,
+				resolve,
+				readFile,
+				writeFile
+			};
+		}
+		default: throw new Error(FILESYSTEM_NOT_SUPPORTED_ON_RUNTIME(runtime));
+	}
+}
+async function getDefaultOutputFilename(format, runtime) {
+	if (!_fs) _fs = await loadFileSystem(runtime);
+	return _fs.resolve(_fs.cwd(), await getDefaultFileName(format, runtime));
+}
+async function getDefaultFileName(format, runtime) {
+	if (!runtime) runtime = detectRuntime();
+	let extension;
+	switch (format) {
+		case "json":
+			extension = "json";
+			break;
+		case "dpack":
+			extension = "dpack";
+			break;
+		case "binary":
+			extension = "msp";
+			break;
+		case "seqproto":
+			extension = "seqp";
+			break;
+		default: extension = "dump";
+	}
+	let dbName = DEFAULT_DB_NAME;
+	/* c8 ignore next 3 */ if (runtime === "deno") dbName = Deno.env.get("ORAMA_DB_NAME") ?? DEFAULT_DB_NAME;
+	else dbName = process?.env?.ORAMA_DB_NAME ?? DEFAULT_DB_NAME;
+	return `${dbName}.${extension}`;
+}
+async function restoreFromBinaryData(data, runtime) {
+	const db = create({ schema: { __placeholder: "string" } });
+	load(db, decode(data));
+	return db;
+}
+//#endregion
+//#region node_modules/@orama/stemmers/dist/de.js
+function r() {
+	this.p = function(r) {
+		this.j = r, this.cursor = 0, this.a = this.j.length, this.f = 0, this.c = this.cursor, this.d = this.a;
+	}, this.z = function() {
+		return this.j;
+	}, this.w = function(r) {
+		this.j = r.j, this.cursor = r.cursor, this.a = r.a, this.f = r.f, this.c = r.c, this.d = r.d;
+	}, this.i = function(r, s, t) {
+		if (this.cursor >= this.a) return !1;
+		var i = this.j.charCodeAt(this.cursor);
+		return !(i > t) && !(i < s) && 0 != (r[(i -= s) >>> 3] & 1 << (7 & i)) && (this.cursor++, !0);
+	}, this.n = function(r, s, t) {
+		if (this.cursor <= this.f) return !1;
+		var i = this.j.charCodeAt(this.cursor - 1);
+		return !(i > t) && !(i < s) && 0 != (r[(i -= s) >>> 3] & 1 << (7 & i)) && (this.cursor--, !0);
+	}, this.k = function(r, s, t) {
+		if (this.cursor >= this.a) return !1;
+		var i = this.j.charCodeAt(this.cursor);
+		return i > t || i < s ? (this.cursor++, !0) : 0 == (r[(i -= s) >>> 3] & 1 << (7 & i)) && (this.cursor++, !0);
+	}, this.q = function(r, s, t) {
+		if (this.cursor <= this.f) return !1;
+		var i = this.j.charCodeAt(this.cursor - 1);
+		return i > t || i < s ? (this.cursor--, !0) : 0 == (r[(i -= s) >>> 3] & 1 << (7 & i)) && (this.cursor--, !0);
+	}, this.m = function(r) {
+		return !(this.a - this.cursor < r.length) && this.j.slice(this.cursor, this.cursor + r.length) == r && (this.cursor += r.length, !0);
+	}, this.g = function(r) {
+		return !(this.cursor - this.f < r.length) && this.j.slice(this.cursor - r.length, this.cursor) == r && (this.cursor -= r.length, !0);
+	}, this.o = function(r) {
+		for (var s = 0, t = r.length, i = this.cursor, c = this.a, u = 0, o = 0, e = !1;;) {
+			var h, n = s + (t - s >>> 1), a = 0, f = u < o ? u : o, b = r[n];
+			for (h = f; h < b[0].length; h++) {
+				if (i + f == c) {
+					a = -1;
+					break;
+				}
+				if (0 != (a = this.j.charCodeAt(i + f) - b[0].charCodeAt(h))) break;
+				f++;
+			}
+			if (0 > a ? (t = n, o = f) : (s = n, u = f), 1 >= t - s) {
+				if (0 < s || t == s || e) break;
+				e = !0;
+			}
+		}
+		for (;;) {
+			if (u >= (b = r[s])[0].length && (this.cursor = i + b[0].length, 4 > b.length || (s = b[3](this), this.cursor = i + b[0].length, s))) return b[2];
+			if (0 > (s = b[1])) return 0;
+		}
+	}, this.h = function(r) {
+		for (var s = 0, t = r.length, i = this.cursor, c = this.f, u = 0, o = 0, e = !1;;) {
+			var h, n = s + (t - s >> 1), a = 0, f = u < o ? u : o, b = r[n];
+			for (h = b[0].length - 1 - f; 0 <= h; h--) {
+				if (i - f == c) {
+					a = -1;
+					break;
+				}
+				if (0 != (a = this.j.charCodeAt(i - 1 - f) - b[0].charCodeAt(h))) break;
+				f++;
+			}
+			if (0 > a ? (t = n, o = f) : (s = n, u = f), 1 >= t - s) {
+				if (0 < s || t == s || e) break;
+				e = !0;
+			}
+		}
+		for (;;) {
+			if (u >= (b = r[s])[0].length && (this.cursor = i - b[0].length, 4 > b.length || (s = b[3](this), this.cursor = i - b[0].length, s))) return b[2];
+			if (0 > (s = b[1])) return 0;
+		}
+	}, this.s = function(r, s, t) {
+		var i = t.length - (s - r);
+		return this.j = this.j.slice(0, r) + t + this.j.slice(s), this.a += i, this.cursor >= s ? this.cursor += i : this.cursor > r && (this.cursor = r), i;
+	}, this.t = function() {
+		return !(0 > this.c) && !(this.c > this.d) && !(this.d > this.a) && !(this.a > this.j.length);
+	}, this.b = function(r) {
+		var s = !1;
+		return this.t() && (this.s(this.c, this.d, r), s = !0), s;
+	}, this.e = function() {
+		return this.b("");
+	}, this.r = function(r, s, t) {
+		s = this.s(r, s, t), r <= this.c && (this.c += s), r <= this.d && (this.d += s);
+	}, this.u = function() {
+		var r = "";
+		return this.t() && (r = this.j.slice(this.c, this.d)), r;
+	}, this.v = function() {
+		return this.j.slice(0, this.a);
+	};
+}
+var s = new function() {
+	var s = new r(), t = [
+		[
+			"",
+			-1,
+			5
+		],
+		[
+			"U",
+			0,
+			2
+		],
+		[
+			"Y",
+			0,
+			1
+		],
+		[
+			"ä",
+			0,
+			3
+		],
+		[
+			"ö",
+			0,
+			4
+		],
+		[
+			"ü",
+			0,
+			2
+		]
+	], i = [
+		[
+			"e",
+			-1,
+			2
+		],
+		[
+			"em",
+			-1,
+			1
+		],
+		[
+			"en",
+			-1,
+			2
+		],
+		[
+			"ern",
+			-1,
+			1
+		],
+		[
+			"er",
+			-1,
+			1
+		],
+		[
+			"s",
+			-1,
+			3
+		],
+		[
+			"es",
+			5,
+			2
+		]
+	], c = [
+		[
+			"en",
+			-1,
+			1
+		],
+		[
+			"er",
+			-1,
+			1
+		],
+		[
+			"st",
+			-1,
+			2
+		],
+		[
+			"est",
+			2,
+			1
+		]
+	], u = [[
+		"ig",
+		-1,
+		1
+	], [
+		"lich",
+		-1,
+		1
+	]], o = [
+		[
+			"end",
+			-1,
+			1
+		],
+		[
+			"ig",
+			-1,
+			2
+		],
+		[
+			"ung",
+			-1,
+			1
+		],
+		[
+			"lich",
+			-1,
+			3
+		],
+		[
+			"isch",
+			-1,
+			2
+		],
+		[
+			"ik",
+			-1,
+			2
+		],
+		[
+			"heit",
+			-1,
+			3
+		],
+		[
+			"keit",
+			-1,
+			4
+		]
+	], e = [
+		17,
+		65,
+		16,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		8,
+		0,
+		32,
+		8
+	], h = [
+		117,
+		30,
+		5
+	], n = [
+		117,
+		30,
+		4
+	], a = 0, f = 0, b = 0;
+	this.l = function() {
+		var r = s.cursor;
+		return function() {
+			for (var r = s.cursor;;) {
+				var t = s.cursor;
+				r: {
+					s: {
+						var i = s.cursor;
+						if (s.c = s.cursor, s.m("ß")) {
+							if (s.d = s.cursor, !s.b("ss")) return;
+							break s;
+						}
+						if (s.cursor = i, s.cursor >= s.a) break r;
+						s.cursor++;
+					}
+					continue;
+				}
+				s.cursor = t;
+				break;
+			}
+			for (s.cursor = r;;) {
+				r = s.cursor;
+				r: {
+					for (;;) {
+						t = s.cursor;
+						t: if (s.i(e, 97, 252)) {
+							s.c = s.cursor;
+							i: {
+								if (i = s.cursor, s.m("u") && (s.d = s.cursor, s.i(e, 97, 252))) {
+									if (!s.b("U")) return;
+									break i;
+								}
+								if (s.cursor = i, !s.m("y") || (s.d = s.cursor, !s.i(e, 97, 252))) break t;
+								if (!s.b("Y")) return;
+							}
+							s.cursor = t;
+							break;
+						}
+						if (s.cursor = t, s.cursor >= s.a) break r;
+						s.cursor++;
+					}
+					continue;
+				}
+				s.cursor = r;
+				break;
+			}
+		}(), s.cursor = r, r = s.cursor, function() {
+			f = b = s.a;
+			var r = s.cursor, t = s.cursor + 3;
+			if (!(t > s.a)) {
+				for (s.cursor = t, a = s.cursor, s.cursor = r; !s.i(e, 97, 252);) {
+					if (s.cursor >= s.a) return;
+					s.cursor++;
+				}
+				for (; !s.k(e, 97, 252);) {
+					if (s.cursor >= s.a) return;
+					s.cursor++;
+				}
+				for ((b = s.cursor) < a && (b = a); !s.i(e, 97, 252);) {
+					if (s.cursor >= s.a) return;
+					s.cursor++;
+				}
+				for (; !s.k(e, 97, 252);) {
+					if (s.cursor >= s.a) return;
+					s.cursor++;
+				}
+				f = s.cursor;
+			}
+		}(), s.cursor = r, s.f = s.cursor, s.cursor = s.a, function() {
+			var r, t = s.a - s.cursor;
+			r: if (s.d = s.cursor, 0 != (r = s.h(i)) && (s.c = s.cursor, b <= s.cursor)) switch (r) {
+				case 1:
+					if (!s.e()) return;
+					break;
+				case 2:
+					if (!s.e()) return;
+					if (r = s.a - s.cursor, s.d = s.cursor, s.g("s")) if (s.c = s.cursor, s.g("nis")) {
+						if (!s.e()) return;
+					} else s.cursor = s.a - r;
+					else s.cursor = s.a - r;
+					break;
+				case 3:
+					if (!s.n(h, 98, 116)) break r;
+					if (!s.e()) return;
+			}
+			s.cursor = s.a - t, t = s.a - s.cursor;
+			r: if (s.d = s.cursor, 0 != (r = s.h(c)) && (s.c = s.cursor, b <= s.cursor)) switch (r) {
+				case 1:
+					if (!s.e()) return;
+					break;
+				case 2:
+					if (!s.n(n, 98, 116) || (r = s.cursor - 3) < s.f) break r;
+					if (s.cursor = r, !s.e()) return;
+			}
+			s.cursor = s.a - t, t = s.a - s.cursor;
+			r: if (s.d = s.cursor, 0 != (r = s.h(o)) && (s.c = s.cursor, f <= s.cursor)) switch (r) {
+				case 1:
+					if (!s.e()) return;
+					r = s.a - s.cursor;
+					s: if (s.d = s.cursor, s.g("ig")) {
+						s.c = s.cursor;
+						var e = s.a - s.cursor;
+						if (s.g("e")) {
+							s.cursor = s.a - r;
+							break s;
+						}
+						if (s.cursor = s.a - e, f <= s.cursor) {
+							if (!s.e()) return;
+						} else s.cursor = s.a - r;
+					} else s.cursor = s.a - r;
+					break;
+				case 2:
+					if (r = s.a - s.cursor, s.g("e")) break r;
+					if (s.cursor = s.a - r, !s.e()) return;
+					break;
+				case 3:
+					if (!s.e()) return;
+					r = s.a - s.cursor;
+					s: {
+						if ((s.d = s.cursor, e = s.a - s.cursor, !s.g("er")) && (s.cursor = s.a - e, !s.g("en"))) {
+							s.cursor = s.a - r;
+							break s;
+						}
+						if (s.c = s.cursor, b <= s.cursor) {
+							if (!s.e()) return;
+						} else s.cursor = s.a - r;
+					}
+					break;
+				case 4:
+					if (!s.e()) return;
+					if (r = s.a - s.cursor, s.d = s.cursor, 0 == s.h(u)) s.cursor = s.a - r;
+					else if (s.c = s.cursor, f <= s.cursor) {
+						if (!s.e()) return;
+					} else s.cursor = s.a - r;
+			}
+			s.cursor = s.a - t;
+		}(), s.cursor = s.f, r = s.cursor, function() {
+			for (var r;;) {
+				var i = s.cursor;
+				r: if (s.c = s.cursor, 0 != (r = s.o(t))) {
+					switch (s.d = s.cursor, r) {
+						case 1:
+							if (!s.b("y")) return;
+							break;
+						case 2:
+							if (!s.b("u")) return;
+							break;
+						case 3:
+							if (!s.b("a")) return;
+							break;
+						case 4:
+							if (!s.b("o")) return;
+							break;
+						case 5:
+							if (s.cursor >= s.a) break r;
+							s.cursor++;
+					}
+					continue;
+				}
+				s.cursor = i;
+				break;
+			}
+		}(), s.cursor = r, !0;
+	}, this.stemWord = function(r) {
+		return s.p(r), this.l(), s.j;
+	};
+}();
+function stemmer(r) {
+	return s.stemWord(r);
+}
+var GERMAN_TOKENIZER = {
+	stemming: true,
+	stemmer,
+	language: "german",
+	stopWords: [
+		"der",
+		"die",
+		"das",
+		"des",
+		"dem",
+		"den",
+		"ein",
+		"eine",
+		"einer",
+		"eines",
+		"einem",
+		"einen",
+		"und",
+		"oder",
+		"aber",
+		"sowie",
+		"sowohl",
+		"weder",
+		"noch",
+		"hinter",
+		"vor",
+		"über",
+		"unter",
+		"zwischen",
+		"neben",
+		"an",
+		"auf",
+		"in",
+		"im",
+		"am",
+		"zu",
+		"zum",
+		"zur",
+		"für",
+		"von",
+		"vom",
+		"mit",
+		"bei",
+		"aus",
+		"nach",
+		"durch",
+		"gegen",
+		"ohne",
+		"bis",
+		"seit",
+		"während",
+		"wegen",
+		"trotz",
+		"innerhalb",
+		"außerhalb",
+		"oberhalb",
+		"unterhalb",
+		"ist",
+		"sind",
+		"war",
+		"waren",
+		"wird",
+		"werden",
+		"wurde",
+		"wurden",
+		"hat",
+		"haben",
+		"hatte",
+		"hatten",
+		"kann",
+		"können",
+		"muss",
+		"müssen",
+		"soll",
+		"sollen",
+		"darf",
+		"dürfen",
+		"sich",
+		"als",
+		"wie",
+		"so",
+		"nicht",
+		"kein",
+		"keine",
+		"auch",
+		"nur",
+		"noch",
+		"schon",
+		"dass",
+		"daß",
+		"diese",
+		"dieser",
+		"dieses",
+		"diesem",
+		"diesen",
+		"jene",
+		"jener",
+		"jenes"
+	]
+};
+var ORAMA_SCHEMA = {
+	seitencode: "string",
+	sektionNr: "string",
+	sektion: "string",
+	titel: "string",
+	tags: "string[]",
+	notePath: "string",
+	bilddatei: "string",
+	kind: "enum",
+	text: "string",
+	embedding: `vector[768]`
+};
+/** Correctly restores the shipped binary index with the German tokenizer intact. */
+async function loadIndex(indexPath) {
+	const exported = await save(await restoreFromFile("binary", indexPath, "node"));
+	const db = await create({
+		schema: ORAMA_SCHEMA,
+		components: { tokenizer: GERMAN_TOKENIZER }
+	});
+	await load(db, exported);
+	return db;
+}
+//#endregion
+//#region src/retriever.ts
+/** Query-time task prefix for gemini-embedding-2 (see PLAN.md - this model has
+* no task_type EmbedContentConfig param; steering is a text prefix instead). */
+var QUERY_PREFIX_TMPL = "task: search result | query: {content}";
+/** Validates the shipped manifest against the plugin's settings (embedding-parity
+* guard - see PLAN.md). Returns a list of human-readable warning strings (empty = OK). */
+function validateManifest(manifest, settings) {
+	const warnings = [];
+	if (manifest.embeddingModel !== settings.embeddingModel) warnings.push(`Index was built with embedding model "${manifest.embeddingModel}", but settings specify "${settings.embeddingModel}". Update settings or rebuild the index.`);
+	if (manifest.embeddingDims !== settings.outputDim) warnings.push(`Index was built at ${manifest.embeddingDims} dims (the shipped/query dims), but settings specify ${settings.outputDim}. These MUST match or vector search will silently return garbage. Fix settings.outputDim.`);
+	return warnings;
+}
+/** Embeds a user query via the Google gemini-embedding-2 REST API (non-streaming,
+* via Obsidian's CORS-safe requestUrl - no streaming needed here). */
+async function embedQuery(query, settings) {
+	if (!settings.geminiApiKey) throw new Error("Google API key (GEMINI_API_KEY) is required for query embeddings - set it in RAG Chat settings.");
+	const prefixed = QUERY_PREFIX_TMPL.replace("{content}", query);
+	const url = `https://generativelanguage.googleapis.com/v1beta/models/${settings.embeddingModel}:embedContent`;
+	const response = await (0, obsidian.requestUrl)({
+		url,
+		method: "POST",
+		headers: {
+			"x-goog-api-key": settings.geminiApiKey,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			content: { parts: [{ text: prefixed }] },
+			outputDimensionality: settings.outputDim
+		})
+	});
+	const values = response.json?.embedding?.values;
+	if (!Array.isArray(values)) throw new Error(`Unexpected embedContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
+	return values;
+}
+var cachedDb = null;
+var cachedDbPath = null;
+/** Loads (and caches) the Orama index from the plugin directory. */
+async function getIndex(indexPath) {
+	if (cachedDb && cachedDbPath === indexPath) return cachedDb;
+	cachedDb = await loadIndex(indexPath);
+	cachedDbPath = indexPath;
+	return cachedDb;
+}
+/** Runs hybrid (BM25 + vector) search and returns typed hits. */
+async function hybridSearch(db, term, vector, settings) {
+	return (await search(db, {
+		mode: "hybrid",
+		term,
+		vector: {
+			value: vector,
+			property: "embedding"
+		},
+		similarity: settings.similarity,
+		limit: settings.topK
+	})).hits.map((h) => {
+		const doc = h.document;
+		return {
+			score: h.score,
+			notePath: doc.notePath,
+			seitencode: doc.seitencode,
+			sektion: doc.sektion,
+			titel: doc.titel,
+			kind: doc.kind
+		};
+	});
+}
+/**
+* Parent-note expansion (see PLAN.md Phase 4): dedupe hits by notePath (the
+* UNIQUE key - seitencode alone has 47 known collisions across the vault,
+* see PLAN.md), read each source note IN FULL via vault.read (the "Parent
+* Note" pattern - never truncate), and return context blocks labelled with
+* notePath + seitencode + sektion (that pair disambiguates the collisions).
+*/
+async function expandToParentNotes(hits, vault) {
+	const seen = /* @__PURE__ */ new Set();
+	const blocks = [];
+	for (const hit of hits) {
+		if (seen.has(hit.notePath)) continue;
+		seen.add(hit.notePath);
+		const file = vault.getFileByPath(hit.notePath);
+		if (!file) continue;
+		const fullText = await vault.read(file);
+		blocks.push({
+			notePath: hit.notePath,
+			seitencode: hit.seitencode,
+			sektion: hit.sektion,
+			titel: hit.titel,
+			fullText
+		});
+	}
+	return blocks;
+}
+/** Assembles the <context> block fed to the generation model. */
+function buildContextXml(blocks) {
+	return `<context>\n${blocks.map((b) => `<document source="${b.notePath}" seitencode="${b.seitencode}" sektion="${b.sektion}">\n${b.fullText}\n</document>`).join("\n\n")}\n</context>`;
+}
+//#endregion
+//#region src/gemini.ts
+/**
+* Pinned system instruction (see PLAN.md Phase 4 "System prompt", shipped
+* verbatim). Steers determinism via the prompt since temperature/top_p/top_k
+* are deprecated on gemini-3.6-flash and are never sent.
+*/
+var SYSTEM_PROMPT = `Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
+Beantworte die Frage AUSSCHLIESSLICH anhand der Informationen im <context>.
+- Fehlt eine genaue Teilenummer oder ein Spezifikationswert im Kontext, sage das
+  ausdrücklich ("Diese Information ist im Kontext nicht enthalten.").
+- Nutze KEIN Allgemeinwissen, außer der Nutzer verlangt es ausdrücklich.
+- Nenne den Dateinamen (Seitencode) der Quelle bei technischen Angaben.
+Antworte auf Deutsch.`;
+/**
+* Streams a generation response via gemini-3.6-flash, calling onChunk for
+* every text delta as it arrives.
+*
+* IMPORTANT (see PLAN.md - verified live against the real Zen endpoint, Aug
+* 2026): Obsidian's requestUrl helper (the usual CORS-safe HTTP path for
+* plugins) does NOT expose a readable stream - it only resolves a full
+* response. Since this plugin is isDesktopOnly, Node's built-in `https`
+* module is used instead (externalized in vite.config.ts) - it isn't a
+* browser fetch(), so it isn't subject to CORS at all.
+*
+* Wire format: `:streamGenerateContent?alt=sse` returns standard SSE
+* `data: {...}` chunks, each a partial GenerateContentResponse. There is no
+* `[DONE]` sentinel - the connection just closes after the final chunk
+* (which carries finishReason). Zen appends one extra trailing event with
+* no `candidates` field: `data: {"type":"ping","cost":"..."}` - this and any
+* other candidate-less event are silently skipped.
+*/
+function streamGenerate(contextXml, question, settings, onChunk) {
+	const provider = settings.genProvider;
+	const apiKey = provider === "google" ? settings.geminiApiKey : settings.opencodeApiKey;
+	if (!apiKey) {
+		const keyName = provider === "google" ? "Google API key" : "OpenCode Zen API key";
+		return Promise.reject(/* @__PURE__ */ new Error(`${keyName} is required for generation - set it in RAG Chat settings.`));
+	}
+	const host = provider === "google" ? "generativelanguage.googleapis.com" : "opencode.ai";
+	const path = provider === "google" ? `/v1beta/models/${settings.generationModel}:streamGenerateContent?alt=sse` : `/zen/v1/models/${settings.generationModel}:streamGenerateContent?alt=sse`;
+	const requestBody = JSON.stringify({
+		systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+		contents: [{
+			role: "user",
+			parts: [{ text: `${contextXml}\n\n<question>\n${question}\n</question>` }]
+		}]
+	});
+	return new Promise((resolve, reject) => {
+		const req = node_https.request({
+			host,
+			path,
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Content-Length": Buffer.byteLength(requestBody),
+				"x-goog-api-key": apiKey,
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+			}
+		}, (res) => {
+			if ((res.statusCode ?? 0) >= 400) {
+				let errBody = "";
+				res.on("data", (chunk) => errBody += chunk);
+				res.on("end", () => reject(/* @__PURE__ */ new Error(`HTTP ${res.statusCode}: ${errBody.slice(0, 500)}`)));
+				return;
+			}
+			let buffer = "";
+			res.setEncoding("utf-8");
+			res.on("data", (chunk) => {
+				buffer += chunk;
+				let idx;
+				while ((idx = buffer.indexOf("\n\n")) !== -1) {
+					const event = buffer.slice(0, idx);
+					buffer = buffer.slice(idx + 2);
+					for (const line of event.split("\n")) {
+						if (!line.startsWith("data:")) continue;
+						const payload = line.slice(5).trim();
+						if (!payload || payload === "[DONE]") continue;
+						try {
+							const text = JSON.parse(payload)?.candidates?.[0]?.content?.parts?.[0]?.text;
+							if (typeof text === "string" && text.length > 0) onChunk(text);
+						} catch {}
+					}
+				}
+			});
+			res.on("end", () => resolve());
+			res.on("error", (err) => reject(err));
+		});
+		req.on("error", (err) => reject(err));
+		req.write(requestBody);
+		req.end();
+	});
+}
+//#endregion
+//#region src/view.ts
+var RAG_CHAT_VIEW_TYPE = "rag-chat-view";
+var RagChatView = class extends obsidian.ItemView {
+	constructor(leaf, plugin) {
+		super(leaf);
+		this.turns = [];
+		this.busy = false;
+		this.plugin = plugin;
+	}
+	getViewType() {
+		return RAG_CHAT_VIEW_TYPE;
+	}
+	getDisplayText() {
+		return "RAG Chat";
+	}
+	getIcon() {
+		return "message-circle-question";
+	}
+	async onOpen() {
+		const container = this.contentEl;
+		container.empty();
+		container.addClass("rag-chat-container");
+		this.messagesEl = container.createDiv({ cls: "rag-chat-messages" });
+		const inputRow = container.createDiv({ cls: "rag-chat-input-row" });
+		this.inputEl = inputRow.createEl("textarea", {
+			cls: "rag-chat-input",
+			attr: { placeholder: "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)" }
+		});
+		this.inputEl.addEventListener("keydown", (evt) => {
+			if (evt.key === "Enter" && !evt.shiftKey) {
+				evt.preventDefault();
+				this.handleSend();
+			}
+		});
+		this.sendButton = inputRow.createEl("button", {
+			cls: "rag-chat-send",
+			text: "Fragen"
+		});
+		this.sendButton.addEventListener("click", () => this.handleSend());
+		this.renderTurns();
+	}
+	async onClose() {
+		this.contentEl.empty();
+	}
+	setBusy(busy) {
+		this.busy = busy;
+		this.sendButton.disabled = busy;
+		this.sendButton.setText(busy ? "..." : "Fragen");
+	}
+	async handleSend() {
+		if (this.busy) return;
+		const question = this.inputEl.value.trim();
+		if (!question) return;
+		this.inputEl.value = "";
+		this.turns.push({
+			role: "user",
+			text: question
+		});
+		const assistantTurn = {
+			role: "assistant",
+			text: ""
+		};
+		this.turns.push(assistantTurn);
+		this.renderTurns();
+		this.setBusy(true);
+		try {
+			await this.answer(question, assistantTurn);
+		} catch (err) {
+			assistantTurn.text = `Fehler: ${err instanceof Error ? err.message : String(err)}`;
+			new obsidian.Notice(`RAG Chat error: ${err instanceof Error ? err.message : String(err)}`);
+		} finally {
+			this.setBusy(false);
+			this.renderTurns();
+		}
+	}
+	async answer(question, turn) {
+		const { settings } = this.plugin;
+		await this.plugin.getManifest();
+		const indexPath = this.plugin.getIndexPath();
+		const [vector, db] = await Promise.all([embedQuery(question, settings), getIndex(indexPath)]);
+		const contextBlocks = await expandToParentNotes(await hybridSearch(db, question, vector, settings), this.app.vault);
+		turn.citations = contextBlocks;
+		if (contextBlocks.length === 0) {
+			turn.text = "Keine passenden Seiten im Handbuch gefunden.";
+			this.renderTurns();
+			return;
+		}
+		await streamGenerate(buildContextXml(contextBlocks), question, settings, (delta) => {
+			turn.text += delta;
+			this.renderTurns();
+		});
+	}
+	renderTurns() {
+		this.messagesEl.empty();
+		for (const turn of this.turns) {
+			const turnEl = this.messagesEl.createDiv({ cls: `rag-chat-turn rag-chat-turn-${turn.role}` });
+			turnEl.createDiv({
+				cls: "rag-chat-turn-text",
+				text: turn.text
+			});
+			if (turn.citations && turn.citations.length > 0) {
+				const citeEl = turnEl.createDiv({ cls: "rag-chat-citations" });
+				citeEl.createSpan({ text: "Quellen: " });
+				for (const block of turn.citations) citeEl.createEl("a", {
+					cls: "rag-chat-citation-link",
+					text: `${block.seitencode} (${block.sektion})`
+				}).addEventListener("click", (evt) => {
+					evt.preventDefault();
+					this.app.workspace.openLinkText(block.notePath, "", false);
+				});
+			}
+		}
+		this.messagesEl.scrollTo({ top: this.messagesEl.scrollHeight });
+	}
+};
+//#endregion
+//#region src/main.ts
+var RagChatPlugin = class extends obsidian.Plugin {
+	constructor(..._args) {
+		super(..._args);
+		this.manifestCache = null;
+	}
+	async onload() {
+		await this.loadSettings();
+		this.registerView(RAG_CHAT_VIEW_TYPE, (leaf) => new RagChatView(leaf, this));
+		this.addRibbonIcon("message-circle-question", "RAG Chat öffnen", () => {
+			this.activateView();
+		});
+		this.addCommand({
+			id: "rag-chat-open",
+			name: "RAG: Frage stellen",
+			callback: () => {
+				this.activateView();
+			}
+		});
+		this.addSettingTab(new RagChatSettingTab(this.app, this));
+		try {
+			const warnings = validateManifest(await this.getManifest(), this.settings);
+			for (const w of warnings) new obsidian.Notice(`RAG Chat: ${w}`, 1e4);
+		} catch (err) {
+			new obsidian.Notice(`RAG Chat: konnte rag-manifest.json nicht laden (${err instanceof Error ? err.message : String(err)}). Index ggf. neu bauen.`, 1e4);
+		}
+	}
+	onunload() {}
+	getPluginDir() {
+		return this.manifest.dir ?? `.obsidian/plugins/${this.manifest.id}`;
+	}
+	getIndexPath() {
+		const relPath = `${this.getPluginDir()}/rag-index.orama.msp`;
+		if (this.app.vault.adapter instanceof obsidian.FileSystemAdapter) return this.app.vault.adapter.getFullPath(relPath);
+		return relPath;
+	}
+	async getManifest() {
+		if (this.manifestCache) return this.manifestCache;
+		const relPath = `${this.getPluginDir()}/rag-manifest.json`;
+		const raw = await this.app.vault.adapter.read(relPath);
+		this.manifestCache = JSON.parse(raw);
+		return this.manifestCache;
+	}
+	async activateView() {
+		const { workspace } = this.app;
+		let leaf = workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)[0];
+		if (!leaf) {
+			leaf = workspace.getRightLeaf(false) ?? workspace.getLeaf(true);
+			await leaf.setViewState({
+				type: RAG_CHAT_VIEW_TYPE,
+				active: true
+			});
+		}
+		workspace.revealLeaf(leaf);
+	}
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+	async saveSettings() {
+		await this.saveData(this.settings);
+	}
+};
+//#endregion
+module.exports = RagChatPlugin;
