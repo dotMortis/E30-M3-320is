@@ -1,4 +1,5 @@
 import type { Vault } from "obsidian";
+import { readNoteOrNull } from "./note-reader";
 import type { ContextBlock, ReferenceChunkMap, RetrievedHit } from "./types";
 
 export async function expandToParentNotes(
@@ -25,9 +26,8 @@ export async function expandToParentNotes(
     }
     if (seen.has(hit.notePath)) continue;
     seen.add(hit.notePath);
-    const file = vault.getFileByPath(hit.notePath);
-    if (!file) continue;
-    const fullText = await vault.read(file);
+    const fullText = await readNoteOrNull(vault, hit.notePath);
+    if (fullText === null) continue;
     blocks.push({
       notePath: hit.notePath,
       seitencode: hit.seitencode,

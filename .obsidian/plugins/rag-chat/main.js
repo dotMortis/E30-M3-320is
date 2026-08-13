@@ -8056,6 +8056,13 @@ async function federatedHybridSearch(indices, term, vector, settings) {
 	}));
 }
 //#endregion
+//#region src/retrieval/note-reader.ts
+async function readNoteOrNull(vault, notePath) {
+	const file = vault.getFileByPath(notePath);
+	if (!file) return null;
+	return await vault.read(file);
+}
+//#endregion
 //#region src/agent/execute-tool.ts
 async function executeTool(fc, ctx, state) {
 	switch (fc.name) {
@@ -8083,9 +8090,8 @@ async function executeTool(fc, ctx, state) {
 		case "get_manual_page": {
 			const notePath = String(fc.args?.notePath ?? "");
 			if (!notePath.trim()) return { error: "notePath darf nicht leer sein." };
-			const file = ctx.vault.getFileByPath(notePath);
-			if (!file) return { error: `Seite "${notePath}" nicht gefunden - evtl. verschoben oder gelöscht.` };
-			const fullText = await ctx.vault.read(file);
+			const fullText = await readNoteOrNull(ctx.vault, notePath);
+			if (fullText === null) return { error: `Seite "${notePath}" nicht gefunden - evtl. verschoben oder gelöscht.` };
 			const seitencode = String(fc.args?.seitencode ?? "");
 			const sektion = String(fc.args?.sektion ?? "");
 			const titel = String(fc.args?.titel ?? notePath);
@@ -8360,9 +8366,8 @@ async function expandToParentNotes(hits, vault, referenceChunks) {
 		}
 		if (seen.has(hit.notePath)) continue;
 		seen.add(hit.notePath);
-		const file = vault.getFileByPath(hit.notePath);
-		if (!file) continue;
-		const fullText = await vault.read(file);
+		const fullText = await readNoteOrNull(vault, hit.notePath);
+		if (fullText === null) continue;
 		blocks.push({
 			notePath: hit.notePath,
 			seitencode: hit.seitencode,

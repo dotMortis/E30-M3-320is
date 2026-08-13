@@ -1,6 +1,7 @@
 import { toCompactHits } from "../retrieval/compact-hits";
 import { embedQuery } from "../retrieval/embeddings";
 import { federatedHybridSearch } from "../retrieval/hybrid-search";
+import { readNoteOrNull } from "../retrieval/note-reader";
 import type { AgentLoopContext, AgentLoopState } from "./types";
 
 export async function executeTool(
@@ -31,9 +32,8 @@ export async function executeTool(
     case "get_manual_page": {
       const notePath = String(fc.args?.notePath ?? "");
       if (!notePath.trim()) return { error: "notePath darf nicht leer sein." };
-      const file = ctx.vault.getFileByPath(notePath);
-      if (!file) return { error: `Seite "${notePath}" nicht gefunden - evtl. verschoben oder gelöscht.` };
-      const fullText = await ctx.vault.read(file);
+      const fullText = await readNoteOrNull(ctx.vault, notePath);
+      if (fullText === null) return { error: `Seite "${notePath}" nicht gefunden - evtl. verschoben oder gelöscht.` };
       const seitencode = String(fc.args?.seitencode ?? "");
       const sektion = String(fc.args?.sektion ?? "");
       const titel = String(fc.args?.titel ?? notePath);
