@@ -54,7 +54,7 @@ describe("answerQuestion", () => {
       indices,
       fuzzyApi: null,
     });
-    expect(embedQuery).toHaveBeenCalledWith("und was ist mit 16-03?", expect.anything(), undefined);
+    expect(embedQuery).toHaveBeenCalledWith("und was ist mit 16-03?", expect.anything(), undefined, undefined);
     expect(federatedHybridSearch).toHaveBeenCalledWith(
       indices,
       "und was ist mit 16-03?",
@@ -136,6 +136,16 @@ describe("answerQuestion", () => {
     const result = await answerQuestion({ question: "Frage?", history: [], settings: fakeSettings(), vault, indices, fuzzyApi: null });
     expect(result).toEqual({ status: "awaiting_clarification", question: "Welches Baujahr?", pending });
   });
+
+  it("rejects immediately without retrieving anything when the signal is already aborted", async () => {
+    const controller = new AbortController();
+    controller.abort();
+    await expect(
+      answerQuestion({ question: "Frage?", history: [], settings: fakeSettings(), vault, indices, fuzzyApi: null, signal: controller.signal })
+    ).rejects.toThrow("Anfrage abgebrochen.");
+    expect(embedQuery).not.toHaveBeenCalled();
+    expect(runAgentLoop).not.toHaveBeenCalled();
+  });
 });
 
 describe("continueAnswer", () => {
@@ -159,5 +169,13 @@ describe("continueAnswer", () => {
     resumeAgentLoop.mockResolvedValue({ status: "awaiting_clarification", question: "Und welches Modell?", pending: pending2 });
     const result = await continueAnswer({ state: {}, ctx: {} } as any, "1988");
     expect(result).toEqual({ status: "awaiting_clarification", question: "Und welches Modell?", pending: pending2 });
+  });
+
+  it("rejects immediately without resuming the agent loop when the signal is already aborted", async () => {
+    const controller = new AbortController();
+    controller.abort();
+    const pending = { state: {}, ctx: {} } as any;
+    await expect(continueAnswer(pending, "1988", controller.signal)).rejects.toThrow("Anfrage abgebrochen.");
+    expect(resumeAgentLoop).not.toHaveBeenCalled();
   });
 });

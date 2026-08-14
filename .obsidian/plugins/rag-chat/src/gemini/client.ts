@@ -16,7 +16,7 @@ export async function generateWithTools(
   contents: GeminiContent[],
   functionDeclarations: FunctionDeclaration[] | null,
   settings: RagChatSettings,
-  opts?: { includeGoogleSearch?: boolean; onStatus?: (status: string) => void }
+  opts?: { includeGoogleSearch?: boolean; onStatus?: (status: string) => void; signal?: AbortSignal }
 ): Promise<GenerateWithToolsResult> {
   const apiKey = settings.geminiApiKey;
   if (!apiKey) {
@@ -51,7 +51,7 @@ export async function generateWithTools(
       headers: { "x-goog-api-key": apiKey, "Content-Type": "application/json" },
       body: JSON.stringify(body),
     },
-    { onStatus: opts?.onStatus, label: "Generierung" }
+    { onStatus: opts?.onStatus, label: "Generierung", signal: opts?.signal }
   );
 
   // `response.json` is a throwing getter (it lazily JSON.parses the raw

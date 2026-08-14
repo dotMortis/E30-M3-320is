@@ -7840,17 +7840,6 @@ function clearIndicesCache() {
 	cachedPromise = null;
 }
 //#endregion
-//#region src/gemini/history.ts
-function buildHistoryContents(history) {
-	return history.map((t) => ({
-		...t,
-		text: t.text.trim()
-	})).filter((t) => t.text.length > 0).map((t) => ({
-		role: t.role === "assistant" ? "model" : "user",
-		parts: [{ text: t.text }]
-	}));
-}
-//#endregion
 //#region src/constants.ts
 /**
 * Cap on how many candidate hits are pulled from each Orama leg (text/vector)
@@ -7869,6 +7858,18 @@ var HTTP_RETRY_MAX_DELAY_MS = 16e3;
 var HTTP_RETRY_JITTER_RATIO = .2;
 /** How long to wait for a single HTTP request before aborting it, in ms. */
 var HTTP_REQUEST_TIMEOUT_MS = 3e4;
+var ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";
+//#endregion
+//#region src/gemini/history.ts
+function buildHistoryContents(history) {
+	return history.map((t) => ({
+		...t,
+		text: t.text.trim()
+	})).filter((t) => t.text.length > 0).map((t) => ({
+		role: t.role === "assistant" ? "model" : "user",
+		parts: [{ text: t.text }]
+	}));
+}
 //#endregion
 //#region src/http/retry.ts
 var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
@@ -7878,8 +7879,19 @@ var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
 	503,
 	504
 ]);
-function sleep(ms) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
+function sleep(ms, signal) {
+	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
+	return new Promise((resolve, reject) => {
+		const onAbort = () => {
+			clearTimeout(timer);
+			reject(new Error(ABORT_ERROR_MESSAGE));
+		};
+		const timer = setTimeout(() => {
+			signal?.removeEventListener("abort", onAbort);
+			resolve();
+		}, ms);
+		signal?.addEventListener("abort", onAbort, { once: true });
+	});
 }
 function extractErrorMessage(response) {
 	try {
@@ -7895,21 +7907,26 @@ function extractErrorMessage(response) {
 * instead - the underlying request may keep running in the background, but
 * our caller stops waiting and can retry/fail instead of hanging.
 */
-function requestWithTimeout(params) {
+function requestWithTimeout(params, signal) {
+	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
 	return new Promise((resolve, reject) => {
+		let settled = false;
+		const finish = (fn) => {
+			if (settled) return;
+			settled = true;
+			clearTimeout(timer);
+			signal?.removeEventListener("abort", onAbort);
+			fn();
+		};
+		const onAbort = () => finish(() => reject(new Error(ABORT_ERROR_MESSAGE)));
 		const timer = setTimeout(() => {
-			reject(/* @__PURE__ */ new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1e3}s`));
+			finish(() => reject(/* @__PURE__ */ new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1e3}s`)));
 		}, HTTP_REQUEST_TIMEOUT_MS);
+		signal?.addEventListener("abort", onAbort, { once: true });
 		(0, obsidian.requestUrl)({
 			...params,
 			throw: false
-		}).then((response) => {
-			clearTimeout(timer);
-			resolve(response);
-		}, (err) => {
-			clearTimeout(timer);
-			reject(err);
-		});
+		}).then((response) => finish(() => resolve(response)), (err) => finish(() => reject(err)));
 	});
 }
 /**
@@ -7945,17 +7962,20 @@ function retryAfterHeaderValue(response) {
 */
 async function requestUrlWithRetry(params, opts) {
 	const label = opts?.label ?? "Anfrage";
+	const signal = opts?.signal;
 	let lastResponse;
 	for (let attempt = 1; attempt <= 3; attempt++) {
+		if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 		let response;
 		try {
-			response = await requestWithTimeout(params);
+			response = await requestWithTimeout(params, signal);
 		} catch (err) {
+			if (signal?.aborted) throw err;
 			const message = err instanceof Error ? err.message : String(err);
 			if (attempt === 3) throw new Error(`${label} fehlgeschlagen: ${message}`);
 			const delay = computeDelayMs(attempt);
 			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
-			await sleep(delay);
+			await sleep(delay, signal);
 			continue;
 		}
 		if (response.status < 400) return response;
@@ -7966,7 +7986,7 @@ async function requestUrlWithRetry(params, opts) {
 		}
 		const delay = computeDelayMs(attempt, retryAfterHeaderValue(response));
 		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
-		await sleep(delay);
+		await sleep(delay, signal);
 	}
 	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
 }
@@ -8116,7 +8136,8 @@ async function generateWithTools(contents, functionDeclarations, settings, opts)
 		body: JSON.stringify(body)
 	}, {
 		onStatus: opts?.onStatus,
-		label: "Generierung"
+		label: "Generierung",
+		signal: opts?.signal
 	});
 	let json;
 	try {
@@ -8182,7 +8203,7 @@ function validateManifest(manifest, settings) {
 	if (manifest.embeddingDims !== settings.outputDim) warnings.push(`Index was built at ${manifest.embeddingDims} dims (the shipped/query dims), but settings specify ${settings.outputDim}. These MUST match or vector search will silently return garbage. Fix settings.outputDim.`);
 	return warnings;
 }
-async function embedQuery(query, settings, onStatus) {
+async function embedQuery(query, settings, onStatus, signal) {
 	if (!settings.geminiApiKey) throw new Error("Google API key (GEMINI_API_KEY) is required for query embeddings - set it in RAG Chat settings.");
 	const prefixed = QUERY_PREFIX_TMPL.replace("{content}", query);
 	const response = await requestUrlWithRetry({
@@ -8198,7 +8219,8 @@ async function embedQuery(query, settings, onStatus) {
 		})
 	}, {
 		onStatus,
-		label: "Embedding"
+		label: "Embedding",
+		signal
 	});
 	const values = response.json?.embedding?.values;
 	if (!Array.isArray(values)) throw new Error(`Unexpected embedContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
@@ -8288,7 +8310,7 @@ async function executeTool(fc, ctx, state) {
 		case "search_manual": {
 			const query = String(fc.args?.query ?? "");
 			if (!query.trim()) return { error: "query darf nicht leer sein." };
-			const vector = await embedQuery(query, ctx.settings, ctx.onStatus);
+			const vector = await embedQuery(query, ctx.settings, ctx.onStatus, ctx.signal);
 			return { hits: toCompactHits(await federatedHybridSearch(ctx.indices, query, vector, ctx.settings)) };
 		}
 		case "search_manual_fuzzy": {
@@ -8363,10 +8385,13 @@ async function driveLoop(state, ctx) {
 	const maxRounds = ctx.settings.maxAgentRounds;
 	const declarations = ctx.settings.enableFuzzySearchLeg ? FUNCTION_DECLARATIONS : FUNCTION_DECLARATIONS.filter((d) => d.name !== "search_manual_fuzzy");
 	while (state.round < maxRounds) {
-		if (ctx.signal?.aborted) throw new Error("Anfrage abgebrochen.");
+		if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 		state.round++;
 		ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: denke nach …`);
-		const result = await generateWithTools(state.contents, declarations, ctx.settings, { onStatus: ctx.onStatus });
+		const result = await generateWithTools(state.contents, declarations, ctx.settings, {
+			onStatus: ctx.onStatus,
+			signal: ctx.signal
+		});
 		mergeGrounding(state.webCitations, result.groundingChunks);
 		const functionCalls = result.parts.filter((p) => Boolean(p.functionCall)).map((p) => p.functionCall);
 		if (functionCalls.length === 0) return {
@@ -8385,6 +8410,7 @@ async function driveLoop(state, ctx) {
 		const otherCalls = functionCalls.filter((fc) => fc !== askUserCall);
 		const responseParts = [];
 		for (const fc of otherCalls) {
+			if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 			ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: ${describeCall(fc)} …`);
 			let response;
 			try {
@@ -8415,6 +8441,7 @@ async function driveLoop(state, ctx) {
 			}
 		};
 	}
+	if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 	ctx.onStatus?.("Werkzeug-Budget erreicht - erstelle abschließende Antwort …");
 	state.contents.push({
 		role: "user",
@@ -8422,7 +8449,8 @@ async function driveLoop(state, ctx) {
 	});
 	const final = await generateWithTools(state.contents, null, ctx.settings, {
 		includeGoogleSearch: false,
-		onStatus: ctx.onStatus
+		onStatus: ctx.onStatus,
+		signal: ctx.signal
 	});
 	mergeGrounding(state.webCitations, final.groundingChunks);
 	return {
@@ -8450,12 +8478,18 @@ async function runAgentLoop(params) {
 	}, ctx);
 }
 async function resumeAgentLoop(pending, userAnswer, signal) {
-	const { state, ctx: pausedCtx } = pending;
+	const { state: pausedState, ctx: pausedCtx } = pending;
 	const ctx = signal ? {
 		...pausedCtx,
 		signal
 	} : pausedCtx;
-	const askUserCallId = [...state.contents].reverse().find((c) => c.role === "model")?.parts.find((p) => p.functionCall?.name === "ask_user")?.functionCall?.id;
+	const askUserCallId = [...pausedState.contents].reverse().find((c) => c.role === "model")?.parts.find((p) => p.functionCall?.name === "ask_user")?.functionCall?.id;
+	const state = {
+		contents: [...pausedState.contents],
+		round: pausedState.round,
+		manualPages: new Map(pausedState.manualPages),
+		webCitations: new Map(pausedState.webCitations)
+	};
 	state.contents.push({
 		role: "user",
 		parts: [{ functionResponse: {
@@ -8534,8 +8568,8 @@ async function expandToParentNotes(hits, vault, referenceChunks) {
 }
 //#endregion
 //#region src/workflow.ts
-async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, onStatus) {
-	const hybridHits = await federatedHybridSearch(indices, query, await embedQuery(query, settings, onStatus), settings);
+async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, onStatus, signal) {
+	const hybridHits = await federatedHybridSearch(indices, query, await embedQuery(query, settings, onStatus, signal), settings);
 	let hits = hybridHits;
 	if (settings.enableFuzzySearchLeg && fuzzyApi) try {
 		hits = mergeWithFuzzy(hybridHits, (await fuzzyApi.search(query, 10)).results, settings.topK, settings.rrfK);
@@ -8544,8 +8578,9 @@ async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, onSta
 }
 async function answerQuestion(params) {
 	const { question, history, settings, vault, indices, fuzzyApi, onStatus, signal } = params;
+	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 	onStatus?.("Durchsuche Handbuch …");
-	const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, onStatus);
+	const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, onStatus, signal);
 	onStatus?.(`Basis-Suche: ${baselineBlocks.length} Seite(n) gefunden`);
 	const result = await runAgentLoop({
 		question,
@@ -8575,6 +8610,7 @@ async function answerQuestion(params) {
 	};
 }
 async function continueAnswer(pending, userAnswer, signal) {
+	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 	const result = await resumeAgentLoop(pending, userAnswer, signal);
 	if (result.status === "awaiting_clarification") return {
 		status: "awaiting_clarification",
@@ -8641,11 +8677,13 @@ async function sendMessage(state, message, deps) {
 }
 async function sendMessageUnguarded(state, message, deps) {
 	const isResuming = state.pendingAgentState !== null;
+	const pendingBeforeSend = state.pendingAgentState;
 	const history = [...state.turns];
-	state.turns.push({
+	const userTurn = {
 		role: "user",
 		text: message
-	});
+	};
+	state.turns.push(userTurn);
 	const assistantTurn = {
 		role: "assistant",
 		text: "",
@@ -8676,16 +8714,61 @@ async function sendMessageUnguarded(state, message, deps) {
 		});
 		applyResult(assistantTurn, state, result);
 	} catch (err) {
+		if (deps.signal?.aborted) {
+			state.turns.splice(state.turns.length - 2, 2);
+			state.pendingAgentState = pendingBeforeSend;
+			deps.onCancelled?.(message);
+			return;
+		}
 		state.pendingAgentState = null;
-		const message = err instanceof Error ? err.message : String(err);
+		const errMessage = err instanceof Error ? err.message : String(err);
 		assistantTurn.status = void 0;
-		assistantTurn.text = `Fehler: ${message}`;
+		assistantTurn.text = `Fehler: ${errMessage}`;
 		assistantTurn.citations = [];
 		assistantTurn.webCitations = [];
 		assistantTurn.webGroundingChunks = [];
 		assistantTurn.webGroundingSupports = [];
-		deps.onError?.(message);
+		deps.onError?.(errMessage);
 	}
+}
+//#endregion
+//#region src/view/confirm-modal.ts
+var ConfirmModal = class extends obsidian.Modal {
+	constructor(app, message, resolveFn) {
+		super(app);
+		this.resolved = false;
+		this.message = message;
+		this.resolveFn = resolveFn;
+	}
+	onOpen() {
+		this.contentEl.createEl("p", { text: this.message });
+		const buttonRow = this.contentEl.createDiv({ cls: "rag-chat-confirm-modal-buttons" });
+		buttonRow.createEl("button", { text: "Nein" }).addEventListener("click", () => {
+			this.settle(false);
+			this.close();
+		});
+		buttonRow.createEl("button", {
+			cls: "mod-warning",
+			text: "Ja"
+		}).addEventListener("click", () => {
+			this.settle(true);
+			this.close();
+		});
+	}
+	onClose() {
+		this.settle(false);
+		this.contentEl.empty();
+	}
+	settle(value) {
+		if (this.resolved) return;
+		this.resolved = true;
+		this.resolveFn(value);
+	}
+};
+function confirmModal(app, message) {
+	return new Promise((resolve) => {
+		new ConfirmModal(app, message, resolve).open();
+	});
 }
 //#endregion
 //#region src/view/fuzzy-search-plugin.ts
@@ -9069,7 +9152,7 @@ var RagChatView = class extends obsidian.ItemView {
 			text: "Chat leeren"
 		});
 		this.registerDomEvent(clearButton, "click", () => {
-			if (confirm("Chat leeren? Der bisherige Verlauf geht verloren.")) this.clearChat();
+			this.handleClearClick();
 		});
 		this.messagesEl = container.createDiv({ cls: "rag-chat-messages" });
 		const clarificationRow = container.createDiv({ cls: "rag-chat-clarification-row" });
@@ -9097,7 +9180,10 @@ var RagChatView = class extends obsidian.ItemView {
 			cls: "rag-chat-send",
 			text: "Fragen"
 		});
-		this.registerDomEvent(this.sendButton, "click", () => void this.handleSend());
+		this.registerDomEvent(this.sendButton, "click", () => {
+			if (this.busy) this.handleCancelClick();
+			else this.handleSend();
+		});
 		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
 		this.updateClarificationAffordance();
 	}
@@ -9119,10 +9205,21 @@ var RagChatView = class extends obsidian.ItemView {
 		this.updateClarificationAffordance();
 		this.inputEl.placeholder = inputPlaceholder(this.session);
 	}
+	async handleClearClick() {
+		const confirmed = await confirmModal(this.app, "Chat leeren? Der bisherige Verlauf geht verloren.");
+		if (this.closed) return;
+		if (confirmed) this.clearChat();
+		this.inputEl.focus();
+	}
 	setBusy(busy) {
 		this.busy = busy;
-		this.sendButton.disabled = busy;
-		this.sendButton.setText(busy ? "..." : "Fragen");
+		this.sendButton.setText(busy ? "Abbrechen" : "Fragen");
+	}
+	async handleCancelClick() {
+		const confirmed = await confirmModal(this.app, "Anfrage wirklich abbrechen?");
+		if (this.closed) return;
+		if (confirmed) this.abortController?.abort();
+		this.inputEl.focus();
 	}
 	updateClarificationAffordance() {
 		this.cancelClarificationButton.toggleClass("rag-chat-hidden", this.session.pendingAgentState === null);
@@ -9139,6 +9236,7 @@ var RagChatView = class extends obsidian.ItemView {
 		const controller = new AbortController();
 		this.abortController = controller;
 		let currentTurn = null;
+		let cancelled = false;
 		try {
 			await sendMessage(this.session, message, {
 				settings: this.plugin.settings,
@@ -9158,12 +9256,21 @@ var RagChatView = class extends obsidian.ItemView {
 				onError: (message) => {
 					if (this.closed) return;
 					new obsidian.Notice(`RAG Chat error: ${message}`);
+				},
+				onCancelled: (originalMessage) => {
+					cancelled = true;
+					if (this.closed) return;
+					unloadAllTurns(this.rendered);
+					this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+					this.inputEl.value = originalMessage;
+					this.inputEl.focus();
+					new obsidian.Notice("Anfrage abgebrochen.");
 				}
 			});
 		} finally {
 			if (this.abortController === controller) this.abortController = null;
 			if (!this.closed) {
-				if (currentTurn) this.syncTurn(currentTurn);
+				if (!cancelled && currentTurn) this.syncTurn(currentTurn);
 				this.updateClarificationAffordance();
 				this.setBusy(false);
 				this.inputEl.placeholder = inputPlaceholder(this.session);

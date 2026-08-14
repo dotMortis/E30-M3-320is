@@ -90,4 +90,12 @@ describe("embedQuery", () => {
     mockRequestUrlSequence([errorResponse(400, "invalid request")]);
     await expect(embedQuery("q", fakeSettings())).rejects.toThrow("Request failed, status 400");
   });
+
+  it("forwards the signal to the retry wrapper, aborting immediately instead of waiting for a response", async () => {
+    requestUrl.mockReturnValueOnce(new Promise(() => {}));
+    const controller = new AbortController();
+    const promise = embedQuery("q", fakeSettings(), undefined, controller.signal);
+    controller.abort();
+    await expect(promise).rejects.toThrow("Anfrage abgebrochen.");
+  });
 });

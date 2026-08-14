@@ -8,7 +8,7 @@ import { mergeWithFuzzy } from "./retrieval/fuzzy-merge";
 import { expandToParentNotes } from "./retrieval/parent-notes";
 import type { CachedIndices, ChatTurn, ContextBlock, FuzzySearchApi, WebCitation } from "./retrieval/types";
 import type { RagChatSettings } from "./settings/types";
-import { FUZZY_LEG_RESULT_LIMIT } from "./constants";
+import { ABORT_ERROR_MESSAGE, FUZZY_LEG_RESULT_LIMIT } from "./constants";
 
 export interface WorkflowParams {
   question: string;
@@ -44,9 +44,10 @@ async function baselineRetrieve(
   indices: CachedIndices,
   fuzzyApi: FuzzySearchApi | null,
   vault: Vault,
-  onStatus?: (status: string) => void
+  onStatus?: (status: string) => void,
+  signal?: AbortSignal
 ): Promise<ContextBlock[]> {
-  const vector = await embedQuery(query, settings, onStatus);
+  const vector = await embedQuery(query, settings, onStatus, signal);
   const hybridHits = await federatedHybridSearch(indices, query, vector, settings);
 
   let hits = hybridHits;
@@ -63,8 +64,11 @@ async function baselineRetrieve(
 export async function answerQuestion(params: WorkflowParams): Promise<WorkflowResult> {
   const { question, history, settings, vault, indices, fuzzyApi, onStatus, signal } = params;
 
+  if (signal?.aborted) {
+    throw new Error(ABORT_ERROR_MESSAGE);
+  }
   onStatus?.("Durchsuche Handbuch …");
-  const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, onStatus);
+  const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, onStatus, signal);
   onStatus?.(`Basis-Suche: ${baselineBlocks.length} Seite(n) gefunden`);
 
   const result = await runAgentLoop({
@@ -92,6 +96,9 @@ export async function continueAnswer(
   userAnswer: string,
   signal?: AbortSignal
 ): Promise<WorkflowResult> {
+  if (signal?.aborted) {
+    throw new Error(ABORT_ERROR_MESSAGE);
+  }
   const result = await resumeAgentLoop(pending, userAnswer, signal);
   if (result.status === "awaiting_clarification") {
     return { status: "awaiting_clarification", question: result.question, pending: result.pending };

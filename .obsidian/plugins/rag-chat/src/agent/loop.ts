@@ -1,3 +1,4 @@
+import { ABORT_ERROR_MESSAGE } from "../constants";
 import { buildHistoryContents } from "../gemini/history";
 import { generateWithTools } from "../gemini/client";
 import type { GeminiContent, GeminiPart } from "../gemini/types";
@@ -16,12 +17,15 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
 
   while (state.round < maxRounds) {
     if (ctx.signal?.aborted) {
-      throw new Error("Anfrage abgebrochen.");
+      throw new Error(ABORT_ERROR_MESSAGE);
     }
     state.round++;
     ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: denke nach …`);
 
-    const result = await generateWithTools(state.contents, declarations, ctx.settings, { onStatus: ctx.onStatus });
+    const result = await generateWithTools(state.contents, declarations, ctx.settings, {
+      onStatus: ctx.onStatus,
+      signal: ctx.signal,
+    });
     mergeGrounding(state.webCitations, result.groundingChunks);
 
     const functionCalls = result.parts
@@ -52,6 +56,9 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
     // would leave the conversation in an invalid state on resume.
     const responseParts: GeminiPart[] = [];
     for (const fc of otherCalls) {
+      if (ctx.signal?.aborted) {
+        throw new Error(ABORT_ERROR_MESSAGE);
+      }
       ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: ${describeCall(fc)} …`);
       let response: Record<string, unknown>;
       try {
@@ -79,6 +86,9 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
     }
   }
 
+  if (ctx.signal?.aborted) {
+    throw new Error(ABORT_ERROR_MESSAGE);
+  }
   ctx.onStatus?.("Werkzeug-Budget erreicht - erstelle abschließende Antwort …");
   state.contents.push({
     role: "user",
@@ -93,6 +103,7 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
   const final = await generateWithTools(state.contents, null, ctx.settings, {
     includeGoogleSearch: false,
     onStatus: ctx.onStatus,
+    signal: ctx.signal,
   });
   mergeGrounding(state.webCitations, final.groundingChunks);
   const text = final.parts.map((p) => p.text ?? "").join("");
@@ -134,16 +145,17 @@ export async function resumeAgentLoop(
   userAnswer: string,
   signal?: AbortSignal
 ): Promise<AgentResult> {
-  const { state, ctx: pausedCtx } = pending;
-  // Use the caller's current abort signal (a fresh one per user-initiated
-  // send) rather than whatever was live when we paused - that one may
-  // already be settled/irrelevant by the time the user answers.
+  const { state: pausedState, ctx: pausedCtx } = pending;
   const ctx: AgentLoopContext = signal ? { ...pausedCtx, signal } : pausedCtx;
-  // Correlate the ask_user functionResponse with its original functionCall's
-  // id (if the model provided one), by finding it in the last "model" turn -
-  // that's where driveLoop pushed it right before pausing.
-  const lastModelContent = [...state.contents].reverse().find((c) => c.role === "model");
+  const lastModelContent = [...pausedState.contents].reverse().find((c) => c.role === "model");
   const askUserCallId = lastModelContent?.parts.find((p) => p.functionCall?.name === "ask_user")?.functionCall?.id;
+
+  const state: AgentLoopState = {
+    contents: [...pausedState.contents],
+    round: pausedState.round,
+    manualPages: new Map(pausedState.manualPages),
+    webCitations: new Map(pausedState.webCitations),
+  };
   state.contents.push({
     role: "user",
     parts: [

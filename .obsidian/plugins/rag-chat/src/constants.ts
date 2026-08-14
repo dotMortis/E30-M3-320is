@@ -51,3 +51,5 @@ export const HTTP_RETRY_JITTER_RATIO = 0.2;
 
 /** How long to wait for a single HTTP request before aborting it, in ms. */
 export const HTTP_REQUEST_TIMEOUT_MS = 30_000;
+
+export const ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";

@@ -282,6 +282,54 @@ describe("runAgentLoop", () => {
     ]);
   });
 
+  it("stops before executing further tool calls in the same round once aborted mid-round", async () => {
+    mockRequestUrlSequence([
+      generateContentResponse({
+        functionCalls: [
+          { name: "search_manual_fuzzy", args: { query: "benzin" } },
+          {
+            name: "get_manual_page",
+            args: { notePath: "16-01.md", seitencode: "16-01", sektion: "Kraftstoff", titel: "Tank" },
+          },
+        ],
+      }),
+    ]);
+    const controller = new AbortController();
+    const readSpy = vi.fn().mockResolvedValue("Seiteninhalt");
+    const throwinglessVault = { getFileByPath: () => ({ path: "16-01.md" }), read: readSpy };
+    const fuzzyApi: FuzzySearchApi = {
+      search: vi.fn().mockImplementation(async () => {
+        controller.abort();
+        return { results: [], correction: null };
+      }),
+    };
+    const ctx = await makeCtx({ fuzzyApi, vault: throwinglessVault as unknown as Vault, signal: controller.signal });
+
+    await expect(runAgentLoop({ question: "Frage?", history: [], baselineBlocks: [], ctx })).rejects.toThrow(
+      "Anfrage abgebrochen."
+    );
+    expect(readSpy).not.toHaveBeenCalled();
+  });
+
+  it("stops before the tools-budget-exhausted fallback call once aborted", async () => {
+    mockRequestUrlSequence([
+      generateContentResponse({ functionCalls: [{ name: "search_manual_fuzzy", args: { query: "a" } }] }),
+    ]);
+    const controller = new AbortController();
+    const fuzzyApi: FuzzySearchApi = {
+      search: vi.fn().mockImplementation(async () => {
+        controller.abort();
+        return { results: [], correction: null };
+      }),
+    };
+    const ctx = await makeCtx({ fuzzyApi, settings: fakeSettings({ maxAgentRounds: 1 }), signal: controller.signal });
+
+    await expect(runAgentLoop({ question: "Frage?", history: [], baselineBlocks: [], ctx })).rejects.toThrow(
+      "Anfrage abgebrochen."
+    );
+    expect(requestUrl).toHaveBeenCalledTimes(1);
+  });
+
   it("snapshots settings at pause time: later mutation of the original settings object does not affect resume", async () => {
     mockRequestUrlSequence([
       generateContentResponse({ functionCalls: [{ name: "ask_user", args: { question: "Welches Baujahr?" } }] }),
@@ -331,9 +379,11 @@ describe("resumeAgentLoop", () => {
     if (paused.status !== "awaiting_clarification") throw new Error("expected awaiting_clarification");
     expect(paused.pending.state.round).toBe(1);
 
-    mockRequestUrlSequence([generateContentResponse({ text: "Zweite Runde Antwort." })]);
-    const resumed = await resumeAgentLoop(paused.pending, "1988");
-    expect(resumed).toMatchObject({ status: "done", text: "Zweite Runde Antwort." });
-    expect(paused.pending.state.round).toBe(2);
+    mockRequestUrlSequence([
+      generateContentResponse({ functionCalls: [{ name: "ask_user", args: { question: "Nochmal?" } }] }),
+    ]);
+    const resumedPause = await resumeAgentLoop(paused.pending, "1988");
+    if (resumedPause.status !== "awaiting_clarification") throw new Error("expected awaiting_clarification");
+    expect(resumedPause.pending.state.round).toBe(2);
   });
 });

@@ -22,7 +22,8 @@ export function validateManifest(manifest: RagManifest, settings: RagChatSetting
 export async function embedQuery(
   query: string,
   settings: RagChatSettings,
-  onStatus?: (status: string) => void
+  onStatus?: (status: string) => void,
+  signal?: AbortSignal
 ): Promise<number[]> {
   if (!settings.geminiApiKey) {
     throw new Error("Google API key (GEMINI_API_KEY) is required for query embeddings - set it in RAG Chat settings.");
@@ -42,7 +43,7 @@ export async function embedQuery(
         outputDimensionality: settings.outputDim,
       }),
     },
-    { onStatus, label: "Embedding" }
+    { onStatus, label: "Embedding", signal }
   );
   const values = response.json?.embedding?.values;
   if (!Array.isArray(values)) {

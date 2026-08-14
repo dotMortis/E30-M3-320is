@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Vault } from "obsidian";
-import { embedContentResponse, mockRequestUrlSequence } from "../mocks/gemini-http";
+import { embedContentResponse, mockRequestUrlSequence, requestUrl } from "../mocks/gemini-http";
 import { resetObsidianMocks } from "../mocks/obsidian";
 import { fakeSettings } from "../fixtures/settings";
 import { buildFakeIndices, fakeRow } from "../fixtures/build-indices";
@@ -54,6 +54,15 @@ describe("executeTool - search_manual", () => {
     const result = await executeTool({ name: "search_manual", args: { query: "Bremse" } }, ctx, freshState());
     expect(Array.isArray(result.hits)).toBe(true);
     expect((result.hits as { notePath: string }[])[0]).toMatchObject({ notePath: "a.md" });
+  });
+
+  it("forwards ctx.signal to the embedding call, aborting immediately instead of waiting for a response", async () => {
+    requestUrl.mockReturnValueOnce(new Promise(() => {}));
+    const controller = new AbortController();
+    const ctx = await makeCtx({ signal: controller.signal });
+    const promise = executeTool({ name: "search_manual", args: { query: "Bremse" } }, ctx, freshState());
+    controller.abort();
+    await expect(promise).rejects.toThrow("Anfrage abgebrochen.");
   });
 });
 

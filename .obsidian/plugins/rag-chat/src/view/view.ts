@@ -8,6 +8,7 @@ import {
   sendMessage,
   type ChatSessionState,
 } from "./controller";
+import { confirmModal } from "./confirm-modal";
 import { getFuzzySearchApi } from "./fuzzy-search-plugin";
 import { appendNewTurns, renderTurns, unloadAllTurns, updateTurn, type RenderTurnsResult } from "./render-turns";
 import type { ChatTurn } from "../retrieval/types";
@@ -61,9 +62,7 @@ export class RagChatView extends ItemView {
     const toolbarRow = container.createDiv({ cls: "rag-chat-toolbar-row" });
     const clearButton = toolbarRow.createEl("button", { cls: "rag-chat-clear-button", text: "Chat leeren" });
     this.registerDomEvent(clearButton, "click", () => {
-      if (confirm("Chat leeren? Der bisherige Verlauf geht verloren.")) {
-        this.clearChat();
-      }
+      void this.handleClearClick();
     });
 
     this.messagesEl = container.createDiv({ cls: "rag-chat-messages" });
@@ -92,7 +91,13 @@ export class RagChatView extends ItemView {
     });
 
     this.sendButton = inputRow.createEl("button", { cls: "rag-chat-send", text: "Fragen" });
-    this.registerDomEvent(this.sendButton, "click", () => void this.handleSend());
+    this.registerDomEvent(this.sendButton, "click", () => {
+      if (this.busy) {
+        void this.handleCancelClick();
+      } else {
+        void this.handleSend();
+      }
+    });
 
     this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
     this.updateClarificationAffordance();
@@ -119,10 +124,23 @@ export class RagChatView extends ItemView {
     this.inputEl.placeholder = inputPlaceholder(this.session);
   }
 
+  private async handleClearClick(): Promise<void> {
+    const confirmed = await confirmModal(this.app, "Chat leeren? Der bisherige Verlauf geht verloren.");
+    if (this.closed) return;
+    if (confirmed) this.clearChat();
+    this.inputEl.focus();
+  }
+
   private setBusy(busy: boolean): void {
     this.busy = busy;
-    this.sendButton.disabled = busy;
-    this.sendButton.setText(busy ? "..." : "Fragen");
+    this.sendButton.setText(busy ? "Abbrechen" : "Fragen");
+  }
+
+  private async handleCancelClick(): Promise<void> {
+    const confirmed = await confirmModal(this.app, "Anfrage wirklich abbrechen?");
+    if (this.closed) return;
+    if (confirmed) this.abortController?.abort();
+    this.inputEl.focus();
   }
 
   private updateClarificationAffordance(): void {
@@ -146,6 +164,7 @@ export class RagChatView extends ItemView {
     this.abortController = controller;
 
     let currentTurn: ChatTurn | null = null;
+    let cancelled = false;
     try {
       await sendMessage(this.session, message, {
         settings: this.plugin.settings,
@@ -166,11 +185,20 @@ export class RagChatView extends ItemView {
           if (this.closed) return;
           new Notice(`RAG Chat error: ${message}`);
         },
+        onCancelled: (originalMessage) => {
+          cancelled = true;
+          if (this.closed) return;
+          unloadAllTurns(this.rendered);
+          this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+          this.inputEl.value = originalMessage;
+          this.inputEl.focus();
+          new Notice("Anfrage abgebrochen.");
+        },
       });
     } finally {
       if (this.abortController === controller) this.abortController = null;
       if (!this.closed) {
-        if (currentTurn) this.syncTurn(currentTurn);
+        if (!cancelled && currentTurn) this.syncTurn(currentTurn);
         this.updateClarificationAffordance();
         this.setBusy(false);
         this.inputEl.placeholder = inputPlaceholder(this.session);

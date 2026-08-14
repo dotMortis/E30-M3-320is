@@ -133,6 +133,46 @@ export class ItemView extends Component {
   async onClose(): Promise<void> {}
 }
 
+export class Modal {
+  static instances: Modal[] = [];
+  app: unknown;
+  containerEl: FakeElement;
+  modalEl: FakeElement;
+  titleEl: FakeElement;
+  contentEl: FakeElement;
+
+  constructor(app: unknown) {
+    this.app = app;
+    this.containerEl = makeEl("div");
+    this.modalEl = this.containerEl.createDiv();
+    this.titleEl = this.modalEl.createDiv();
+    this.contentEl = this.modalEl.createDiv();
+    Modal.instances.push(this);
+  }
+
+  open(): void {
+    void this.onOpen();
+  }
+
+  close(): void {
+    this.onClose();
+  }
+
+  onOpen(): void | Promise<void> {}
+
+  onClose(): void {}
+
+  setTitle(title: string): this {
+    this.titleEl.setText(title);
+    return this;
+  }
+
+  setContent(content: string): this {
+    this.contentEl.setText(content);
+    return this;
+  }
+}
+
 export class PluginSettingTab {
   app: unknown;
   plugin: unknown;
@@ -333,5 +373,6 @@ export const requestUrl = vi.fn(async (_params: unknown): Promise<unknown> => {
 export function resetObsidianMocks(): void {
   Notice.instances = [];
   Setting.instances = [];
+  Modal.instances = [];
   requestUrl.mockReset();
 }

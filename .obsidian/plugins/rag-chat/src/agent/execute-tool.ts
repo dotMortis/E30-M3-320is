@@ -14,7 +14,7 @@ export async function executeTool(
     case "search_manual": {
       const query = String(fc.args?.query ?? "");
       if (!query.trim()) return { error: "query darf nicht leer sein." };
-      const vector = await embedQuery(query, ctx.settings, ctx.onStatus);
+      const vector = await embedQuery(query, ctx.settings, ctx.onStatus, ctx.signal);
       const hits = await federatedHybridSearch(ctx.indices, query, vector, ctx.settings);
       return { hits: toCompactHits(hits) };
     }

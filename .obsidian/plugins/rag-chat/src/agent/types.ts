@@ -9,14 +9,6 @@ export interface AgentLoopContext {
   indices: CachedIndices;
   fuzzyApi: FuzzySearchApi | null;
   onStatus?: (status: string) => void;
-  /**
-   * Checked between rounds so an abandoned request (e.g. the view was
-   * closed) stops making further model/tool calls instead of continuing to
-   * burn API quota for a result nobody will see. Obsidian's `requestUrl` has
-   * no cancellation support, so an already-in-flight HTTP call can't be
-   * aborted mid-flight - this only stops the *next* round/call from
-   * starting.
-   */
   signal?: AbortSignal;
 }
 

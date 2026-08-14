@@ -201,4 +201,12 @@ describe("generateWithTools", () => {
     expect(onStatus).toHaveBeenCalled();
     expect(onStatus.mock.calls[0][0]).toContain("Generierung überlastet");
   });
+
+  it("forwards the signal to the retry wrapper, aborting immediately instead of waiting for a response", async () => {
+    requestUrl.mockReturnValueOnce(new Promise(() => {}));
+    const controller = new AbortController();
+    const promise = generateWithTools(CONTENTS, null, fakeSettings(), { signal: controller.signal });
+    controller.abort();
+    await expect(promise).rejects.toThrow("Anfrage abgebrochen.");
+  });
 });

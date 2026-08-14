@@ -24,6 +24,7 @@ export interface SendMessageDeps {
   onTurnStarted?: (assistantTurn: ChatTurn) => void;
   onStatus?: (status: string) => void;
   onError?: (message: string) => void;
+  onCancelled?: (originalMessage: string) => void;
   signal?: AbortSignal;
 }
 
@@ -80,9 +81,11 @@ export async function sendMessage(state: ChatSessionState, message: string, deps
 
 async function sendMessageUnguarded(state: ChatSessionState, message: string, deps: SendMessageDeps): Promise<void> {
   const isResuming = state.pendingAgentState !== null;
+  const pendingBeforeSend = state.pendingAgentState;
 
   const history = [...state.turns];
-  state.turns.push({ role: "user", text: message });
+  const userTurn: ChatTurn = { role: "user", text: message };
+  state.turns.push(userTurn);
   const assistantTurn: ChatTurn = {
     role: "assistant",
     text: "",
@@ -117,14 +120,20 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
     }
     applyResult(assistantTurn, state, result);
   } catch (err) {
+    if (deps.signal?.aborted) {
+      state.turns.splice(state.turns.length - 2, 2);
+      state.pendingAgentState = pendingBeforeSend;
+      deps.onCancelled?.(message);
+      return;
+    }
     state.pendingAgentState = null;
-    const message = err instanceof Error ? err.message : String(err);
+    const errMessage = err instanceof Error ? err.message : String(err);
     assistantTurn.status = undefined;
-    assistantTurn.text = `Fehler: ${message}`;
+    assistantTurn.text = `Fehler: ${errMessage}`;
     assistantTurn.citations = [];
     assistantTurn.webCitations = [];
     assistantTurn.webGroundingChunks = [];
     assistantTurn.webGroundingSupports = [];
-    deps.onError?.(message);
+    deps.onError?.(errMessage);
   }
 }

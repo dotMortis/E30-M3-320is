@@ -1,5 +1,6 @@
 import { requestUrl, type RequestUrlParam, type RequestUrlResponse } from "obsidian";
 import {
+  ABORT_ERROR_MESSAGE,
   HTTP_MAX_ATTEMPTS,
   HTTP_REQUEST_TIMEOUT_MS,
   HTTP_RETRY_BACKOFF_FACTOR,
@@ -10,8 +11,19 @@ import {
 
 export const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
+  return new Promise((resolve, reject) => {
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(new Error(ABORT_ERROR_MESSAGE));
+    };
+    const timer = setTimeout(() => {
+      signal?.removeEventListener("abort", onAbort);
+      resolve();
+    }, ms);
+    signal?.addEventListener("abort", onAbort, { once: true });
+  });
 }
 
 function extractErrorMessage(response: RequestUrlResponse): string | undefined {
@@ -29,20 +41,25 @@ function extractErrorMessage(response: RequestUrlResponse): string | undefined {
  * instead - the underlying request may keep running in the background, but
  * our caller stops waiting and can retry/fail instead of hanging.
  */
-function requestWithTimeout(params: RequestUrlParam): Promise<RequestUrlResponse> {
+function requestWithTimeout(params: RequestUrlParam, signal?: AbortSignal): Promise<RequestUrlResponse> {
+  if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
   return new Promise((resolve, reject) => {
+    let settled = false;
+    const finish = (fn: () => void) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", onAbort);
+      fn();
+    };
+    const onAbort = () => finish(() => reject(new Error(ABORT_ERROR_MESSAGE)));
     const timer = setTimeout(() => {
-      reject(new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1000}s`));
+      finish(() => reject(new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1000}s`)));
     }, HTTP_REQUEST_TIMEOUT_MS);
+    signal?.addEventListener("abort", onAbort, { once: true });
     requestUrl({ ...params, throw: false }).then(
-      (response) => {
-        clearTimeout(timer);
-        resolve(response);
-      },
-      (err) => {
-        clearTimeout(timer);
-        reject(err);
-      }
+      (response) => finish(() => resolve(response)),
+      (err) => finish(() => reject(err))
     );
   });
 }
@@ -82,16 +99,20 @@ function retryAfterHeaderValue(response: RequestUrlResponse): string | undefined
  */
 export async function requestUrlWithRetry(
   params: RequestUrlParam,
-  opts?: { onStatus?: (status: string) => void; label?: string }
+  opts?: { onStatus?: (status: string) => void; label?: string; signal?: AbortSignal }
 ): Promise<RequestUrlResponse> {
   const label = opts?.label ?? "Anfrage";
+  const signal = opts?.signal;
   let lastResponse: RequestUrlResponse | undefined;
 
   for (let attempt = 1; attempt <= HTTP_MAX_ATTEMPTS; attempt++) {
+    if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
+
     let response: RequestUrlResponse;
     try {
-      response = await requestWithTimeout(params);
+      response = await requestWithTimeout(params, signal);
     } catch (err) {
+      if (signal?.aborted) throw err;
       // Network-level failures (DNS, connection reset, our own timeout,
       // ...) reject the promise entirely rather than resolving with a 4xx/5xx
       // status - retry those too, up to HTTP_MAX_ATTEMPTS.
@@ -103,7 +124,7 @@ export async function requestUrlWithRetry(
       opts?.onStatus?.(
         `${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`
       );
-      await sleep(delay);
+      await sleep(delay, signal);
       continue;
     }
 
@@ -120,7 +141,7 @@ export async function requestUrlWithRetry(
     opts?.onStatus?.(
       `${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`
     );
-    await sleep(delay);
+    await sleep(delay, signal);
   }
 
   throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);

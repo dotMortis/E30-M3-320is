@@ -21,13 +21,15 @@ const answerQuestion = vi.fn();
 const continueAnswer = vi.fn();
 vi.mock("../../workflow", () => ({ answerQuestion, continueAnswer }));
 
+const confirmModal = vi.fn();
+vi.mock("../../view/confirm-modal", () => ({ confirmModal }));
+
 let RagChatView: typeof import("../../view/view").RagChatView;
 let RAG_CHAT_VIEW_TYPE: typeof import("../../view/view").RAG_CHAT_VIEW_TYPE;
 
 beforeEach(async () => {
   resetObsidianMocks();
   vi.clearAllMocks();
-  vi.unstubAllGlobals();
   ({ RagChatView, RAG_CHAT_VIEW_TYPE } = await import("../../view/view"));
 });
 
@@ -120,7 +122,7 @@ describe("RagChatView", () => {
     expect(answerQuestion).not.toHaveBeenCalled();
   });
 
-  it("disables the send button while a request is in flight and re-enables it after", async () => {
+  it("shows Abbrechen on the send button while a request is in flight, then Fragen again after", async () => {
     getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
     let resolveAnswer!: (v: typeof DONE_RESULT) => void;
     answerQuestion.mockReturnValue(new Promise((resolve) => (resolveAnswer = resolve)));
@@ -132,10 +134,11 @@ describe("RagChatView", () => {
     input.value = "Frage?";
     button.dispatch("click");
 
-    await vi.waitFor(() => expect(button.disabled).toBe(true));
+    await vi.waitFor(() => expect(button.text).toBe("Abbrechen"));
+    expect(button.disabled).toBe(false);
 
     resolveAnswer(DONE_RESULT);
-    await vi.waitFor(() => expect(button.disabled).toBe(false));
+    await vi.waitFor(() => expect(button.text).toBe("Fragen"));
   });
 
   it("shows a Notice and an error turn when the workflow throws", async () => {
@@ -292,6 +295,60 @@ describe("RagChatView", () => {
     expect(capturedSignal!.aborted).toBe(true);
   });
 
+  describe("cancel button", () => {
+    it("shows a confirm dialog and, when accepted, aborts the request and reverts the turns and input", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockImplementation(({ signal }: { signal?: AbortSignal }) => {
+        return new Promise((_, reject) => {
+          signal?.addEventListener("abort", () => reject(new Error("Anfrage abgebrochen.")));
+        });
+      });
+      confirmModal.mockResolvedValue(true);
+      const { view } = makeView();
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Wie viel Nm für die Zylinderkopfschrauben?";
+      button.dispatch("click");
+
+      await vi.waitFor(() => expect(answerQuestion).toHaveBeenCalled());
+      button.dispatch("click");
+
+      await vi.waitFor(() => {
+        expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(0);
+      });
+      expect(input.value).toBe("Wie viel Nm für die Zylinderkopfschrauben?");
+      expect(button.text).toBe("Fragen");
+      expect(Notice.instances.some((n) => n.message.includes("abgebrochen"))).toBe(true);
+    });
+
+    it("does not abort the request when the confirm dialog is dismissed", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      let capturedSignal: AbortSignal | undefined;
+      answerQuestion.mockImplementation(({ signal }: { signal?: AbortSignal }) => {
+        capturedSignal = signal;
+        return new Promise(() => {});
+      });
+      confirmModal.mockResolvedValue(false);
+      const { view } = makeView();
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      button.dispatch("click");
+
+      await vi.waitFor(() => expect(capturedSignal).toBeDefined());
+      button.dispatch("click");
+      await vi.waitFor(() => expect(confirmModal).toHaveBeenCalled());
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(capturedSignal!.aborted).toBe(false);
+      expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(2);
+    });
+  });
+
   describe("clearChat", () => {
     it("resets the conversation to empty and re-renders", async () => {
       getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
@@ -339,7 +396,7 @@ describe("RagChatView", () => {
     it("clears the conversation when the confirm dialog is accepted", async () => {
       getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
       answerQuestion.mockResolvedValue(DONE_RESULT);
-      vi.stubGlobal("confirm", vi.fn().mockReturnValue(true));
+      confirmModal.mockResolvedValue(true);
       const { view } = makeView();
       await view.onOpen();
 
@@ -354,13 +411,15 @@ describe("RagChatView", () => {
       const clearButton = fake(view.contentEl).querySelectorAll("button.rag-chat-clear-button")[0];
       clearButton.dispatch("click");
 
-      expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(0);
+      await vi.waitFor(() => {
+        expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(0);
+      });
     });
 
     it("does not clear the conversation when the confirm dialog is dismissed", async () => {
       getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
       answerQuestion.mockResolvedValue(DONE_RESULT);
-      vi.stubGlobal("confirm", vi.fn().mockReturnValue(false));
+      confirmModal.mockResolvedValue(false);
       const { view } = makeView();
       await view.onOpen();
 
@@ -374,6 +433,8 @@ describe("RagChatView", () => {
 
       const clearButton = fake(view.contentEl).querySelectorAll("button.rag-chat-clear-button")[0];
       clearButton.dispatch("click");
+      await vi.waitFor(() => expect(confirmModal).toHaveBeenCalled());
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(2);
     });
