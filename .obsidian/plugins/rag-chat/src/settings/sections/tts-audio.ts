@@ -16,7 +16,6 @@ export function renderTtsAudioSection(
     slider
       .setLimits(0, 1, 0.01)
       .setValue(plugin.settings.ttsVolume)
-      .setDynamicTooltip()
       .onChange(async (value) => {
         ttsPlayback.setVolume(value);
         plugin.settings.ttsVolume = value;
