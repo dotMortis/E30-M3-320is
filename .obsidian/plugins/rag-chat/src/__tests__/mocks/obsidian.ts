@@ -279,6 +279,11 @@ export class ButtonComponent {
     return this.tooltip;
   }
 
+  setDisabled(disabled: boolean): this {
+    this.el.disabled = disabled;
+    return this;
+  }
+
   onClick(fn: (evt: unknown) => void | Promise<void>): this {
     this.clickHandler = fn;
     this.el.addEventListener("click", (evt) => void this.clickHandler?.(evt));
@@ -290,11 +295,59 @@ export class ButtonComponent {
   }
 }
 
+export class DropdownComponent {
+  el: FakeElement;
+  selectEl: FakeElement;
+  value = "";
+  private changeHandler?: (value: string) => void | Promise<void>;
+
+  constructor(containerEl: FakeElement) {
+    this.el = containerEl.createEl("select");
+    this.selectEl = this.el;
+  }
+
+  addOption(value: string, display: string): this {
+    this.selectEl.createEl("option", { attr: { value }, text: display });
+    return this;
+  }
+
+  addOptions(options: Record<string, string>): this {
+    for (const [value, display] of Object.entries(options)) this.addOption(value, display);
+    return this;
+  }
+
+  getValue(): string {
+    return this.value;
+  }
+
+  setValue(value: string): this {
+    this.value = value;
+    this.selectEl.value = value;
+    return this;
+  }
+
+  setDisabled(disabled: boolean): this {
+    this.selectEl.disabled = disabled;
+    return this;
+  }
+
+  onChange(fn: (value: string) => void | Promise<void>): this {
+    this.changeHandler = fn;
+    return this;
+  }
+
+  async triggerChange(value: string): Promise<void> {
+    this.value = value;
+    this.selectEl.value = value;
+    await this.changeHandler?.(value);
+  }
+}
+
 export class Setting {
   static instances: Setting[] = [];
   containerEl: FakeElement;
   settingEl: FakeElement;
-  components: (TextComponent | ToggleComponent | ButtonComponent)[] = [];
+  components: (TextComponent | ToggleComponent | ButtonComponent | DropdownComponent)[] = [];
 
   constructor(containerEl: FakeElement) {
     this.containerEl = containerEl;
@@ -332,7 +385,18 @@ export class Setting {
     cb(component);
     return this;
   }
+
+  addDropdown(cb: (dropdown: DropdownComponent) => void): this {
+    const component = new DropdownComponent(this.settingEl);
+    this.components.push(component);
+    cb(component);
+    return this;
+  }
 }
+
+export const setIcon = vi.fn((el: FakeElement, icon: string): void => {
+  el.setAttribute("data-icon", icon);
+});
 
 export class FileSystemAdapter {
   basePath: string;
@@ -375,4 +439,5 @@ export function resetObsidianMocks(): void {
   Setting.instances = [];
   Modal.instances = [];
   requestUrl.mockReset();
+  setIcon.mockClear();
 }

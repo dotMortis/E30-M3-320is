@@ -39,6 +39,185 @@ var DEFAULT_SETTINGS = {
 	maxAgentRounds: 4
 };
 //#endregion
+//#region src/constants.ts
+/**
+* Cap on how many candidate hits are pulled from each Orama leg (text/vector)
+* before RRF fusion. High enough to not clip real recall on this corpus size,
+* low enough to keep the fusion step cheap. See retrieval/hybrid-search.ts.
+*/
+var CANDIDATE_POOL_LIMIT = 5e3;
+/** Base delay for exponential backoff between retryable HTTP requests, in ms. */
+var HTTP_RETRY_BASE_DELAY_MS = 1e3;
+/** Upper bound on the (unjittered) backoff delay between retries, in ms. */
+var HTTP_RETRY_MAX_DELAY_MS = 16e3;
+/**
+* Maximum jitter (as a fraction of the computed backoff delay) added/removed
+* at random, to avoid thundering-herd retries against the Gemini API.
+*/
+var HTTP_RETRY_JITTER_RATIO = .2;
+/** How long to wait for a single HTTP request before aborting it, in ms. */
+var HTTP_REQUEST_TIMEOUT_MS = 3e4;
+var ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";
+//#endregion
+//#region src/http/retry.ts
+var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
+	429,
+	500,
+	502,
+	503,
+	504
+]);
+function sleep(ms, signal) {
+	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
+	return new Promise((resolve, reject) => {
+		const onAbort = () => {
+			clearTimeout(timer);
+			reject(new Error(ABORT_ERROR_MESSAGE));
+		};
+		const timer = setTimeout(() => {
+			signal?.removeEventListener("abort", onAbort);
+			resolve();
+		}, ms);
+		signal?.addEventListener("abort", onAbort, { once: true });
+	});
+}
+function extractErrorMessage(response) {
+	try {
+		const jsonMsg = response.json?.error?.message;
+		if (typeof jsonMsg === "string" && jsonMsg.trim()) return jsonMsg.trim();
+	} catch {}
+	const text = response.text?.trim();
+	return text ? text.slice(0, 300) : void 0;
+}
+/**
+* Obsidian's `requestUrl` has no built-in timeout or AbortSignal support, so
+* a hung request would otherwise wait forever. We race it against a timer
+* instead - the underlying request may keep running in the background, but
+* our caller stops waiting and can retry/fail instead of hanging.
+*/
+function requestWithTimeout(params, signal) {
+	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
+	return new Promise((resolve, reject) => {
+		let settled = false;
+		const finish = (fn) => {
+			if (settled) return;
+			settled = true;
+			clearTimeout(timer);
+			signal?.removeEventListener("abort", onAbort);
+			fn();
+		};
+		const onAbort = () => finish(() => reject(new Error(ABORT_ERROR_MESSAGE)));
+		const timer = setTimeout(() => {
+			finish(() => reject(/* @__PURE__ */ new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1e3}s`)));
+		}, HTTP_REQUEST_TIMEOUT_MS);
+		signal?.addEventListener("abort", onAbort, { once: true });
+		(0, obsidian.requestUrl)({
+			...params,
+			throw: false
+		}).then((response) => finish(() => resolve(response)), (err) => finish(() => reject(err)));
+	});
+}
+/**
+* Exponential backoff with jitter for attempt N (1-based): base * factor^(N-1),
+* capped, then jittered by +/- HTTP_RETRY_JITTER_RATIO to avoid a thundering
+* herd of retries against the API. When a `Retry-After` header is present
+* (seconds or an HTTP-date), it takes precedence over the computed backoff.
+*/
+function computeDelayMs(attempt, retryAfterHeader) {
+	if (retryAfterHeader) {
+		const seconds = Number(retryAfterHeader);
+		if (!Number.isNaN(seconds)) return Math.max(0, seconds * 1e3);
+		const dateMs = Date.parse(retryAfterHeader);
+		if (!Number.isNaN(dateMs)) return Math.max(0, dateMs - Date.now());
+	}
+	const exponential = HTTP_RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+	const capped = Math.min(exponential, HTTP_RETRY_MAX_DELAY_MS);
+	const jitter = (Math.random() * 2 - 1) * capped * HTTP_RETRY_JITTER_RATIO;
+	return Math.max(0, Math.round(capped + jitter));
+}
+function retryAfterHeaderValue(response) {
+	const headers = response.headers ?? {};
+	return headers["retry-after"] ?? headers["Retry-After"];
+}
+/**
+* Note: retries here are not guaranteed idempotent. If a request actually
+* succeeded server-side (e.g. Gemini generated/billed a response) but the
+* client never saw it (our own timeout, a dropped connection, ...), the
+* retried attempt is a genuinely new call - there's no request-id/idempotency
+* key in play. This is an inherent tradeoff of retrying non-idempotent LLM
+* generation calls, not something fixed by tuning backoff - documented here,
+* not solved.
+*/
+async function requestUrlWithRetry(params, opts) {
+	const label = opts?.label ?? "Anfrage";
+	const signal = opts?.signal;
+	let lastResponse;
+	for (let attempt = 1; attempt <= 3; attempt++) {
+		if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
+		let response;
+		try {
+			response = await requestWithTimeout(params, signal);
+		} catch (err) {
+			if (signal?.aborted) throw err;
+			const message = err instanceof Error ? err.message : String(err);
+			if (attempt === 3) throw new Error(`${label} fehlgeschlagen: ${message}`);
+			const delay = computeDelayMs(attempt);
+			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
+			await sleep(delay, signal);
+			continue;
+		}
+		if (response.status < 400) return response;
+		lastResponse = response;
+		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 3) {
+			const msg = extractErrorMessage(response);
+			throw new Error(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`);
+		}
+		const delay = computeDelayMs(attempt, retryAfterHeaderValue(response));
+		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
+		await sleep(delay, signal);
+	}
+	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
+}
+//#endregion
+//#region src/gemini/models.ts
+var FLASH_NAME_PATTERN = /flash/i;
+var EXCLUDED_NAME_PATTERN = /preview|tts|lite|latest/i;
+var GEMINI_NAME_PATTERN = /gemini/i;
+var LIST_MODELS_PAGE_SIZE = 1e3;
+async function listFlashModels(apiKey, signal) {
+	if (!apiKey) return [];
+	const models = [];
+	let pageToken;
+	try {
+		do {
+			const json = (await requestUrlWithRetry({
+				url: `https://generativelanguage.googleapis.com/v1beta/models?pageSize=${LIST_MODELS_PAGE_SIZE}` + (pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ""),
+				method: "GET",
+				headers: { "x-goog-api-key": apiKey }
+			}, {
+				label: "Modellliste",
+				signal
+			})).json;
+			for (const model of json.models ?? []) {
+				const id = model.name.replace(/^models\//, "");
+				if (!FLASH_NAME_PATTERN.test(id)) continue;
+				if (EXCLUDED_NAME_PATTERN.test(id)) continue;
+				if (!GEMINI_NAME_PATTERN.test(id)) continue;
+				if (!model.supportedGenerationMethods?.includes("generateContent")) continue;
+				models.push({
+					id,
+					displayName: model.displayName ?? id
+				});
+			}
+			pageToken = json.nextPageToken;
+		} while (pageToken);
+	} catch {
+		return [];
+	}
+	models.sort((a, b) => a.id > b.id ? -1 : a.id < b.id ? 1 : 0);
+	return models;
+}
+//#endregion
 //#region src/settings/settings-tab.ts
 var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 	constructor(app, plugin) {
@@ -49,7 +228,7 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 		this.containerEl.empty();
 		const { containerEl } = this;
 		containerEl.createEl("h2", { text: "RAG Chat" });
-		containerEl.createEl("p", { text: "Google (gemini-embedding-2 + gemini-3.6-flash) is used for both query embeddings and generation." });
+		containerEl.createEl("p", { text: "Google (gemini-embedding-2 for embeddings, a selectable Gemini Flash model for generation) is used for both query embeddings and generation." });
 		let apiKeyInputEl;
 		new obsidian.Setting(containerEl).setName("Google API key (GEMINI_API_KEY)").setDesc("Required for query embeddings and generation.").addText((text) => {
 			text.setPlaceholder("AIza...").setValue(this.plugin.settings.geminiApiKey).onChange(async (value) => {
@@ -72,10 +251,40 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 			await this.plugin.saveSettings();
 			await this.plugin.revalidateManifest();
 		}));
-		new obsidian.Setting(containerEl).setName("Generation model").addText((text) => text.setValue(this.plugin.settings.generationModel).onChange(async (value) => {
-			this.plugin.settings.generationModel = value.trim();
-			await this.plugin.saveSettings();
-		}));
+		let modelDropdown;
+		let modelRefreshButton;
+		const refreshModelOptions = async () => {
+			if (!modelDropdown) return;
+			const currentModel = this.plugin.settings.generationModel;
+			modelDropdown.setDisabled(true);
+			modelRefreshButton?.setDisabled(true);
+			const models = await listFlashModels(this.plugin.settings.geminiApiKey);
+			const options = models.some((model) => model.id === currentModel) ? models : [{
+				id: currentModel,
+				displayName: currentModel
+			}, ...models];
+			modelDropdown.selectEl.empty();
+			for (const model of options) modelDropdown.addOption(model.id, model.displayName);
+			modelDropdown.setValue(currentModel);
+			modelDropdown.setDisabled(false);
+			modelRefreshButton?.setDisabled(false);
+		};
+		new obsidian.Setting(containerEl).setName("Generation model").addDropdown((dropdown) => {
+			modelDropdown = dropdown;
+			dropdown.addOption(this.plugin.settings.generationModel, this.plugin.settings.generationModel);
+			dropdown.setValue(this.plugin.settings.generationModel);
+			dropdown.onChange(async (value) => {
+				this.plugin.settings.generationModel = value;
+				await this.plugin.saveSettings();
+			});
+		}).addButton((button) => {
+			modelRefreshButton = button;
+			button.setIcon("refresh-cw").setTooltip("Modellliste aktualisieren");
+			button.onClick(() => {
+				refreshModelOptions();
+			});
+		});
+		refreshModelOptions();
 		new obsidian.Setting(containerEl).setName("Output dimensions").setDesc("Must match rag-manifest.json's embeddingDims (3072 - full-fidelity, no truncation).").addText((text) => text.setValue(String(this.plugin.settings.outputDim)).onChange(async (value) => {
 			const n = parseInt(value, 10);
 			if (!Number.isNaN(n) && n > 0) {
@@ -7840,26 +8049,6 @@ function clearIndicesCache() {
 	cachedPromise = null;
 }
 //#endregion
-//#region src/constants.ts
-/**
-* Cap on how many candidate hits are pulled from each Orama leg (text/vector)
-* before RRF fusion. High enough to not clip real recall on this corpus size,
-* low enough to keep the fusion step cheap. See retrieval/hybrid-search.ts.
-*/
-var CANDIDATE_POOL_LIMIT = 5e3;
-/** Base delay for exponential backoff between retryable HTTP requests, in ms. */
-var HTTP_RETRY_BASE_DELAY_MS = 1e3;
-/** Upper bound on the (unjittered) backoff delay between retries, in ms. */
-var HTTP_RETRY_MAX_DELAY_MS = 16e3;
-/**
-* Maximum jitter (as a fraction of the computed backoff delay) added/removed
-* at random, to avoid thundering-herd retries against the Gemini API.
-*/
-var HTTP_RETRY_JITTER_RATIO = .2;
-/** How long to wait for a single HTTP request before aborting it, in ms. */
-var HTTP_REQUEST_TIMEOUT_MS = 3e4;
-var ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";
-//#endregion
 //#region src/gemini/history.ts
 function buildHistoryContents(history) {
 	return history.map((t) => ({
@@ -7869,126 +8058,6 @@ function buildHistoryContents(history) {
 		role: t.role === "assistant" ? "model" : "user",
 		parts: [{ text: t.text }]
 	}));
-}
-//#endregion
-//#region src/http/retry.ts
-var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
-	429,
-	500,
-	502,
-	503,
-	504
-]);
-function sleep(ms, signal) {
-	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
-	return new Promise((resolve, reject) => {
-		const onAbort = () => {
-			clearTimeout(timer);
-			reject(new Error(ABORT_ERROR_MESSAGE));
-		};
-		const timer = setTimeout(() => {
-			signal?.removeEventListener("abort", onAbort);
-			resolve();
-		}, ms);
-		signal?.addEventListener("abort", onAbort, { once: true });
-	});
-}
-function extractErrorMessage(response) {
-	try {
-		const jsonMsg = response.json?.error?.message;
-		if (typeof jsonMsg === "string" && jsonMsg.trim()) return jsonMsg.trim();
-	} catch {}
-	const text = response.text?.trim();
-	return text ? text.slice(0, 300) : void 0;
-}
-/**
-* Obsidian's `requestUrl` has no built-in timeout or AbortSignal support, so
-* a hung request would otherwise wait forever. We race it against a timer
-* instead - the underlying request may keep running in the background, but
-* our caller stops waiting and can retry/fail instead of hanging.
-*/
-function requestWithTimeout(params, signal) {
-	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
-	return new Promise((resolve, reject) => {
-		let settled = false;
-		const finish = (fn) => {
-			if (settled) return;
-			settled = true;
-			clearTimeout(timer);
-			signal?.removeEventListener("abort", onAbort);
-			fn();
-		};
-		const onAbort = () => finish(() => reject(new Error(ABORT_ERROR_MESSAGE)));
-		const timer = setTimeout(() => {
-			finish(() => reject(/* @__PURE__ */ new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1e3}s`)));
-		}, HTTP_REQUEST_TIMEOUT_MS);
-		signal?.addEventListener("abort", onAbort, { once: true });
-		(0, obsidian.requestUrl)({
-			...params,
-			throw: false
-		}).then((response) => finish(() => resolve(response)), (err) => finish(() => reject(err)));
-	});
-}
-/**
-* Exponential backoff with jitter for attempt N (1-based): base * factor^(N-1),
-* capped, then jittered by +/- HTTP_RETRY_JITTER_RATIO to avoid a thundering
-* herd of retries against the API. When a `Retry-After` header is present
-* (seconds or an HTTP-date), it takes precedence over the computed backoff.
-*/
-function computeDelayMs(attempt, retryAfterHeader) {
-	if (retryAfterHeader) {
-		const seconds = Number(retryAfterHeader);
-		if (!Number.isNaN(seconds)) return Math.max(0, seconds * 1e3);
-		const dateMs = Date.parse(retryAfterHeader);
-		if (!Number.isNaN(dateMs)) return Math.max(0, dateMs - Date.now());
-	}
-	const exponential = HTTP_RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
-	const capped = Math.min(exponential, HTTP_RETRY_MAX_DELAY_MS);
-	const jitter = (Math.random() * 2 - 1) * capped * HTTP_RETRY_JITTER_RATIO;
-	return Math.max(0, Math.round(capped + jitter));
-}
-function retryAfterHeaderValue(response) {
-	const headers = response.headers ?? {};
-	return headers["retry-after"] ?? headers["Retry-After"];
-}
-/**
-* Note: retries here are not guaranteed idempotent. If a request actually
-* succeeded server-side (e.g. Gemini generated/billed a response) but the
-* client never saw it (our own timeout, a dropped connection, ...), the
-* retried attempt is a genuinely new call - there's no request-id/idempotency
-* key in play. This is an inherent tradeoff of retrying non-idempotent LLM
-* generation calls, not something fixed by tuning backoff - documented here,
-* not solved.
-*/
-async function requestUrlWithRetry(params, opts) {
-	const label = opts?.label ?? "Anfrage";
-	const signal = opts?.signal;
-	let lastResponse;
-	for (let attempt = 1; attempt <= 3; attempt++) {
-		if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-		let response;
-		try {
-			response = await requestWithTimeout(params, signal);
-		} catch (err) {
-			if (signal?.aborted) throw err;
-			const message = err instanceof Error ? err.message : String(err);
-			if (attempt === 3) throw new Error(`${label} fehlgeschlagen: ${message}`);
-			const delay = computeDelayMs(attempt);
-			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
-			await sleep(delay, signal);
-			continue;
-		}
-		if (response.status < 400) return response;
-		lastResponse = response;
-		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 3) {
-			const msg = extractErrorMessage(response);
-			throw new Error(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`);
-		}
-		const delay = computeDelayMs(attempt, retryAfterHeaderValue(response));
-		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
-		await sleep(delay, signal);
-	}
-	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
 }
 //#endregion
 //#region src/agent/tool-declarations.ts
@@ -9147,7 +9216,21 @@ var RagChatView = class extends obsidian.ItemView {
 		const container = this.contentEl;
 		container.empty();
 		container.addClass("rag-chat-container");
-		const clearButton = container.createDiv({ cls: "rag-chat-toolbar-row" }).createEl("button", {
+		const toolbarRow = container.createDiv({ cls: "rag-chat-toolbar-row" });
+		const modelControls = toolbarRow.createDiv({ cls: "rag-chat-model-controls" });
+		this.modelSelectEl = modelControls.createEl("select", { cls: "rag-chat-model-select" });
+		this.registerDomEvent(this.modelSelectEl, "change", () => {
+			this.handleModelChange();
+		});
+		this.modelRefreshButton = modelControls.createEl("button", {
+			cls: "rag-chat-model-refresh",
+			attr: { "aria-label": "Modellliste aktualisieren" }
+		});
+		(0, obsidian.setIcon)(this.modelRefreshButton, "refresh-cw");
+		this.registerDomEvent(this.modelRefreshButton, "click", () => {
+			this.refreshModelOptions();
+		});
+		const clearButton = toolbarRow.createEl("button", {
 			cls: "rag-chat-clear-button",
 			text: "Chat leeren"
 		});
@@ -9186,6 +9269,7 @@ var RagChatView = class extends obsidian.ItemView {
 		});
 		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
 		this.updateClarificationAffordance();
+		this.refreshModelOptions();
 	}
 	async onClose() {
 		this.closed = true;
@@ -9214,6 +9298,33 @@ var RagChatView = class extends obsidian.ItemView {
 	setBusy(busy) {
 		this.busy = busy;
 		this.sendButton.setText(busy ? "Abbrechen" : "Fragen");
+		this.modelSelectEl.disabled = busy;
+		this.modelRefreshButton.disabled = busy;
+	}
+	async refreshModelOptions() {
+		const currentModel = this.plugin.settings.generationModel;
+		this.modelSelectEl.disabled = true;
+		this.modelRefreshButton.disabled = true;
+		const models = await listFlashModels(this.plugin.settings.geminiApiKey);
+		if (this.closed) return;
+		const options = models.some((model) => model.id === currentModel) ? models : [{
+			id: currentModel,
+			displayName: currentModel
+		}, ...models];
+		this.modelSelectEl.empty();
+		for (const model of options) this.modelSelectEl.createEl("option", {
+			attr: { value: model.id },
+			text: model.displayName
+		});
+		this.modelSelectEl.value = currentModel;
+		this.modelSelectEl.disabled = this.busy;
+		this.modelRefreshButton.disabled = this.busy;
+	}
+	async handleModelChange() {
+		const value = this.modelSelectEl.value;
+		if (!value || value === this.plugin.settings.generationModel) return;
+		this.plugin.settings.generationModel = value;
+		await this.plugin.saveSettings();
 	}
 	async handleCancelClick() {
 		const confirmed = await confirmModal(this.app, "Anfrage wirklich abbrechen?");

@@ -6,9 +6,28 @@
 
 .rag-chat-toolbar-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding: 6px 8px;
   border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.rag-chat-model-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rag-chat-model-select {
+  font-size: var(--font-ui-smaller);
+  max-width: 220px;
+}
+
+.rag-chat-model-refresh {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
 }
 
 .rag-chat-clear-button {

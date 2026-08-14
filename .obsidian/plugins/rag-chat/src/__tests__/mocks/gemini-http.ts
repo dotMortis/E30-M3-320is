@@ -79,6 +79,16 @@ export function errorResponse(status: number, message: string): FakeRequestUrlRe
   return fakeResponse(status, { error: { message } });
 }
 
+export interface ListModelsModelSpec {
+  name: string;
+  displayName?: string;
+  supportedGenerationMethods?: string[];
+}
+
+export function listModelsResponse(models: ListModelsModelSpec[], nextPageToken?: string): FakeRequestUrlResponse {
+  return fakeResponse(200, { models, ...(nextPageToken ? { nextPageToken } : {}) });
+}
+
 export function mockRequestUrlSequence(responses: FakeRequestUrlResponse[]): void {
   for (const response of responses) {
     requestUrl.mockResolvedValueOnce(response);
