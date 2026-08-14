@@ -9,20 +9,43 @@ import {
   HTTP_REQUEST_TIMEOUT_MS,
   HTTP_RETRY_BACKOFF_FACTOR,
   HTTP_RETRY_BASE_DELAY_MS,
+  HTTP_RETRY_COUNTDOWN_TICK_MS,
   HTTP_RETRY_JITTER_RATIO,
   HTTP_RETRY_MAX_DELAY_MS,
 } from "../constants";
 
 export const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
 
-function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+/**
+ * Waits `ms` milliseconds. When `onTick` is provided, calls it immediately
+ * and then every `HTTP_RETRY_COUNTDOWN_TICK_MS` with the actual remaining
+ * time (ceiling-rounded to whole seconds, never below 1 while still
+ * waiting) so a caller-displayed "erneuter Versuch in Ns" counts down live
+ * instead of staying frozen at the initial estimate for the whole delay.
+ */
+function sleep(
+  ms: number,
+  signal?: AbortSignal,
+  onTick?: (remainingSeconds: number) => void,
+): Promise<void> {
   if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
   return new Promise((resolve, reject) => {
+    const start = Date.now();
+    const emitTick = () => {
+      const remainingMs = ms - (Date.now() - start);
+      if (remainingMs > 0) onTick?.(Math.ceil(remainingMs / 1000));
+    };
+    emitTick();
+    const interval = onTick
+      ? setInterval(emitTick, HTTP_RETRY_COUNTDOWN_TICK_MS)
+      : undefined;
     const onAbort = () => {
+      if (interval) clearInterval(interval);
       clearTimeout(timer);
       reject(new Error(ABORT_ERROR_MESSAGE));
     };
     const timer = setTimeout(() => {
+      if (interval) clearInterval(interval);
       signal?.removeEventListener("abort", onAbort);
       resolve();
     }, ms);
@@ -141,10 +164,14 @@ export async function requestUrlWithRetry(
         throw new Error(`${label} fehlgeschlagen: ${message}`);
       }
       const delay = computeDelayMs(attempt);
-      opts?.onStatus?.(
-        `${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
+      await sleep(delay, signal, (seconds) =>
+        opts?.onStatus?.(
+          `${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
+        ),
       );
-      await sleep(delay, signal);
+      opts?.onStatus?.(
+        `${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
+      );
       continue;
     }
 
@@ -160,10 +187,14 @@ export async function requestUrlWithRetry(
     }
 
     const delay = computeDelayMs(attempt, retryAfterHeaderValue(response));
-    opts?.onStatus?.(
-      `${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
+    await sleep(delay, signal, (seconds) =>
+      opts?.onStatus?.(
+        `${label} überlastet (Status ${response.status}) – erneuter Versuch in ${seconds}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
+      ),
     );
-    await sleep(delay, signal);
+    opts?.onStatus?.(
+      `${label} überlastet (Status ${response.status}) – erneuter Versuch (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
+    );
   }
 
   throw new Error(

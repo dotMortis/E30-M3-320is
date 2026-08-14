@@ -74,20 +74,49 @@ describe("requestUrlWithRetry", () => {
     await vi.advanceTimersByTimeAsync(4000);
     await promise;
 
-    expect(onStatus).toHaveBeenCalledTimes(1);
+    expect(onStatus).toHaveBeenCalled();
     expect(onStatus.mock.calls[0][0]).toContain("Embedding überlastet (Status 429)");
   });
 
-  it("throws after exhausting MAX_ATTEMPTS (3) retryable failures", async () => {
+  it("counts down the remaining seconds live during the retry wait instead of staying frozen", async () => {
     vi.useFakeTimers();
-    mockRequestUrlSequence([errorResponse(503, "a"), errorResponse(503, "b"), errorResponse(503, "c")]);
+    const rateLimited = fakeResponse(429, { error: { message: "rate limited" } });
+    rateLimited.headers = { "retry-after": "3" };
+    mockRequestUrlSequence([rateLimited, fakeResponse(200, {})]);
+    const onStatus = vi.fn();
+
+    const promise = requestUrlWithRetry({ url: "https://example.com" }, { onStatus });
+    await vi.advanceTimersByTimeAsync(1000);
+    await vi.advanceTimersByTimeAsync(1000);
+    await vi.advanceTimersByTimeAsync(1000);
+    await promise;
+
+    const messages = onStatus.mock.calls.map((call) => call[0] as string);
+    expect(messages[0]).toContain("in 3s");
+    expect(messages.some((m) => m.includes("in 2s"))).toBe(true);
+    expect(messages.some((m) => m.includes("in 1s"))).toBe(true);
+    // Never shows a misleading "in 0s" while still waiting.
+    expect(messages.some((m) => m.includes("in 0s"))).toBe(false);
+  });
+
+  it("throws after exhausting all HTTP_MAX_ATTEMPTS (5) retryable failures", async () => {
+    vi.useFakeTimers();
+    mockRequestUrlSequence([
+      errorResponse(503, "a"),
+      errorResponse(503, "b"),
+      errorResponse(503, "c"),
+      errorResponse(503, "d"),
+      errorResponse(503, "e"),
+    ]);
 
     const promise = requestUrlWithRetry({ url: "https://example.com" });
-    const expectation = expect(promise).rejects.toThrow("Request failed, status 503: c");
-    await vi.advanceTimersByTimeAsync(8000);
+    const expectation = expect(promise).rejects.toThrow("Request failed, status 503: e");
+    // Worst case (with jitter) across the 4 backoff sleeps between 5 attempts
+    // is ~18s (1.2s + 2.4s + 4.8s + 9.6s), so 20s comfortably covers it.
+    await vi.advanceTimersByTimeAsync(20_000);
     await expectation;
 
-    expect(requestUrl).toHaveBeenCalledTimes(3);
+    expect(requestUrl).toHaveBeenCalledTimes(5);
   });
 
   it("falls back to a text snippet when the error body isn't valid JSON", async () => {
@@ -115,16 +144,16 @@ describe("requestUrlWithRetry", () => {
     expect(requestUrl).toHaveBeenCalledTimes(2);
   });
 
-  it("gives up after MAX_ATTEMPTS network-level rejections with a descriptive error", async () => {
+  it("gives up after HTTP_MAX_ATTEMPTS (5) network-level rejections with a descriptive error", async () => {
     vi.useFakeTimers();
     requestUrl.mockRejectedValue(new Error("connection reset"));
 
     const promise = requestUrlWithRetry({ url: "https://example.com" }, { label: "Generierung" });
     const expectation = expect(promise).rejects.toThrow("Generierung fehlgeschlagen: connection reset");
-    await vi.advanceTimersByTimeAsync(8000);
+    await vi.advanceTimersByTimeAsync(20_000);
     await expectation;
 
-    expect(requestUrl).toHaveBeenCalledTimes(3);
+    expect(requestUrl).toHaveBeenCalledTimes(5);
   });
 
   it("times out and retries a request that never resolves", async () => {

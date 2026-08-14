@@ -1,13 +1,13 @@
 import { ABORT_ERROR_MESSAGE } from "../constants";
-import { buildHistoryContents } from "../gemini/history";
 import { generateWithTools } from "../gemini/client";
+import { buildHistoryContents } from "../gemini/history";
 import type { GeminiContent, GeminiPart } from "../gemini/types";
 import { buildContextXml, escapeXml } from "../retrieval/context-xml";
 import type { ChatTurn, ContextBlock } from "../retrieval/types";
 import { executeTool } from "./execute-tool";
 import {
-  describeCall,
   describeBudgetExhausted,
+  describeCall,
   describeClarification,
   describeFinalAnswer,
   describeRoundDecision,
@@ -17,9 +17,17 @@ import {
 } from "./status-text";
 import { NOOP_STEP_REPORTER } from "./step-reporter";
 import { FUNCTION_DECLARATIONS } from "./tool-declarations";
-import type { AgentLoopContext, AgentLoopState, AgentResult, PendingAgentState } from "./types";
+import type {
+  AgentLoopContext,
+  AgentLoopState,
+  AgentResult,
+  PendingAgentState,
+} from "./types";
 
-async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<AgentResult> {
+async function driveLoop(
+  state: AgentLoopState,
+  ctx: AgentLoopContext,
+): Promise<AgentResult> {
   const maxRounds = ctx.settings.maxAgentRounds;
   const reporter = ctx.reporter ?? NOOP_STEP_REPORTER;
   const declarations = ctx.settings.enableFuzzySearchLeg
@@ -38,14 +46,25 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
       model: ctx.settings.generationModel,
     });
 
-    const result = await generateWithTools(state.contents, declarations, ctx.settings, {
-      onStatus: (status) => reporter.update(roundStep, { title: status }),
-      signal: ctx.signal,
-    });
+    const result = await generateWithTools(
+      state.contents,
+      declarations,
+      ctx.settings,
+      {
+        onStatus: (status) => reporter.update(roundStep, { title: status }),
+        signal: ctx.signal,
+      },
+    );
     mergeGrounding(state.webCitations, result.groundingChunks);
 
     const functionCalls = result.parts
-      .filter((p): p is GeminiPart & { functionCall: NonNullable<GeminiPart["functionCall"]> } => Boolean(p.functionCall))
+      .filter(
+        (
+          p,
+        ): p is GeminiPart & {
+          functionCall: NonNullable<GeminiPart["functionCall"]>;
+        } => Boolean(p.functionCall),
+      )
       .map((p) => p.functionCall);
 
     reporter.finish(roundStep, {
@@ -95,7 +114,8 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
         title: describeCall(fc),
         toolName: fc.name,
         toolArgs: fc.args,
-        model: fc.name === "search_manual" ? ctx.settings.embeddingModel : undefined,
+        model:
+          fc.name === "search_manual" ? ctx.settings.embeddingModel : undefined,
       });
       let response: Record<string, unknown>;
       try {
@@ -112,19 +132,31 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
           narration: describeToolNarration(fc, response),
         });
       }
-      responseParts.push({ functionResponse: { ...(fc.id ? { id: fc.id } : {}), name: fc.name, response } });
+      responseParts.push({
+        functionResponse: {
+          ...(fc.id ? { id: fc.id } : {}),
+          name: fc.name,
+          response,
+        },
+      });
     }
     if (responseParts.length > 0) {
       state.contents.push({ role: "user", parts: responseParts });
     }
 
     if (askUserCall) {
-      const question = String(askUserCall.args?.question ?? "Kannst du das bitte genauer beschreiben?");
+      const question = String(
+        askUserCall.args?.question ??
+          "Kannst du das bitte genauer beschreiben?",
+      );
       reporter.record({
         kind: "clarification",
         round: state.round,
         title: `Rückfrage an Nutzer: "${question}"`,
-        narration: describeClarification(question, otherCalls.map((fc) => fc.name)),
+        narration: describeClarification(
+          question,
+          otherCalls.map((fc) => fc.name),
+        ),
       });
       // Snapshot settings at the moment we pause: `ctx.settings` is normally
       // a live reference to the plugin's mutable settings object, which
@@ -132,8 +164,15 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
       // edit the API key or topK in the settings tab mid-clarification).
       // Freezing a shallow copy here means resumeAgentLoop continues with
       // the settings that were in effect when the question was asked.
-      const pendingCtx: AgentLoopContext = { ...ctx, settings: { ...ctx.settings } };
-      return { status: "awaiting_clarification", question, pending: { state, ctx: pendingCtx } };
+      const pendingCtx: AgentLoopContext = {
+        ...ctx,
+        settings: { ...ctx.settings },
+      };
+      return {
+        status: "awaiting_clarification",
+        question,
+        pending: { state, ctx: pendingCtx },
+      };
     }
   }
 
@@ -196,7 +235,9 @@ export interface RunAgentLoopParams {
   ctx: AgentLoopContext;
 }
 
-export async function runAgentLoop(params: RunAgentLoopParams): Promise<AgentResult> {
+export async function runAgentLoop(
+  params: RunAgentLoopParams,
+): Promise<AgentResult> {
   const { question, history, baselineBlocks, ctx } = params;
 
   const manualPages = new Map<string, ContextBlock>();
@@ -205,22 +246,38 @@ export async function runAgentLoop(params: RunAgentLoopParams): Promise<AgentRes
   const contextXml = buildContextXml(baselineBlocks);
   const contents: GeminiContent[] = [
     ...buildHistoryContents(history),
-    { role: "user", parts: [{ text: `${contextXml}\n\n<question>\n${escapeXml(question)}\n</question>` }] },
+    {
+      role: "user",
+      parts: [
+        {
+          text: `${contextXml}\n\n<question>\n${escapeXml(question)}\n</question>`,
+        },
+      ],
+    },
   ];
 
-  const state: AgentLoopState = { contents, round: 0, manualPages, webCitations: new Map() };
+  const state: AgentLoopState = {
+    contents,
+    round: 0,
+    manualPages,
+    webCitations: new Map(),
+  };
   return driveLoop(state, ctx);
 }
 
 export async function resumeAgentLoop(
   pending: PendingAgentState,
   userAnswer: string,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<AgentResult> {
   const { state: pausedState, ctx: pausedCtx } = pending;
   const ctx: AgentLoopContext = signal ? { ...pausedCtx, signal } : pausedCtx;
-  const lastModelContent = [...pausedState.contents].reverse().find((c) => c.role === "model");
-  const askUserCallId = lastModelContent?.parts.find((p) => p.functionCall?.name === "ask_user")?.functionCall?.id;
+  const lastModelContent = [...pausedState.contents]
+    .reverse()
+    .find((c) => c.role === "model");
+  const askUserCallId = lastModelContent?.parts.find(
+    (p) => p.functionCall?.name === "ask_user",
+  )?.functionCall?.id;
 
   const state: AgentLoopState = {
     contents: [...pausedState.contents],

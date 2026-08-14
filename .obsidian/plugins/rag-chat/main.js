@@ -57,6 +57,8 @@ var HTTP_RETRY_MAX_DELAY_MS = 16e3;
 var HTTP_RETRY_JITTER_RATIO = .2;
 /** How long to wait for a single HTTP request before aborting it, in ms. */
 var HTTP_REQUEST_TIMEOUT_MS = 3e4;
+/** How often the retry backoff countdown (onStatus's "erneuter Versuch in Ns") ticks, in ms. */
+var HTTP_RETRY_COUNTDOWN_TICK_MS = 1e3;
 var ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";
 //#endregion
 //#region src/http/retry.ts
@@ -67,14 +69,30 @@ var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
 	503,
 	504
 ]);
-function sleep(ms, signal) {
+/**
+* Waits `ms` milliseconds. When `onTick` is provided, calls it immediately
+* and then every `HTTP_RETRY_COUNTDOWN_TICK_MS` with the actual remaining
+* time (ceiling-rounded to whole seconds, never below 1 while still
+* waiting) so a caller-displayed "erneuter Versuch in Ns" counts down live
+* instead of staying frozen at the initial estimate for the whole delay.
+*/
+function sleep(ms, signal, onTick) {
 	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
 	return new Promise((resolve, reject) => {
+		const start = Date.now();
+		const emitTick = () => {
+			const remainingMs = ms - (Date.now() - start);
+			if (remainingMs > 0) onTick?.(Math.ceil(remainingMs / 1e3));
+		};
+		emitTick();
+		const interval = onTick ? setInterval(emitTick, HTTP_RETRY_COUNTDOWN_TICK_MS) : void 0;
 		const onAbort = () => {
+			if (interval) clearInterval(interval);
 			clearTimeout(timer);
 			reject(new Error(ABORT_ERROR_MESSAGE));
 		};
 		const timer = setTimeout(() => {
+			if (interval) clearInterval(interval);
 			signal?.removeEventListener("abort", onAbort);
 			resolve();
 		}, ms);
@@ -152,7 +170,7 @@ async function requestUrlWithRetry(params, opts) {
 	const label = opts?.label ?? "Anfrage";
 	const signal = opts?.signal;
 	let lastResponse;
-	for (let attempt = 1; attempt <= 3; attempt++) {
+	for (let attempt = 1; attempt <= 5; attempt++) {
 		if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 		let response;
 		try {
@@ -160,21 +178,19 @@ async function requestUrlWithRetry(params, opts) {
 		} catch (err) {
 			if (signal?.aborted) throw err;
 			const message = err instanceof Error ? err.message : String(err);
-			if (attempt === 3) throw new Error(`${label} fehlgeschlagen: ${message}`);
-			const delay = computeDelayMs(attempt);
-			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
-			await sleep(delay, signal);
+			if (attempt === 5) throw new Error(`${label} fehlgeschlagen: ${message}`);
+			await sleep(computeDelayMs(attempt), signal, (seconds) => opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
+			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/5) …`);
 			continue;
 		}
 		if (response.status < 400) return response;
 		lastResponse = response;
-		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 3) {
+		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 5) {
 			const msg = extractErrorMessage(response);
 			throw new Error(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`);
 		}
-		const delay = computeDelayMs(attempt, retryAfterHeaderValue(response));
-		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1e3)}s (${attempt}/3) …`);
-		await sleep(delay, signal);
+		await sleep(computeDelayMs(attempt, retryAfterHeaderValue(response)), signal, (seconds) => opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
+		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch (${attempt}/5) …`);
 	}
 	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
 }
@@ -8156,17 +8172,6 @@ function describeFinalAnswer(text, manualCitations, webCitations) {
 	return `Antwort erstellt (${text.trim().length} Zeichen) mit ${manualCitations.length} Handbuch-Zitat(en) und ${webCitations.length} Web-Zitat(en).`;
 }
 //#endregion
-//#region src/gemini/history.ts
-function buildHistoryContents(history) {
-	return history.map((t) => ({
-		...t,
-		text: t.text.trim()
-	})).filter((t) => t.text.length > 0).map((t) => ({
-		role: t.role === "assistant" ? "model" : "user",
-		parts: [{ text: t.text }]
-	}));
-}
-//#endregion
 //#region src/agent/tool-declarations.ts
 var FUNCTION_DECLARATIONS = [
 	{
@@ -8344,6 +8349,17 @@ async function generateWithTools(contents, functionDeclarations, settings, opts)
 		})),
 		finishReason: candidate?.finishReason
 	};
+}
+//#endregion
+//#region src/gemini/history.ts
+function buildHistoryContents(history) {
+	return history.map((t) => ({
+		...t,
+		text: t.text.trim()
+	})).filter((t) => t.text.length > 0).map((t) => ({
+		role: t.role === "assistant" ? "model" : "user",
+		parts: [{ text: t.text }]
+	}));
 }
 //#endregion
 //#region src/retrieval/context-xml.ts
