@@ -18,7 +18,7 @@ export async function generateWithToolsStreaming(
 ): Promise<GenerateWithToolsResult> {
   requireApiKey(settings.geminiApiKey);
   const url = modelUrl(settings.generationModel, "streamGenerateContent?alt=sse");
-  const body = buildGenerateBody(contents, functionDeclarations, opts);
+  const body = buildGenerateBody(contents, functionDeclarations, settings.generationModel, opts);
 
   const parts: GeminiPart[] = [];
   let groundingChunks: GroundingChunk[] = [];

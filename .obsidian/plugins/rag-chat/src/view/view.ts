@@ -282,6 +282,10 @@ export class RagChatView extends ItemView {
           if (this.closed || !currentTurn) return;
           this.syncTurnLive(currentTurn);
         },
+        onShortAnswerReady: (turn) => {
+          if (this.closed) return;
+          this.speech.beginStreamingSpeech(turn, turn.ttsShortAnswer ?? "", controller.signal);
+        },
         onError: (message) => {
           if (this.closed) return;
           new Notice(`RAG Chat error: ${message}`);

@@ -4,6 +4,7 @@ import type { RagChatSettings } from "../settings/types";
 import { blockReasonMessage } from "./block-reason";
 import { buildGenerateBody, modelUrl, requireApiKey, type GenerateOpts } from "./request-body";
 import { mapGroundingChunks, mapGroundingSupports } from "./response";
+import { buildThinkingConfig } from "./thinking-config";
 import type { FunctionDeclaration, GenerateWithToolsResult, GeminiContent } from "./types";
 
 export async function generateWithTools(
@@ -17,7 +18,7 @@ export async function generateWithTools(
 ): Promise<GenerateWithToolsResult> {
   requireApiKey(settings.geminiApiKey);
   const url = modelUrl(settings.generationModel, "generateContent");
-  const body = buildGenerateBody(contents, functionDeclarations, opts);
+  const body = buildGenerateBody(contents, functionDeclarations, settings.generationModel, opts);
 
   const response = await requestUrlWithRetry(
     {
@@ -55,7 +56,7 @@ export async function generatePlainText(
   const url = modelUrl(settings.generationModel, "generateContent");
   const body: Record<string, unknown> = {
     contents,
-    generationConfig: { thinkingConfig: { thinkingBudget: 0 } },
+    generationConfig: buildThinkingConfig(settings.generationModel, false),
   };
 
   const response = await requestUrlWithRetry(

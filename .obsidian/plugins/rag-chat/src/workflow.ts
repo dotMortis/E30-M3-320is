@@ -22,12 +22,14 @@ export interface WorkflowParams {
   reporter?: StepReporter;
 
   onTextDelta?: (text: string) => void;
+  onShortAnswerReady?: (text: string) => void;
   signal?: AbortSignal;
 }
 
 export interface WorkflowDone {
   status: "done";
   text: string;
+  shortAnswer?: string;
   manualCitations: ContextBlock[];
   webCitations: WebCitation[];
   webGroundingChunks: GroundingChunk[];
@@ -49,6 +51,7 @@ function toWorkflowResult(result: AgentResult): WorkflowResult {
   return {
     status: "done",
     text: result.text,
+    shortAnswer: result.shortAnswer,
     manualCitations: result.manualCitations,
     webCitations: result.webCitations,
     webGroundingChunks: result.webGroundingChunks,
@@ -102,7 +105,8 @@ async function baselineRetrieve(
 }
 
 export async function answerQuestion(params: WorkflowParams): Promise<WorkflowResult> {
-  const { question, history, settings, vault, indices, fuzzyApi, reporter, onTextDelta, signal } = params;
+  const { question, history, settings, vault, indices, fuzzyApi, reporter, onTextDelta, onShortAnswerReady, signal } =
+    params;
 
   if (signal?.aborted) {
     throw new Error(ABORT_ERROR_MESSAGE);
@@ -114,7 +118,7 @@ export async function answerQuestion(params: WorkflowParams): Promise<WorkflowRe
     question,
     history,
     baselineBlocks,
-    ctx: { settings, vault, indices, fuzzyApi, reporter: rep, onTextDelta, signal },
+    ctx: { settings, vault, indices, fuzzyApi, reporter: rep, onTextDelta, onShortAnswerReady, signal },
   });
   return toWorkflowResult(result);
 }

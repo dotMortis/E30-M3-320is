@@ -1,3 +1,4 @@
+import { splitAnswerBlocks } from "../gemini/answer-blocks";
 import { generateWithToolsStreaming } from "../gemini/generate-stream";
 import type { FunctionDeclaration, GeminiPart } from "../gemini/types";
 import { describeRoundDecision, mergeGrounding } from "./status-text";
@@ -21,12 +22,19 @@ export async function runModelRound(
   });
 
   let roundText = "";
+  let shortAnswerSent = false;
   const result = await generateWithToolsStreaming(state.contents, declarations, ctx.settings, {
     includeGoogleSearch: ctx.settings.webSearchEnabled,
-    thinkingEnabled: ctx.settings.thinkingEnabled || ctx.settings.webSearchEnabled,
+    thinkingEnabled: ctx.settings.thinkingEnabled,
+    ttsRequested: ctx.settings.ttsEnabled,
     onDelta: (chunk) => {
       roundText += chunk;
-      ctx.onTextDelta?.(roundText);
+      const blocks = splitAnswerBlocks(roundText);
+      if (blocks.shortAnswerComplete && !shortAnswerSent) {
+        shortAnswerSent = true;
+        ctx.onShortAnswerReady?.(blocks.shortAnswer ?? "");
+      }
+      ctx.onTextDelta?.(blocks.answer);
     },
     onStatus: (status) => reporter.update(roundStep, { title: status }),
     signal: ctx.signal,

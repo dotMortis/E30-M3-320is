@@ -19,6 +19,7 @@ function errText(err: unknown): string {
 
 export class TurnSpeech {
   private playingTurn: ChatTurn | null = null;
+  private readonly speculativeAudio = new WeakMap<ChatTurn, Promise<string | null>>();
 
   constructor(private readonly host: TurnSpeechHost) {}
 
@@ -29,6 +30,12 @@ export class TurnSpeech {
   stop(): void {
     ttsPlayback.stop();
     this.playingTurn = null;
+  }
+
+  beginStreamingSpeech(turn: ChatTurn, shortText: string, signal?: AbortSignal): void {
+    if (!this.host.plugin().settings.ttsEnabled || !shortText) return;
+    const promise = synthesizeSpeech(shortText, this.host.plugin().settings, { signal }).catch(() => null);
+    this.speculativeAudio.set(turn, promise);
   }
 
   async handleSpeakClick(turn: ChatTurn): Promise<void> {
@@ -50,8 +57,7 @@ export class TurnSpeech {
     turn.ttsStatus = "generating";
     this.host.syncTurn(turn);
     try {
-      const shortText = await buildShortAnswer(turn.text, this.host.plugin().settings, { signal });
-      const audio = await synthesizeSpeech(shortText, this.host.plugin().settings, { signal });
+      const { shortText, audio } = await this.resolveSpeech(turn, signal);
       await recordCharsUsed(this.host.plugin(), shortText.length);
       if (this.host.isClosed()) return;
       turn.ttsText = shortText;
@@ -66,6 +72,20 @@ export class TurnSpeech {
         new Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${errText(err)}).`);
       }
     }
+  }
+
+  private async resolveSpeech(
+    turn: ChatTurn,
+    signal?: AbortSignal
+  ): Promise<{ shortText: string; audio: string }> {
+    if (turn.ttsShortAnswer) {
+      const speculative = await this.speculativeAudio.get(turn);
+      const audio = speculative ?? (await synthesizeSpeech(turn.ttsShortAnswer, this.host.plugin().settings, { signal }));
+      return { shortText: turn.ttsShortAnswer, audio };
+    }
+    const shortText = await buildShortAnswer(turn.text, this.host.plugin().settings, { signal });
+    const audio = await synthesizeSpeech(shortText, this.host.plugin().settings, { signal });
+    return { shortText, audio };
   }
 
   private async playTurnAudio(turn: ChatTurn, audioBase64: string): Promise<void> {

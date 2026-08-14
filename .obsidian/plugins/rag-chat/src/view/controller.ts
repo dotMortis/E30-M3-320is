@@ -22,6 +22,7 @@ export interface SendMessageDeps {
   onStep?: (step: PipelineStep) => void;
 
   onTextDelta?: () => void;
+  onShortAnswerReady?: (assistantTurn: ChatTurn) => void;
   onError?: (message: string) => void;
   onCancelled?: (originalMessage: string) => void;
 
@@ -79,6 +80,10 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
     assistantTurn.streamingText = text || undefined;
     deps.onTextDelta?.();
   };
+  const onShortAnswerReady = (text: string) => {
+    assistantTurn.ttsShortAnswer = text;
+    deps.onShortAnswerReady?.(assistantTurn);
+  };
 
   try {
     let result: WorkflowResult;
@@ -87,6 +92,7 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
       state.pendingAgentState = null;
       pending.ctx.reporter = reporter;
       pending.ctx.onTextDelta = onTextDelta;
+      pending.ctx.onShortAnswerReady = onShortAnswerReady;
       result = await continueAnswer(pending, message, deps.signal);
     } else {
       result = await answerQuestion({
@@ -98,6 +104,7 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
         fuzzyApi: deps.getFuzzyApi(),
         reporter,
         onTextDelta,
+        onShortAnswerReady,
         signal: deps.signal,
       });
     }

@@ -108,6 +108,7 @@ export interface ChatTurn {
   retry?: { message: string; pendingBefore: PendingAgentState | null };
 
   ttsText?: string;
+  ttsShortAnswer?: string;
 
   ttsAudioBase64?: string;
   ttsStatus?: "generating" | "ready" | "error";

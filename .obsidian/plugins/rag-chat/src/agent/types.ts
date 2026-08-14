@@ -12,6 +12,7 @@ export interface AgentLoopContext {
   reporter?: StepReporter;
 
   onTextDelta?: (text: string) => void;
+  onShortAnswerReady?: (text: string) => void;
   signal?: AbortSignal;
 }
 
@@ -30,6 +31,7 @@ export interface PendingAgentState {
 export interface AgentDone {
   status: "done";
   text: string;
+  shortAnswer?: string;
   manualCitations: ContextBlock[];
   webCitations: WebCitation[];
   webGroundingChunks: GroundingChunk[];

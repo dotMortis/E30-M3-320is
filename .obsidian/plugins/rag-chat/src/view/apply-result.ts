@@ -19,6 +19,7 @@ export function applyResult(turn: ChatTurn, state: ChatSessionState, result: Wor
     clearCitations(turn);
   } else {
     turn.text = result.text.trim() || "Ich habe leider keine Antwort erhalten.";
+    turn.ttsShortAnswer = result.shortAnswer;
     turn.isClarifying = false;
     turn.citations = result.manualCitations;
     turn.webCitations = result.webCitations;

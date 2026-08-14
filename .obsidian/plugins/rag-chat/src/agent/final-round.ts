@@ -1,3 +1,4 @@
+import { extractFinalAnswer, splitAnswerBlocks } from "../gemini/answer-blocks";
 import { generateWithToolsStreaming } from "../gemini/generate-stream";
 import { describeBudgetExhausted, describeFinalAnswer, mergeGrounding } from "./status-text";
 import type { StepReporter } from "./step-reporter";
@@ -30,19 +31,26 @@ export async function runForcedFinalRound(
   });
 
   let finalRoundText = "";
+  let shortAnswerSent = false;
   const final = await generateWithToolsStreaming(state.contents, null, ctx.settings, {
     includeGoogleSearch: false,
     thinkingEnabled: ctx.settings.thinkingEnabled,
+    ttsRequested: ctx.settings.ttsEnabled,
     onDelta: (chunk) => {
       finalRoundText += chunk;
-      ctx.onTextDelta?.(finalRoundText);
+      const blocks = splitAnswerBlocks(finalRoundText);
+      if (blocks.shortAnswerComplete && !shortAnswerSent) {
+        shortAnswerSent = true;
+        ctx.onShortAnswerReady?.(blocks.shortAnswer ?? "");
+      }
+      ctx.onTextDelta?.(blocks.answer);
     },
     onStatus: (status) => reporter.update(finalStep, { title: status }),
     signal: ctx.signal,
   });
   mergeGrounding(state.webCitations, final.groundingChunks);
 
-  const text = final.parts.map((p) => p.text ?? "").join("");
+  const { text, shortAnswer } = extractFinalAnswer(final.parts.map((p) => p.text ?? "").join(""));
   const manualCitations = [...state.manualPages.values()];
   const webCitations = [...state.webCitations.values()];
   reporter.finish(finalStep, { title: "Erzwungene finale Antwort erhalten" });
@@ -57,6 +65,7 @@ export async function runForcedFinalRound(
   return {
     status: "done",
     text,
+    shortAnswer,
     manualCitations,
     webCitations,
     webGroundingChunks: final.groundingChunks,

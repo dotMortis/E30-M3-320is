@@ -113,6 +113,31 @@ describe("RagChatView", () => {
       expect(buildShortAnswer).not.toHaveBeenCalled();
     });
 
+    it("starts synthesizing speech as soon as the model streams a short answer, before the turn is done", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      synthesizeSpeech.mockResolvedValue("base64audio");
+      answerQuestion.mockImplementation(async (params: any) => {
+        params.onShortAnswerReady?.("Kurze Antwort.");
+        return { ...DONE_RESULT, shortAnswer: "Kurze Antwort." };
+      });
+
+      const { view, plugin } = makeView();
+      plugin.settings.ttsEnabled = true;
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      button.dispatch("click");
+
+      await vi.waitFor(() =>
+        expect(synthesizeSpeech).toHaveBeenCalledWith("Kurze Antwort.", plugin.settings, expect.anything())
+      );
+      await vi.waitFor(() => expect(ttsPlaybackMock.play).toHaveBeenCalledWith("base64audio", expect.anything()));
+      expect(buildShortAnswer).not.toHaveBeenCalled();
+      expect(synthesizeSpeech).toHaveBeenCalledTimes(1);
+    });
+
     it("replays cached audio on a second speaker-button click without re-synthesizing", async () => {
       getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
       answerQuestion.mockResolvedValue(DONE_RESULT);

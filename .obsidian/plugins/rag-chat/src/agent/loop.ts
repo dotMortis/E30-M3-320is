@@ -1,4 +1,5 @@
 import { ABORT_ERROR_MESSAGE } from "../constants";
+import { extractFinalAnswer } from "../gemini/answer-blocks";
 import type { GenerateWithToolsResult, GeminiPart } from "../gemini/types";
 import type { ChatTurn, ContextBlock } from "../retrieval/types";
 import { appendClarificationAnswer, buildInitialState, cloneState } from "./conversation";
@@ -22,7 +23,7 @@ function finalAnswer(
   result: GenerateWithToolsResult,
   reporter: StepReporter,
 ): AgentResult {
-  const text = result.parts.map((p) => p.text ?? "").join("");
+  const { text, shortAnswer } = extractFinalAnswer(result.parts.map((p) => p.text ?? "").join(""));
   const manualCitations = [...state.manualPages.values()];
   const webCitations = [...state.webCitations.values()];
   reporter.record({
@@ -35,6 +36,7 @@ function finalAnswer(
   return {
     status: "done",
     text,
+    shortAnswer,
     manualCitations,
     webCitations,
     webGroundingChunks: result.groundingChunks,

@@ -8597,6 +8597,51 @@ function describeFinalAnswer(text, manualCitations, webCitations) {
 	return `Antwort erstellt (${text.trim().length} Zeichen) mit ${manualCitations.length} Handbuch-Zitat(en) und ${webCitations.length} Web-Zitat(en).`;
 }
 //#endregion
+//#region src/gemini/answer-blocks.ts
+var SHORT_ANSWER_START = "%%%SHORT_ANSWER_START%%%";
+var SHORT_ANSWER_END = "%%%SHORT_ANSWER_END%%%";
+var ANSWER_START = "%%%ANSWER_START%%%";
+var ANSWER_END = "%%%ANSWER_END%%%";
+function stripAnswerMarkers(text) {
+	return text.replace(ANSWER_START, "").replace(ANSWER_END, "").trim();
+}
+function removeAll(text, marker) {
+	return text.split(marker).join("");
+}
+function stripAllMarkers(text) {
+	return [
+		SHORT_ANSWER_START,
+		SHORT_ANSWER_END,
+		ANSWER_START,
+		ANSWER_END
+	].reduce(removeAll, text).trim();
+}
+function splitAnswerBlocks(text) {
+	const shortStartIdx = text.indexOf(SHORT_ANSWER_START);
+	if (shortStartIdx === -1) return {
+		shortAnswerComplete: false,
+		answer: stripAnswerMarkers(text)
+	};
+	const shortEndIdx = text.indexOf(SHORT_ANSWER_END, shortStartIdx + 24);
+	if (shortEndIdx === -1) return {
+		shortAnswerComplete: false,
+		answer: ""
+	};
+	return {
+		shortAnswer: text.slice(shortStartIdx + 24, shortEndIdx).trim(),
+		shortAnswerComplete: true,
+		answer: stripAnswerMarkers(text.slice(shortEndIdx + 22))
+	};
+}
+function extractFinalAnswer(fullText) {
+	const blocks = splitAnswerBlocks(fullText);
+	if (blocks.shortAnswerComplete) return {
+		text: blocks.answer,
+		shortAnswer: blocks.shortAnswer
+	};
+	return { text: stripAllMarkers(fullText) };
+}
+//#endregion
 //#region src/gemini/history.ts
 function buildHistoryContents(history) {
 	return history.map((t) => ({
@@ -8852,7 +8897,18 @@ var FUNCTION_DECLARATIONS = [
 ];
 //#endregion
 //#region src/gemini/prompts.ts
-function SYSTEM_PROMPT(includeGoogleSearch) {
+var TTS_ANSWER_FORMAT_CLAUSE = `
+
+Wenn du jetzt direkt antwortest (keinen Funktionsaufruf tätigst), formatiere deine Antwort exakt so:
+${SHORT_ANSWER_START}
+Eine sehr kurze, gesprochen-taugliche Zusammenfassung in 1-2 Sätzen. Exakte Zahlen und Einheiten
+unverändert übernehmen, aber keine Zitatmarker, keine Seitencodes, keine Markdown-Symbole.
+${SHORT_ANSWER_END}
+${ANSWER_START}
+Die vollständige Antwort wie oben beschrieben, inklusive Zitaten und Markdown.
+${ANSWER_END}
+Tätigst du stattdessen einen Funktionsaufruf, lass dieses Format komplett weg.`;
+function SYSTEM_PROMPT(includeGoogleSearch, ttsRequested = false) {
 	return `Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
 
 Antworte kurz und klar: nur das, was zur Beantwortung der Frage nötig ist. Wiederhole die Frage nicht,
@@ -8882,7 +8938,7 @@ Struktur jeder Antwort:
    hin, dass die Werksangabe (falls in Abschnitt 1 vorhanden) Vorrang hat und ungeprüfte Werte nicht
    ohne Weiteres übernommen werden sollten.${includeGoogleSearch ? "\n3. Nenne bei Web-Quellen die URL bzw. Domain, damit sie nachvollziehbar sind." : ""}
 
-Antworte auf Deutsch.`;
+Antworte auf Deutsch.${ttsRequested ? TTS_ANSWER_FORMAT_CLAUSE : ""}`;
 }
 function toolParamNames(decl) {
 	const properties = decl.parameters?.properties;
@@ -8901,21 +8957,30 @@ function buildToolsSuffix(functionDeclarations, includeGoogleSearch) {
 	return "\n\nDir stehen für diese Anfrage folgende Werkzeuge zur Verfügung:\n" + lines.join("\n") + "\n\nDir steht pro Frage nur ein begrenztes Budget an Werkzeug-Aufrufen zur Verfügung (in der Regel wenige Runden) - suche gezielt und effizient, nicht plan- und ziellos. Wird das Budget aufgebraucht, antworte direkt mit dem, was du bis dahin gefunden hast.";
 }
 //#endregion
+//#region src/gemini/thinking-config.ts
+var GEMINI_3_PATTERN = /^gemini-3/i;
+function buildThinkingConfig(model, thinkingEnabled) {
+	if (thinkingEnabled) return void 0;
+	if (GEMINI_3_PATTERN.test(model)) return { thinkingConfig: { thinkingLevel: "low" } };
+	return { thinkingConfig: { thinkingBudget: 0 } };
+}
+//#endregion
 //#region src/gemini/request-body.ts
-function buildGenerateBody(contents, functionDeclarations, opts) {
+function buildGenerateBody(contents, functionDeclarations, model, opts) {
 	const includeGoogleSearch = opts?.includeGoogleSearch === true;
 	const tools = [];
 	if (includeGoogleSearch) tools.push({ google_search: {} });
 	if (functionDeclarations && functionDeclarations.length > 0) tools.push({ functionDeclarations });
 	const body = {
-		systemInstruction: { parts: [{ text: SYSTEM_PROMPT(includeGoogleSearch) + buildToolsSuffix(functionDeclarations, includeGoogleSearch) }] },
+		systemInstruction: { parts: [{ text: SYSTEM_PROMPT(includeGoogleSearch, opts?.ttsRequested === true) + buildToolsSuffix(functionDeclarations, includeGoogleSearch) }] },
 		contents
 	};
 	if (tools.length > 0) {
 		body.tools = tools;
-		body.toolConfig = { includeServerSideToolInvocations: true };
+		if (includeGoogleSearch && functionDeclarations && functionDeclarations.length > 0) body.toolConfig = { includeServerSideToolInvocations: true };
 	}
-	if (opts?.thinkingEnabled !== true) body.generationConfig = { thinkingConfig: { thinkingBudget: 0 } };
+	const thinkingConfig = buildThinkingConfig(model, opts?.thinkingEnabled === true || includeGoogleSearch);
+	if (thinkingConfig) body.generationConfig = thinkingConfig;
 	return body;
 }
 function modelUrl(model, method) {
@@ -8945,7 +9010,7 @@ function mapGroundingSupports(rawSupports) {
 async function generateWithToolsStreaming(contents, functionDeclarations, settings, opts) {
 	requireApiKey(settings.geminiApiKey);
 	const url = modelUrl(settings.generationModel, "streamGenerateContent?alt=sse");
-	const body = buildGenerateBody(contents, functionDeclarations, opts);
+	const body = buildGenerateBody(contents, functionDeclarations, settings.generationModel, opts);
 	const parts = [];
 	let groundingChunks = [];
 	let groundingSupports = [];
@@ -9016,18 +9081,25 @@ async function runForcedFinalRound(state, ctx, maxRounds, reporter) {
 		model: ctx.settings.generationModel
 	});
 	let finalRoundText = "";
+	let shortAnswerSent = false;
 	const final = await generateWithToolsStreaming(state.contents, null, ctx.settings, {
 		includeGoogleSearch: false,
 		thinkingEnabled: ctx.settings.thinkingEnabled,
+		ttsRequested: ctx.settings.ttsEnabled,
 		onDelta: (chunk) => {
 			finalRoundText += chunk;
-			ctx.onTextDelta?.(finalRoundText);
+			const blocks = splitAnswerBlocks(finalRoundText);
+			if (blocks.shortAnswerComplete && !shortAnswerSent) {
+				shortAnswerSent = true;
+				ctx.onShortAnswerReady?.(blocks.shortAnswer ?? "");
+			}
+			ctx.onTextDelta?.(blocks.answer);
 		},
 		onStatus: (status) => reporter.update(finalStep, { title: status }),
 		signal: ctx.signal
 	});
 	mergeGrounding(state.webCitations, final.groundingChunks);
-	const text = final.parts.map((p) => p.text ?? "").join("");
+	const { text, shortAnswer } = extractFinalAnswer(final.parts.map((p) => p.text ?? "").join(""));
 	const manualCitations = [...state.manualPages.values()];
 	const webCitations = [...state.webCitations.values()];
 	reporter.finish(finalStep, { title: "Erzwungene finale Antwort erhalten" });
@@ -9041,6 +9113,7 @@ async function runForcedFinalRound(state, ctx, maxRounds, reporter) {
 	return {
 		status: "done",
 		text,
+		shortAnswer,
 		manualCitations,
 		webCitations,
 		webGroundingChunks: final.groundingChunks,
@@ -9057,12 +9130,19 @@ async function runModelRound(state, ctx, declarations, maxRounds, reporter) {
 		model: ctx.settings.generationModel
 	});
 	let roundText = "";
+	let shortAnswerSent = false;
 	const result = await generateWithToolsStreaming(state.contents, declarations, ctx.settings, {
 		includeGoogleSearch: ctx.settings.webSearchEnabled,
-		thinkingEnabled: ctx.settings.thinkingEnabled || ctx.settings.webSearchEnabled,
+		thinkingEnabled: ctx.settings.thinkingEnabled,
+		ttsRequested: ctx.settings.ttsEnabled,
 		onDelta: (chunk) => {
 			roundText += chunk;
-			ctx.onTextDelta?.(roundText);
+			const blocks = splitAnswerBlocks(roundText);
+			if (blocks.shortAnswerComplete && !shortAnswerSent) {
+				shortAnswerSent = true;
+				ctx.onShortAnswerReady?.(blocks.shortAnswer ?? "");
+			}
+			ctx.onTextDelta?.(blocks.answer);
 		},
 		onStatus: (status) => reporter.update(roundStep, { title: status }),
 		signal: ctx.signal
@@ -9277,7 +9357,7 @@ function activeDeclarations(ctx) {
 	return ctx.settings.enableFuzzySearchLeg ? FUNCTION_DECLARATIONS : FUNCTION_DECLARATIONS.filter((d) => d.name !== "search_manual_fuzzy");
 }
 function finalAnswer(state, ctx, result, reporter) {
-	const text = result.parts.map((p) => p.text ?? "").join("");
+	const { text, shortAnswer } = extractFinalAnswer(result.parts.map((p) => p.text ?? "").join(""));
 	const manualCitations = [...state.manualPages.values()];
 	const webCitations = [...state.webCitations.values()];
 	reporter.record({
@@ -9290,6 +9370,7 @@ function finalAnswer(state, ctx, result, reporter) {
 	return {
 		status: "done",
 		text,
+		shortAnswer,
 		manualCitations,
 		webCitations,
 		webGroundingChunks: result.groundingChunks,
@@ -9427,6 +9508,7 @@ function toWorkflowResult(result) {
 	return {
 		status: "done",
 		text: result.text,
+		shortAnswer: result.shortAnswer,
 		manualCitations: result.manualCitations,
 		webCitations: result.webCitations,
 		webGroundingChunks: result.webGroundingChunks,
@@ -9468,7 +9550,7 @@ async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, repor
 	return expandToParentNotes(hits, vault, indices.referenceChunks);
 }
 async function answerQuestion(params) {
-	const { question, history, settings, vault, indices, fuzzyApi, reporter, onTextDelta, signal } = params;
+	const { question, history, settings, vault, indices, fuzzyApi, reporter, onTextDelta, onShortAnswerReady, signal } = params;
 	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 	const rep = reporter ?? NOOP_STEP_REPORTER;
 	return toWorkflowResult(await runAgentLoop({
@@ -9482,6 +9564,7 @@ async function answerQuestion(params) {
 			fuzzyApi,
 			reporter: rep,
 			onTextDelta,
+			onShortAnswerReady,
 			signal
 		}
 	}));
@@ -9508,6 +9591,7 @@ function applyResult(turn, state, result) {
 		clearCitations(turn);
 	} else {
 		turn.text = result.text.trim() || "Ich habe leider keine Antwort erhalten.";
+		turn.ttsShortAnswer = result.shortAnswer;
 		turn.isClarifying = false;
 		turn.citations = result.manualCitations;
 		turn.webCitations = result.webCitations;
@@ -9570,6 +9654,10 @@ async function sendMessageUnguarded(state, message, deps) {
 		assistantTurn.streamingText = text || void 0;
 		deps.onTextDelta?.();
 	};
+	const onShortAnswerReady = (text) => {
+		assistantTurn.ttsShortAnswer = text;
+		deps.onShortAnswerReady?.(assistantTurn);
+	};
 	try {
 		let result;
 		if (isResuming && state.pendingAgentState) {
@@ -9577,6 +9665,7 @@ async function sendMessageUnguarded(state, message, deps) {
 			state.pendingAgentState = null;
 			pending.ctx.reporter = reporter;
 			pending.ctx.onTextDelta = onTextDelta;
+			pending.ctx.onShortAnswerReady = onShortAnswerReady;
 			result = await continueAnswer(pending, message, deps.signal);
 		} else result = await answerQuestion({
 			question: message,
@@ -9587,6 +9676,7 @@ async function sendMessageUnguarded(state, message, deps) {
 			fuzzyApi: deps.getFuzzyApi(),
 			reporter,
 			onTextDelta,
+			onShortAnswerReady,
 			signal: deps.signal
 		});
 		applyResult(assistantTurn, state, result);
@@ -10262,7 +10352,7 @@ async function generatePlainText(contents, settings, opts) {
 	const url = modelUrl(settings.generationModel, "generateContent");
 	const body = {
 		contents,
-		generationConfig: { thinkingConfig: { thinkingBudget: 0 } }
+		generationConfig: buildThinkingConfig(settings.generationModel, false)
 	};
 	const json = readResponseJson(await requestUrlWithRetry({
 		url,
@@ -10312,6 +10402,7 @@ var TurnSpeech = class {
 	constructor(host) {
 		this.host = host;
 		this.playingTurn = null;
+		this.speculativeAudio = /* @__PURE__ */ new WeakMap();
 	}
 	isSpeaking(turn) {
 		return this.playingTurn === turn;
@@ -10319,6 +10410,11 @@ var TurnSpeech = class {
 	stop() {
 		stop();
 		this.playingTurn = null;
+	}
+	beginStreamingSpeech(turn, shortText, signal) {
+		if (!this.host.plugin().settings.ttsEnabled || !shortText) return;
+		const promise = synthesizeSpeech(shortText, this.host.plugin().settings, { signal }).catch(() => null);
+		this.speculativeAudio.set(turn, promise);
 	}
 	async handleSpeakClick(turn) {
 		if (this.playingTurn === turn) {
@@ -10338,8 +10434,7 @@ var TurnSpeech = class {
 		turn.ttsStatus = "generating";
 		this.host.syncTurn(turn);
 		try {
-			const shortText = await buildShortAnswer(turn.text, this.host.plugin().settings, { signal });
-			const audio = await synthesizeSpeech(shortText, this.host.plugin().settings, { signal });
+			const { shortText, audio } = await this.resolveSpeech(turn, signal);
 			await recordCharsUsed(this.host.plugin(), shortText.length);
 			if (this.host.isClosed()) return;
 			turn.ttsText = shortText;
@@ -10354,6 +10449,20 @@ var TurnSpeech = class {
 				new obsidian.Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${errText(err)}).`);
 			}
 		}
+	}
+	async resolveSpeech(turn, signal) {
+		if (turn.ttsShortAnswer) {
+			const audio = await this.speculativeAudio.get(turn) ?? await synthesizeSpeech(turn.ttsShortAnswer, this.host.plugin().settings, { signal });
+			return {
+				shortText: turn.ttsShortAnswer,
+				audio
+			};
+		}
+		const shortText = await buildShortAnswer(turn.text, this.host.plugin().settings, { signal });
+		return {
+			shortText,
+			audio: await synthesizeSpeech(shortText, this.host.plugin().settings, { signal })
+		};
 	}
 	async playTurnAudio(turn, audioBase64) {
 		setOnEnded(() => {
@@ -10670,6 +10779,10 @@ var RagChatView = class extends obsidian.ItemView {
 				onTextDelta: () => {
 					if (this.closed || !currentTurn) return;
 					this.syncTurnLive(currentTurn);
+				},
+				onShortAnswerReady: (turn) => {
+					if (this.closed) return;
+					this.speech.beginStreamingSpeech(turn, turn.ttsShortAnswer ?? "", controller.signal);
 				},
 				onError: (message) => {
 					if (this.closed) return;

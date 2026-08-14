@@ -106,6 +106,28 @@ describe("sendMessage", () => {
     expect(state.pendingAgentState).toBe(pending);
   });
 
+  it("sets ttsShortAnswer on the assistant turn from a 'done' result", async () => {
+    answerQuestion.mockResolvedValue({ ...DONE_RESULT, shortAnswer: "Kurze Antwort." });
+    const state = createChatSessionState();
+    await sendMessage(state, "Frage?", baseDeps);
+    expect(state.turns[1].ttsShortAnswer).toBe("Kurze Antwort.");
+  });
+
+  it("calls deps.onShortAnswerReady with the assistant turn as soon as the workflow streams a short answer", async () => {
+    answerQuestion.mockImplementation(async (params) => {
+      params.onShortAnswerReady?.("Kurze Antwort.");
+      return { ...DONE_RESULT, shortAnswer: "Kurze Antwort." };
+    });
+    const state = createChatSessionState();
+    const onShortAnswerReady = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onShortAnswerReady });
+
+    expect(onShortAnswerReady).toHaveBeenCalledTimes(1);
+    const turn = onShortAnswerReady.mock.calls[0][0];
+    expect(turn).toBe(state.turns[1]);
+    expect(turn.ttsShortAnswer).toBe("Kurze Antwort.");
+  });
+
   it("uses continueAnswer instead of answerQuestion when a pending clarification exists", async () => {
     const pending = { state: {}, ctx: {} } as any;
     continueAnswer.mockResolvedValue(DONE_RESULT);

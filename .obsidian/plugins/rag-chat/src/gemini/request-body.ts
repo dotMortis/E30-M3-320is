@@ -1,14 +1,17 @@
 import { buildToolsSuffix, SYSTEM_PROMPT } from "./prompts";
+import { buildThinkingConfig } from "./thinking-config";
 import type { FunctionDeclaration, GeminiContent } from "./types";
 
 export interface GenerateOpts {
   includeGoogleSearch?: boolean;
   thinkingEnabled?: boolean;
+  ttsRequested?: boolean;
 }
 
 export function buildGenerateBody(
   contents: GeminiContent[],
   functionDeclarations: FunctionDeclaration[] | null,
+  model: string,
   opts?: GenerateOpts,
 ): Record<string, unknown> {
   const includeGoogleSearch = opts?.includeGoogleSearch === true;
@@ -19,7 +22,8 @@ export function buildGenerateBody(
   }
 
   const systemInstructionText =
-    SYSTEM_PROMPT(includeGoogleSearch) + buildToolsSuffix(functionDeclarations, includeGoogleSearch);
+    SYSTEM_PROMPT(includeGoogleSearch, opts?.ttsRequested === true) +
+    buildToolsSuffix(functionDeclarations, includeGoogleSearch);
 
   const body: Record<string, unknown> = {
     systemInstruction: { parts: [{ text: systemInstructionText }] },
@@ -27,11 +31,13 @@ export function buildGenerateBody(
   };
   if (tools.length > 0) {
     body.tools = tools;
-    body.toolConfig = { includeServerSideToolInvocations: true };
+    if (includeGoogleSearch && functionDeclarations && functionDeclarations.length > 0) {
+      body.toolConfig = { includeServerSideToolInvocations: true };
+    }
   }
-  if (opts?.thinkingEnabled !== true) {
-    body.generationConfig = { thinkingConfig: { thinkingBudget: 0 } };
-  }
+  const thinkingEnabled = opts?.thinkingEnabled === true || includeGoogleSearch;
+  const thinkingConfig = buildThinkingConfig(model, thinkingEnabled);
+  if (thinkingConfig) body.generationConfig = thinkingConfig;
   return body;
 }
 

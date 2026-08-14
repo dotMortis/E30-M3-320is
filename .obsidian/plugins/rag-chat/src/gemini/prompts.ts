@@ -1,7 +1,20 @@
 import { FUNCTION_DECLARATIONS } from "../agent/tool-declarations";
+import { ANSWER_END, ANSWER_START, SHORT_ANSWER_END, SHORT_ANSWER_START } from "./answer-blocks";
 import type { FunctionDeclaration } from "./types";
 
-export function SYSTEM_PROMPT(includeGoogleSearch: boolean): string {
+const TTS_ANSWER_FORMAT_CLAUSE = `
+
+Wenn du jetzt direkt antwortest (keinen Funktionsaufruf tätigst), formatiere deine Antwort exakt so:
+${SHORT_ANSWER_START}
+Eine sehr kurze, gesprochen-taugliche Zusammenfassung in 1-2 Sätzen. Exakte Zahlen und Einheiten
+unverändert übernehmen, aber keine Zitatmarker, keine Seitencodes, keine Markdown-Symbole.
+${SHORT_ANSWER_END}
+${ANSWER_START}
+Die vollständige Antwort wie oben beschrieben, inklusive Zitaten und Markdown.
+${ANSWER_END}
+Tätigst du stattdessen einen Funktionsaufruf, lass dieses Format komplett weg.`;
+
+export function SYSTEM_PROMPT(includeGoogleSearch: boolean, ttsRequested = false): string {
   const webClause = includeGoogleSearch ? " und - falls verfügbar - aktuellen Web-Rechercheergebnissen" : "";
   const section2Heading = includeGoogleSearch
     ? "Zusätzliches Wissen (Allgemeinwissen & Web, nicht werksseitig verifiziert)"
@@ -9,6 +22,8 @@ export function SYSTEM_PROMPT(includeGoogleSearch: boolean): string {
   const webSourceRule = includeGoogleSearch
     ? "\n3. Nenne bei Web-Quellen die URL bzw. Domain, damit sie nachvollziehbar sind."
     : "";
+
+  const ttsClause = ttsRequested ? TTS_ANSWER_FORMAT_CLAUSE : "";
 
   return `Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
 
@@ -39,7 +54,7 @@ Struktur jeder Antwort:
    hin, dass die Werksangabe (falls in Abschnitt 1 vorhanden) Vorrang hat und ungeprüfte Werte nicht
    ohne Weiteres übernommen werden sollten.${webSourceRule}
 
-Antworte auf Deutsch.`;
+Antworte auf Deutsch.${ttsClause}`;
 }
 
 function toolParamNames(decl: FunctionDeclaration): string[] {

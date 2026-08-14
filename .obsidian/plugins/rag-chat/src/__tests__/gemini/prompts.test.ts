@@ -51,6 +51,23 @@ describe("SYSTEM_PROMPT", () => {
     expect(SYSTEM_PROMPT(true)).toContain("Nenne bei Web-Quellen die URL");
     expect(SYSTEM_PROMPT(false)).not.toContain("Nenne bei Web-Quellen die URL");
   });
+
+  it("omits the short/long answer format instructions when TTS is not requested", () => {
+    expect(SYSTEM_PROMPT(false)).not.toContain("%%%SHORT_ANSWER_START%%%");
+    expect(SYSTEM_PROMPT(false, false)).not.toContain("%%%SHORT_ANSWER_START%%%");
+  });
+
+  it("appends the short/long answer format markers when TTS is requested", () => {
+    const prompt = SYSTEM_PROMPT(false, true);
+    expect(prompt).toContain("%%%SHORT_ANSWER_START%%%");
+    expect(prompt).toContain("%%%SHORT_ANSWER_END%%%");
+    expect(prompt).toContain("%%%ANSWER_START%%%");
+    expect(prompt).toContain("%%%ANSWER_END%%%");
+  });
+
+  it("tells the model to skip the format entirely when it calls a function instead", () => {
+    expect(SYSTEM_PROMPT(false, true)).toContain("Tätigst du stattdessen einen Funktionsaufruf, lass dieses Format komplett weg.");
+  });
 });
 
 describe("buildToolsSuffix", () => {
