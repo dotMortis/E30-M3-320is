@@ -26,6 +26,14 @@ export interface SendMessageDeps {
   onStep?: (step: PipelineStep) => void;
   onError?: (message: string) => void;
   onCancelled?: (originalMessage: string) => void;
+  /**
+   * Fired once per turn, only for a genuine "done" result - never for
+   * awaiting_clarification, and never on the caught-exception/error path
+   * (see sendMessageUnguarded's try/catch below). Used to gate the optional
+   * post-answer TTS pipeline without letting it see clarification questions
+   * or error text.
+   */
+  onTurnDone?: (assistantTurn: ChatTurn) => void;
   signal?: AbortSignal;
 }
 
@@ -122,6 +130,9 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
       });
     }
     applyResult(assistantTurn, state, result);
+    if (result.status === "done") {
+      deps.onTurnDone?.(assistantTurn);
+    }
   } catch (err) {
     if (deps.signal?.aborted) {
       state.turns.splice(state.turns.length - 2, 2);

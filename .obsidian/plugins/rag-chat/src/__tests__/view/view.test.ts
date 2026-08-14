@@ -25,6 +25,28 @@ vi.mock("../../workflow", () => ({ answerQuestion, continueAnswer }));
 const confirmModal = vi.fn();
 vi.mock("../../view/confirm-modal", () => ({ confirmModal }));
 
+const buildShortAnswer = vi.fn();
+vi.mock("../../tts/short-answer", () => ({ buildShortAnswer }));
+
+const synthesizeSpeech = vi.fn();
+vi.mock("../../tts/client", () => ({ synthesizeSpeech }));
+
+const recordCharsUsed = vi.fn().mockResolvedValue(undefined);
+vi.mock("../../tts/usage", () => ({ recordCharsUsed }));
+
+const listOutputDevices = vi.fn().mockResolvedValue([]);
+vi.mock("../../tts/devices", () => ({ listOutputDevices }));
+
+const ttsPlaybackMock = {
+  play: vi.fn().mockResolvedValue(undefined),
+  setVolume: vi.fn(),
+  stop: vi.fn(),
+  isPlaying: vi.fn().mockReturnValue(false),
+  setOnEnded: vi.fn(),
+  dispose: vi.fn(),
+};
+vi.mock("../../tts/playback", () => ttsPlaybackMock);
+
 let RagChatView: typeof import("../../view/view").RagChatView;
 let RAG_CHAT_VIEW_TYPE: typeof import("../../view/view").RAG_CHAT_VIEW_TYPE;
 
@@ -600,6 +622,130 @@ describe("RagChatView", () => {
       const select = fake(view.contentEl).querySelectorAll("select.rag-chat-model-select")[0];
       await vi.waitFor(() => expect(optionValues(select)).toContain("gemini-3.6-flash"));
       expect(requestUrl).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe("voice output (TTS)", () => {
+    it("renders an unchecked voice checkbox with the TTS controls row hidden by default", async () => {
+      const { view } = makeView();
+      await view.onOpen();
+
+      const checkbox = fake(view.contentEl).querySelectorAll("input.rag-chat-tts-checkbox")[0] as any;
+      expect(checkbox).toBeDefined();
+      expect(checkbox.checked).toBe(false);
+
+      const controlsRow = fake(view.contentEl).querySelectorAll(".rag-chat-tts-controls")[0];
+      expect(controlsRow.classes.has("rag-chat-hidden")).toBe(true);
+    });
+
+    it("toggling the voice checkbox persists settings.ttsEnabled and shows/hides the controls row", async () => {
+      const { view, plugin } = makeView();
+      await view.onOpen();
+
+      const checkbox = fake(view.contentEl).querySelectorAll("input.rag-chat-tts-checkbox")[0] as any;
+      const controlsRow = fake(view.contentEl).querySelectorAll(".rag-chat-tts-controls")[0];
+
+      checkbox.checked = true;
+      checkbox.dispatch("change");
+
+      expect(plugin.settings.ttsEnabled).toBe(true);
+      expect(plugin.saveSettings).toHaveBeenCalled();
+      expect(controlsRow.classes.has("rag-chat-hidden")).toBe(false);
+    });
+
+    it("runs the short-answer -> synthesize -> play pipeline after a successful answer when voice output is enabled", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockResolvedValue(DONE_RESULT);
+      buildShortAnswer.mockResolvedValue("30 Nm.");
+      synthesizeSpeech.mockResolvedValue("base64audio");
+
+      const { view, plugin } = makeView();
+      plugin.settings.ttsEnabled = true;
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      button.dispatch("click");
+
+      await vi.waitFor(() => expect(synthesizeSpeech).toHaveBeenCalledTimes(1));
+      expect(buildShortAnswer).toHaveBeenCalledWith(DONE_RESULT.text, plugin.settings, expect.anything());
+      expect(recordCharsUsed).toHaveBeenCalledWith(plugin, "30 Nm.".length);
+      await vi.waitFor(() =>
+        expect(ttsPlaybackMock.play).toHaveBeenCalledWith(
+          "base64audio",
+          expect.objectContaining({ deviceId: plugin.settings.ttsOutputDeviceId, volume: plugin.settings.ttsVolume })
+        )
+      );
+    });
+
+    it("does not run the TTS pipeline when voice output is disabled", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockResolvedValue(DONE_RESULT);
+      const { view } = makeView();
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      button.dispatch("click");
+
+      await vi.waitFor(() => expect(answerQuestion).toHaveBeenCalled());
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(buildShortAnswer).not.toHaveBeenCalled();
+    });
+
+    it("does not run the TTS pipeline for an awaiting_clarification result even when voice output is enabled", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockResolvedValue({
+        status: "awaiting_clarification",
+        question: "Welches Baujahr?",
+        pending: { state: {}, ctx: {} },
+      });
+      const { view, plugin } = makeView();
+      plugin.settings.ttsEnabled = true;
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      button.dispatch("click");
+
+      await vi.waitFor(() => expect(answerQuestion).toHaveBeenCalled());
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(buildShortAnswer).not.toHaveBeenCalled();
+    });
+
+    it("replays cached audio on a second speaker-button click without re-synthesizing", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockResolvedValue(DONE_RESULT);
+      buildShortAnswer.mockResolvedValue("30 Nm.");
+      synthesizeSpeech.mockResolvedValue("base64audio");
+
+      const { view, plugin } = makeView();
+      plugin.settings.ttsEnabled = true;
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      button.dispatch("click");
+
+      await vi.waitFor(() => expect(synthesizeSpeech).toHaveBeenCalledTimes(1));
+      await vi.waitFor(() => expect(ttsPlaybackMock.setOnEnded).toHaveBeenCalled());
+
+      // Simulate the autoplayed clip finishing naturally, clearing the
+      // view's "currently speaking" turn so a click is treated as replay.
+      const onEnded = ttsPlaybackMock.setOnEnded.mock.calls.at(-1)![0] as () => void;
+      onEnded();
+
+      ttsPlaybackMock.play.mockClear();
+      const speakButton = fake(view.contentEl).querySelectorAll("button.rag-chat-tts-button")[0];
+      speakButton.dispatch("click");
+
+      await vi.waitFor(() => expect(ttsPlaybackMock.play).toHaveBeenCalledTimes(1));
+      expect(synthesizeSpeech).toHaveBeenCalledTimes(1);
+      expect(recordCharsUsed).toHaveBeenCalledTimes(1);
     });
   });
 });

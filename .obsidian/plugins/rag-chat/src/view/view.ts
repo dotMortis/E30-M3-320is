@@ -17,6 +17,12 @@ import { appendNewTurns, renderTurns, unloadAllTurns, updateTurn, type RenderTur
 import type { TurnActionCallbacks } from "./render-turn-actions";
 import type { ChatTurn } from "../retrieval/types";
 import { listFlashModels } from "../gemini/models";
+import { buildShortAnswer } from "../tts/short-answer";
+import { synthesizeSpeech } from "../tts/client";
+import { recordCharsUsed } from "../tts/usage";
+import { listOutputDevices } from "../tts/devices";
+import * as ttsPlayback from "../tts/playback";
+import { TTS_FREE_TIER_CHAR_LIMIT } from "../constants";
 
 export const RAG_CHAT_VIEW_TYPE = "rag-chat-view";
 
@@ -42,9 +48,20 @@ export class RagChatView extends ItemView {
   private rendered: RenderTurnsResult = emptyRenderResult();
   private closed = false;
   private abortController: AbortController | null = null;
+  private ttsCheckboxEl!: HTMLInputElement;
+  private ttsControlsRow!: HTMLElement;
+  private ttsDeviceSelectEl!: HTMLSelectElement;
+  private ttsDeviceRefreshButton!: HTMLButtonElement;
+  private ttsVolumeSliderEl!: HTMLInputElement;
+  private ttsVolumeLabelEl!: HTMLElement;
+  private ttsCharCounterEl!: HTMLElement;
+  /** The turn whose TTS audio is currently playing, if any (see tts/playback.ts). */
+  private ttsPlayingTurn: ChatTurn | null = null;
   private readonly turnCallbacks: TurnActionCallbacks = {
     onRetry: (turn) => void this.handleRetryClick(turn),
     onDelete: (turn) => this.handleDeleteClick(turn),
+    onSpeak: (turn) => void this.handleSpeakClick(turn),
+    isSpeaking: (turn) => this.ttsPlayingTurn === turn,
   };
 
   constructor(leaf: WorkspaceLeaf, plugin: RagChatPlugin) {
@@ -125,6 +142,55 @@ export class RagChatView extends ItemView {
       }
     });
 
+    const ttsToggleLabel = inputRow.createEl("label", { cls: "rag-chat-tts-toggle" });
+    this.ttsCheckboxEl = ttsToggleLabel.createEl("input", {
+      cls: "rag-chat-tts-checkbox",
+      attr: { type: "checkbox" },
+    });
+    this.ttsCheckboxEl.checked = this.plugin.settings.ttsEnabled;
+    ttsToggleLabel.createSpan({ text: "Sprachausgabe" });
+    this.registerDomEvent(this.ttsCheckboxEl, "change", () => {
+      this.plugin.settings.ttsEnabled = this.ttsCheckboxEl.checked;
+      void this.plugin.saveSettings();
+      this.updateTtsControlsVisibility();
+    });
+
+    this.ttsControlsRow = container.createDiv({ cls: "rag-chat-tts-controls" });
+
+    const deviceGroup = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-device" });
+    this.ttsDeviceSelectEl = deviceGroup.createEl("select");
+    this.registerDomEvent(this.ttsDeviceSelectEl, "change", () => {
+      void this.handleTtsDeviceChange();
+    });
+    this.ttsDeviceRefreshButton = deviceGroup.createEl("button", {
+      attr: { "aria-label": "Audioausgabegeräte aktualisieren" },
+    });
+    setIcon(this.ttsDeviceRefreshButton, "refresh-cw");
+    this.registerDomEvent(this.ttsDeviceRefreshButton, "click", () => {
+      void this.refreshTtsDeviceOptions();
+    });
+
+    const volumeGroup = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-volume" });
+    this.ttsVolumeSliderEl = volumeGroup.createEl("input", {
+      attr: { type: "range", min: "0", max: "1", step: "0.05" },
+    });
+    this.ttsVolumeSliderEl.value = String(this.plugin.settings.ttsVolume);
+    this.ttsVolumeLabelEl = volumeGroup.createSpan({ cls: "rag-chat-tts-volume-label" });
+    this.updateTtsVolumeLabel();
+    this.registerDomEvent(this.ttsVolumeSliderEl, "input", () => {
+      ttsPlayback.setVolume(Number(this.ttsVolumeSliderEl.value));
+      this.updateTtsVolumeLabel();
+    });
+    this.registerDomEvent(this.ttsVolumeSliderEl, "change", () => {
+      void this.handleTtsVolumeCommit();
+    });
+
+    this.ttsCharCounterEl = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-char-counter" });
+    this.updateTtsCharCounter();
+
+    this.updateTtsControlsVisibility();
+    void this.refreshTtsDeviceOptions();
+
     this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
     this.updateClarificationAffordance();
     void this.refreshModelOptions();
@@ -133,6 +199,8 @@ export class RagChatView extends ItemView {
   async onClose(): Promise<void> {
     this.closed = true;
     this.abortController?.abort();
+    ttsPlayback.stop();
+    this.ttsPlayingTurn = null;
     unloadAllTurns(this.rendered);
     this.contentEl.empty();
   }
@@ -191,6 +259,125 @@ export class RagChatView extends ItemView {
     if (!value || value === this.plugin.settings.generationModel) return;
     this.plugin.settings.generationModel = value;
     await this.plugin.saveSettings();
+  }
+
+  private updateTtsControlsVisibility(): void {
+    this.ttsControlsRow.toggleClass("rag-chat-hidden", !this.plugin.settings.ttsEnabled);
+  }
+
+  private updateTtsVolumeLabel(): void {
+    const pct = Math.round(Number(this.ttsVolumeSliderEl.value) * 100);
+    this.ttsVolumeLabelEl.setText(`${pct}%`);
+  }
+
+  private async handleTtsVolumeCommit(): Promise<void> {
+    this.plugin.settings.ttsVolume = Number(this.ttsVolumeSliderEl.value);
+    await this.plugin.saveSettings();
+  }
+
+  private updateTtsCharCounter(): void {
+    const used = this.plugin.settings.ttsCharCount.toLocaleString("de-DE");
+    const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
+    this.ttsCharCounterEl.setText(`${used} / ${limit} Zeichen (Freikontingent)`);
+  }
+
+  private async refreshTtsDeviceOptions(): Promise<void> {
+    this.ttsDeviceSelectEl.disabled = true;
+    this.ttsDeviceRefreshButton.disabled = true;
+
+    const devices = await listOutputDevices();
+    if (this.closed) return;
+
+    this.ttsDeviceSelectEl.empty();
+    this.ttsDeviceSelectEl.createEl("option", { attr: { value: "" }, text: "Systemstandard" });
+    const deviceIds: string[] = [];
+    for (const device of devices) {
+      if (!device.deviceId || device.deviceId === "default") continue;
+      deviceIds.push(device.deviceId);
+      this.ttsDeviceSelectEl.createEl("option", {
+        attr: { value: device.deviceId },
+        text: device.label || `Gerät ${device.deviceId.slice(0, 8)}`,
+      });
+    }
+
+    const current = this.plugin.settings.ttsOutputDeviceId;
+    const hasCurrent = current === "" || deviceIds.includes(current);
+    this.ttsDeviceSelectEl.value = hasCurrent ? current : "";
+    this.ttsDeviceSelectEl.disabled = this.busy;
+    this.ttsDeviceRefreshButton.disabled = this.busy;
+  }
+
+  private async handleTtsDeviceChange(): Promise<void> {
+    this.plugin.settings.ttsOutputDeviceId = this.ttsDeviceSelectEl.value;
+    await this.plugin.saveSettings();
+  }
+
+  /** Plays already-synthesized audio for `turn`, tracking it as the
+   * "currently speaking" turn so the speaker button reflects a stop state,
+   * and clearing that state (re-rendering the turn) once playback ends. */
+  private async playTurnAudio(turn: ChatTurn, audioBase64: string): Promise<void> {
+    ttsPlayback.setOnEnded(() => {
+      if (this.ttsPlayingTurn !== turn) return;
+      this.ttsPlayingTurn = null;
+      if (!this.closed) this.syncTurn(turn);
+    });
+    this.ttsPlayingTurn = turn;
+    try {
+      await ttsPlayback.play(audioBase64, {
+        deviceId: this.plugin.settings.ttsOutputDeviceId,
+        volume: this.plugin.settings.ttsVolume,
+      });
+    } catch (err) {
+      this.ttsPlayingTurn = null;
+      if (!this.closed) {
+        new Notice(`RAG Chat: Wiedergabe fehlgeschlagen (${err instanceof Error ? err.message : String(err)}).`);
+      }
+    }
+    if (!this.closed) this.syncTurn(turn);
+  }
+
+  /**
+   * Runs the short-answer -> synthesize -> cache -> play pipeline for a
+   * turn that doesn't have cached TTS audio yet, then plays it. Any failure
+   * is caught and surfaces a Notice only - the already-displayed long
+   * answer is never touched. Char-usage is recorded exactly once here, per
+   * real synthesis call (never for cached replays - see handleSpeakClick).
+   */
+  private async synthesizeAndPlay(turn: ChatTurn, signal?: AbortSignal): Promise<void> {
+    turn.ttsStatus = "generating";
+    this.syncTurn(turn);
+    try {
+      const shortText = await buildShortAnswer(turn.text, this.plugin.settings, { signal });
+      const audio = await synthesizeSpeech(shortText, this.plugin.settings, { signal });
+      await recordCharsUsed(this.plugin, shortText.length);
+      if (this.closed) return;
+      turn.ttsText = shortText;
+      turn.ttsAudioBase64 = audio;
+      turn.ttsStatus = "ready";
+      this.updateTtsCharCounter();
+      void this.playTurnAudio(turn, audio);
+    } catch (err) {
+      turn.ttsStatus = "error";
+      if (!this.closed) {
+        this.syncTurn(turn);
+        new Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${err instanceof Error ? err.message : String(err)}).`);
+      }
+    }
+  }
+
+  private async handleSpeakClick(turn: ChatTurn): Promise<void> {
+    if (this.ttsPlayingTurn === turn) {
+      ttsPlayback.stop();
+      this.ttsPlayingTurn = null;
+      this.syncTurn(turn);
+      return;
+    }
+    if (turn.ttsStatus === "generating") return;
+    if (turn.ttsAudioBase64) {
+      void this.playTurnAudio(turn, turn.ttsAudioBase64);
+      return;
+    }
+    await this.synthesizeAndPlay(turn);
   }
 
   private async handleCancelClick(): Promise<void> {
@@ -258,6 +445,10 @@ export class RagChatView extends ItemView {
           this.inputEl.value = originalMessage;
           this.inputEl.focus();
           new Notice("Anfrage abgebrochen.");
+        },
+        onTurnDone: (turn) => {
+          if (this.closed || !this.plugin.settings.ttsEnabled) return;
+          void this.synthesizeAndPlay(turn, controller.signal);
         },
       });
     } finally {

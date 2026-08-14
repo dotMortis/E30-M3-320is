@@ -104,6 +104,44 @@ describe("sendMessage", () => {
     expect(turn.status).toBeUndefined();
   });
 
+  it("calls onTurnDone with the assistant turn for a genuine 'done' result", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    const onTurnDone = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onTurnDone });
+    expect(onTurnDone).toHaveBeenCalledTimes(1);
+    expect(onTurnDone).toHaveBeenCalledWith(state.turns[1]);
+  });
+
+  it("does not call onTurnDone for an 'awaiting_clarification' result", async () => {
+    const pending = { state: {}, ctx: {} } as any;
+    answerQuestion.mockResolvedValue({ status: "awaiting_clarification", question: "Welches Baujahr?", pending });
+    const state = createChatSessionState();
+    const onTurnDone = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onTurnDone });
+    expect(onTurnDone).not.toHaveBeenCalled();
+  });
+
+  it("does not call onTurnDone when the workflow throws (error path)", async () => {
+    answerQuestion.mockRejectedValue(new Error("boom"));
+    const state = createChatSessionState();
+    const onTurnDone = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onTurnDone });
+    expect(onTurnDone).not.toHaveBeenCalled();
+  });
+
+  it("does not call onTurnDone when the request is cancelled", async () => {
+    const controller = new AbortController();
+    answerQuestion.mockImplementation(() => {
+      controller.abort();
+      return Promise.reject(new Error("Anfrage abgebrochen."));
+    });
+    const state = createChatSessionState();
+    const onTurnDone = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onTurnDone, signal: controller.signal });
+    expect(onTurnDone).not.toHaveBeenCalled();
+  });
+
   it("falls back to a default message when the final text is empty", async () => {
     answerQuestion.mockResolvedValue({ ...DONE_RESULT, text: "   " });
     const state = createChatSessionState();

@@ -36,7 +36,14 @@ var DEFAULT_SETTINGS = {
 	similarity: .55,
 	rrfK: 2,
 	enableFuzzySearchLeg: true,
-	maxAgentRounds: 4
+	maxAgentRounds: 5,
+	ttsEnabled: false,
+	ttsApiKey: "",
+	ttsLanguageCode: "de-DE",
+	ttsVoiceName: "de-DE-Chirp3-HD-Laomedeia",
+	ttsOutputDeviceId: "",
+	ttsVolume: 1,
+	ttsCharCount: 0
 };
 //#endregion
 //#region src/constants.ts
@@ -56,10 +63,12 @@ var HTTP_RETRY_MAX_DELAY_MS = 16e3;
 */
 var HTTP_RETRY_JITTER_RATIO = .2;
 /** How long to wait for a single HTTP request before aborting it, in ms. */
-var HTTP_REQUEST_TIMEOUT_MS = 3e4;
+var HTTP_REQUEST_TIMEOUT_MS = 45e3;
 /** How often the retry backoff countdown (onStatus's "erneuter Versuch in Ns") ticks, in ms. */
 var HTTP_RETRY_COUNTDOWN_TICK_MS = 1e3;
 var ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";
+/** Chirp 3 HD free tier ceiling (characters/month), for the usage display only. */
+var TTS_FREE_TIER_CHAR_LIMIT = 1e6;
 //#endregion
 //#region src/http/retry.ts
 var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
@@ -170,7 +179,7 @@ async function requestUrlWithRetry(params, opts) {
 	const label = opts?.label ?? "Anfrage";
 	const signal = opts?.signal;
 	let lastResponse;
-	for (let attempt = 1; attempt <= 1; attempt++) {
+	for (let attempt = 1; attempt <= 5; attempt++) {
 		if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 		let response;
 		try {
@@ -178,19 +187,19 @@ async function requestUrlWithRetry(params, opts) {
 		} catch (err) {
 			if (signal?.aborted) throw err;
 			const message = err instanceof Error ? err.message : String(err);
-			if (attempt === 1) throw new Error(`${label} fehlgeschlagen: ${message}`);
-			await sleep(computeDelayMs(attempt), signal, (seconds) => opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/1) …`));
-			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/1) …`);
+			if (attempt === 5) throw new Error(`${label} fehlgeschlagen: ${message}`);
+			await sleep(computeDelayMs(attempt), signal, (seconds) => opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
+			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/5) …`);
 			continue;
 		}
 		if (response.status < 400) return response;
 		lastResponse = response;
-		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 1) {
+		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 5) {
 			const msg = extractErrorMessage(response);
 			throw new Error(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`);
 		}
-		await sleep(computeDelayMs(attempt, retryAfterHeaderValue(response)), signal, (seconds) => opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${seconds}s (${attempt}/1) …`));
-		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch (${attempt}/1) …`);
+		await sleep(computeDelayMs(attempt, retryAfterHeaderValue(response)), signal, (seconds) => opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
+		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch (${attempt}/5) …`);
 	}
 	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
 }
@@ -232,6 +241,166 @@ async function listFlashModels(apiKey, signal) {
 	}
 	models.sort((a, b) => a.id > b.id ? -1 : a.id < b.id ? 1 : 0);
 	return models;
+}
+//#endregion
+//#region src/tts/voices.ts
+var CHIRP3_HD_NAME_PATTERN = /Chirp3-HD/i;
+/**
+* Lists Chirp 3: HD voices available via Cloud Text-to-Speech. Mirrors
+* gemini/models.ts's listFlashModels shape/error-swallowing: returns an
+* empty array on any failure (missing key, network error, non-2xx, ...) and
+* never throws into the settings UI.
+*/
+async function listChirp3Voices(apiKey, signal) {
+	if (!apiKey) return [];
+	try {
+		const json = (await requestUrlWithRetry({
+			url: "https://texttospeech.googleapis.com/v1/voices",
+			method: "GET",
+			headers: { "X-Goog-Api-Key": apiKey }
+		}, {
+			label: "Stimmenliste",
+			signal
+		})).json;
+		const voices = [];
+		for (const voice of json.voices ?? []) {
+			if (!CHIRP3_HD_NAME_PATTERN.test(voice.name)) continue;
+			voices.push({
+				name: voice.name,
+				languageCodes: voice.languageCodes ?? []
+			});
+		}
+		voices.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
+		return voices;
+	} catch {
+		return [];
+	}
+}
+//#endregion
+//#region src/tts/devices.ts
+/**
+* Lists available audio output devices. Note: `navigator.mediaDevices
+* .enumerateDevices()` only returns *named* `audiooutput` devices after the
+* page has been granted microphone permission at least once (a browser
+* privacy rule) - see `unlockDeviceLabels()` below. Before that unlock, this
+* still returns entries, just with empty/generic labels.
+*/
+async function listOutputDevices() {
+	if (!navigator.mediaDevices?.enumerateDevices) return [];
+	return (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audiooutput");
+}
+/**
+* One-shot microphone-permission prompt, solely to unlock device *labels*
+* for the subsequent `enumerateDevices()` call - every returned track is
+* stopped immediately afterward. Nothing is ever recorded, stored, or
+* transmitted. Guarded/no-throw: permission may be denied, or the API may be
+* unavailable in this runtime.
+*/
+async function unlockDeviceLabels() {
+	if (!navigator.mediaDevices?.getUserMedia) return;
+	try {
+		const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+		for (const track of stream.getTracks()) track.stop();
+	} catch {}
+}
+//#endregion
+//#region src/tts/playback.ts
+var audioEl;
+var onEndedCallback = null;
+function getAudioEl() {
+	if (!audioEl) {
+		audioEl = new Audio();
+		audioEl.addEventListener("ended", () => onEndedCallback?.());
+	}
+	return audioEl;
+}
+/**
+* Registers a callback fired when the current clip finishes playing
+* naturally (not on an explicit `stop()`). Callers (the chat view) use this
+* to reset a per-turn "currently speaking" UI state. Only one callback is
+* kept at a time - set it again before each `play()` call.
+*/
+function setOnEnded(cb) {
+	onEndedCallback = cb;
+}
+/**
+* Stops and clears any current playback, sets the given base64 MP3 as the
+* source, applies the requested output device and volume, and starts
+* playback. Guards `setSinkId` (unsupported browsers/Electron builds, or a
+* saved device that no longer exists) by falling back to the default sink
+* and surfacing a Notice, never a hard failure.
+*/
+async function play(base64Mp3, opts) {
+	const audio = getAudioEl();
+	stop();
+	audio.src = `data:audio/mpeg;base64,${base64Mp3}`;
+	audio.volume = opts.volume;
+	const sinkCapableAudio = audio;
+	if (opts.deviceId && typeof sinkCapableAudio.setSinkId === "function") try {
+		await sinkCapableAudio.setSinkId(opts.deviceId);
+	} catch (err) {
+		new obsidian.Notice(`RAG Chat: Audioausgabegerät konnte nicht gesetzt werden, verwende Systemstandard (${err instanceof Error ? err.message : String(err)}).`, 6e3);
+		try {
+			await sinkCapableAudio.setSinkId("default");
+		} catch {}
+	}
+	await audio.play();
+}
+/** Live-updates the volume of the currently loaded/playing clip, if any. */
+function setVolume(v) {
+	if (audioEl) audioEl.volume = v;
+}
+/** Stops playback and rewinds, without clearing the loaded source. */
+function stop() {
+	if (!audioEl) return;
+	audioEl.pause();
+	audioEl.currentTime = 0;
+}
+/** Called on plugin unload to release the underlying audio element. */
+function dispose() {
+	if (!audioEl) return;
+	audioEl.pause();
+	audioEl.src = "";
+	audioEl = void 0;
+}
+//#endregion
+//#region src/view/confirm-modal.ts
+var ConfirmModal = class extends obsidian.Modal {
+	constructor(app, message, resolveFn) {
+		super(app);
+		this.resolved = false;
+		this.message = message;
+		this.resolveFn = resolveFn;
+	}
+	onOpen() {
+		this.contentEl.createEl("p", { text: this.message });
+		const buttonRow = this.contentEl.createDiv({ cls: "rag-chat-confirm-modal-buttons" });
+		buttonRow.createEl("button", { text: "Nein" }).addEventListener("click", () => {
+			this.settle(false);
+			this.close();
+		});
+		buttonRow.createEl("button", {
+			cls: "mod-warning",
+			text: "Ja"
+		}).addEventListener("click", () => {
+			this.settle(true);
+			this.close();
+		});
+	}
+	onClose() {
+		this.settle(false);
+		this.contentEl.empty();
+	}
+	settle(value) {
+		if (this.resolved) return;
+		this.resolved = true;
+		this.resolveFn(value);
+	}
+};
+function confirmModal(app, message) {
+	return new Promise((resolve) => {
+		new ConfirmModal(app, message, resolve).open();
+	});
 }
 //#endregion
 //#region src/settings/settings-tab.ts
@@ -343,6 +512,138 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 				await this.plugin.saveSettings();
 			}
 		}));
+		containerEl.createEl("h3", { text: "Sprachausgabe (TTS)" });
+		containerEl.createEl("p", { text: "Optional: zusätzlich zur gewohnten, zitatreichen Antwort wird eine kurze, gesprochene Zusammenfassung erzeugt und über Google Cloud Text-to-Speech (Chirp 3: HD) abgespielt - z.B. für die Werkstatt, um ein Anzugsdrehmoment vorgelesen zu bekommen." });
+		new obsidian.Setting(containerEl).setName("Sprachausgabe aktivieren").setDesc("Setzt den Anfangszustand der Sprachausgabe-Checkbox im Chat (dort jederzeit umschaltbar).").addToggle((toggle) => toggle.setValue(this.plugin.settings.ttsEnabled).onChange(async (value) => {
+			this.plugin.settings.ttsEnabled = value;
+			await this.plugin.saveSettings();
+		}));
+		let ttsApiKeyInputEl;
+		new obsidian.Setting(containerEl).setName("TTS API key").setDesc("Separater Google Cloud API-Key für Text-to-Speech (optional). Benötigt aktivierte Cloud Text-to-Speech API und Billing im zugehörigen Projekt. Leer = es wird versucht, den Gemini-Key oben zu verwenden.").addText((text) => {
+			text.setPlaceholder("AIza...").setValue(this.plugin.settings.ttsApiKey).onChange(async (value) => {
+				this.plugin.settings.ttsApiKey = value.trim();
+				await this.plugin.saveSettings();
+			});
+			ttsApiKeyInputEl = text.inputEl;
+			ttsApiKeyInputEl.type = "password";
+		}).addButton((button) => {
+			button.setIcon("eye").setTooltip("API-Schlüssel anzeigen/verbergen");
+			button.onClick(() => {
+				if (!ttsApiKeyInputEl) return;
+				const revealed = ttsApiKeyInputEl.type === "text";
+				ttsApiKeyInputEl.type = revealed ? "password" : "text";
+				button.setIcon(revealed ? "eye" : "eye-off");
+			});
+		});
+		let ttsLanguageDropdown;
+		let ttsVoiceDropdown;
+		let ttsVoiceRefreshButton;
+		let ttsVoicesCache = [];
+		const populateTtsVoiceOptions = (languageCode) => {
+			if (!ttsVoiceDropdown) return;
+			const currentVoice = this.plugin.settings.ttsVoiceName;
+			const names = ttsVoicesCache.filter((v) => v.languageCodes.includes(languageCode)).map((v) => v.name);
+			const options = names.includes(currentVoice) ? names : [currentVoice, ...names];
+			ttsVoiceDropdown.selectEl.empty();
+			for (const name of options) ttsVoiceDropdown.addOption(name, name);
+			ttsVoiceDropdown.setValue(currentVoice);
+		};
+		const refreshTtsVoiceOptions = async () => {
+			if (!ttsLanguageDropdown || !ttsVoiceDropdown) return;
+			const apiKey = this.plugin.settings.ttsApiKey || this.plugin.settings.geminiApiKey;
+			ttsLanguageDropdown.setDisabled(true);
+			ttsVoiceDropdown.setDisabled(true);
+			ttsVoiceRefreshButton?.setDisabled(true);
+			ttsVoicesCache = await listChirp3Voices(apiKey);
+			const currentLanguage = this.plugin.settings.ttsLanguageCode;
+			const languageCodes = Array.from(new Set(ttsVoicesCache.flatMap((v) => v.languageCodes))).sort();
+			const languageOptions = languageCodes.includes(currentLanguage) ? languageCodes : [currentLanguage, ...languageCodes];
+			ttsLanguageDropdown.selectEl.empty();
+			for (const code of languageOptions) ttsLanguageDropdown.addOption(code, code);
+			ttsLanguageDropdown.setValue(currentLanguage);
+			populateTtsVoiceOptions(currentLanguage);
+			ttsLanguageDropdown.setDisabled(false);
+			ttsVoiceDropdown.setDisabled(false);
+			ttsVoiceRefreshButton?.setDisabled(false);
+		};
+		new obsidian.Setting(containerEl).setName("Sprache").addDropdown((dropdown) => {
+			ttsLanguageDropdown = dropdown;
+			dropdown.addOption(this.plugin.settings.ttsLanguageCode, this.plugin.settings.ttsLanguageCode);
+			dropdown.setValue(this.plugin.settings.ttsLanguageCode);
+			dropdown.onChange(async (value) => {
+				this.plugin.settings.ttsLanguageCode = value;
+				await this.plugin.saveSettings();
+				populateTtsVoiceOptions(value);
+			});
+		});
+		new obsidian.Setting(containerEl).setName("Stimme (Chirp 3: HD)").addDropdown((dropdown) => {
+			ttsVoiceDropdown = dropdown;
+			dropdown.addOption(this.plugin.settings.ttsVoiceName, this.plugin.settings.ttsVoiceName);
+			dropdown.setValue(this.plugin.settings.ttsVoiceName);
+			dropdown.onChange(async (value) => {
+				this.plugin.settings.ttsVoiceName = value;
+				await this.plugin.saveSettings();
+			});
+		}).addButton((button) => {
+			ttsVoiceRefreshButton = button;
+			button.setIcon("refresh-cw").setTooltip("Stimmenliste aktualisieren");
+			button.onClick(() => {
+				refreshTtsVoiceOptions();
+			});
+		});
+		refreshTtsVoiceOptions();
+		let ttsDeviceDropdown;
+		const refreshTtsDeviceOptions = async () => {
+			if (!ttsDeviceDropdown) return;
+			const devices = await listOutputDevices();
+			const current = this.plugin.settings.ttsOutputDeviceId;
+			ttsDeviceDropdown.selectEl.empty();
+			ttsDeviceDropdown.addOption("", "Systemstandard");
+			for (const device of devices) {
+				if (!device.deviceId || device.deviceId === "default") continue;
+				ttsDeviceDropdown.addOption(device.deviceId, device.label || `Gerät ${device.deviceId.slice(0, 8)}`);
+			}
+			const hasCurrent = current === "" || devices.some((d) => d.deviceId === current);
+			ttsDeviceDropdown.setValue(hasCurrent ? current : "");
+		};
+		new obsidian.Setting(containerEl).setName("Audioausgabegerät").setDesc("\"Geräte erkennen\" fragt einmalig nach Mikrofonberechtigung, nur um Gerätenamen auszulesen - es wird nichts aufgenommen oder übertragen.").addDropdown((dropdown) => {
+			ttsDeviceDropdown = dropdown;
+			dropdown.addOption("", "Systemstandard");
+			dropdown.onChange(async (value) => {
+				this.plugin.settings.ttsOutputDeviceId = value;
+				await this.plugin.saveSettings();
+			});
+		}).addButton((button) => {
+			button.setButtonText("Geräte erkennen");
+			button.onClick(async () => {
+				button.setDisabled(true);
+				await unlockDeviceLabels();
+				await refreshTtsDeviceOptions();
+				button.setDisabled(false);
+			});
+		});
+		refreshTtsDeviceOptions();
+		new obsidian.Setting(containerEl).setName("Lautstärke").addSlider((slider) => slider.setLimits(0, 1, .05).setValue(this.plugin.settings.ttsVolume).setDynamicTooltip().onChange(async (value) => {
+			setVolume(value);
+			this.plugin.settings.ttsVolume = value;
+			await this.plugin.saveSettings();
+		}));
+		const charCounterSetting = new obsidian.Setting(containerEl).setName("Zeichenzähler (Chirp 3 HD)");
+		const updateCharCounterDesc = () => {
+			const used = this.plugin.settings.ttsCharCount.toLocaleString("de-DE");
+			const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
+			charCounterSetting.setDesc(`${used} / ${limit} Zeichen (Freikontingent).`);
+		};
+		updateCharCounterDesc();
+		charCounterSetting.addButton((button) => {
+			button.setButtonText("Zurücksetzen").setWarning();
+			button.onClick(async () => {
+				if (!await confirmModal(this.app, "Zeichenzähler wirklich zurücksetzen?")) return;
+				this.plugin.settings.ttsCharCount = 0;
+				await this.plugin.saveSettings();
+				updateCharCounterDesc();
+			});
+		});
 	}
 };
 //#endregion
@@ -8350,6 +8651,45 @@ async function generateWithTools(contents, functionDeclarations, settings, opts)
 		finishReason: candidate?.finishReason
 	};
 }
+/**
+* Minimal, tool-less sibling to `generateWithTools`: no Google Search, no
+* function declarations, no tool-suffix system instruction - just a plain
+* instruction plus contents. Used only by tts/short-answer.ts to keep the
+* spoken-answer summarization cheap, fast, and unable to trigger the
+* agent/tool machinery.
+*/
+async function generatePlainText(contents, settings, opts) {
+	const apiKey = settings.geminiApiKey;
+	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
+	const response = await requestUrlWithRetry({
+		url: `https://generativelanguage.googleapis.com/v1beta/models/${settings.generationModel}:generateContent`,
+		method: "POST",
+		headers: {
+			"x-goog-api-key": apiKey,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ contents })
+	}, {
+		label: "Kurzantwort",
+		signal: opts?.signal
+	});
+	let json;
+	try {
+		json = response.json;
+	} catch (err) {
+		throw new Error(`Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`);
+	}
+	const candidate = json?.candidates?.[0];
+	const parts = candidate?.content?.parts ?? [];
+	if (parts.length === 0) {
+		const blockReason = json?.promptFeedback?.blockReason;
+		const finishReason = candidate?.finishReason;
+		const reason = blockReason ?? (finishReason && finishReason !== "STOP" ? finishReason : void 0);
+		if (reason) throw new Error(BLOCK_REASON_MESSAGES[reason] ?? `Die Antwort wurde blockiert/abgebrochen (Grund: ${reason}).`);
+		throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(json).slice(0, 300)}`);
+	}
+	return parts.map((p) => p.text ?? "").join("").trim();
+}
 //#endregion
 //#region src/gemini/history.ts
 function buildHistoryContents(history) {
@@ -8975,6 +9315,7 @@ async function sendMessageUnguarded(state, message, deps) {
 			signal: deps.signal
 		});
 		applyResult(assistantTurn, state, result);
+		if (result.status === "done") deps.onTurnDone?.(assistantTurn);
 	} catch (err) {
 		if (deps.signal?.aborted) {
 			state.turns.splice(state.turns.length - 2, 2);
@@ -9011,45 +9352,6 @@ async function retryTurn(state, turn, deps) {
 	const message = discardFailedTurn(state, turn);
 	if (message === null) return;
 	await sendMessage(state, message, deps);
-}
-//#endregion
-//#region src/view/confirm-modal.ts
-var ConfirmModal = class extends obsidian.Modal {
-	constructor(app, message, resolveFn) {
-		super(app);
-		this.resolved = false;
-		this.message = message;
-		this.resolveFn = resolveFn;
-	}
-	onOpen() {
-		this.contentEl.createEl("p", { text: this.message });
-		const buttonRow = this.contentEl.createDiv({ cls: "rag-chat-confirm-modal-buttons" });
-		buttonRow.createEl("button", { text: "Nein" }).addEventListener("click", () => {
-			this.settle(false);
-			this.close();
-		});
-		buttonRow.createEl("button", {
-			cls: "mod-warning",
-			text: "Ja"
-		}).addEventListener("click", () => {
-			this.settle(true);
-			this.close();
-		});
-	}
-	onClose() {
-		this.settle(false);
-		this.contentEl.empty();
-	}
-	settle(value) {
-		if (this.resolved) return;
-		this.resolved = true;
-		this.resolveFn(value);
-	}
-};
-function confirmModal(app, message) {
-	return new Promise((resolve) => {
-		new ConfirmModal(app, message, resolve).open();
-	});
 }
 //#endregion
 //#region src/view/fuzzy-search-plugin.ts
@@ -9357,6 +9659,25 @@ function renderTurnActions(turnEl, turn, component, callbacks) {
 			});
 		});
 	}
+	if (turn.role === "assistant" && !turn.isClarifying && canCopy) {
+		const speaking = callbacks.isSpeaking?.(turn) ?? false;
+		const speakButton = actionsEl.createEl("button", {
+			cls: "rag-chat-action-button rag-chat-tts-button",
+			attr: { "aria-label": speaking ? "Wiedergabe stoppen" : "Antwort vorlesen" }
+		});
+		if (turn.ttsStatus === "generating") {
+			speakButton.disabled = true;
+			speakButton.addClass("rag-chat-tts-button-loading");
+			(0, obsidian.setIcon)(speakButton, "loader-2");
+		} else if (speaking) {
+			speakButton.addClass("rag-chat-tts-button-playing");
+			(0, obsidian.setIcon)(speakButton, "square");
+		} else if (turn.ttsStatus === "error") {
+			speakButton.addClass("rag-chat-tts-button-error");
+			(0, obsidian.setIcon)(speakButton, "volume-2");
+		} else (0, obsidian.setIcon)(speakButton, "volume-2");
+		component.registerDomEvent(speakButton, "click", () => callbacks.onSpeak?.(turn));
+	}
 	if (turn.retry) {
 		const retryButton = actionsEl.createEl("button", {
 			cls: "rag-chat-action-button rag-chat-retry-button",
@@ -9520,6 +9841,99 @@ function unloadAllTurns(result) {
 	result.markdownComponents.clear();
 }
 //#endregion
+//#region src/tts/short-answer.ts
+var CITATION_MARKUP_PATTERN = /\[Seite\s+[^\]]+\]|\[Referenz:\s*[^\]]+\]/i;
+var SHORT_ANSWER_PROMPT = "Fasse die folgende Antwort für eine Sprachausgabe in 1-2 kurzen, klaren Sätzen zusammen. Behalte exakte Zahlen, Einheiten und Anzugsdrehmomente unverändert bei. Keine Zitatmarker, keine Seitencodes, keine Markdown-Symbole.";
+/**
+* Derives a short, spoken-friendly answer from an already-completed long
+* answer. Never re-runs retrieval or the agent loop, so the spoken number
+* can never drift from the long answer's number - critical for
+* safety-relevant values like torque specs.
+*
+* Fast path: if the long answer is already short and free of citation
+* markup, it is returned unchanged (trimmed), skipping the extra Flash call
+* entirely. Otherwise, a single tool-less generatePlainText call summarizes
+* it.
+*/
+async function buildShortAnswer(longText, settings, opts) {
+	const trimmed = longText.trim();
+	if (trimmed.length <= 240 && !CITATION_MARKUP_PATTERN.test(trimmed)) return trimmed;
+	return (await generatePlainText([{
+		role: "user",
+		parts: [{ text: `${SHORT_ANSWER_PROMPT}\n\n---\n\n${trimmed}` }]
+	}], settings, opts)).trim();
+}
+//#endregion
+//#region src/tts/client.ts
+var ACCESS_DENIED_MESSAGE = "Zugriff verweigert - Cloud Text-to-Speech API und Billing im Projekt dieses API-Keys aktivieren.";
+/**
+* Synthesizes `text` via Google Cloud Text-to-Speech (Chirp 3: HD) and
+* returns the resulting audio as a base64-encoded string (the raw
+* `audioContent` field from the API response).
+*
+* Uses `settings.ttsApiKey` if set, otherwise falls back to
+* `settings.geminiApiKey` - an AI Studio key can authenticate to this API,
+* but only if the Cloud project behind it has the Text-to-Speech API and
+* billing enabled (otherwise expect an HTTP 403, mapped below to a clear
+* German error).
+*
+* Character-usage accounting is the caller's responsibility (see
+* tts/usage.ts) - this module is a pure HTTP client and must not be called
+* for cached/replayed audio.
+*/
+async function synthesizeSpeech(text, settings, opts) {
+	const apiKey = settings.ttsApiKey || settings.geminiApiKey;
+	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
+	const url = "https://texttospeech.googleapis.com/v1/text:synthesize";
+	const body = {
+		input: { text },
+		voice: {
+			languageCode: settings.ttsLanguageCode,
+			name: settings.ttsVoiceName
+		},
+		audioConfig: { audioEncoding: "MP3" }
+	};
+	let response;
+	try {
+		response = await requestUrlWithRetry({
+			url,
+			method: "POST",
+			headers: {
+				"X-Goog-Api-Key": apiKey,
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(body)
+		}, {
+			label: "Sprachsynthese",
+			signal: opts?.signal
+		});
+	} catch (err) {
+		if ((err instanceof Error ? err.message : String(err)).includes("status 403")) throw new Error(ACCESS_DENIED_MESSAGE);
+		throw err;
+	}
+	let json;
+	try {
+		json = response.json;
+	} catch (err) {
+		throw new Error(`Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`);
+	}
+	const audioContent = json?.audioContent;
+	if (typeof audioContent !== "string" || audioContent.length === 0) throw new Error(`Unexpected text:synthesize response shape: ${JSON.stringify(json).slice(0, 300)}`);
+	return audioContent;
+}
+//#endregion
+//#region src/tts/usage.ts
+/**
+* Records characters actually sent to the Cloud TTS synthesize endpoint and
+* persists the updated cumulative counter. Must be called exactly once per
+* real synthesis API call - never on a cached replay of previously
+* synthesized audio (see ChatTurn.ttsAudioBase64).
+*/
+async function recordCharsUsed(plugin, charCount) {
+	plugin.settings.ttsCharCount += charCount;
+	await plugin.saveSettings();
+}
+//#endregion
 //#region src/view/view.ts
 var RAG_CHAT_VIEW_TYPE = "rag-chat-view";
 function emptyRenderResult() {
@@ -9538,9 +9952,12 @@ var RagChatView = class extends obsidian.ItemView {
 		this.rendered = emptyRenderResult();
 		this.closed = false;
 		this.abortController = null;
+		this.ttsPlayingTurn = null;
 		this.turnCallbacks = {
 			onRetry: (turn) => void this.handleRetryClick(turn),
-			onDelete: (turn) => this.handleDeleteClick(turn)
+			onDelete: (turn) => this.handleDeleteClick(turn),
+			onSpeak: (turn) => void this.handleSpeakClick(turn),
+			isSpeaking: (turn) => this.ttsPlayingTurn === turn
 		};
 		this.plugin = plugin;
 	}
@@ -9609,6 +10026,50 @@ var RagChatView = class extends obsidian.ItemView {
 			if (this.busy) this.handleCancelClick();
 			else this.handleSend();
 		});
+		const ttsToggleLabel = inputRow.createEl("label", { cls: "rag-chat-tts-toggle" });
+		this.ttsCheckboxEl = ttsToggleLabel.createEl("input", {
+			cls: "rag-chat-tts-checkbox",
+			attr: { type: "checkbox" }
+		});
+		this.ttsCheckboxEl.checked = this.plugin.settings.ttsEnabled;
+		ttsToggleLabel.createSpan({ text: "Sprachausgabe" });
+		this.registerDomEvent(this.ttsCheckboxEl, "change", () => {
+			this.plugin.settings.ttsEnabled = this.ttsCheckboxEl.checked;
+			this.plugin.saveSettings();
+			this.updateTtsControlsVisibility();
+		});
+		this.ttsControlsRow = container.createDiv({ cls: "rag-chat-tts-controls" });
+		const deviceGroup = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-device" });
+		this.ttsDeviceSelectEl = deviceGroup.createEl("select");
+		this.registerDomEvent(this.ttsDeviceSelectEl, "change", () => {
+			this.handleTtsDeviceChange();
+		});
+		this.ttsDeviceRefreshButton = deviceGroup.createEl("button", { attr: { "aria-label": "Audioausgabegeräte aktualisieren" } });
+		(0, obsidian.setIcon)(this.ttsDeviceRefreshButton, "refresh-cw");
+		this.registerDomEvent(this.ttsDeviceRefreshButton, "click", () => {
+			this.refreshTtsDeviceOptions();
+		});
+		const volumeGroup = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-volume" });
+		this.ttsVolumeSliderEl = volumeGroup.createEl("input", { attr: {
+			type: "range",
+			min: "0",
+			max: "1",
+			step: "0.05"
+		} });
+		this.ttsVolumeSliderEl.value = String(this.plugin.settings.ttsVolume);
+		this.ttsVolumeLabelEl = volumeGroup.createSpan({ cls: "rag-chat-tts-volume-label" });
+		this.updateTtsVolumeLabel();
+		this.registerDomEvent(this.ttsVolumeSliderEl, "input", () => {
+			setVolume(Number(this.ttsVolumeSliderEl.value));
+			this.updateTtsVolumeLabel();
+		});
+		this.registerDomEvent(this.ttsVolumeSliderEl, "change", () => {
+			this.handleTtsVolumeCommit();
+		});
+		this.ttsCharCounterEl = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-char-counter" });
+		this.updateTtsCharCounter();
+		this.updateTtsControlsVisibility();
+		this.refreshTtsDeviceOptions();
 		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
 		this.updateClarificationAffordance();
 		this.refreshModelOptions();
@@ -9616,6 +10077,8 @@ var RagChatView = class extends obsidian.ItemView {
 	async onClose() {
 		this.closed = true;
 		this.abortController?.abort();
+		stop();
+		this.ttsPlayingTurn = null;
 		unloadAllTurns(this.rendered);
 		this.contentEl.empty();
 	}
@@ -9668,6 +10131,114 @@ var RagChatView = class extends obsidian.ItemView {
 		this.plugin.settings.generationModel = value;
 		await this.plugin.saveSettings();
 	}
+	updateTtsControlsVisibility() {
+		this.ttsControlsRow.toggleClass("rag-chat-hidden", !this.plugin.settings.ttsEnabled);
+	}
+	updateTtsVolumeLabel() {
+		const pct = Math.round(Number(this.ttsVolumeSliderEl.value) * 100);
+		this.ttsVolumeLabelEl.setText(`${pct}%`);
+	}
+	async handleTtsVolumeCommit() {
+		this.plugin.settings.ttsVolume = Number(this.ttsVolumeSliderEl.value);
+		await this.plugin.saveSettings();
+	}
+	updateTtsCharCounter() {
+		const used = this.plugin.settings.ttsCharCount.toLocaleString("de-DE");
+		const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
+		this.ttsCharCounterEl.setText(`${used} / ${limit} Zeichen (Freikontingent)`);
+	}
+	async refreshTtsDeviceOptions() {
+		this.ttsDeviceSelectEl.disabled = true;
+		this.ttsDeviceRefreshButton.disabled = true;
+		const devices = await listOutputDevices();
+		if (this.closed) return;
+		this.ttsDeviceSelectEl.empty();
+		this.ttsDeviceSelectEl.createEl("option", {
+			attr: { value: "" },
+			text: "Systemstandard"
+		});
+		const deviceIds = [];
+		for (const device of devices) {
+			if (!device.deviceId || device.deviceId === "default") continue;
+			deviceIds.push(device.deviceId);
+			this.ttsDeviceSelectEl.createEl("option", {
+				attr: { value: device.deviceId },
+				text: device.label || `Gerät ${device.deviceId.slice(0, 8)}`
+			});
+		}
+		const current = this.plugin.settings.ttsOutputDeviceId;
+		const hasCurrent = current === "" || deviceIds.includes(current);
+		this.ttsDeviceSelectEl.value = hasCurrent ? current : "";
+		this.ttsDeviceSelectEl.disabled = this.busy;
+		this.ttsDeviceRefreshButton.disabled = this.busy;
+	}
+	async handleTtsDeviceChange() {
+		this.plugin.settings.ttsOutputDeviceId = this.ttsDeviceSelectEl.value;
+		await this.plugin.saveSettings();
+	}
+	/** Plays already-synthesized audio for `turn`, tracking it as the
+	* "currently speaking" turn so the speaker button reflects a stop state,
+	* and clearing that state (re-rendering the turn) once playback ends. */
+	async playTurnAudio(turn, audioBase64) {
+		setOnEnded(() => {
+			if (this.ttsPlayingTurn !== turn) return;
+			this.ttsPlayingTurn = null;
+			if (!this.closed) this.syncTurn(turn);
+		});
+		this.ttsPlayingTurn = turn;
+		try {
+			await play(audioBase64, {
+				deviceId: this.plugin.settings.ttsOutputDeviceId,
+				volume: this.plugin.settings.ttsVolume
+			});
+		} catch (err) {
+			this.ttsPlayingTurn = null;
+			if (!this.closed) new obsidian.Notice(`RAG Chat: Wiedergabe fehlgeschlagen (${err instanceof Error ? err.message : String(err)}).`);
+		}
+		if (!this.closed) this.syncTurn(turn);
+	}
+	/**
+	* Runs the short-answer -> synthesize -> cache -> play pipeline for a
+	* turn that doesn't have cached TTS audio yet, then plays it. Any failure
+	* is caught and surfaces a Notice only - the already-displayed long
+	* answer is never touched. Char-usage is recorded exactly once here, per
+	* real synthesis call (never for cached replays - see handleSpeakClick).
+	*/
+	async synthesizeAndPlay(turn, signal) {
+		turn.ttsStatus = "generating";
+		this.syncTurn(turn);
+		try {
+			const shortText = await buildShortAnswer(turn.text, this.plugin.settings, { signal });
+			const audio = await synthesizeSpeech(shortText, this.plugin.settings, { signal });
+			await recordCharsUsed(this.plugin, shortText.length);
+			if (this.closed) return;
+			turn.ttsText = shortText;
+			turn.ttsAudioBase64 = audio;
+			turn.ttsStatus = "ready";
+			this.updateTtsCharCounter();
+			this.playTurnAudio(turn, audio);
+		} catch (err) {
+			turn.ttsStatus = "error";
+			if (!this.closed) {
+				this.syncTurn(turn);
+				new obsidian.Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${err instanceof Error ? err.message : String(err)}).`);
+			}
+		}
+	}
+	async handleSpeakClick(turn) {
+		if (this.ttsPlayingTurn === turn) {
+			stop();
+			this.ttsPlayingTurn = null;
+			this.syncTurn(turn);
+			return;
+		}
+		if (turn.ttsStatus === "generating") return;
+		if (turn.ttsAudioBase64) {
+			this.playTurnAudio(turn, turn.ttsAudioBase64);
+			return;
+		}
+		await this.synthesizeAndPlay(turn);
+	}
 	async handleCancelClick() {
 		const confirmed = await confirmModal(this.app, "Anfrage wirklich abbrechen?");
 		if (this.closed) return;
@@ -9719,6 +10290,10 @@ var RagChatView = class extends obsidian.ItemView {
 					this.inputEl.value = originalMessage;
 					this.inputEl.focus();
 					new obsidian.Notice("Anfrage abgebrochen.");
+				},
+				onTurnDone: (turn) => {
+					if (this.closed || !this.plugin.settings.ttsEnabled) return;
+					this.synthesizeAndPlay(turn, controller.signal);
 				}
 			});
 		} finally {
@@ -9873,7 +10448,9 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			new obsidian.Notice(`RAG Chat: konnte rag-manifest.json nicht laden (${err instanceof Error ? err.message : String(err)}). Index ggf. neu bauen.`, 1e4);
 		}
 	}
-	onunload() {}
+	onunload() {
+		dispose();
+	}
 	getPluginDir() {
 		return getPluginDir(this.manifest);
 	}
@@ -9939,6 +10516,17 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			this.lastEncryptedApiKeyCiphertext = void 0;
 			if (storedApiKey) new obsidian.Notice("RAG Chat: Google API key (GEMINI_API_KEY) konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.", 1e4);
 		}
+		const storedTtsApiKey = raw.ttsApiKey;
+		try {
+			this.settings.ttsApiKey = await decryptSecret(storedTtsApiKey);
+			this.lastEncryptedTtsApiKeyPlaintext = this.settings.ttsApiKey;
+			this.lastEncryptedTtsApiKeyCiphertext = storedTtsApiKey;
+		} catch (err) {
+			this.settings.ttsApiKey = "";
+			this.lastEncryptedTtsApiKeyPlaintext = void 0;
+			this.lastEncryptedTtsApiKeyCiphertext = void 0;
+			if (storedTtsApiKey) new obsidian.Notice("RAG Chat: TTS API-Key konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.", 1e4);
+		}
 	}
 	async saveSettings() {
 		const toPersist = { ...this.settings };
@@ -9948,6 +10536,13 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			toPersist.geminiApiKey = encrypted;
 			this.lastEncryptedApiKeyPlaintext = this.settings.geminiApiKey;
 			this.lastEncryptedApiKeyCiphertext = encrypted;
+		}
+		if (this.settings.ttsApiKey === this.lastEncryptedTtsApiKeyPlaintext && this.lastEncryptedTtsApiKeyCiphertext !== void 0) toPersist.ttsApiKey = this.lastEncryptedTtsApiKeyCiphertext;
+		else {
+			const encrypted = await encryptSecret(this.settings.ttsApiKey);
+			toPersist.ttsApiKey = encrypted;
+			this.lastEncryptedTtsApiKeyPlaintext = this.settings.ttsApiKey;
+			this.lastEncryptedTtsApiKeyCiphertext = encrypted;
 		}
 		await this.saveData(toPersist);
 	}

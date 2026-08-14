@@ -8,6 +8,15 @@ export interface RagChatSettings {
   rrfK: number;
   enableFuzzySearchLeg: boolean;
   maxAgentRounds: number;
+
+  // --- TTS (voice output) ---
+  ttsEnabled: boolean;
+  ttsApiKey: string;
+  ttsLanguageCode: string;
+  ttsVoiceName: string;
+  ttsOutputDeviceId: string;
+  ttsVolume: number;
+  ttsCharCount: number;
 }
 
 export const DEFAULT_SETTINGS: RagChatSettings = {
@@ -20,4 +29,12 @@ export const DEFAULT_SETTINGS: RagChatSettings = {
   rrfK: 2,
   enableFuzzySearchLeg: true,
   maxAgentRounds: 5,
+
+  ttsEnabled: false,
+  ttsApiKey: "",
+  ttsLanguageCode: "de-DE",
+  ttsVoiceName: "de-DE-Chirp3-HD-Laomedeia",
+  ttsOutputDeviceId: "",
+  ttsVolume: 1.0,
+  ttsCharCount: 0,
 };

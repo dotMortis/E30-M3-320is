@@ -254,6 +254,8 @@ export class ButtonComponent {
   private clickHandler?: (evt: unknown) => void | Promise<void>;
   private tooltip = "";
   private icon = "";
+  private buttonText = "";
+  private warning = false;
 
   constructor(containerEl: FakeElement) {
     this.el = containerEl.createEl("button");
@@ -279,6 +281,26 @@ export class ButtonComponent {
     return this.tooltip;
   }
 
+  setButtonText(text: string): this {
+    this.buttonText = text;
+    this.el.setText(text);
+    return this;
+  }
+
+  getButtonText(): string {
+    return this.buttonText;
+  }
+
+  setWarning(): this {
+    this.warning = true;
+    this.el.addClass("mod-warning");
+    return this;
+  }
+
+  isWarning(): boolean {
+    return this.warning;
+  }
+
   setDisabled(disabled: boolean): this {
     this.el.disabled = disabled;
     return this;
@@ -292,6 +314,53 @@ export class ButtonComponent {
 
   async triggerClick(): Promise<void> {
     await this.clickHandler?.({});
+  }
+}
+
+export class SliderComponent {
+  el: FakeElement;
+  value = 0;
+  private changeHandler?: (value: number) => void | Promise<void>;
+
+  constructor(containerEl: FakeElement) {
+    this.el = containerEl.createEl("input", { attr: { type: "range" } });
+  }
+
+  setLimits(min: number, max: number, step: number | "any"): this {
+    this.el.setAttribute("min", String(min));
+    this.el.setAttribute("max", String(max));
+    this.el.setAttribute("step", String(step));
+    return this;
+  }
+
+  getValue(): number {
+    return this.value;
+  }
+
+  setValue(value: number): this {
+    this.value = value;
+    this.el.value = String(value);
+    return this;
+  }
+
+  setDynamicTooltip(): this {
+    return this;
+  }
+
+  setDisabled(disabled: boolean): this {
+    this.el.disabled = disabled;
+    return this;
+  }
+
+  onChange(fn: (value: number) => void | Promise<void>): this {
+    this.changeHandler = fn;
+    return this;
+  }
+
+  async triggerChange(value: number): Promise<void> {
+    this.value = value;
+    this.el.value = String(value);
+    await this.changeHandler?.(value);
   }
 }
 
@@ -347,7 +416,7 @@ export class Setting {
   static instances: Setting[] = [];
   containerEl: FakeElement;
   settingEl: FakeElement;
-  components: (TextComponent | ToggleComponent | ButtonComponent | DropdownComponent)[] = [];
+  components: (TextComponent | ToggleComponent | ButtonComponent | DropdownComponent | SliderComponent)[] = [];
 
   constructor(containerEl: FakeElement) {
     this.containerEl = containerEl;
@@ -388,6 +457,13 @@ export class Setting {
 
   addDropdown(cb: (dropdown: DropdownComponent) => void): this {
     const component = new DropdownComponent(this.settingEl);
+    this.components.push(component);
+    cb(component);
+    return this;
+  }
+
+  addSlider(cb: (slider: SliderComponent) => void): this {
+    const component = new SliderComponent(this.settingEl);
     this.components.push(component);
     cb(component);
     return this;

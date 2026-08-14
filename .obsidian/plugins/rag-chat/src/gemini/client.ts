@@ -99,3 +99,62 @@ export async function generateWithTools(
 
   return { parts, groundingChunks, groundingSupports, finishReason: candidate?.finishReason };
 }
+
+/**
+ * Minimal, tool-less sibling to `generateWithTools`: no Google Search, no
+ * function declarations, no tool-suffix system instruction - just a plain
+ * instruction plus contents. Used only by tts/short-answer.ts to keep the
+ * spoken-answer summarization cheap, fast, and unable to trigger the
+ * agent/tool machinery.
+ */
+export async function generatePlainText(
+  contents: GeminiContent[],
+  settings: RagChatSettings,
+  opts?: { signal?: AbortSignal }
+): Promise<string> {
+  const apiKey = settings.geminiApiKey;
+  if (!apiKey) {
+    throw new Error("Google API key is required - set it in RAG Chat settings.");
+  }
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${settings.generationModel}:generateContent`;
+
+  const body: Record<string, unknown> = {
+    contents,
+  };
+
+  const response = await requestUrlWithRetry(
+    {
+      url,
+      method: "POST",
+      headers: { "x-goog-api-key": apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    },
+    { label: "Kurzantwort", signal: opts?.signal }
+  );
+
+  let json: any;
+  try {
+    json = response.json;
+  } catch (err) {
+    throw new Error(
+      `Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`
+    );
+  }
+
+  const candidate = json?.candidates?.[0];
+  const parts = candidate?.content?.parts ?? [];
+  if (parts.length === 0) {
+    const blockReason = json?.promptFeedback?.blockReason as string | undefined;
+    const finishReason = candidate?.finishReason as string | undefined;
+    const reason = blockReason ?? (finishReason && finishReason !== "STOP" ? finishReason : undefined);
+    if (reason) {
+      throw new Error(BLOCK_REASON_MESSAGES[reason] ?? `Die Antwort wurde blockiert/abgebrochen (Grund: ${reason}).`);
+    }
+    throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(json).slice(0, 300)}`);
+  }
+
+  return parts
+    .map((p: { text?: string }) => p.text ?? "")
+    .join("")
+    .trim();
+}

@@ -8,6 +8,7 @@ import type { RagManifest } from "./retrieval/types";
 import { getPluginDir, getPluginDirFullPath } from "./plugin/paths";
 import { readManifest } from "./retrieval/manifest";
 import { decryptSecret, encryptSecret } from "./secure-storage";
+import { dispose as disposeTtsPlayback } from "./tts/playback";
 
 export default class RagChatPlugin extends Plugin {
   settings!: RagChatSettings;
@@ -18,6 +19,10 @@ export default class RagChatPlugin extends Plugin {
   // salt/IV) when the key itself hasn't actually changed since last save.
   private lastEncryptedApiKeyPlaintext: string | undefined;
   private lastEncryptedApiKeyCiphertext: string | undefined;
+  // Same cache-pair mechanism as above, mirrored for the optional, separate
+  // ttsApiKey setting.
+  private lastEncryptedTtsApiKeyPlaintext: string | undefined;
+  private lastEncryptedTtsApiKeyCiphertext: string | undefined;
 
   async onload(): Promise<void> {
     await this.loadSettings();
@@ -75,7 +80,9 @@ export default class RagChatPlugin extends Plugin {
     }
   }
 
-  onunload(): void {}
+  onunload(): void {
+    disposeTtsPlayback();
+  }
 
   getPluginDir(): string {
     return getPluginDir(this.manifest);
@@ -162,6 +169,23 @@ export default class RagChatPlugin extends Plugin {
         );
       }
     }
+
+    const storedTtsApiKey = raw.ttsApiKey as string | undefined;
+    try {
+      this.settings.ttsApiKey = await decryptSecret(storedTtsApiKey);
+      this.lastEncryptedTtsApiKeyPlaintext = this.settings.ttsApiKey;
+      this.lastEncryptedTtsApiKeyCiphertext = storedTtsApiKey;
+    } catch (err) {
+      this.settings.ttsApiKey = "";
+      this.lastEncryptedTtsApiKeyPlaintext = undefined;
+      this.lastEncryptedTtsApiKeyCiphertext = undefined;
+      if (storedTtsApiKey) {
+        new Notice(
+          "RAG Chat: TTS API-Key konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.",
+          10000
+        );
+      }
+    }
   }
 
   async saveSettings(): Promise<void> {
@@ -174,6 +198,18 @@ export default class RagChatPlugin extends Plugin {
       toPersist.geminiApiKey = encrypted;
       this.lastEncryptedApiKeyPlaintext = this.settings.geminiApiKey;
       this.lastEncryptedApiKeyCiphertext = encrypted;
+    }
+
+    if (
+      this.settings.ttsApiKey === this.lastEncryptedTtsApiKeyPlaintext &&
+      this.lastEncryptedTtsApiKeyCiphertext !== undefined
+    ) {
+      toPersist.ttsApiKey = this.lastEncryptedTtsApiKeyCiphertext;
+    } else {
+      const encrypted = await encryptSecret(this.settings.ttsApiKey);
+      toPersist.ttsApiKey = encrypted;
+      this.lastEncryptedTtsApiKeyPlaintext = this.settings.ttsApiKey;
+      this.lastEncryptedTtsApiKeyCiphertext = encrypted;
     }
 
     await this.saveData(toPersist);

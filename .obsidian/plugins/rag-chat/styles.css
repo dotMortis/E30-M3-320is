@@ -383,3 +383,64 @@
 .rag-chat-send {
   flex: 0 0 auto;
 }
+
+.rag-chat-tts-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.rag-chat-tts-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+  border-top: 1px solid var(--background-modifier-border);
+  flex-wrap: wrap;
+}
+
+.rag-chat-tts-device {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rag-chat-tts-device select {
+  font-size: var(--font-ui-smaller);
+  max-width: 180px;
+}
+
+.rag-chat-tts-volume {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rag-chat-tts-volume-label {
+  min-width: 3em;
+  text-align: right;
+}
+
+.rag-chat-tts-char-counter {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.rag-chat-tts-button-playing {
+  color: var(--text-accent);
+}
+
+.rag-chat-tts-button-loading {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.rag-chat-tts-button-error {
+  color: var(--text-error);
+}

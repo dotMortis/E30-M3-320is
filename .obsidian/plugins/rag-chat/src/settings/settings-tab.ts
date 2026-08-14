@@ -1,6 +1,11 @@
 import { App, PluginSettingTab, Setting, type ButtonComponent, type DropdownComponent } from "obsidian";
 import type RagChatPlugin from "../main";
 import { listFlashModels } from "../gemini/models";
+import { listChirp3Voices, type Chirp3VoiceInfo } from "../tts/voices";
+import { listOutputDevices, unlockDeviceLabels } from "../tts/devices";
+import * as ttsPlayback from "../tts/playback";
+import { confirmModal } from "../view/confirm-modal";
+import { TTS_FREE_TIER_CHAR_LIMIT } from "../constants";
 
 export class RagChatSettingTab extends PluginSettingTab {
   plugin: RagChatPlugin;
@@ -197,5 +202,201 @@ export class RagChatSettingTab extends PluginSettingTab {
           }
         })
       );
+
+    containerEl.createEl("h3", { text: "Sprachausgabe (TTS)" });
+    containerEl.createEl("p", {
+      text:
+        "Optional: zusätzlich zur gewohnten, zitatreichen Antwort wird eine kurze, gesprochene " +
+        "Zusammenfassung erzeugt und über Google Cloud Text-to-Speech (Chirp 3: HD) abgespielt - " +
+        "z.B. für die Werkstatt, um ein Anzugsdrehmoment vorgelesen zu bekommen.",
+    });
+
+    new Setting(containerEl)
+      .setName("Sprachausgabe aktivieren")
+      .setDesc("Setzt den Anfangszustand der Sprachausgabe-Checkbox im Chat (dort jederzeit umschaltbar).")
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.ttsEnabled).onChange(async (value) => {
+          this.plugin.settings.ttsEnabled = value;
+          await this.plugin.saveSettings();
+        })
+      );
+
+    let ttsApiKeyInputEl: HTMLInputElement | undefined;
+    new Setting(containerEl)
+      .setName("TTS API key")
+      .setDesc(
+        "Separater Google Cloud API-Key für Text-to-Speech (optional). Benötigt aktivierte Cloud " +
+          "Text-to-Speech API und Billing im zugehörigen Projekt. Leer = es wird versucht, den " +
+          "Gemini-Key oben zu verwenden."
+      )
+      .addText((text) => {
+        text
+          .setPlaceholder("AIza...")
+          .setValue(this.plugin.settings.ttsApiKey)
+          .onChange(async (value) => {
+            this.plugin.settings.ttsApiKey = value.trim();
+            await this.plugin.saveSettings();
+          });
+        ttsApiKeyInputEl = text.inputEl;
+        ttsApiKeyInputEl.type = "password";
+      })
+      .addButton((button) => {
+        button.setIcon("eye").setTooltip("API-Schlüssel anzeigen/verbergen");
+        button.onClick(() => {
+          if (!ttsApiKeyInputEl) return;
+          const revealed = ttsApiKeyInputEl.type === "text";
+          ttsApiKeyInputEl.type = revealed ? "password" : "text";
+          button.setIcon(revealed ? "eye" : "eye-off");
+        });
+      });
+
+    let ttsLanguageDropdown: DropdownComponent | undefined;
+    let ttsVoiceDropdown: DropdownComponent | undefined;
+    let ttsVoiceRefreshButton: ButtonComponent | undefined;
+    let ttsVoicesCache: Chirp3VoiceInfo[] = [];
+
+    const populateTtsVoiceOptions = (languageCode: string): void => {
+      if (!ttsVoiceDropdown) return;
+      const currentVoice = this.plugin.settings.ttsVoiceName;
+      const names = ttsVoicesCache.filter((v) => v.languageCodes.includes(languageCode)).map((v) => v.name);
+      const options = names.includes(currentVoice) ? names : [currentVoice, ...names];
+
+      ttsVoiceDropdown.selectEl.empty();
+      for (const name of options) ttsVoiceDropdown.addOption(name, name);
+      ttsVoiceDropdown.setValue(currentVoice);
+    };
+
+    const refreshTtsVoiceOptions = async (): Promise<void> => {
+      if (!ttsLanguageDropdown || !ttsVoiceDropdown) return;
+      const apiKey = this.plugin.settings.ttsApiKey || this.plugin.settings.geminiApiKey;
+      ttsLanguageDropdown.setDisabled(true);
+      ttsVoiceDropdown.setDisabled(true);
+      ttsVoiceRefreshButton?.setDisabled(true);
+
+      ttsVoicesCache = await listChirp3Voices(apiKey);
+
+      const currentLanguage = this.plugin.settings.ttsLanguageCode;
+      const languageCodes = Array.from(new Set(ttsVoicesCache.flatMap((v) => v.languageCodes))).sort();
+      const languageOptions = languageCodes.includes(currentLanguage) ? languageCodes : [currentLanguage, ...languageCodes];
+
+      ttsLanguageDropdown.selectEl.empty();
+      for (const code of languageOptions) ttsLanguageDropdown.addOption(code, code);
+      ttsLanguageDropdown.setValue(currentLanguage);
+
+      populateTtsVoiceOptions(currentLanguage);
+
+      ttsLanguageDropdown.setDisabled(false);
+      ttsVoiceDropdown.setDisabled(false);
+      ttsVoiceRefreshButton?.setDisabled(false);
+    };
+
+    new Setting(containerEl)
+      .setName("Sprache")
+      .addDropdown((dropdown) => {
+        ttsLanguageDropdown = dropdown;
+        dropdown.addOption(this.plugin.settings.ttsLanguageCode, this.plugin.settings.ttsLanguageCode);
+        dropdown.setValue(this.plugin.settings.ttsLanguageCode);
+        dropdown.onChange(async (value) => {
+          this.plugin.settings.ttsLanguageCode = value;
+          await this.plugin.saveSettings();
+          populateTtsVoiceOptions(value);
+        });
+      });
+
+    new Setting(containerEl)
+      .setName("Stimme (Chirp 3: HD)")
+      .addDropdown((dropdown) => {
+        ttsVoiceDropdown = dropdown;
+        dropdown.addOption(this.plugin.settings.ttsVoiceName, this.plugin.settings.ttsVoiceName);
+        dropdown.setValue(this.plugin.settings.ttsVoiceName);
+        dropdown.onChange(async (value) => {
+          this.plugin.settings.ttsVoiceName = value;
+          await this.plugin.saveSettings();
+        });
+      })
+      .addButton((button) => {
+        ttsVoiceRefreshButton = button;
+        button.setIcon("refresh-cw").setTooltip("Stimmenliste aktualisieren");
+        button.onClick(() => {
+          void refreshTtsVoiceOptions();
+        });
+      });
+
+    void refreshTtsVoiceOptions();
+
+    let ttsDeviceDropdown: DropdownComponent | undefined;
+
+    const refreshTtsDeviceOptions = async (): Promise<void> => {
+      if (!ttsDeviceDropdown) return;
+      const devices = await listOutputDevices();
+      const current = this.plugin.settings.ttsOutputDeviceId;
+
+      ttsDeviceDropdown.selectEl.empty();
+      ttsDeviceDropdown.addOption("", "Systemstandard");
+      for (const device of devices) {
+        if (!device.deviceId || device.deviceId === "default") continue;
+        ttsDeviceDropdown.addOption(device.deviceId, device.label || `Gerät ${device.deviceId.slice(0, 8)}`);
+      }
+      const hasCurrent = current === "" || devices.some((d) => d.deviceId === current);
+      ttsDeviceDropdown.setValue(hasCurrent ? current : "");
+    };
+
+    new Setting(containerEl)
+      .setName("Audioausgabegerät")
+      .setDesc(
+        "\"Geräte erkennen\" fragt einmalig nach Mikrofonberechtigung, nur um Gerätenamen auszulesen " +
+          "- es wird nichts aufgenommen oder übertragen."
+      )
+      .addDropdown((dropdown) => {
+        ttsDeviceDropdown = dropdown;
+        dropdown.addOption("", "Systemstandard");
+        dropdown.onChange(async (value) => {
+          this.plugin.settings.ttsOutputDeviceId = value;
+          await this.plugin.saveSettings();
+        });
+      })
+      .addButton((button) => {
+        button.setButtonText("Geräte erkennen");
+        button.onClick(async () => {
+          button.setDisabled(true);
+          await unlockDeviceLabels();
+          await refreshTtsDeviceOptions();
+          button.setDisabled(false);
+        });
+      });
+
+    void refreshTtsDeviceOptions();
+
+    new Setting(containerEl)
+      .setName("Lautstärke")
+      .addSlider((slider) =>
+        slider
+          .setLimits(0, 1, 0.05)
+          .setValue(this.plugin.settings.ttsVolume)
+          .setDynamicTooltip()
+          .onChange(async (value) => {
+            ttsPlayback.setVolume(value);
+            this.plugin.settings.ttsVolume = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    const charCounterSetting = new Setting(containerEl).setName("Zeichenzähler (Chirp 3 HD)");
+    const updateCharCounterDesc = (): void => {
+      const used = this.plugin.settings.ttsCharCount.toLocaleString("de-DE");
+      const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
+      charCounterSetting.setDesc(`${used} / ${limit} Zeichen (Freikontingent).`);
+    };
+    updateCharCounterDesc();
+    charCounterSetting.addButton((button) => {
+      button.setButtonText("Zurücksetzen").setWarning();
+      button.onClick(async () => {
+        const confirmed = await confirmModal(this.app, "Zeichenzähler wirklich zurücksetzen?");
+        if (!confirmed) return;
+        this.plugin.settings.ttsCharCount = 0;
+        await this.plugin.saveSettings();
+        updateCharCounterDesc();
+      });
+    });
   }
 }

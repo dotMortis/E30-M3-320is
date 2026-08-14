@@ -56,3 +56,17 @@ export const HTTP_REQUEST_TIMEOUT_MS = 45_000;
 export const HTTP_RETRY_COUNTDOWN_TICK_MS = 1000;
 
 export const ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";
+
+/** Audio encoding requested from Cloud Text-to-Speech (Chirp 3: HD). */
+export const TTS_AUDIO_ENCODING = "MP3";
+
+/**
+ * Below this character count, and free of citation markup, a long answer is
+ * spoken directly rather than summarized via an extra Flash call. Covers the
+ * common single-torque-value case with zero added latency. See
+ * tts/short-answer.ts.
+ */
+export const TTS_SHORT_ANSWER_MAX_CHARS = 240;
+
+/** Chirp 3 HD free tier ceiling (characters/month), for the usage display only. */
+export const TTS_FREE_TIER_CHAR_LIMIT = 1_000_000;

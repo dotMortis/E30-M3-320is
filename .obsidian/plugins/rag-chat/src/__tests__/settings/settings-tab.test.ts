@@ -35,9 +35,9 @@ describe("RagChatSettingTab.display", () => {
     expect(containerEl.children.some((c) => c.tag === "h2" && c.text === "RAG Chat")).toBe(true);
   });
 
-  it("creates exactly 9 Setting rows", () => {
+  it("creates exactly 16 Setting rows", () => {
     makeTab();
-    expect(Setting.instances).toHaveLength(9);
+    expect(Setting.instances).toHaveLength(16);
   });
 
   it("pre-fills the API key field with the current setting value", () => {
@@ -136,7 +136,9 @@ describe("RagChatSettingTab.display", () => {
 
   it("re-fetches the model list when the refresh button next to the dropdown is clicked", async () => {
     const { plugin } = makeTab();
-    await vi.waitFor(() => expect(requestUrl).toHaveBeenCalledTimes(1));
+    // Two requestUrl calls happen on initial mount: the generation-model
+    // list and the TTS voices list (both refreshed eagerly in display()).
+    await vi.waitFor(() => expect(requestUrl).toHaveBeenCalledTimes(2));
 
     mockRequestUrlSequence([
       listModelsResponse([
@@ -147,7 +149,7 @@ describe("RagChatSettingTab.display", () => {
     const refreshButton = Setting.instances[2].components[1] as ButtonComponent;
     await refreshButton.triggerClick();
 
-    expect(requestUrl).toHaveBeenCalledTimes(2);
+    expect(requestUrl).toHaveBeenCalledTimes(3);
     const optionValues = dropdown.selectEl.children.map((c) => c.attrs.value);
     expect(optionValues).toContain("gemini-3.6-flash");
     expect(dropdown.getValue()).toBe(plugin.settings.generationModel);
