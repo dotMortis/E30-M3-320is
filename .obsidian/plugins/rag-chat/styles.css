@@ -4,6 +4,18 @@
   height: 100%;
 }
 
+.rag-chat-toolbar-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.rag-chat-clear-button {
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
 .rag-chat-messages {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -19,25 +31,10 @@
   font-size: var(--font-text-size);
 }
 
-/* Assistant answers are ALWAYS markdown-rendered now (see view.ts's
- * MarkdownRenderer.render, used for every non-empty assistant turn -
- * real answers, clarifying questions, and error text alike), so
- * white-space MUST stay at the normal default here, not pre-wrap:
- * CommonMark's "soft line break" (a single \n inside a paragraph, e.g.
- * from Gemini wrapping a sentence at some column width) is meant to be
- * INVISIBLE - collapsed into an ordinary space by normal whitespace
- * handling. With pre-wrap inherited from a shared .rag-chat-turn rule,
- * every one of those normally-invisible soft breaks instead rendered as
- * a forced hard line break, which - compounded with paragraph/list
- * margins - was the dominant cause of the excess vertical whitespace
- * (not just margins, which is what the previous pass tightened alone). */
 .rag-chat-turn-user {
   background-color: var(--background-modifier-hover);
   align-self: flex-end;
   max-width: 90%;
-  /* The user's own typed question is plain text (view.ts's setText, not
-   * MarkdownRenderer.render) - preserve any manual Shift+Enter line
-   * breaks they typed, unlike the assistant side above. */
   white-space: pre-wrap;
 }
 
@@ -47,9 +44,6 @@
   max-width: 95%;
 }
 
-/* A paused ask_user clarifying question (see agent.ts) - visually distinct
- * from a final answer so it's clear the model is waiting on a reply before
- * it can continue, not just done. */
 .rag-chat-turn-clarifying {
   border: 1px solid var(--interactive-accent);
   background-color: var(--background-secondary);
@@ -64,30 +58,15 @@
 
 .rag-chat-turn-text {
   word-wrap: break-word;
-  /* Denser than Obsidian's reading-view default (~1.5-1.6) - this is a
-   * compact chat bubble, not a full-page note. !important because this is
-   * a plugin-owned, non-editable UI surface: there's no legitimate reason
-   * for the active theme's note-reading typography to win here, and
-   * fighting unknown per-theme specificity/cascade-order otherwise isn't
-   * worth it. */
   line-height: 1.35 !important;
 }
 
-/* Markdown-rendered assistant answers (see view.ts's MarkdownRenderer.render)
- * shouldn't double up on the message bubble's own padding/margins. */
 .rag-chat-turn-text :is(h1, h2, h3, h4) {
   margin-top: 0.3em !important;
   margin-bottom: 0.15em !important;
   font-size: 1em;
 }
 
-/* Tighten ALL paragraph spacing, not just first/last-child - Obsidian's
- * default reading-view <p> margin (roughly 1em top+bottom) is a major
- * source of excess empty space in the compact chat bubble once a few
- * interior paragraphs pile up (intro line, a "Deutsche Anleitungen:" label
- * line, a caveat line, etc. - each previously kept its own full default
- * margin except the very first/last one). !important throughout this
- * block for the same reason as line-height above - see its comment. */
 .rag-chat-turn-text p {
   margin: 0.2em 0 !important;
 }
@@ -100,19 +79,10 @@
   margin-bottom: 0 !important;
 }
 
-/* Obsidian's default <hr> margin is large (built for full-page notes, not
- * a narrow chat bubble) - this is what causes the big gap around the
- * divider between "1. Aus dem Werkstatthandbuch" and "2. Zusätzliches
- * Wissen ...". */
 .rag-chat-turn-text hr {
   margin: 0.4em 0 !important;
 }
 
-/* Tighten list spacing - Obsidian's default reading-view margins on
- * <p>/<ol>/<ul>/<li> (esp. a <p> wrapping a list item's own text before a
- * nested sub-list) leave large, visually confusing gaps inside the compact
- * chat bubble, e.g. between a numbered step's bold heading and its nested
- * bullet points. */
 .rag-chat-turn-text :is(ol, ul) {
   margin: 0.2em 0 !important;
   padding-left: 1.4em;
@@ -131,23 +101,12 @@
   margin-bottom: 0 !important;
 }
 
-/* Seitencode mentioned inline by the model but not found at all among this
- * turn's actually-retrieved sources (hallucinated/typo'd - see
- * citation-links.ts) - flagged instead of linked or silently left plain, so
- * an unverifiable citation is visually distinct from a real one. Reserved
- * strictly for zero-match codes - an ambiguous (multi-match) code gets the
- * expandable treatment below instead, since a real page DOES exist there. */
 .rag-chat-citation-unverified {
   color: var(--text-warning, var(--text-muted));
   border-bottom: 1px dashed var(--text-warning, var(--text-muted));
   cursor: help;
 }
 
-/* A cited seitencode that collides across >1 retrieved page (see
- * citation-links.ts's linkifyCitations and PLAN.md's "47 seitencodes
- * collide" note) - an expandable <details> listing every real candidate
- * page as its own link, kept inline (not block) so it doesn't disrupt the
- * surrounding sentence/bracket flow. */
 .rag-chat-citation-ambiguous {
   display: inline-block;
   vertical-align: baseline;
@@ -188,10 +147,6 @@
   color: var(--text-muted);
 }
 
-/* Transient "what's happening right now" label (see view.ts's ChatTurn.status)
- * shown in the answer box while retrieval/generation/validation are still in
- * flight - visually distinct from real answer content so it's clear the
- * reply isn't final yet. */
 .rag-chat-turn-status {
   font-style: italic;
   color: var(--text-muted);
@@ -228,17 +183,10 @@
   text-decoration: underline;
 }
 
-/* Web citations (Google Search grounding, see agent.ts's webCitations) are
- * kept in their own row, visually separate from manual-page citations, so
- * it's clear at a glance which sources are the verified factory manual vs.
- * unverified web results. */
 .rag-chat-web-citations {
   border-top-color: var(--text-accent);
 }
 
-/* Each fallback web-citation entry (link + optional cited-excerpt snippet,
- * see view.ts / citation-links.ts's buildWebCitationSnippets) stays on one
- * line together instead of the link and its snippet wrapping independently. */
 .rag-chat-web-citation-row {
   white-space: nowrap;
 }
@@ -248,11 +196,6 @@
   font-style: italic;
 }
 
-/* Collapsed-by-default trail of every status line emitted over a turn's
- * lifetime (baseline retrieval hit count, per-round tool calls + outcomes,
- * retry countdowns - see ChatTurn.statusLog / view.ts's renderStatusLog).
- * Stays available after the answer renders so it's reviewable, without
- * cluttering the default view. */
 .rag-chat-status-log {
   margin-top: 6px;
   padding-top: 6px;

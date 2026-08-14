@@ -32,15 +32,7 @@ export class RagChatView extends ItemView {
   private cancelClarificationButton!: HTMLButtonElement;
   private busy = false;
   private rendered: RenderTurnsResult = emptyRenderResult();
-  /** True once onClose()/onunload() has run - gates all UI-touching
-   * callbacks so a settling promise from a request started before close
-   * doesn't touch a torn-down view (stray Notice, rerender into an emptied
-   * contentEl, etc). */
   private closed = false;
-  /** Aborted on close (or when a new send starts) so an abandoned request's
-   * agent loop stops taking further rounds. Obsidian's requestUrl has no
-   * cancellation support, so an already-in-flight HTTP call itself can't be
-   * aborted - this only stops the *next* round from starting. */
   private abortController: AbortController | null = null;
 
   constructor(leaf: WorkspaceLeaf, plugin: RagChatPlugin) {
@@ -65,6 +57,14 @@ export class RagChatView extends ItemView {
     const container = this.contentEl;
     container.empty();
     container.addClass("rag-chat-container");
+
+    const toolbarRow = container.createDiv({ cls: "rag-chat-toolbar-row" });
+    const clearButton = toolbarRow.createEl("button", { cls: "rag-chat-clear-button", text: "Chat leeren" });
+    this.registerDomEvent(clearButton, "click", () => {
+      if (confirm("Chat leeren? Der bisherige Verlauf geht verloren.")) {
+        this.clearChat();
+      }
+    });
 
     this.messagesEl = container.createDiv({ cls: "rag-chat-messages" });
 
@@ -110,8 +110,6 @@ export class RagChatView extends ItemView {
     this.abortController?.abort();
   }
 
-  /** Resets the conversation (turns + any pending clarification) and
-   * re-renders an empty message list. Backs the "RAG: Chat leeren" command. */
   clearChat(): void {
     this.abortController?.abort();
     unloadAllTurns(this.rendered);

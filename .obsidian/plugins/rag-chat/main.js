@@ -9064,6 +9064,13 @@ var RagChatView = class extends obsidian.ItemView {
 		const container = this.contentEl;
 		container.empty();
 		container.addClass("rag-chat-container");
+		const clearButton = container.createDiv({ cls: "rag-chat-toolbar-row" }).createEl("button", {
+			cls: "rag-chat-clear-button",
+			text: "Chat leeren"
+		});
+		this.registerDomEvent(clearButton, "click", () => {
+			if (confirm("Chat leeren? Der bisherige Verlauf geht verloren.")) this.clearChat();
+		});
 		this.messagesEl = container.createDiv({ cls: "rag-chat-messages" });
 		const clarificationRow = container.createDiv({ cls: "rag-chat-clarification-row" });
 		this.cancelClarificationButton = clarificationRow.createEl("button", {
@@ -9104,8 +9111,6 @@ var RagChatView = class extends obsidian.ItemView {
 		this.closed = true;
 		this.abortController?.abort();
 	}
-	/** Resets the conversation (turns + any pending clarification) and
-	* re-renders an empty message list. Backs the "RAG: Chat leeren" command. */
 	clearChat() {
 		this.abortController?.abort();
 		unloadAllTurns(this.rendered);

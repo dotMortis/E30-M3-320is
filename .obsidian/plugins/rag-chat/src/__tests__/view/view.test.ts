@@ -27,6 +27,7 @@ let RAG_CHAT_VIEW_TYPE: typeof import("../../view/view").RAG_CHAT_VIEW_TYPE;
 beforeEach(async () => {
   resetObsidianMocks();
   vi.clearAllMocks();
+  vi.unstubAllGlobals();
   ({ RagChatView, RAG_CHAT_VIEW_TYPE } = await import("../../view/view"));
 });
 
@@ -255,7 +256,7 @@ describe("RagChatView", () => {
     let capturedSignal: AbortSignal | undefined;
     answerQuestion.mockImplementation(async ({ signal }: { signal?: AbortSignal }) => {
       capturedSignal = signal;
-      return new Promise(() => {}); // never resolves
+      return new Promise(() => {});
     });
     const { view } = makeView();
     await view.onOpen();
@@ -331,6 +332,50 @@ describe("RagChatView", () => {
       view.clearChat();
       const cancelButton = fake(view.contentEl).querySelectorAll(".rag-chat-cancel-clarification")[0];
       expect(cancelButton.classes.has("rag-chat-hidden")).toBe(true);
+    });
+  });
+
+  describe("clear-chat button", () => {
+    it("clears the conversation when the confirm dialog is accepted", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockResolvedValue(DONE_RESULT);
+      vi.stubGlobal("confirm", vi.fn().mockReturnValue(true));
+      const { view } = makeView();
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const sendButton = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      sendButton.dispatch("click");
+      await vi.waitFor(() => {
+        expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(2);
+      });
+
+      const clearButton = fake(view.contentEl).querySelectorAll("button.rag-chat-clear-button")[0];
+      clearButton.dispatch("click");
+
+      expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(0);
+    });
+
+    it("does not clear the conversation when the confirm dialog is dismissed", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockResolvedValue(DONE_RESULT);
+      vi.stubGlobal("confirm", vi.fn().mockReturnValue(false));
+      const { view } = makeView();
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const sendButton = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      sendButton.dispatch("click");
+      await vi.waitFor(() => {
+        expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(2);
+      });
+
+      const clearButton = fake(view.contentEl).querySelectorAll("button.rag-chat-clear-button")[0];
+      clearButton.dispatch("click");
+
+      expect(fake(view.contentEl).querySelectorAll(".rag-chat-turn")).toHaveLength(2);
     });
   });
 });
