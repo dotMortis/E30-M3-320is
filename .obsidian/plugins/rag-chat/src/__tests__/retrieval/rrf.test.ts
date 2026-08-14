@@ -78,9 +78,7 @@ describe("rrfMerge", () => {
   });
 
   it("within a single leg, keeps the first (best-ranked) item for a duplicate key rather than a later one", () => {
-    // Regression coverage for the old fuzzy-merge dedup bug: when a leg's own
-    // array contains the same key twice (e.g. two chunks of the same note),
-    // the earlier (better-ranked) occurrence must win, not the later one.
+
     const leg = [
       { key: "note.md", rank: 0, item: "best-chunk" },
       { key: "note.md", rank: 1, item: "worse-chunk" },
@@ -88,7 +86,7 @@ describe("rrfMerge", () => {
     const result = rrfMerge([leg], 2);
     expect(result).toHaveLength(1);
     expect(result[0].item).toBe("best-chunk");
-    // Both occurrences still contribute to the score.
+
     expect(result[0].score).toBeCloseTo(1 / 3 + 1 / 4);
   });
 });

@@ -1,8 +1,6 @@
 import type { ChatTurn, PipelineStep, PipelineStepKind, PipelineStepStatus } from "../retrieval/types";
 
-export function showsStatus(turn: ChatTurn): boolean {
-  return turn.role === "assistant" && turn.text.length === 0 && Boolean(turn.status);
-}
+export { showsStatus, showsStreamingText } from "./turn-state";
 
 const KIND_LABELS: Record<PipelineStepKind, string> = {
   retrieval: "Suche",

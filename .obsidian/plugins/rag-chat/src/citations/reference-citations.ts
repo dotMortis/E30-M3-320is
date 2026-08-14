@@ -15,10 +15,7 @@ export function linkifyReferenceCitations(text: string, citations: ContextBlock[
   return text.replace(/\[Referenz:\s*([^\]]+)\]/gi, (whole, inner: string) => {
     const titel = inner.trim();
     if (!titel) return whole;
-    // Reference docs don't have a seitencode/sektion that reliably
-    // disambiguates a titel collision (sektion is often the same generic
-    // category, e.g. "Referenz", for every reference doc) - notePath is the
-    // one field guaranteed to differ between two distinct colliding docs.
+
     const rendered = renderCitationMatch(titel, byTitel.get(titel), (m) => m.notePath);
     return `[Referenz: ${rendered}]`;
   });

@@ -16,12 +16,6 @@ interface ListVoicesResponse {
 
 const CHIRP3_HD_NAME_PATTERN = /Chirp3-HD/i;
 
-/**
- * Lists Chirp 3: HD voices available via Cloud Text-to-Speech. Mirrors
- * gemini/models.ts's listFlashModels shape/error-swallowing: returns an
- * empty array on any failure (missing key, network error, non-2xx, ...) and
- * never throws into the settings UI.
- */
 export async function listChirp3Voices(apiKey: string, signal?: AbortSignal): Promise<Chirp3VoiceInfo[]> {
   if (!apiKey) return [];
 

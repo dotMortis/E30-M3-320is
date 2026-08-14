@@ -22,10 +22,70 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 //#endregion
 let obsidian = require("obsidian");
-let node_fs = require("node:fs");
 let node_crypto = require("node:crypto");
 let node_os = require("node:os");
 node_os = __toESM(node_os, 1);
+let node_fs = require("node:fs");
+//#region src/secure-storage.ts
+var ENC_PREFIX = "enc:v1:";
+var KEY_LEN = 32;
+var SALT_LEN = 16;
+var IV_LEN = 12;
+var SCRYPT_PARAMS = {
+	N: 16384,
+	r: 8,
+	p: 1
+};
+function scrypt(password, salt, keylen, options) {
+	return new Promise((resolve, reject) => {
+		(0, node_crypto.scrypt)(password, salt, keylen, options, (err, derivedKey) => {
+			if (err) reject(err);
+			else resolve(derivedKey);
+		});
+	});
+}
+function getMachineFingerprint() {
+	return [
+		node_os.hostname(),
+		node_os.platform(),
+		node_os.arch(),
+		node_os.cpus()?.[0]?.model ?? "unknown-cpu",
+		String(node_os.totalmem()),
+		node_os.homedir()
+	].join("|");
+}
+async function deriveKey(salt) {
+	return await scrypt(getMachineFingerprint(), salt, KEY_LEN, SCRYPT_PARAMS);
+}
+async function encryptSecret(plain) {
+	if (!plain) return "";
+	const salt = (0, node_crypto.randomBytes)(SALT_LEN);
+	const key = await deriveKey(salt);
+	const iv = (0, node_crypto.randomBytes)(IV_LEN);
+	const cipher = (0, node_crypto.createCipheriv)("aes-256-gcm", key, iv);
+	const ciphertext = Buffer.concat([cipher.update(plain, "utf8"), cipher.final()]);
+	const tag = cipher.getAuthTag();
+	return ENC_PREFIX + Buffer.concat([
+		salt,
+		iv,
+		tag,
+		ciphertext
+	]).toString("base64");
+}
+async function decryptSecret(stored) {
+	if (!stored) return "";
+	if (!stored.startsWith(ENC_PREFIX)) throw new Error("unrecognized secret format");
+	const payload = Buffer.from(stored.slice(7), "base64");
+	const salt = payload.subarray(0, SALT_LEN);
+	const iv = payload.subarray(SALT_LEN, 28);
+	const tag = payload.subarray(28, 44);
+	const ciphertext = payload.subarray(44);
+	const key = await deriveKey(salt);
+	const decipher = (0, node_crypto.createDecipheriv)("aes-256-gcm", key, iv);
+	decipher.setAuthTag(tag);
+	return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString("utf8");
+}
+//#endregion
 //#region src/settings/types.ts
 var DEFAULT_SETTINGS = {
 	geminiApiKey: "",
@@ -37,6 +97,8 @@ var DEFAULT_SETTINGS = {
 	rrfK: 2,
 	enableFuzzySearchLeg: true,
 	maxAgentRounds: 5,
+	thinkingEnabled: false,
+	webSearchEnabled: false,
 	ttsEnabled: false,
 	ttsApiKey: "",
 	ttsLanguageCode: "de-DE",
@@ -46,31 +108,136 @@ var DEFAULT_SETTINGS = {
 	ttsCharCount: 0
 };
 //#endregion
+//#region src/settings/settings-store.ts
+var SettingsStore = class {
+	constructor(plugin) {
+		this.plugin = plugin;
+		this.geminiKeyCache = {
+			plaintext: void 0,
+			ciphertext: void 0
+		};
+		this.ttsKeyCache = {
+			plaintext: void 0,
+			ciphertext: void 0
+		};
+	}
+	async load() {
+		const raw = await this.plugin.loadData() ?? {};
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, raw);
+		this.settings.geminiApiKey = await this.loadSecret(raw.geminiApiKey, this.geminiKeyCache, "Google API key (GEMINI_API_KEY)");
+		this.settings.ttsApiKey = await this.loadSecret(raw.ttsApiKey, this.ttsKeyCache, "TTS API-Key");
+	}
+	async save() {
+		const toPersist = { ...this.settings };
+		toPersist.geminiApiKey = await this.persistSecret(this.settings.geminiApiKey, this.geminiKeyCache);
+		toPersist.ttsApiKey = await this.persistSecret(this.settings.ttsApiKey, this.ttsKeyCache);
+		await this.plugin.saveData(toPersist);
+	}
+	async loadSecret(stored, cache, label) {
+		try {
+			const plaintext = await decryptSecret(stored);
+			cache.plaintext = plaintext;
+			cache.ciphertext = stored;
+			return plaintext;
+		} catch {
+			cache.plaintext = void 0;
+			cache.ciphertext = void 0;
+			if (stored) new obsidian.Notice(`RAG Chat: ${label} konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.`, 1e4);
+			return "";
+		}
+	}
+	async persistSecret(plaintext, cache) {
+		if (plaintext === cache.plaintext && cache.ciphertext !== void 0) return cache.ciphertext;
+		const ciphertext = await encryptSecret(plaintext);
+		cache.plaintext = plaintext;
+		cache.ciphertext = ciphertext;
+		return ciphertext;
+	}
+};
+//#endregion
+//#region src/settings/controls/secret-text.ts
+function addSecretText(containerEl, config) {
+	let inputEl;
+	const setting = new obsidian.Setting(containerEl).setName(config.name);
+	if (config.desc) setting.setDesc(config.desc);
+	setting.addText((text) => {
+		text.setPlaceholder(config.placeholder ?? "AIza...").setValue(config.getValue()).onChange(async (value) => {
+			await config.setValue(value.trim());
+		});
+		inputEl = text.inputEl;
+		inputEl.type = "password";
+	}).addButton((button) => {
+		button.setIcon("eye").setTooltip("API-Schlüssel anzeigen/verbergen");
+		button.onClick(() => {
+			if (!inputEl) return;
+			const revealed = inputEl.type === "text";
+			inputEl.type = revealed ? "password" : "text";
+			button.setIcon(revealed ? "eye" : "eye-off");
+		});
+	});
+	return setting;
+}
+//#endregion
+//#region src/settings/sections/api-key.ts
+function renderApiKeySection(containerEl, plugin) {
+	containerEl.createEl("h2", { text: "RAG Chat" });
+	containerEl.createEl("p", { text: "Google (gemini-embedding-2 for embeddings, a selectable Gemini Flash model for generation) is used for both query embeddings and generation." });
+	addSecretText(containerEl, {
+		name: "Google API key (GEMINI_API_KEY)",
+		desc: "Required for query embeddings and generation.",
+		getValue: () => plugin.settings.geminiApiKey,
+		setValue: async (value) => {
+			plugin.settings.geminiApiKey = value;
+			await plugin.saveSettings();
+		}
+	});
+}
+//#endregion
+//#region src/settings/controls/number-field.ts
+function addNumberField(containerEl, config) {
+	const parse = config.parse ?? ((raw) => parseInt(raw, 10));
+	const setting = new obsidian.Setting(containerEl).setName(config.name);
+	if (config.desc) setting.setDesc(config.desc);
+	setting.addText((text) => text.setValue(String(config.getValue())).onChange(async (value) => {
+		const n = parse(value);
+		if (!Number.isNaN(n) && config.isValid(n)) await config.onValid(n);
+	}));
+	return setting;
+}
+//#endregion
+//#region src/settings/sections/agent.ts
+function renderAgentSection(containerEl, plugin) {
+	containerEl.createEl("h3", { text: "Agenten-Schleife (Werkzeuge & Rückfragen)" });
+	containerEl.createEl("p", { text: "RAG Chat beantwortet Fragen nicht mehr nur aus dem Handbuch: das Modell kann selbst entscheiden, erneut zu suchen, eine bestimmte Seite vollständig nachzuladen, das Web zu durchsuchen oder dich um eine Klärung zu bitten - begrenzt durch ein festes Budget an Werkzeug-Runden pro Frage." });
+	new obsidian.Setting(containerEl).setName("Vault-Search-Werkzeug anbieten").setDesc("Bietet dem Modell die tippfehler-/synonymtolerante Handbuchsuche (Plugin \"vault-search\") als eigenständiges Werkzeug an. Benötigt das vault-search-Plugin (aktiviert).").addToggle((toggle) => toggle.setValue(plugin.settings.enableFuzzySearchLeg).onChange(async (value) => {
+		plugin.settings.enableFuzzySearchLeg = value;
+		await plugin.saveSettings();
+	}));
+	addNumberField(containerEl, {
+		name: "Max. Werkzeug-Runden",
+		desc: "Hartes Limit an Werkzeug-Aufrufen (erneute Suche, Seite nachladen, Rückfrage) pro Frage, bevor das Modell gezwungen wird, direkt zu antworten. Eine Rückfrage an dich verbraucht beim Fortsetzen ebenfalls eine Runde dieses Budgets.",
+		getValue: () => plugin.settings.maxAgentRounds,
+		isValid: (n) => n > 0,
+		onValid: async (n) => {
+			plugin.settings.maxAgentRounds = n;
+			await plugin.saveSettings();
+		}
+	});
+}
+//#endregion
 //#region src/constants.ts
-/**
-* Cap on how many candidate hits are pulled from each Orama leg (text/vector)
-* before RRF fusion. High enough to not clip real recall on this corpus size,
-* low enough to keep the fusion step cheap. See retrieval/hybrid-search.ts.
-*/
 var CANDIDATE_POOL_LIMIT = 5e3;
-/** Base delay for exponential backoff between retryable HTTP requests, in ms. */
 var HTTP_RETRY_BASE_DELAY_MS = 1e3;
-/** Upper bound on the (unjittered) backoff delay between retries, in ms. */
 var HTTP_RETRY_MAX_DELAY_MS = 16e3;
-/**
-* Maximum jitter (as a fraction of the computed backoff delay) added/removed
-* at random, to avoid thundering-herd retries against the Gemini API.
-*/
 var HTTP_RETRY_JITTER_RATIO = .2;
-/** How long to wait for a single HTTP request before aborting it, in ms. */
 var HTTP_REQUEST_TIMEOUT_MS = 45e3;
-/** How often the retry backoff countdown (onStatus's "erneuter Versuch in Ns") ticks, in ms. */
+var HTTP_STREAM_FIRST_BYTE_TIMEOUT_MS = HTTP_REQUEST_TIMEOUT_MS;
+var HTTP_STREAM_IDLE_TIMEOUT_MS = 3e4;
 var HTTP_RETRY_COUNTDOWN_TICK_MS = 1e3;
 var ABORT_ERROR_MESSAGE = "Anfrage abgebrochen.";
-/** Chirp 3 HD free tier ceiling (characters/month), for the usage display only. */
 var TTS_FREE_TIER_CHAR_LIMIT = 1e6;
 //#endregion
-//#region src/http/retry.ts
+//#region src/http/backoff.ts
 var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
 	429,
 	500,
@@ -78,13 +245,64 @@ var RETRYABLE_STATUSES = /* @__PURE__ */ new Set([
 	503,
 	504
 ]);
-/**
-* Waits `ms` milliseconds. When `onTick` is provided, calls it immediately
-* and then every `HTTP_RETRY_COUNTDOWN_TICK_MS` with the actual remaining
-* time (ceiling-rounded to whole seconds, never below 1 while still
-* waiting) so a caller-displayed "erneuter Versuch in Ns" counts down live
-* instead of staying frozen at the initial estimate for the whole delay.
-*/
+function computeDelayMs(attempt, retryAfterHeader) {
+	if (retryAfterHeader) {
+		const seconds = Number(retryAfterHeader);
+		if (!Number.isNaN(seconds)) return Math.max(0, seconds * 1e3);
+		const dateMs = Date.parse(retryAfterHeader);
+		if (!Number.isNaN(dateMs)) return Math.max(0, dateMs - Date.now());
+	}
+	const exponential = HTTP_RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+	const capped = Math.min(exponential, HTTP_RETRY_MAX_DELAY_MS);
+	const jitter = (Math.random() * 2 - 1) * capped * HTTP_RETRY_JITTER_RATIO;
+	return Math.max(0, Math.round(capped + jitter));
+}
+//#endregion
+//#region src/http/error-message.ts
+function truncate(text) {
+	const trimmed = text.trim();
+	return trimmed ? trimmed.slice(0, 300) : "";
+}
+function extractErrorMessageFromText(text) {
+	try {
+		const msg = JSON.parse(text)?.error?.message;
+		if (typeof msg === "string" && msg.trim()) return msg.trim();
+	} catch {}
+	return truncate(text) || void 0;
+}
+function extractResponseErrorMessage(response) {
+	try {
+		const jsonMsg = response.json?.error?.message;
+		if (typeof jsonMsg === "string" && jsonMsg.trim()) return jsonMsg.trim();
+	} catch {}
+	return truncate(response.text ?? "") || void 0;
+}
+//#endregion
+//#region src/http/request-timeout.ts
+function requestWithTimeout(params, signal) {
+	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
+	return new Promise((resolve, reject) => {
+		let settled = false;
+		const finish = (fn) => {
+			if (settled) return;
+			settled = true;
+			clearTimeout(timer);
+			signal?.removeEventListener("abort", onAbort);
+			fn();
+		};
+		const onAbort = () => finish(() => reject(new Error(ABORT_ERROR_MESSAGE)));
+		const timer = setTimeout(() => {
+			finish(() => reject(/* @__PURE__ */ new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1e3}s`)));
+		}, HTTP_REQUEST_TIMEOUT_MS);
+		signal?.addEventListener("abort", onAbort, { once: true });
+		(0, obsidian.requestUrl)({
+			...params,
+			throw: false
+		}).then((response) => finish(() => resolve(response)), (err) => finish(() => reject(err)));
+	});
+}
+//#endregion
+//#region src/http/sleep.ts
 function sleep(ms, signal, onTick) {
 	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
 	return new Promise((resolve, reject) => {
@@ -108,73 +326,16 @@ function sleep(ms, signal, onTick) {
 		signal?.addEventListener("abort", onAbort, { once: true });
 	});
 }
-function extractErrorMessage(response) {
-	try {
-		const jsonMsg = response.json?.error?.message;
-		if (typeof jsonMsg === "string" && jsonMsg.trim()) return jsonMsg.trim();
-	} catch {}
-	const text = response.text?.trim();
-	return text ? text.slice(0, 300) : void 0;
-}
-/**
-* Obsidian's `requestUrl` has no built-in timeout or AbortSignal support, so
-* a hung request would otherwise wait forever. We race it against a timer
-* instead - the underlying request may keep running in the background, but
-* our caller stops waiting and can retry/fail instead of hanging.
-*/
-function requestWithTimeout(params, signal) {
-	if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
-	return new Promise((resolve, reject) => {
-		let settled = false;
-		const finish = (fn) => {
-			if (settled) return;
-			settled = true;
-			clearTimeout(timer);
-			signal?.removeEventListener("abort", onAbort);
-			fn();
-		};
-		const onAbort = () => finish(() => reject(new Error(ABORT_ERROR_MESSAGE)));
-		const timer = setTimeout(() => {
-			finish(() => reject(/* @__PURE__ */ new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1e3}s`)));
-		}, HTTP_REQUEST_TIMEOUT_MS);
-		signal?.addEventListener("abort", onAbort, { once: true });
-		(0, obsidian.requestUrl)({
-			...params,
-			throw: false
-		}).then((response) => finish(() => resolve(response)), (err) => finish(() => reject(err)));
-	});
-}
-/**
-* Exponential backoff with jitter for attempt N (1-based): base * factor^(N-1),
-* capped, then jittered by +/- HTTP_RETRY_JITTER_RATIO to avoid a thundering
-* herd of retries against the API. When a `Retry-After` header is present
-* (seconds or an HTTP-date), it takes precedence over the computed backoff.
-*/
-function computeDelayMs(attempt, retryAfterHeader) {
-	if (retryAfterHeader) {
-		const seconds = Number(retryAfterHeader);
-		if (!Number.isNaN(seconds)) return Math.max(0, seconds * 1e3);
-		const dateMs = Date.parse(retryAfterHeader);
-		if (!Number.isNaN(dateMs)) return Math.max(0, dateMs - Date.now());
-	}
-	const exponential = HTTP_RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
-	const capped = Math.min(exponential, HTTP_RETRY_MAX_DELAY_MS);
-	const jitter = (Math.random() * 2 - 1) * capped * HTTP_RETRY_JITTER_RATIO;
-	return Math.max(0, Math.round(capped + jitter));
-}
+//#endregion
+//#region src/http/retry.ts
 function retryAfterHeaderValue(response) {
 	const headers = response.headers ?? {};
 	return headers["retry-after"] ?? headers["Retry-After"];
 }
-/**
-* Note: retries here are not guaranteed idempotent. If a request actually
-* succeeded server-side (e.g. Gemini generated/billed a response) but the
-* client never saw it (our own timeout, a dropped connection, ...), the
-* retried attempt is a genuinely new call - there's no request-id/idempotency
-* key in play. This is an inherent tradeoff of retrying non-idempotent LLM
-* generation calls, not something fixed by tuning backoff - documented here,
-* not solved.
-*/
+async function backoff(attempt, delay, signal, onStatus, message) {
+	await sleep(delay, signal, (seconds) => onStatus?.(message(`in ${seconds}s (${attempt}/5) …`)));
+	onStatus?.(message(`(${attempt}/5) …`));
+}
 async function requestUrlWithRetry(params, opts) {
 	const label = opts?.label ?? "Anfrage";
 	const signal = opts?.signal;
@@ -188,18 +349,17 @@ async function requestUrlWithRetry(params, opts) {
 			if (signal?.aborted) throw err;
 			const message = err instanceof Error ? err.message : String(err);
 			if (attempt === 5) throw new Error(`${label} fehlgeschlagen: ${message}`);
-			await sleep(computeDelayMs(attempt), signal, (seconds) => opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
-			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/5) …`);
+			await backoff(attempt, computeDelayMs(attempt), signal, opts?.onStatus, (suffix) => `${label} fehlgeschlagen (${message}) – erneuter Versuch ${suffix}`);
 			continue;
 		}
 		if (response.status < 400) return response;
 		lastResponse = response;
 		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 5) {
-			const msg = extractErrorMessage(response);
+			const msg = extractResponseErrorMessage(response);
 			throw new Error(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`);
 		}
-		await sleep(computeDelayMs(attempt, retryAfterHeaderValue(response)), signal, (seconds) => opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
-		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch (${attempt}/5) …`);
+		const delay = computeDelayMs(attempt, retryAfterHeaderValue(response));
+		await backoff(attempt, delay, signal, opts?.onStatus, (suffix) => `${label} überlastet (Status ${response.status}) – erneuter Versuch ${suffix}`);
 	}
 	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
 }
@@ -243,59 +403,102 @@ async function listFlashModels(apiKey, signal) {
 	return models;
 }
 //#endregion
-//#region src/tts/voices.ts
-var CHIRP3_HD_NAME_PATTERN = /Chirp3-HD/i;
-/**
-* Lists Chirp 3: HD voices available via Cloud Text-to-Speech. Mirrors
-* gemini/models.ts's listFlashModels shape/error-swallowing: returns an
-* empty array on any failure (missing key, network error, non-2xx, ...) and
-* never throws into the settings UI.
-*/
-async function listChirp3Voices(apiKey, signal) {
-	if (!apiKey) return [];
-	try {
-		const json = (await requestUrlWithRetry({
-			url: "https://texttospeech.googleapis.com/v1/voices",
-			method: "GET",
-			headers: { "X-Goog-Api-Key": apiKey }
-		}, {
-			label: "Stimmenliste",
-			signal
-		})).json;
-		const voices = [];
-		for (const voice of json.voices ?? []) {
-			if (!CHIRP3_HD_NAME_PATTERN.test(voice.name)) continue;
-			voices.push({
-				name: voice.name,
-				languageCodes: voice.languageCodes ?? []
-			});
+//#region src/settings/sections/generation.ts
+function renderGenerationModel(containerEl, plugin) {
+	let modelDropdown;
+	let modelRefreshButton;
+	const refreshModelOptions = async () => {
+		if (!modelDropdown) return;
+		const currentModel = plugin.settings.generationModel;
+		modelDropdown.setDisabled(true);
+		modelRefreshButton?.setDisabled(true);
+		const models = await listFlashModels(plugin.settings.geminiApiKey);
+		const options = models.some((model) => model.id === currentModel) ? models : [{
+			id: currentModel,
+			displayName: currentModel
+		}, ...models];
+		modelDropdown.selectEl.empty();
+		for (const model of options) modelDropdown.addOption(model.id, model.displayName);
+		modelDropdown.setValue(currentModel);
+		modelDropdown.setDisabled(false);
+		modelRefreshButton?.setDisabled(false);
+	};
+	new obsidian.Setting(containerEl).setName("Generation model").addDropdown((dropdown) => {
+		modelDropdown = dropdown;
+		dropdown.addOption(plugin.settings.generationModel, plugin.settings.generationModel);
+		dropdown.setValue(plugin.settings.generationModel);
+		dropdown.onChange(async (value) => {
+			plugin.settings.generationModel = value;
+			await plugin.saveSettings();
+		});
+	}).addButton((button) => {
+		modelRefreshButton = button;
+		button.setIcon("refresh-cw").setTooltip("Modellliste aktualisieren");
+		button.onClick(() => {
+			refreshModelOptions();
+		});
+	});
+	refreshModelOptions();
+}
+//#endregion
+//#region src/settings/sections/retrieval.ts
+function renderRetrievalSection(containerEl, plugin) {
+	new obsidian.Setting(containerEl).setName("Embedding model").setDesc("Must match the model the index was built with (see rag-manifest.json). Google-only.").addText((text) => text.setValue(plugin.settings.embeddingModel).onChange(async (value) => {
+		plugin.settings.embeddingModel = value.trim();
+		await plugin.saveSettings();
+		await plugin.revalidateManifest();
+	}));
+}
+function renderRetrievalKnobs(containerEl, plugin) {
+	addNumberField(containerEl, {
+		name: "Output dimensions",
+		desc: "Must match rag-manifest.json's embeddingDims (3072 - full-fidelity, no truncation).",
+		getValue: () => plugin.settings.outputDim,
+		isValid: (n) => n > 0,
+		onValid: async (n) => {
+			plugin.settings.outputDim = n;
+			await plugin.saveSettings();
+			await plugin.revalidateManifest();
 		}
-		voices.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
-		return voices;
-	} catch {
-		return [];
-	}
+	});
+	addNumberField(containerEl, {
+		name: "Top K",
+		desc: "Number of retrieval hits to consider (before parent-note dedup).",
+		getValue: () => plugin.settings.topK,
+		isValid: (n) => n > 0,
+		onValid: async (n) => {
+			plugin.settings.topK = n;
+			await plugin.saveSettings();
+		}
+	});
+	addNumberField(containerEl, {
+		name: "Similarity threshold",
+		desc: "Minimum vector similarity for the vector leg (0-1). Measured on this corpus: real natural-language queries top out around 0.60-0.75 cosine similarity even for the exact correct page — setting this above ~0.75 silently disables the vector leg entirely on most real questions. Default 0.55 is calibrated from live benchmarking, not a guess.",
+		getValue: () => plugin.settings.similarity,
+		parse: (raw) => parseFloat(raw),
+		isValid: (n) => n >= 0 && n <= 1,
+		onValid: async (n) => {
+			plugin.settings.similarity = n;
+			await plugin.saveSettings();
+		}
+	});
+	addNumberField(containerEl, {
+		name: "Hybrid fusion (RRF) k",
+		desc: "Reciprocal Rank Fusion constant merging the BM25 and vector leg rankings. Small values (1-10) were empirically best on this corpus; the common literature default of 60 buried single-leg-exclusive top matches under documents merely mediocre on both legs.",
+		getValue: () => plugin.settings.rrfK,
+		isValid: (n) => n > 0,
+		onValid: async (n) => {
+			plugin.settings.rrfK = n;
+			await plugin.saveSettings();
+		}
+	});
 }
 //#endregion
 //#region src/tts/devices.ts
-/**
-* Lists available audio output devices. Note: `navigator.mediaDevices
-* .enumerateDevices()` only returns *named* `audiooutput` devices after the
-* page has been granted microphone permission at least once (a browser
-* privacy rule) - see `unlockDeviceLabels()` below. Before that unlock, this
-* still returns entries, just with empty/generic labels.
-*/
 async function listOutputDevices() {
 	if (!navigator.mediaDevices?.enumerateDevices) return [];
 	return (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audiooutput");
 }
-/**
-* One-shot microphone-permission prompt, solely to unlock device *labels*
-* for the subsequent `enumerateDevices()` call - every returned track is
-* stopped immediately afterward. Nothing is ever recorded, stored, or
-* transmitted. Guarded/no-throw: permission may be denied, or the API may be
-* unavailable in this runtime.
-*/
 async function unlockDeviceLabels() {
 	if (!navigator.mediaDevices?.getUserMedia) return;
 	try {
@@ -314,22 +517,9 @@ function getAudioEl() {
 	}
 	return audioEl;
 }
-/**
-* Registers a callback fired when the current clip finishes playing
-* naturally (not on an explicit `stop()`). Callers (the chat view) use this
-* to reset a per-turn "currently speaking" UI state. Only one callback is
-* kept at a time - set it again before each `play()` call.
-*/
 function setOnEnded(cb) {
 	onEndedCallback = cb;
 }
-/**
-* Stops and clears any current playback, sets the given base64 MP3 as the
-* source, applies the requested output device and volume, and starts
-* playback. Guards `setSinkId` (unsupported browsers/Electron builds, or a
-* saved device that no longer exists) by falling back to the default sink
-* and surfacing a Notice, never a hard failure.
-*/
 async function play(base64Mp3, opts) {
 	const audio = getAudioEl();
 	stop();
@@ -346,17 +536,14 @@ async function play(base64Mp3, opts) {
 	}
 	await audio.play();
 }
-/** Live-updates the volume of the currently loaded/playing clip, if any. */
 function setVolume(v) {
 	if (audioEl) audioEl.volume = v;
 }
-/** Stops playback and rewinds, without clearing the loaded source. */
 function stop() {
 	if (!audioEl) return;
 	audioEl.pause();
 	audioEl.currentTime = 0;
 }
-/** Called on plugin unload to release the underlying audio element. */
 function dispose() {
 	if (!audioEl) return;
 	audioEl.pause();
@@ -403,6 +590,174 @@ function confirmModal(app, message) {
 	});
 }
 //#endregion
+//#region src/settings/sections/tts-audio.ts
+function renderTtsAudioSection(containerEl, plugin, app) {
+	renderDevicePicker(containerEl, plugin);
+	new obsidian.Setting(containerEl).setName("Lautstärke").addSlider((slider) => slider.setLimits(0, 1, .05).setValue(plugin.settings.ttsVolume).setDynamicTooltip().onChange(async (value) => {
+		setVolume(value);
+		plugin.settings.ttsVolume = value;
+		await plugin.saveSettings();
+	}));
+	renderCharCounter(containerEl, plugin, app);
+}
+function renderDevicePicker(containerEl, plugin) {
+	let deviceDropdown;
+	const refreshDeviceOptions = async () => {
+		if (!deviceDropdown) return;
+		const devices = await listOutputDevices();
+		const current = plugin.settings.ttsOutputDeviceId;
+		deviceDropdown.selectEl.empty();
+		deviceDropdown.addOption("", "Systemstandard");
+		for (const device of devices) {
+			if (!device.deviceId || device.deviceId === "default") continue;
+			deviceDropdown.addOption(device.deviceId, device.label || `Gerät ${device.deviceId.slice(0, 8)}`);
+		}
+		const hasCurrent = current === "" || devices.some((d) => d.deviceId === current);
+		deviceDropdown.setValue(hasCurrent ? current : "");
+	};
+	new obsidian.Setting(containerEl).setName("Audioausgabegerät").setDesc("\"Geräte erkennen\" fragt einmalig nach Mikrofonberechtigung, nur um Gerätenamen auszulesen - es wird nichts aufgenommen oder übertragen.").addDropdown((dropdown) => {
+		deviceDropdown = dropdown;
+		dropdown.addOption("", "Systemstandard");
+		dropdown.onChange(async (value) => {
+			plugin.settings.ttsOutputDeviceId = value;
+			await plugin.saveSettings();
+		});
+	}).addButton((button) => {
+		button.setButtonText("Geräte erkennen");
+		button.onClick(async () => {
+			button.setDisabled(true);
+			await unlockDeviceLabels();
+			await refreshDeviceOptions();
+			button.setDisabled(false);
+		});
+	});
+	refreshDeviceOptions();
+}
+function renderCharCounter(containerEl, plugin, app) {
+	const setting = new obsidian.Setting(containerEl).setName("Zeichenzähler (Chirp 3 HD)");
+	const updateDesc = () => {
+		const used = plugin.settings.ttsCharCount.toLocaleString("de-DE");
+		const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
+		setting.setDesc(`${used} / ${limit} Zeichen (Freikontingent).`);
+	};
+	updateDesc();
+	setting.addButton((button) => {
+		button.setButtonText("Zurücksetzen").setWarning();
+		button.onClick(async () => {
+			if (!await confirmModal(app, "Zeichenzähler wirklich zurücksetzen?")) return;
+			plugin.settings.ttsCharCount = 0;
+			await plugin.saveSettings();
+			updateDesc();
+		});
+	});
+}
+//#endregion
+//#region src/tts/voices.ts
+var CHIRP3_HD_NAME_PATTERN = /Chirp3-HD/i;
+async function listChirp3Voices(apiKey, signal) {
+	if (!apiKey) return [];
+	try {
+		const json = (await requestUrlWithRetry({
+			url: "https://texttospeech.googleapis.com/v1/voices",
+			method: "GET",
+			headers: { "X-Goog-Api-Key": apiKey }
+		}, {
+			label: "Stimmenliste",
+			signal
+		})).json;
+		const voices = [];
+		for (const voice of json.voices ?? []) {
+			if (!CHIRP3_HD_NAME_PATTERN.test(voice.name)) continue;
+			voices.push({
+				name: voice.name,
+				languageCodes: voice.languageCodes ?? []
+			});
+		}
+		voices.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
+		return voices;
+	} catch {
+		return [];
+	}
+}
+//#endregion
+//#region src/settings/sections/tts-voice.ts
+function renderTtsVoiceSection(containerEl, plugin) {
+	containerEl.createEl("h3", { text: "Sprachausgabe (TTS)" });
+	containerEl.createEl("p", { text: "Optional: zusätzlich zur gewohnten, zitatreichen Antwort wird eine kurze, gesprochene Zusammenfassung erzeugt und über Google Cloud Text-to-Speech (Chirp 3: HD) abgespielt - z.B. für die Werkstatt, um ein Anzugsdrehmoment vorgelesen zu bekommen." });
+	new obsidian.Setting(containerEl).setName("Sprachausgabe aktivieren").setDesc("Setzt den Anfangszustand der Sprachausgabe-Checkbox im Chat (dort jederzeit umschaltbar).").addToggle((toggle) => toggle.setValue(plugin.settings.ttsEnabled).onChange(async (value) => {
+		plugin.settings.ttsEnabled = value;
+		await plugin.saveSettings();
+	}));
+	addSecretText(containerEl, {
+		name: "TTS API key",
+		desc: "Separater Google Cloud API-Key für Text-to-Speech (optional). Benötigt aktivierte Cloud Text-to-Speech API und Billing im zugehörigen Projekt. Leer = Sprachausgabe deaktiviert.",
+		getValue: () => plugin.settings.ttsApiKey,
+		setValue: async (value) => {
+			plugin.settings.ttsApiKey = value;
+			await plugin.saveSettings();
+		}
+	});
+	renderVoicePickers(containerEl, plugin);
+}
+function renderVoicePickers(containerEl, plugin) {
+	let languageDropdown;
+	let voiceDropdown;
+	let voiceRefreshButton;
+	let voicesCache = [];
+	const populateVoiceOptions = (languageCode) => {
+		if (!voiceDropdown) return;
+		const currentVoice = plugin.settings.ttsVoiceName;
+		const names = voicesCache.filter((v) => v.languageCodes.includes(languageCode)).map((v) => v.name);
+		const options = names.includes(currentVoice) ? names : [currentVoice, ...names];
+		voiceDropdown.selectEl.empty();
+		for (const name of options) voiceDropdown.addOption(name, name);
+		voiceDropdown.setValue(currentVoice);
+	};
+	const refreshVoiceOptions = async () => {
+		if (!languageDropdown || !voiceDropdown) return;
+		languageDropdown.setDisabled(true);
+		voiceDropdown.setDisabled(true);
+		voiceRefreshButton?.setDisabled(true);
+		voicesCache = await listChirp3Voices(plugin.settings.ttsApiKey);
+		const currentLanguage = plugin.settings.ttsLanguageCode;
+		const languageCodes = Array.from(new Set(voicesCache.flatMap((v) => v.languageCodes))).sort();
+		const languageOptions = languageCodes.includes(currentLanguage) ? languageCodes : [currentLanguage, ...languageCodes];
+		languageDropdown.selectEl.empty();
+		for (const code of languageOptions) languageDropdown.addOption(code, code);
+		languageDropdown.setValue(currentLanguage);
+		populateVoiceOptions(currentLanguage);
+		languageDropdown.setDisabled(false);
+		voiceDropdown.setDisabled(false);
+		voiceRefreshButton?.setDisabled(false);
+	};
+	new obsidian.Setting(containerEl).setName("Sprache").addDropdown((dropdown) => {
+		languageDropdown = dropdown;
+		dropdown.addOption(plugin.settings.ttsLanguageCode, plugin.settings.ttsLanguageCode);
+		dropdown.setValue(plugin.settings.ttsLanguageCode);
+		dropdown.onChange(async (value) => {
+			plugin.settings.ttsLanguageCode = value;
+			await plugin.saveSettings();
+			populateVoiceOptions(value);
+		});
+	});
+	new obsidian.Setting(containerEl).setName("Stimme (Chirp 3: HD)").addDropdown((dropdown) => {
+		voiceDropdown = dropdown;
+		dropdown.addOption(plugin.settings.ttsVoiceName, plugin.settings.ttsVoiceName);
+		dropdown.setValue(plugin.settings.ttsVoiceName);
+		dropdown.onChange(async (value) => {
+			plugin.settings.ttsVoiceName = value;
+			await plugin.saveSettings();
+		});
+	}).addButton((button) => {
+		voiceRefreshButton = button;
+		button.setIcon("refresh-cw").setTooltip("Stimmenliste aktualisieren");
+		button.onClick(() => {
+			refreshVoiceOptions();
+		});
+	});
+	refreshVoiceOptions();
+}
+//#endregion
 //#region src/settings/settings-tab.ts
 var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 	constructor(app, plugin) {
@@ -412,238 +767,13 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 	display() {
 		this.containerEl.empty();
 		const { containerEl } = this;
-		containerEl.createEl("h2", { text: "RAG Chat" });
-		containerEl.createEl("p", { text: "Google (gemini-embedding-2 for embeddings, a selectable Gemini Flash model for generation) is used for both query embeddings and generation." });
-		let apiKeyInputEl;
-		new obsidian.Setting(containerEl).setName("Google API key (GEMINI_API_KEY)").setDesc("Required for query embeddings and generation.").addText((text) => {
-			text.setPlaceholder("AIza...").setValue(this.plugin.settings.geminiApiKey).onChange(async (value) => {
-				this.plugin.settings.geminiApiKey = value.trim();
-				await this.plugin.saveSettings();
-			});
-			apiKeyInputEl = text.inputEl;
-			apiKeyInputEl.type = "password";
-		}).addButton((button) => {
-			button.setIcon("eye").setTooltip("API-Schlüssel anzeigen/verbergen");
-			button.onClick(() => {
-				if (!apiKeyInputEl) return;
-				const revealed = apiKeyInputEl.type === "text";
-				apiKeyInputEl.type = revealed ? "password" : "text";
-				button.setIcon(revealed ? "eye" : "eye-off");
-			});
-		});
-		new obsidian.Setting(containerEl).setName("Embedding model").setDesc("Must match the model the index was built with (see rag-manifest.json). Google-only.").addText((text) => text.setValue(this.plugin.settings.embeddingModel).onChange(async (value) => {
-			this.plugin.settings.embeddingModel = value.trim();
-			await this.plugin.saveSettings();
-			await this.plugin.revalidateManifest();
-		}));
-		let modelDropdown;
-		let modelRefreshButton;
-		const refreshModelOptions = async () => {
-			if (!modelDropdown) return;
-			const currentModel = this.plugin.settings.generationModel;
-			modelDropdown.setDisabled(true);
-			modelRefreshButton?.setDisabled(true);
-			const models = await listFlashModels(this.plugin.settings.geminiApiKey);
-			const options = models.some((model) => model.id === currentModel) ? models : [{
-				id: currentModel,
-				displayName: currentModel
-			}, ...models];
-			modelDropdown.selectEl.empty();
-			for (const model of options) modelDropdown.addOption(model.id, model.displayName);
-			modelDropdown.setValue(currentModel);
-			modelDropdown.setDisabled(false);
-			modelRefreshButton?.setDisabled(false);
-		};
-		new obsidian.Setting(containerEl).setName("Generation model").addDropdown((dropdown) => {
-			modelDropdown = dropdown;
-			dropdown.addOption(this.plugin.settings.generationModel, this.plugin.settings.generationModel);
-			dropdown.setValue(this.plugin.settings.generationModel);
-			dropdown.onChange(async (value) => {
-				this.plugin.settings.generationModel = value;
-				await this.plugin.saveSettings();
-			});
-		}).addButton((button) => {
-			modelRefreshButton = button;
-			button.setIcon("refresh-cw").setTooltip("Modellliste aktualisieren");
-			button.onClick(() => {
-				refreshModelOptions();
-			});
-		});
-		refreshModelOptions();
-		new obsidian.Setting(containerEl).setName("Output dimensions").setDesc("Must match rag-manifest.json's embeddingDims (3072 - full-fidelity, no truncation).").addText((text) => text.setValue(String(this.plugin.settings.outputDim)).onChange(async (value) => {
-			const n = parseInt(value, 10);
-			if (!Number.isNaN(n) && n > 0) {
-				this.plugin.settings.outputDim = n;
-				await this.plugin.saveSettings();
-				await this.plugin.revalidateManifest();
-			}
-		}));
-		new obsidian.Setting(containerEl).setName("Top K").setDesc("Number of retrieval hits to consider (before parent-note dedup).").addText((text) => text.setValue(String(this.plugin.settings.topK)).onChange(async (value) => {
-			const n = parseInt(value, 10);
-			if (!Number.isNaN(n) && n > 0) {
-				this.plugin.settings.topK = n;
-				await this.plugin.saveSettings();
-			}
-		}));
-		new obsidian.Setting(containerEl).setName("Similarity threshold").setDesc("Minimum vector similarity for the vector leg (0-1). Measured on this corpus: real natural-language queries top out around 0.60-0.75 cosine similarity even for the exact correct page — setting this above ~0.75 silently disables the vector leg entirely on most real questions. Default 0.55 is calibrated from live benchmarking, not a guess.").addText((text) => text.setValue(String(this.plugin.settings.similarity)).onChange(async (value) => {
-			const n = parseFloat(value);
-			if (!Number.isNaN(n) && n >= 0 && n <= 1) {
-				this.plugin.settings.similarity = n;
-				await this.plugin.saveSettings();
-			}
-		}));
-		new obsidian.Setting(containerEl).setName("Hybrid fusion (RRF) k").setDesc("Reciprocal Rank Fusion constant merging the BM25 and vector leg rankings. Small values (1-10) were empirically best on this corpus; the common literature default of 60 buried single-leg-exclusive top matches under documents merely mediocre on both legs.").addText((text) => text.setValue(String(this.plugin.settings.rrfK)).onChange(async (value) => {
-			const n = parseInt(value, 10);
-			if (!Number.isNaN(n) && n > 0) {
-				this.plugin.settings.rrfK = n;
-				await this.plugin.saveSettings();
-			}
-		}));
-		containerEl.createEl("h3", { text: "Agenten-Schleife (Werkzeuge & Rückfragen)" });
-		containerEl.createEl("p", { text: "RAG Chat beantwortet Fragen nicht mehr nur aus dem Handbuch: das Modell kann selbst entscheiden, erneut zu suchen, eine bestimmte Seite vollständig nachzuladen, das Web zu durchsuchen oder dich um eine Klärung zu bitten - begrenzt durch ein festes Budget an Werkzeug-Runden pro Frage." });
-		new obsidian.Setting(containerEl).setName("Vault-Search-Werkzeug anbieten").setDesc("Bietet dem Modell die tippfehler-/synonymtolerante Handbuchsuche (Plugin \"vault-search\") als eigenständiges Werkzeug an. Benötigt das vault-search-Plugin (aktiviert).").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableFuzzySearchLeg).onChange(async (value) => {
-			this.plugin.settings.enableFuzzySearchLeg = value;
-			await this.plugin.saveSettings();
-		}));
-		new obsidian.Setting(containerEl).setName("Max. Werkzeug-Runden").setDesc("Hartes Limit an Werkzeug-Aufrufen (erneute Suche, Seite nachladen, Rückfrage) pro Frage, bevor das Modell gezwungen wird, direkt zu antworten. Eine Rückfrage an dich verbraucht beim Fortsetzen ebenfalls eine Runde dieses Budgets.").addText((text) => text.setValue(String(this.plugin.settings.maxAgentRounds)).onChange(async (value) => {
-			const n = parseInt(value, 10);
-			if (!Number.isNaN(n) && n > 0) {
-				this.plugin.settings.maxAgentRounds = n;
-				await this.plugin.saveSettings();
-			}
-		}));
-		containerEl.createEl("h3", { text: "Sprachausgabe (TTS)" });
-		containerEl.createEl("p", { text: "Optional: zusätzlich zur gewohnten, zitatreichen Antwort wird eine kurze, gesprochene Zusammenfassung erzeugt und über Google Cloud Text-to-Speech (Chirp 3: HD) abgespielt - z.B. für die Werkstatt, um ein Anzugsdrehmoment vorgelesen zu bekommen." });
-		new obsidian.Setting(containerEl).setName("Sprachausgabe aktivieren").setDesc("Setzt den Anfangszustand der Sprachausgabe-Checkbox im Chat (dort jederzeit umschaltbar).").addToggle((toggle) => toggle.setValue(this.plugin.settings.ttsEnabled).onChange(async (value) => {
-			this.plugin.settings.ttsEnabled = value;
-			await this.plugin.saveSettings();
-		}));
-		let ttsApiKeyInputEl;
-		new obsidian.Setting(containerEl).setName("TTS API key").setDesc("Separater Google Cloud API-Key für Text-to-Speech (optional). Benötigt aktivierte Cloud Text-to-Speech API und Billing im zugehörigen Projekt. Leer = es wird versucht, den Gemini-Key oben zu verwenden.").addText((text) => {
-			text.setPlaceholder("AIza...").setValue(this.plugin.settings.ttsApiKey).onChange(async (value) => {
-				this.plugin.settings.ttsApiKey = value.trim();
-				await this.plugin.saveSettings();
-			});
-			ttsApiKeyInputEl = text.inputEl;
-			ttsApiKeyInputEl.type = "password";
-		}).addButton((button) => {
-			button.setIcon("eye").setTooltip("API-Schlüssel anzeigen/verbergen");
-			button.onClick(() => {
-				if (!ttsApiKeyInputEl) return;
-				const revealed = ttsApiKeyInputEl.type === "text";
-				ttsApiKeyInputEl.type = revealed ? "password" : "text";
-				button.setIcon(revealed ? "eye" : "eye-off");
-			});
-		});
-		let ttsLanguageDropdown;
-		let ttsVoiceDropdown;
-		let ttsVoiceRefreshButton;
-		let ttsVoicesCache = [];
-		const populateTtsVoiceOptions = (languageCode) => {
-			if (!ttsVoiceDropdown) return;
-			const currentVoice = this.plugin.settings.ttsVoiceName;
-			const names = ttsVoicesCache.filter((v) => v.languageCodes.includes(languageCode)).map((v) => v.name);
-			const options = names.includes(currentVoice) ? names : [currentVoice, ...names];
-			ttsVoiceDropdown.selectEl.empty();
-			for (const name of options) ttsVoiceDropdown.addOption(name, name);
-			ttsVoiceDropdown.setValue(currentVoice);
-		};
-		const refreshTtsVoiceOptions = async () => {
-			if (!ttsLanguageDropdown || !ttsVoiceDropdown) return;
-			const apiKey = this.plugin.settings.ttsApiKey || this.plugin.settings.geminiApiKey;
-			ttsLanguageDropdown.setDisabled(true);
-			ttsVoiceDropdown.setDisabled(true);
-			ttsVoiceRefreshButton?.setDisabled(true);
-			ttsVoicesCache = await listChirp3Voices(apiKey);
-			const currentLanguage = this.plugin.settings.ttsLanguageCode;
-			const languageCodes = Array.from(new Set(ttsVoicesCache.flatMap((v) => v.languageCodes))).sort();
-			const languageOptions = languageCodes.includes(currentLanguage) ? languageCodes : [currentLanguage, ...languageCodes];
-			ttsLanguageDropdown.selectEl.empty();
-			for (const code of languageOptions) ttsLanguageDropdown.addOption(code, code);
-			ttsLanguageDropdown.setValue(currentLanguage);
-			populateTtsVoiceOptions(currentLanguage);
-			ttsLanguageDropdown.setDisabled(false);
-			ttsVoiceDropdown.setDisabled(false);
-			ttsVoiceRefreshButton?.setDisabled(false);
-		};
-		new obsidian.Setting(containerEl).setName("Sprache").addDropdown((dropdown) => {
-			ttsLanguageDropdown = dropdown;
-			dropdown.addOption(this.plugin.settings.ttsLanguageCode, this.plugin.settings.ttsLanguageCode);
-			dropdown.setValue(this.plugin.settings.ttsLanguageCode);
-			dropdown.onChange(async (value) => {
-				this.plugin.settings.ttsLanguageCode = value;
-				await this.plugin.saveSettings();
-				populateTtsVoiceOptions(value);
-			});
-		});
-		new obsidian.Setting(containerEl).setName("Stimme (Chirp 3: HD)").addDropdown((dropdown) => {
-			ttsVoiceDropdown = dropdown;
-			dropdown.addOption(this.plugin.settings.ttsVoiceName, this.plugin.settings.ttsVoiceName);
-			dropdown.setValue(this.plugin.settings.ttsVoiceName);
-			dropdown.onChange(async (value) => {
-				this.plugin.settings.ttsVoiceName = value;
-				await this.plugin.saveSettings();
-			});
-		}).addButton((button) => {
-			ttsVoiceRefreshButton = button;
-			button.setIcon("refresh-cw").setTooltip("Stimmenliste aktualisieren");
-			button.onClick(() => {
-				refreshTtsVoiceOptions();
-			});
-		});
-		refreshTtsVoiceOptions();
-		let ttsDeviceDropdown;
-		const refreshTtsDeviceOptions = async () => {
-			if (!ttsDeviceDropdown) return;
-			const devices = await listOutputDevices();
-			const current = this.plugin.settings.ttsOutputDeviceId;
-			ttsDeviceDropdown.selectEl.empty();
-			ttsDeviceDropdown.addOption("", "Systemstandard");
-			for (const device of devices) {
-				if (!device.deviceId || device.deviceId === "default") continue;
-				ttsDeviceDropdown.addOption(device.deviceId, device.label || `Gerät ${device.deviceId.slice(0, 8)}`);
-			}
-			const hasCurrent = current === "" || devices.some((d) => d.deviceId === current);
-			ttsDeviceDropdown.setValue(hasCurrent ? current : "");
-		};
-		new obsidian.Setting(containerEl).setName("Audioausgabegerät").setDesc("\"Geräte erkennen\" fragt einmalig nach Mikrofonberechtigung, nur um Gerätenamen auszulesen - es wird nichts aufgenommen oder übertragen.").addDropdown((dropdown) => {
-			ttsDeviceDropdown = dropdown;
-			dropdown.addOption("", "Systemstandard");
-			dropdown.onChange(async (value) => {
-				this.plugin.settings.ttsOutputDeviceId = value;
-				await this.plugin.saveSettings();
-			});
-		}).addButton((button) => {
-			button.setButtonText("Geräte erkennen");
-			button.onClick(async () => {
-				button.setDisabled(true);
-				await unlockDeviceLabels();
-				await refreshTtsDeviceOptions();
-				button.setDisabled(false);
-			});
-		});
-		refreshTtsDeviceOptions();
-		new obsidian.Setting(containerEl).setName("Lautstärke").addSlider((slider) => slider.setLimits(0, 1, .05).setValue(this.plugin.settings.ttsVolume).setDynamicTooltip().onChange(async (value) => {
-			setVolume(value);
-			this.plugin.settings.ttsVolume = value;
-			await this.plugin.saveSettings();
-		}));
-		const charCounterSetting = new obsidian.Setting(containerEl).setName("Zeichenzähler (Chirp 3 HD)");
-		const updateCharCounterDesc = () => {
-			const used = this.plugin.settings.ttsCharCount.toLocaleString("de-DE");
-			const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
-			charCounterSetting.setDesc(`${used} / ${limit} Zeichen (Freikontingent).`);
-		};
-		updateCharCounterDesc();
-		charCounterSetting.addButton((button) => {
-			button.setButtonText("Zurücksetzen").setWarning();
-			button.onClick(async () => {
-				if (!await confirmModal(this.app, "Zeichenzähler wirklich zurücksetzen?")) return;
-				this.plugin.settings.ttsCharCount = 0;
-				await this.plugin.saveSettings();
-				updateCharCounterDesc();
-			});
-		});
+		renderApiKeySection(containerEl, this.plugin);
+		renderRetrievalSection(containerEl, this.plugin);
+		renderGenerationModel(containerEl, this.plugin);
+		renderRetrievalKnobs(containerEl, this.plugin);
+		renderAgentSection(containerEl, this.plugin);
+		renderTtsVoiceSection(containerEl, this.plugin);
+		renderTtsAudioSection(containerEl, this.plugin, this.app);
 	}
 };
 //#endregion
@@ -8355,12 +8485,6 @@ async function getIndices(pluginDir, manifest) {
 	cachedPromise = promise;
 	return promise;
 }
-/**
-* Clears the cached indices, forcing the next `getIndices` call to reload
-* from disk regardless of `corpusHash`. Backs the "Reload RAG index"
-* command, for when the underlying index files changed but the manifest's
-* corpusHash wasn't bumped (or a corrupt/partial load needs retrying).
-*/
 function clearIndicesCache() {
 	cachedKey = null;
 	cachedPromise = null;
@@ -8473,6 +8597,201 @@ function describeFinalAnswer(text, manualCitations, webCitations) {
 	return `Antwort erstellt (${text.trim().length} Zeichen) mit ${manualCitations.length} Handbuch-Zitat(en) und ${webCitations.length} Web-Zitat(en).`;
 }
 //#endregion
+//#region src/gemini/history.ts
+function buildHistoryContents(history) {
+	return history.map((t) => ({
+		...t,
+		text: t.text.trim()
+	})).filter((t) => t.text.length > 0).map((t) => ({
+		role: t.role === "assistant" ? "model" : "user",
+		parts: [{ text: t.text }]
+	}));
+}
+//#endregion
+//#region src/retrieval/context-xml.ts
+function escapeXml(text) {
+	return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function buildContextXml(blocks) {
+	return `<context>\n${blocks.map((b) => `<document source="${escapeXml(b.notePath)}" seitencode="${escapeXml(b.seitencode)}" sektion="${escapeXml(b.sektion)}" titel="${escapeXml(b.titel)}">\n${escapeXml(b.fullText)}\n</document>`).join("\n\n")}\n</context>`;
+}
+//#endregion
+//#region src/agent/conversation.ts
+function buildInitialState(question, history, baselineBlocks) {
+	const manualPages = /* @__PURE__ */ new Map();
+	for (const b of baselineBlocks) manualPages.set(b.notePath, b);
+	const contextXml = buildContextXml(baselineBlocks);
+	return {
+		contents: [...buildHistoryContents(history), {
+			role: "user",
+			parts: [{ text: `${contextXml}\n\n<question>\n${escapeXml(question)}\n</question>` }]
+		}],
+		round: 0,
+		manualPages,
+		webCitations: /* @__PURE__ */ new Map()
+	};
+}
+function cloneState(state) {
+	return {
+		contents: [...state.contents],
+		round: state.round,
+		manualPages: new Map(state.manualPages),
+		webCitations: new Map(state.webCitations)
+	};
+}
+function appendClarificationAnswer(state, userAnswer, callId) {
+	state.contents.push({
+		role: "user",
+		parts: [{ functionResponse: {
+			...callId ? { id: callId } : {},
+			name: "ask_user",
+			response: { answer: userAnswer }
+		} }]
+	});
+}
+//#endregion
+//#region src/http/abort.ts
+function linkAbort(target, source) {
+	if (!source) return () => {};
+	if (source.aborted) {
+		target.abort(source.reason);
+		return () => {};
+	}
+	const handler = () => target.abort(source.reason);
+	source.addEventListener("abort", handler, { once: true });
+	return () => source.removeEventListener("abort", handler);
+}
+//#endregion
+//#region src/http/sse-parse.ts
+function extractSseEvents(buffer) {
+	const frames = buffer.replace(/\r\n/g, "\n").split("\n\n");
+	const rest = frames.pop() ?? "";
+	const events = [];
+	for (const frame of frames) {
+		const dataLines = frame.split("\n").filter((line) => line.startsWith("data:")).map((line) => line.slice(5).trimStart());
+		if (dataLines.length === 0) continue;
+		const payload = dataLines.join("\n");
+		if (!payload || payload === "[DONE]") continue;
+		try {
+			events.push(JSON.parse(payload));
+		} catch {}
+	}
+	return {
+		events,
+		rest
+	};
+}
+//#endregion
+//#region src/http/sse-attempt.ts
+var SseAttemptError = class extends Error {
+	constructor(message, firstByteReceived, status) {
+		super(message);
+		this.firstByteReceived = firstByteReceived;
+		this.status = status;
+	}
+};
+async function attemptPostSse(params, opts) {
+	const fetchImpl = opts.fetchImpl ?? fetch;
+	const attemptController = new AbortController();
+	const unlinkCaller = linkAbort(attemptController, opts.signal);
+	let firstByteReceived = false;
+	let timer;
+	const armTimer = (ms, reason) => {
+		if (timer) clearTimeout(timer);
+		timer = setTimeout(() => attemptController.abort(new Error(reason)), ms);
+	};
+	const clearTimer = () => {
+		if (timer) clearTimeout(timer);
+		timer = void 0;
+	};
+	const fail = (message, status) => {
+		throw new SseAttemptError(message, firstByteReceived, status);
+	};
+	try {
+		armTimer(HTTP_STREAM_FIRST_BYTE_TIMEOUT_MS, `Zeitüberschreitung nach ${HTTP_STREAM_FIRST_BYTE_TIMEOUT_MS / 1e3}s (kein Streaming-Start)`);
+		let response;
+		try {
+			response = await fetchImpl(params.url, {
+				method: "POST",
+				headers: params.headers,
+				body: params.body,
+				signal: attemptController.signal
+			});
+		} catch (err) {
+			if (opts.signal?.aborted) throw fail(ABORT_ERROR_MESSAGE);
+			throw fail(err instanceof Error ? err.message : String(err));
+		}
+		if (!response.ok) {
+			const msg = extractErrorMessageFromText(await response.text().catch(() => ""));
+			throw fail(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`, response.status);
+		}
+		if (!response.body) throw fail("Streaming-Antwort enthält keinen lesbaren Body.");
+		const reader = response.body.getReader();
+		const decoder = new TextDecoder();
+		let buffer = "";
+		try {
+			while (true) {
+				let result;
+				try {
+					result = await reader.read();
+				} catch (err) {
+					if (opts.signal?.aborted) throw fail(ABORT_ERROR_MESSAGE);
+					throw fail(err instanceof Error ? err.message : String(err));
+				}
+				if (result.done) break;
+				firstByteReceived = true;
+				armTimer(HTTP_STREAM_IDLE_TIMEOUT_MS, `Streaming-Verbindung gestoppt (keine Daten seit ${HTTP_STREAM_IDLE_TIMEOUT_MS / 1e3}s).`);
+				buffer += decoder.decode(result.value, { stream: true });
+				const { events, rest } = extractSseEvents(buffer);
+				buffer = rest;
+				for (const event of events) opts.onEvent(event);
+			}
+			const { events } = extractSseEvents(buffer + "\n\n");
+			for (const event of events) opts.onEvent(event);
+		} finally {
+			reader.releaseLock();
+		}
+	} finally {
+		clearTimer();
+		unlinkCaller();
+	}
+}
+//#endregion
+//#region src/http/stream.ts
+async function postSseWithRetry(params, opts) {
+	const label = opts.label ?? "Anfrage";
+	for (let attempt = 1; attempt <= 5; attempt++) {
+		if (opts.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
+		try {
+			await attemptPostSse(params, opts);
+			return;
+		} catch (err) {
+			if (opts.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
+			const message = err instanceof Error ? err.message : String(err);
+			if (!(err instanceof SseAttemptError)) throw new Error(`${label} fehlgeschlagen: ${message}`);
+			const retryableStatus = typeof err.status === "number" && RETRYABLE_STATUSES.has(err.status);
+			if (!(!err.firstByteReceived && (retryableStatus || err.status === void 0)) || attempt === 5) throw err.status !== void 0 ? err : /* @__PURE__ */ new Error(`${label} fehlgeschlagen: ${message}`);
+			await sleep(computeDelayMs(attempt), opts.signal, (seconds) => opts.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
+			opts.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/5) …`);
+		}
+	}
+}
+//#endregion
+//#region src/gemini/block-reason.ts
+var BLOCK_REASON_MESSAGES = {
+	SAFETY: "Die Antwort wurde von Sicherheitsfiltern blockiert (SAFETY).",
+	RECITATION: "Die Antwort wurde blockiert - möglicherweise wörtliche Wiedergabe urheberrechtlich geschützten Materials (RECITATION).",
+	MAX_TOKENS: "Die Antwort wurde wegen Erreichens des Token-Limits abgebrochen, bevor Inhalt erzeugt wurde (MAX_TOKENS).",
+	OTHER: "Die Antwort wurde aus einem nicht näher spezifizierten Grund blockiert (OTHER)."
+};
+function blockReasonMessage(json, candidate) {
+	const blockReason = json?.promptFeedback?.blockReason;
+	const finishReason = candidate?.finishReason;
+	const reason = blockReason ?? (finishReason && finishReason !== "STOP" ? finishReason : void 0);
+	if (!reason) return void 0;
+	return BLOCK_REASON_MESSAGES[reason] ?? `Die Antwort wurde blockiert/abgebrochen (Grund: ${reason}).`;
+}
+//#endregion
 //#region src/agent/tool-declarations.ts
 var FUNCTION_DECLARATIONS = [
 	{
@@ -8533,7 +8852,12 @@ var FUNCTION_DECLARATIONS = [
 ];
 //#endregion
 //#region src/gemini/prompts.ts
-var SYSTEM_PROMPT = `Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
+function SYSTEM_PROMPT(includeGoogleSearch) {
+	return `Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
+
+Antworte kurz und klar: nur das, was zur Beantwortung der Frage nötig ist. Wiederhole die Frage nicht,
+vermeide Füllsätze, Höflichkeitsfloskeln und Einleitungen. Füge keine ungefragten allgemeinen
+Hintergrundinformationen hinzu, die nicht zur Beantwortung beitragen.
 
 Struktur jeder Antwort:
 1. **Aus dem Werkstatthandbuch:** Beantworte den Teil der Frage, der sich aus den abgerufenen
@@ -8549,23 +8873,17 @@ Struktur jeder Antwort:
    Nachschlagewerke (z.B. Sonderwerkzeuge, Sicherheitshinweise, Glossar, Technische Daten), keine
    einzelnen Handbuchseiten. Zitiere solche Quellen stattdessen exakt im Format "[Referenz: <titel>]"
    (titel aus dem titel-Attribut derselben Quelle), niemals mit "[Seite ...]".
-2. **Zusätzliches Wissen (Allgemeinwissen & Web, nicht werksseitig verifiziert):** Ergänze die Antwort
-   IMMER um zusätzlichen Kontext, praktische Hinweise und aktuelle Informationen (z.B. moderne
-   Ersatzteile, gängige Foren-Hinweise, aktualisierte Teilenummern) aus deinem Allgemeinwissen und -
-   falls verfügbar - aktuellen Web-Rechercheergebnissen, auch wenn Abschnitt 1 die Frage bereits
-   beantwortet. Kennzeichne diese Angaben klar als nicht aus dem Werksmanual stammend. Weise bei
+2. **${includeGoogleSearch ? "Zusätzliches Wissen (Allgemeinwissen & Web, nicht werksseitig verifiziert)" : "Zusätzliches Wissen (Allgemeinwissen, nicht werksseitig verifiziert)"}:** Ergänze die Antwort NUR dann um zusätzlichen Kontext, praktische Hinweise
+   oder aktuelle Informationen (z.B. moderne Ersatzteile, bekannte Fallstricke, aktualisierte
+   Teilenummern) aus deinem Allgemeinwissen${includeGoogleSearch ? " und - falls verfügbar - aktuellen Web-Rechercheergebnissen" : ""}, wenn das für die konkrete Frage einen echten
+   Mehrwert bietet - nicht routinemäßig. Lass diesen Abschnitt ganz weg, wenn es nichts Relevantes zu
+   ergänzen gibt. Kennzeichne vorhandene Angaben klar als nicht aus dem Werksmanual stammend. Weise bei
    sicherheitsrelevanten Werten (Drehmomente, Toleranzen, Materialspezifikationen) ausdrücklich darauf
    hin, dass die Werksangabe (falls in Abschnitt 1 vorhanden) Vorrang hat und ungeprüfte Werte nicht
-   ohne Weiteres übernommen werden sollten.
-3. Nenne bei Web-Quellen die URL bzw. Domain, damit sie nachvollziehbar sind.
+   ohne Weiteres übernommen werden sollten.${includeGoogleSearch ? "\n3. Nenne bei Web-Quellen die URL bzw. Domain, damit sie nachvollziehbar sind." : ""}
 
 Antworte auf Deutsch.`;
-/**
-* Derived from `FUNCTION_DECLARATIONS` (the single source of truth for tool
-* name/parameters/description - see agent/tool-declarations.ts) so the
-* natural-language prompt suffix and the API's function-calling schema can't
-* drift apart. Formatted as "name(param1, param2): description" per tool.
-*/
+}
 function toolParamNames(decl) {
 	const properties = decl.parameters?.properties;
 	return properties ? Object.keys(properties) : [];
@@ -8583,138 +8901,182 @@ function buildToolsSuffix(functionDeclarations, includeGoogleSearch) {
 	return "\n\nDir stehen für diese Anfrage folgende Werkzeuge zur Verfügung:\n" + lines.join("\n") + "\n\nDir steht pro Frage nur ein begrenztes Budget an Werkzeug-Aufrufen zur Verfügung (in der Regel wenige Runden) - suche gezielt und effizient, nicht plan- und ziellos. Wird das Budget aufgebraucht, antworte direkt mit dem, was du bis dahin gefunden hast.";
 }
 //#endregion
-//#region src/gemini/client.ts
-/** Human-readable messages for a blocked/truncated generation, keyed by the
-* Gemini API's `promptFeedback.blockReason` or a non-STOP `finishReason`. */
-var BLOCK_REASON_MESSAGES = {
-	SAFETY: "Die Antwort wurde von Sicherheitsfiltern blockiert (SAFETY).",
-	RECITATION: "Die Antwort wurde blockiert - möglicherweise wörtliche Wiedergabe urheberrechtlich geschützten Materials (RECITATION).",
-	MAX_TOKENS: "Die Antwort wurde wegen Erreichens des Token-Limits abgebrochen, bevor Inhalt erzeugt wurde (MAX_TOKENS).",
-	OTHER: "Die Antwort wurde aus einem nicht näher spezifizierten Grund blockiert (OTHER)."
-};
-async function generateWithTools(contents, functionDeclarations, settings, opts) {
-	const apiKey = settings.geminiApiKey;
-	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
-	const url = `https://generativelanguage.googleapis.com/v1beta/models/${settings.generationModel}:generateContent`;
-	const includeGoogleSearch = opts?.includeGoogleSearch !== false;
+//#region src/gemini/request-body.ts
+function buildGenerateBody(contents, functionDeclarations, opts) {
+	const includeGoogleSearch = opts?.includeGoogleSearch === true;
 	const tools = [];
 	if (includeGoogleSearch) tools.push({ google_search: {} });
 	if (functionDeclarations && functionDeclarations.length > 0) tools.push({ functionDeclarations });
 	const body = {
-		systemInstruction: { parts: [{ text: SYSTEM_PROMPT + buildToolsSuffix(functionDeclarations, includeGoogleSearch) }] },
+		systemInstruction: { parts: [{ text: SYSTEM_PROMPT(includeGoogleSearch) + buildToolsSuffix(functionDeclarations, includeGoogleSearch) }] },
 		contents
 	};
 	if (tools.length > 0) {
 		body.tools = tools;
 		body.toolConfig = { includeServerSideToolInvocations: true };
 	}
-	const response = await requestUrlWithRetry({
+	if (opts?.thinkingEnabled !== true) body.generationConfig = { thinkingConfig: { thinkingBudget: 0 } };
+	return body;
+}
+function modelUrl(model, method) {
+	return `https://generativelanguage.googleapis.com/v1beta/models/${model}:${method}`;
+}
+function requireApiKey(apiKey) {
+	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
+}
+//#endregion
+//#region src/gemini/response.ts
+function mapGroundingChunks(rawChunks) {
+	return rawChunks.map((c) => ({
+		uri: c.web?.uri ?? "",
+		title: c.web?.title ?? c.web?.uri ?? ""
+	}));
+}
+function mapGroundingSupports(rawSupports) {
+	return rawSupports.filter((s) => typeof s.segment?.endIndex === "number" && Array.isArray(s.groundingChunkIndices) && s.groundingChunkIndices.length > 0).map((s) => ({
+		startIndex: typeof s.segment?.startIndex === "number" ? s.segment.startIndex : 0,
+		endIndex: s.segment.endIndex,
+		chunkIndices: s.groundingChunkIndices,
+		text: typeof s.segment?.text === "string" ? s.segment.text : void 0
+	}));
+}
+//#endregion
+//#region src/gemini/generate-stream.ts
+async function generateWithToolsStreaming(contents, functionDeclarations, settings, opts) {
+	requireApiKey(settings.geminiApiKey);
+	const url = modelUrl(settings.generationModel, "streamGenerateContent?alt=sse");
+	const body = buildGenerateBody(contents, functionDeclarations, opts);
+	const parts = [];
+	let groundingChunks = [];
+	let groundingSupports = [];
+	let finishReason;
+	let lastJson;
+	let lastCandidate;
+	await postSseWithRetry({
 		url,
-		method: "POST",
 		headers: {
-			"x-goog-api-key": apiKey,
+			"x-goog-api-key": settings.geminiApiKey,
 			"Content-Type": "application/json"
 		},
 		body: JSON.stringify(body)
 	}, {
-		onStatus: opts?.onStatus,
 		label: "Generierung",
-		signal: opts?.signal
+		signal: opts.signal,
+		onStatus: opts.onStatus,
+		fetchImpl: opts.fetchImpl,
+		onEvent: (event) => {
+			const json = event;
+			const candidate = json?.candidates?.[0];
+			if (!candidate) return;
+			lastJson = json;
+			lastCandidate = candidate;
+			const chunkParts = candidate?.content?.parts ?? [];
+			for (const part of chunkParts) {
+				parts.push(part);
+				if (typeof part.text === "string" && part.text.length > 0) opts.onDelta(part.text);
+			}
+			const rawChunks = candidate?.groundingMetadata?.groundingChunks;
+			if (rawChunks) groundingChunks = mapGroundingChunks(rawChunks);
+			const rawSupports = candidate?.groundingMetadata?.groundingSupports;
+			if (rawSupports) groundingSupports = mapGroundingSupports(rawSupports);
+			if (candidate?.finishReason) finishReason = candidate.finishReason;
+		}
 	});
-	let json;
-	try {
-		json = response.json;
-	} catch (err) {
-		throw new Error(`Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`);
-	}
-	const candidate = json?.candidates?.[0];
-	const parts = candidate?.content?.parts ?? [];
 	if (parts.length === 0) {
-		const blockReason = json?.promptFeedback?.blockReason;
-		const finishReason = candidate?.finishReason;
-		const reason = blockReason ?? (finishReason && finishReason !== "STOP" ? finishReason : void 0);
-		if (reason) throw new Error(BLOCK_REASON_MESSAGES[reason] ?? `Die Antwort wurde blockiert/abgebrochen (Grund: ${reason}).`);
-		throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(json).slice(0, 300)}`);
+		const msg = blockReasonMessage(lastJson, lastCandidate);
+		if (msg) throw new Error(msg);
+		throw new Error("Unexpected streamGenerateContent response: no parts received.");
 	}
 	return {
 		parts,
-		groundingChunks: (candidate?.groundingMetadata?.groundingChunks ?? []).map((c) => ({
-			uri: c.web?.uri ?? "",
-			title: c.web?.title ?? c.web?.uri ?? ""
-		})),
-		groundingSupports: (candidate?.groundingMetadata?.groundingSupports ?? []).filter((s) => typeof s.segment?.endIndex === "number" && Array.isArray(s.groundingChunkIndices) && s.groundingChunkIndices.length > 0).map((s) => ({
-			startIndex: typeof s.segment?.startIndex === "number" ? s.segment.startIndex : 0,
-			endIndex: s.segment.endIndex,
-			chunkIndices: s.groundingChunkIndices,
-			text: typeof s.segment?.text === "string" ? s.segment.text : void 0
-		})),
-		finishReason: candidate?.finishReason
+		groundingChunks,
+		groundingSupports,
+		finishReason
 	};
 }
-/**
-* Minimal, tool-less sibling to `generateWithTools`: no Google Search, no
-* function declarations, no tool-suffix system instruction - just a plain
-* instruction plus contents. Used only by tts/short-answer.ts to keep the
-* spoken-answer summarization cheap, fast, and unable to trigger the
-* agent/tool machinery.
-*/
-async function generatePlainText(contents, settings, opts) {
-	const apiKey = settings.geminiApiKey;
-	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
-	const response = await requestUrlWithRetry({
-		url: `https://generativelanguage.googleapis.com/v1beta/models/${settings.generationModel}:generateContent`,
-		method: "POST",
-		headers: {
-			"x-goog-api-key": apiKey,
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ contents })
-	}, {
-		label: "Kurzantwort",
-		signal: opts?.signal
+//#endregion
+//#region src/agent/final-round.ts
+var BUDGET_EXHAUSTED_PROMPT = "Das Werkzeug-Budget für diese Frage ist aufgebraucht. Antworte jetzt direkt und vollständig mit den bisher verfügbaren Informationen, ohne weitere Werkzeugaufrufe.";
+async function runForcedFinalRound(state, ctx, maxRounds, reporter) {
+	reporter.record({
+		kind: "budget_exhausted",
+		round: state.round,
+		title: "Werkzeug-Budget erreicht",
+		narration: describeBudgetExhausted(state.round, maxRounds)
 	});
-	let json;
-	try {
-		json = response.json;
-	} catch (err) {
-		throw new Error(`Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`);
-	}
-	const candidate = json?.candidates?.[0];
-	const parts = candidate?.content?.parts ?? [];
-	if (parts.length === 0) {
-		const blockReason = json?.promptFeedback?.blockReason;
-		const finishReason = candidate?.finishReason;
-		const reason = blockReason ?? (finishReason && finishReason !== "STOP" ? finishReason : void 0);
-		if (reason) throw new Error(BLOCK_REASON_MESSAGES[reason] ?? `Die Antwort wurde blockiert/abgebrochen (Grund: ${reason}).`);
-		throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(json).slice(0, 300)}`);
-	}
-	return parts.map((p) => p.text ?? "").join("").trim();
+	state.contents.push({
+		role: "user",
+		parts: [{ text: BUDGET_EXHAUSTED_PROMPT }]
+	});
+	ctx.onTextDelta?.("");
+	const finalStep = reporter.start({
+		kind: "llm_round",
+		round: state.round,
+		title: "Erzwungene finale Antwort: Modell denkt nach …",
+		model: ctx.settings.generationModel
+	});
+	let finalRoundText = "";
+	const final = await generateWithToolsStreaming(state.contents, null, ctx.settings, {
+		includeGoogleSearch: false,
+		thinkingEnabled: ctx.settings.thinkingEnabled,
+		onDelta: (chunk) => {
+			finalRoundText += chunk;
+			ctx.onTextDelta?.(finalRoundText);
+		},
+		onStatus: (status) => reporter.update(finalStep, { title: status }),
+		signal: ctx.signal
+	});
+	mergeGrounding(state.webCitations, final.groundingChunks);
+	const text = final.parts.map((p) => p.text ?? "").join("");
+	const manualCitations = [...state.manualPages.values()];
+	const webCitations = [...state.webCitations.values()];
+	reporter.finish(finalStep, { title: "Erzwungene finale Antwort erhalten" });
+	reporter.record({
+		kind: "final_answer",
+		round: state.round,
+		title: "Antwort fertiggestellt",
+		model: ctx.settings.generationModel,
+		narration: describeFinalAnswer(text, manualCitations, webCitations)
+	});
+	return {
+		status: "done",
+		text,
+		manualCitations,
+		webCitations,
+		webGroundingChunks: final.groundingChunks,
+		webGroundingSupports: final.groundingSupports
+	};
 }
 //#endregion
-//#region src/gemini/history.ts
-function buildHistoryContents(history) {
-	return history.map((t) => ({
-		...t,
-		text: t.text.trim()
-	})).filter((t) => t.text.length > 0).map((t) => ({
-		role: t.role === "assistant" ? "model" : "user",
-		parts: [{ text: t.text }]
-	}));
-}
-//#endregion
-//#region src/retrieval/context-xml.ts
-/**
-* Escapes text before it's interpolated into the pseudo-XML context block
-* sent to the model. Without this, a note containing a literal `</document>`
-* or stray `<`/`>` could corrupt document-boundary attribution in the
-* prompt (letting note content masquerade as a different/additional
-* <document> block, or break out of an attribute).
-*/
-function escapeXml(text) {
-	return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-function buildContextXml(blocks) {
-	return `<context>\n${blocks.map((b) => `<document source="${escapeXml(b.notePath)}" seitencode="${escapeXml(b.seitencode)}" sektion="${escapeXml(b.sektion)}" titel="${escapeXml(b.titel)}">\n${escapeXml(b.fullText)}\n</document>`).join("\n\n")}\n</context>`;
+//#region src/agent/round.ts
+async function runModelRound(state, ctx, declarations, maxRounds, reporter) {
+	const roundStep = reporter.start({
+		kind: "llm_round",
+		round: state.round,
+		title: `Runde ${state.round}/${maxRounds}: Modell denkt nach …`,
+		model: ctx.settings.generationModel
+	});
+	let roundText = "";
+	const result = await generateWithToolsStreaming(state.contents, declarations, ctx.settings, {
+		includeGoogleSearch: ctx.settings.webSearchEnabled,
+		thinkingEnabled: ctx.settings.thinkingEnabled || ctx.settings.webSearchEnabled,
+		onDelta: (chunk) => {
+			roundText += chunk;
+			ctx.onTextDelta?.(roundText);
+		},
+		onStatus: (status) => reporter.update(roundStep, { title: status }),
+		signal: ctx.signal
+	});
+	mergeGrounding(state.webCitations, result.groundingChunks);
+	const functionCalls = result.parts.filter((p) => Boolean(p.functionCall)).map((p) => p.functionCall);
+	reporter.finish(roundStep, {
+		title: `Runde ${state.round}/${maxRounds}: Modellantwort erhalten`,
+		narration: describeRoundDecision(state.round, maxRounds, functionCalls)
+	});
+	return {
+		result,
+		functionCalls
+	};
 }
 //#endregion
 //#region src/retrieval/compact-hits.ts
@@ -8760,21 +9122,6 @@ async function embedQuery(query, settings, onStatus, signal) {
 }
 //#endregion
 //#region src/retrieval/rrf.ts
-/**
-* Fuses any number of independently-ranked legs (text search, vector search,
-* fuzzy search, ...) into a single ranking via Reciprocal Rank Fusion: each
-* leg contributes 1/(k + rank + 1) to every key it contains, summed across
-* legs. This is the single fusion model used everywhere in the retrieval
-* pipeline - see retrieval/hybrid-search.ts (text + vector legs, keyed by
-* chunk rowId) and retrieval/fuzzy-merge.ts (hybrid + fuzzy legs, keyed by
-* notePath).
-*
-* When multiple entries across (or within) legs share the same key, the
-* first one encountered (in leg order, then array order) wins as the
-* returned `item` - since legs are expected to be pre-sorted best-first,
-* this keeps the best-scoring/highest-ranked item for a given key rather
-* than an arbitrary later (worse) duplicate.
-*/
 function rrfMerge(legs, k) {
 	const scores = /* @__PURE__ */ new Map();
 	for (const leg of legs) for (const entry of leg) {
@@ -8891,137 +9238,48 @@ async function executeTool(fc, ctx, state, step) {
 	}
 }
 //#endregion
-//#region src/agent/loop.ts
-async function driveLoop(state, ctx) {
-	const maxRounds = ctx.settings.maxAgentRounds;
-	const reporter = ctx.reporter ?? NOOP_STEP_REPORTER;
-	const declarations = ctx.settings.enableFuzzySearchLeg ? FUNCTION_DECLARATIONS : FUNCTION_DECLARATIONS.filter((d) => d.name !== "search_manual_fuzzy");
-	while (state.round < maxRounds) {
+//#region src/agent/tool-round.ts
+async function runToolCalls(calls, ctx, state, reporter) {
+	const responseParts = [];
+	for (const fc of calls) {
 		if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-		state.round++;
-		const roundStep = reporter.start({
-			kind: "llm_round",
+		const toolStep = reporter.start({
+			kind: "tool_call",
 			round: state.round,
-			title: `Runde ${state.round}/${maxRounds}: Modell denkt nach …`,
-			model: ctx.settings.generationModel
+			title: describeCall(fc),
+			toolName: fc.name,
+			toolArgs: fc.args,
+			model: fc.name === "search_manual" ? ctx.settings.embeddingModel : void 0
 		});
-		const result = await generateWithTools(state.contents, declarations, ctx.settings, {
-			onStatus: (status) => reporter.update(roundStep, { title: status }),
-			signal: ctx.signal
-		});
-		mergeGrounding(state.webCitations, result.groundingChunks);
-		const functionCalls = result.parts.filter((p) => Boolean(p.functionCall)).map((p) => p.functionCall);
-		reporter.finish(roundStep, {
-			title: `Runde ${state.round}/${maxRounds}: Modellantwort erhalten`,
-			narration: describeRoundDecision(state.round, maxRounds, functionCalls)
-		});
-		if (functionCalls.length === 0) {
-			const text = result.parts.map((p) => p.text ?? "").join("");
-			const manualCitations = [...state.manualPages.values()];
-			const webCitations = [...state.webCitations.values()];
-			reporter.record({
-				kind: "final_answer",
-				round: state.round,
-				title: "Antwort fertiggestellt",
-				model: ctx.settings.generationModel,
-				narration: describeFinalAnswer(text, manualCitations, webCitations)
-			});
-			return {
-				status: "done",
-				text,
-				manualCitations,
-				webCitations,
-				webGroundingChunks: result.groundingChunks,
-				webGroundingSupports: result.groundingSupports
-			};
+		let response;
+		try {
+			response = await executeTool(fc, ctx, state, toolStep);
+		} catch (err) {
+			response = { error: err instanceof Error ? err.message : String(err) };
 		}
-		state.contents.push({
-			role: "model",
-			parts: result.parts
+		if (typeof response.error === "string") reporter.fail(toolStep, response.error);
+		else reporter.finish(toolStep, {
+			toolResult: response,
+			hits: extractToolHits(response),
+			narration: describeToolNarration(fc, response)
 		});
-		const askUserCall = functionCalls.find((fc) => fc.name === "ask_user");
-		const otherCalls = functionCalls.filter((fc) => fc !== askUserCall);
-		const responseParts = [];
-		for (const fc of otherCalls) {
-			if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-			const toolStep = reporter.start({
-				kind: "tool_call",
-				round: state.round,
-				title: describeCall(fc),
-				toolName: fc.name,
-				toolArgs: fc.args,
-				model: fc.name === "search_manual" ? ctx.settings.embeddingModel : void 0
-			});
-			let response;
-			try {
-				response = await executeTool(fc, ctx, state, toolStep);
-			} catch (err) {
-				response = { error: err instanceof Error ? err.message : String(err) };
-			}
-			if (typeof response.error === "string") reporter.fail(toolStep, response.error);
-			else reporter.finish(toolStep, {
-				toolResult: response,
-				hits: extractToolHits(response),
-				narration: describeToolNarration(fc, response)
-			});
-			responseParts.push({ functionResponse: {
-				...fc.id ? { id: fc.id } : {},
-				name: fc.name,
-				response
-			} });
-		}
-		if (responseParts.length > 0) state.contents.push({
-			role: "user",
-			parts: responseParts
-		});
-		if (askUserCall) {
-			const question = String(askUserCall.args?.question ?? "Kannst du das bitte genauer beschreiben?");
-			reporter.record({
-				kind: "clarification",
-				round: state.round,
-				title: `Rückfrage an Nutzer: "${question}"`,
-				narration: describeClarification(question, otherCalls.map((fc) => fc.name))
-			});
-			return {
-				status: "awaiting_clarification",
-				question,
-				pending: {
-					state,
-					ctx: {
-						...ctx,
-						settings: { ...ctx.settings }
-					}
-				}
-			};
-		}
+		responseParts.push({ functionResponse: {
+			...fc.id ? { id: fc.id } : {},
+			name: fc.name,
+			response
+		} });
 	}
-	if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-	reporter.record({
-		kind: "budget_exhausted",
-		round: state.round,
-		title: "Werkzeug-Budget erreicht",
-		narration: describeBudgetExhausted(state.round, maxRounds)
-	});
-	state.contents.push({
-		role: "user",
-		parts: [{ text: "Das Werkzeug-Budget für diese Frage ist aufgebraucht. Antworte jetzt direkt und vollständig mit den bisher verfügbaren Informationen, ohne weitere Werkzeugaufrufe." }]
-	});
-	const finalStep = reporter.start({
-		kind: "llm_round",
-		round: state.round,
-		title: "Erzwungene finale Antwort: Modell denkt nach …",
-		model: ctx.settings.generationModel
-	});
-	const final = await generateWithTools(state.contents, null, ctx.settings, {
-		includeGoogleSearch: false,
-		onStatus: (status) => reporter.update(finalStep, { title: status }),
-		signal: ctx.signal
-	});
-	mergeGrounding(state.webCitations, final.groundingChunks);
-	const text = final.parts.map((p) => p.text ?? "").join("");
+	return responseParts;
+}
+//#endregion
+//#region src/agent/loop.ts
+function activeDeclarations(ctx) {
+	return ctx.settings.enableFuzzySearchLeg ? FUNCTION_DECLARATIONS : FUNCTION_DECLARATIONS.filter((d) => d.name !== "search_manual_fuzzy");
+}
+function finalAnswer(state, ctx, result, reporter) {
+	const text = result.parts.map((p) => p.text ?? "").join("");
 	const manualCitations = [...state.manualPages.values()];
 	const webCitations = [...state.webCitations.values()];
-	reporter.finish(finalStep, { title: "Erzwungene finale Antwort erhalten" });
 	reporter.record({
 		kind: "final_answer",
 		round: state.round,
@@ -9034,24 +9292,60 @@ async function driveLoop(state, ctx) {
 		text,
 		manualCitations,
 		webCitations,
-		webGroundingChunks: final.groundingChunks,
-		webGroundingSupports: final.groundingSupports
+		webGroundingChunks: result.groundingChunks,
+		webGroundingSupports: result.groundingSupports
 	};
+}
+function pauseForClarification(state, ctx, askUserCall, otherCalls, reporter) {
+	const question = String(askUserCall.args?.question ?? "Kannst du das bitte genauer beschreiben?");
+	reporter.record({
+		kind: "clarification",
+		round: state.round,
+		title: `Rückfrage an Nutzer: "${question}"`,
+		narration: describeClarification(question, otherCalls.map((fc) => fc.name))
+	});
+	return {
+		status: "awaiting_clarification",
+		question,
+		pending: {
+			state,
+			ctx: {
+				...ctx,
+				settings: { ...ctx.settings }
+			}
+		}
+	};
+}
+async function driveLoop(state, ctx) {
+	const maxRounds = ctx.settings.maxAgentRounds;
+	const reporter = ctx.reporter ?? NOOP_STEP_REPORTER;
+	const declarations = activeDeclarations(ctx);
+	while (state.round < maxRounds) {
+		if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
+		state.round++;
+		ctx.onTextDelta?.("");
+		const { result, functionCalls } = await runModelRound(state, ctx, declarations, maxRounds, reporter);
+		if (functionCalls.length === 0) return finalAnswer(state, ctx, result, reporter);
+		ctx.onTextDelta?.("");
+		state.contents.push({
+			role: "model",
+			parts: result.parts
+		});
+		const askUserCall = functionCalls.find((fc) => fc.name === "ask_user");
+		const otherCalls = functionCalls.filter((fc) => fc !== askUserCall);
+		const responseParts = await runToolCalls(otherCalls, ctx, state, reporter);
+		if (responseParts.length > 0) state.contents.push({
+			role: "user",
+			parts: responseParts
+		});
+		if (askUserCall) return pauseForClarification(state, ctx, askUserCall, otherCalls, reporter);
+	}
+	if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
+	return runForcedFinalRound(state, ctx, maxRounds, reporter);
 }
 async function runAgentLoop(params) {
 	const { question, history, baselineBlocks, ctx } = params;
-	const manualPages = /* @__PURE__ */ new Map();
-	for (const b of baselineBlocks) manualPages.set(b.notePath, b);
-	const contextXml = buildContextXml(baselineBlocks);
-	return driveLoop({
-		contents: [...buildHistoryContents(history), {
-			role: "user",
-			parts: [{ text: `${contextXml}\n\n<question>\n${escapeXml(question)}\n</question>` }]
-		}],
-		round: 0,
-		manualPages,
-		webCitations: /* @__PURE__ */ new Map()
-	}, ctx);
+	return driveLoop(buildInitialState(question, history, baselineBlocks), ctx);
 }
 async function resumeAgentLoop(pending, userAnswer, signal) {
 	const { state: pausedState, ctx: pausedCtx } = pending;
@@ -9060,32 +9354,12 @@ async function resumeAgentLoop(pending, userAnswer, signal) {
 		signal
 	} : pausedCtx;
 	const askUserCallId = [...pausedState.contents].reverse().find((c) => c.role === "model")?.parts.find((p) => p.functionCall?.name === "ask_user")?.functionCall?.id;
-	const state = {
-		contents: [...pausedState.contents],
-		round: pausedState.round,
-		manualPages: new Map(pausedState.manualPages),
-		webCitations: new Map(pausedState.webCitations)
-	};
-	state.contents.push({
-		role: "user",
-		parts: [{ functionResponse: {
-			...askUserCallId ? { id: askUserCallId } : {},
-			name: "ask_user",
-			response: { answer: userAnswer }
-		} }]
-	});
+	const state = cloneState(pausedState);
+	appendClarificationAnswer(state, userAnswer, askUserCallId);
 	return driveLoop(state, ctx);
 }
 //#endregion
 //#region src/retrieval/fuzzy-merge.ts
-/**
-* Folds the fuzzy (vault-search) leg into the already-fused hybrid results
-* via the same Reciprocal Rank Fusion model used for text+vector (see
-* retrieval/rrf.ts), keyed by notePath rather than chunk rowId - a note can
-* have multiple hybrid chunks; the fuzzy leg only knows about whole notes.
-* `rrfK` is the same fusion constant used for the text/vector legs
-* (settings.rrfK), keeping a single tunable knob for all fusion stages.
-*/
 function mergeWithFuzzy(hybridHits, fuzzyHits, topK, rrfK) {
 	return rrfMerge([hybridHits.map((h, i) => ({
 		key: h.notePath,
@@ -9144,6 +9418,21 @@ async function expandToParentNotes(hits, vault, referenceChunks) {
 }
 //#endregion
 //#region src/workflow.ts
+function toWorkflowResult(result) {
+	if (result.status === "awaiting_clarification") return {
+		status: "awaiting_clarification",
+		question: result.question,
+		pending: result.pending
+	};
+	return {
+		status: "done",
+		text: result.text,
+		manualCitations: result.manualCitations,
+		webCitations: result.webCitations,
+		webGroundingChunks: result.webGroundingChunks,
+		webGroundingSupports: result.webGroundingSupports
+	};
+}
 async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, reporter, signal) {
 	const embeddingStep = reporter.start({
 		kind: "embedding",
@@ -9179,10 +9468,10 @@ async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, repor
 	return expandToParentNotes(hits, vault, indices.referenceChunks);
 }
 async function answerQuestion(params) {
-	const { question, history, settings, vault, indices, fuzzyApi, reporter, signal } = params;
+	const { question, history, settings, vault, indices, fuzzyApi, reporter, onTextDelta, signal } = params;
 	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 	const rep = reporter ?? NOOP_STEP_REPORTER;
-	const result = await runAgentLoop({
+	return toWorkflowResult(await runAgentLoop({
 		question,
 		history,
 		baselineBlocks: await baselineRetrieve(question, settings, indices, fuzzyApi, vault, rep, signal),
@@ -9192,39 +9481,44 @@ async function answerQuestion(params) {
 			indices,
 			fuzzyApi,
 			reporter: rep,
+			onTextDelta,
 			signal
 		}
-	});
-	if (result.status === "awaiting_clarification") return {
-		status: "awaiting_clarification",
-		question: result.question,
-		pending: result.pending
-	};
-	return {
-		status: "done",
-		text: result.text,
-		manualCitations: result.manualCitations,
-		webCitations: result.webCitations,
-		webGroundingChunks: result.webGroundingChunks,
-		webGroundingSupports: result.webGroundingSupports
-	};
+	}));
 }
 async function continueAnswer(pending, userAnswer, signal) {
 	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-	const result = await resumeAgentLoop(pending, userAnswer, signal);
-	if (result.status === "awaiting_clarification") return {
-		status: "awaiting_clarification",
-		question: result.question,
-		pending: result.pending
-	};
-	return {
-		status: "done",
-		text: result.text,
-		manualCitations: result.manualCitations,
-		webCitations: result.webCitations,
-		webGroundingChunks: result.webGroundingChunks,
-		webGroundingSupports: result.webGroundingSupports
-	};
+	return toWorkflowResult(await resumeAgentLoop(pending, userAnswer, signal));
+}
+//#endregion
+//#region src/view/apply-result.ts
+function clearCitations(turn) {
+	turn.citations = [];
+	turn.webCitations = [];
+	turn.webGroundingChunks = [];
+	turn.webGroundingSupports = [];
+}
+function applyResult(turn, state, result) {
+	turn.status = void 0;
+	turn.streamingText = void 0;
+	if (result.status === "awaiting_clarification") {
+		state.pendingAgentState = result.pending;
+		turn.text = result.question;
+		turn.isClarifying = true;
+		clearCitations(turn);
+	} else {
+		turn.text = result.text.trim() || "Ich habe leider keine Antwort erhalten.";
+		turn.isClarifying = false;
+		turn.citations = result.manualCitations;
+		turn.webCitations = result.webCitations;
+		turn.webGroundingChunks = result.webGroundingChunks;
+		turn.webGroundingSupports = result.webGroundingSupports;
+	}
+}
+function applyError(turn, message) {
+	turn.status = void 0;
+	turn.text = `Fehler: ${message}`;
+	clearCitations(turn);
 }
 //#endregion
 //#region src/view/controller.ts
@@ -9235,36 +9529,11 @@ function createChatSessionState() {
 		busy: false
 	};
 }
-/**
-* Abandons a pending ask_user clarification without answering it, so the
-* next message the user sends is routed to a fresh answerQuestion() call
-* instead of being blindly submitted as "the answer" to a question they may
-* no longer even remember (or that's no longer relevant).
-*/
 function abandonPendingClarification(state) {
 	state.pendingAgentState = null;
 }
 function inputPlaceholder(state) {
 	return state.pendingAgentState !== null ? "Antwort auf die Rückfrage …" : "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)";
-}
-function applyResult(turn, state, result) {
-	turn.status = void 0;
-	if (result.status === "awaiting_clarification") {
-		state.pendingAgentState = result.pending;
-		turn.text = result.question;
-		turn.isClarifying = true;
-		turn.citations = [];
-		turn.webCitations = [];
-		turn.webGroundingChunks = [];
-		turn.webGroundingSupports = [];
-	} else {
-		turn.text = result.text.trim() || "Ich habe leider keine Antwort erhalten.";
-		turn.isClarifying = false;
-		turn.citations = result.manualCitations;
-		turn.webCitations = result.webCitations;
-		turn.webGroundingChunks = result.webGroundingChunks;
-		turn.webGroundingSupports = result.webGroundingSupports;
-	}
 }
 async function sendMessage(state, message, deps) {
 	if (state.busy) return;
@@ -9297,12 +9566,17 @@ async function sendMessageUnguarded(state, message, deps) {
 		if (!steps.includes(step)) steps.push(step);
 		deps.onStep?.(step);
 	});
+	const onTextDelta = (text) => {
+		assistantTurn.streamingText = text || void 0;
+		deps.onTextDelta?.();
+	};
 	try {
 		let result;
 		if (isResuming && state.pendingAgentState) {
 			const pending = state.pendingAgentState;
 			state.pendingAgentState = null;
 			pending.ctx.reporter = reporter;
+			pending.ctx.onTextDelta = onTextDelta;
 			result = await continueAnswer(pending, message, deps.signal);
 		} else result = await answerQuestion({
 			question: message,
@@ -9312,6 +9586,7 @@ async function sendMessageUnguarded(state, message, deps) {
 			indices: await deps.getIndices(),
 			fuzzyApi: deps.getFuzzyApi(),
 			reporter,
+			onTextDelta,
 			signal: deps.signal
 		});
 		applyResult(assistantTurn, state, result);
@@ -9325,12 +9600,7 @@ async function sendMessageUnguarded(state, message, deps) {
 		}
 		state.pendingAgentState = null;
 		const errMessage = err instanceof Error ? err.message : String(err);
-		assistantTurn.status = void 0;
-		assistantTurn.text = `Fehler: ${errMessage}`;
-		assistantTurn.citations = [];
-		assistantTurn.webCitations = [];
-		assistantTurn.webGroundingChunks = [];
-		assistantTurn.webGroundingSupports = [];
+		applyError(assistantTurn, errMessage);
 		assistantTurn.retry = {
 			message,
 			pendingBefore: pendingBeforeSend
@@ -9359,31 +9629,33 @@ function getFuzzySearchApi(app) {
 	return (app.plugins?.plugins)?.["vault-search"]?.api ?? null;
 }
 //#endregion
+//#region src/view/model-options.ts
+async function refreshModelOptions(deps) {
+	deps.selectEl.disabled = true;
+	deps.setDisabled(true);
+	const models = await listFlashModels(deps.apiKey);
+	if (deps.isClosed()) return;
+	const options = models.some((model) => model.id === deps.currentModel) ? models : [{
+		id: deps.currentModel,
+		displayName: deps.currentModel
+	}, ...models];
+	deps.selectEl.empty();
+	for (const model of options) deps.selectEl.createEl("option", {
+		attr: { value: model.id },
+		text: model.displayName
+	});
+	deps.selectEl.value = deps.currentModel;
+	deps.selectEl.disabled = deps.isBusy();
+	deps.setDisabled(deps.isBusy());
+}
+//#endregion
 //#region src/citations/util.ts
 function escapeWikilinkPath(notePath) {
 	return notePath.replace(/\|/g, "\\|");
 }
-/**
-* Escapes text before it's interpolated into raw HTML (e.g. a `title="..."`
-* attribute or `<summary>...</summary>` body). The citation fallback text
-* this guards is model-generated, derived from retrieved manual/web content,
-* and must not be able to inject markup.
-*/
 function escapeHtml(text) {
 	return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-/**
-* Shared rendering for a single citation "code" (a seitencode for page
-* citations, a titel for reference citations) against the set of retrieved
-* blocks matching it:
-* - no match: an HTML-escaped "unverified" span (hallucinated/typo'd code).
-* - exactly one match: a plain wikilink.
-* - multiple matches (a collision): an expandable `<details>` listing every
-*   real candidate as its own wikilink, disambiguated via `labelFor`.
-*
-* Used by both citations/page-citations.ts and citations/reference-citations.ts
-* so the two can't drift apart on this shared behavior.
-*/
 function renderCitationMatch(code, matches, labelFor) {
 	if (!matches || matches.length === 0) return `<span class="rag-chat-citation-unverified" title="Konnte nicht gegen die abgerufenen Quellen dieser Antwort verifiziert werden">${escapeHtml(code)}</span>`;
 	if (matches.length === 1) return `[[${escapeWikilinkPath(matches[0].notePath)}|${code}]]`;
@@ -9529,10 +9801,15 @@ function renderWebCitations(turnEl, turn) {
 	}
 }
 //#endregion
-//#region src/view/render-status-log.ts
+//#region src/view/turn-state.ts
 function showsStatus(turn) {
 	return turn.role === "assistant" && turn.text.length === 0 && Boolean(turn.status);
 }
+function showsStreamingText(turn) {
+	return turn.role === "assistant" && turn.text.length === 0 && Boolean(turn.streamingText);
+}
+//#endregion
+//#region src/view/render-status-log.ts
 var KIND_LABELS = {
 	retrieval: "Suche",
 	embedding: "Embedding",
@@ -9629,6 +9906,20 @@ function renderStatusLog(turnEl, turn) {
 		stepEls
 	};
 }
+function appendStatusLogLine(elements, turn) {
+	const steps = turn.steps;
+	if (!steps || steps.length === 0) return;
+	for (const step of steps) {
+		const existing = elements.stepEls.get(step.id);
+		if (existing) fillStepEl(existing, step);
+		else {
+			const itemEl = elements.listEl.createEl("li");
+			fillStepEl(itemEl, step);
+			elements.stepEls.set(step.id, itemEl);
+		}
+	}
+	elements.summaryEl.setText(`Rechercheverlauf (${steps.length} Schritte)`);
+}
 //#endregion
 //#region src/view/clipboard.ts
 async function copyToClipboard(text) {
@@ -9693,11 +9984,6 @@ function renderTurnActions(turnEl, turn, component, callbacks) {
 }
 //#endregion
 //#region src/view/wire-links.ts
-/**
-* Wires up internal-link anchors within `el`. Listeners are registered via
-* `component.registerDomEvent` so they're automatically torn down when
-* `component` unloads, instead of leaking for the lifetime of the view.
-*/
 function wireInternalLinks(el, app, component) {
 	const sourcePath = "";
 	el.querySelectorAll("a.internal-link").forEach((a) => {
@@ -9721,37 +10007,34 @@ function wireInternalLinks(el, app, component) {
 	});
 }
 //#endregion
-//#region src/view/render-turns.ts
-var NEAR_BOTTOM_THRESHOLD_PX = 80;
-function isNearBottom(messagesEl) {
-	const el = messagesEl;
-	return el.scrollHeight - (el.scrollTop + el.clientHeight) <= NEAR_BOTTOM_THRESHOLD_PX;
+//#region src/view/fill-turn.ts
+function textElClass(streaming, status) {
+	if (streaming) return "rag-chat-turn-text rag-chat-turn-streaming";
+	if (status) return "rag-chat-turn-text rag-chat-turn-status";
+	return "rag-chat-turn-text";
 }
-/**
-* Renders one turn's full content (status/text/clarifying hint/citations/
-* status-log) into `turnEl`, which must already be created (and, for an
-* update, already attached to the DOM at its existing position). Any
-* previous Markdown-rendering component for this turn must be unloaded by
-* the caller first.
-*/
+function renderAnswerMarkdown(textEl, turn, app, parentComponent) {
+	const renderedText = linkifyReferenceCitations(linkifyCitations(linkifyWebCitations(turn.text, turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []), turn.citations ?? []), turn.citations ?? []);
+	const markdownComponent = new obsidian.Component();
+	parentComponent.addChild(markdownComponent);
+	obsidian.MarkdownRenderer.render(app, renderedText, textEl, "", markdownComponent).then(() => {
+		wireInternalLinks(textEl, app, markdownComponent);
+	});
+	return markdownComponent;
+}
 function fillTurn(turnEl, turn, app, parentComponent, callbacks) {
 	turnEl.empty();
-	const cls = ["rag-chat-turn", `rag-chat-turn-${turn.role}`];
-	if (turn.isClarifying) cls.push("rag-chat-turn-clarifying");
-	for (const c of cls) turnEl.addClass(c);
-	const status = showsStatus(turn);
-	const textEl = turnEl.createDiv({ cls: status ? "rag-chat-turn-text rag-chat-turn-status" : "rag-chat-turn-text" });
+	turnEl.addClass("rag-chat-turn");
+	turnEl.addClass(`rag-chat-turn-${turn.role}`);
+	if (turn.isClarifying) turnEl.addClass("rag-chat-turn-clarifying");
+	const streaming = showsStreamingText(turn);
+	const status = !streaming && showsStatus(turn);
+	const textEl = turnEl.createDiv({ cls: textElClass(streaming, status) });
 	let markdownComponent;
-	if (status) textEl.setText(turn.status);
-	else if (turn.role === "assistant" && turn.text) {
-		const renderedText = linkifyReferenceCitations(linkifyCitations(linkifyWebCitations(turn.text, turn.webGroundingChunks ?? [], turn.webGroundingSupports ?? []), turn.citations ?? []), turn.citations ?? []);
-		markdownComponent = new obsidian.Component();
-		parentComponent.addChild(markdownComponent);
-		const scopedComponent = markdownComponent;
-		obsidian.MarkdownRenderer.render(app, renderedText, textEl, "", scopedComponent).then(() => {
-			wireInternalLinks(textEl, app, scopedComponent);
-		});
-	} else textEl.setText(turn.text);
+	if (streaming) textEl.setText(turn.streamingText);
+	else if (status) textEl.setText(turn.status);
+	else if (turn.role === "assistant" && turn.text) markdownComponent = renderAnswerMarkdown(textEl, turn, app, parentComponent);
+	else textEl.setText(turn.text);
 	if (turn.isClarifying) turnEl.createDiv({
 		cls: "rag-chat-clarifying-hint",
 		text: "Antworte unten, um fortzufahren."
@@ -9767,59 +10050,45 @@ function fillTurn(turnEl, turn, app, parentComponent, callbacks) {
 		markdownComponent
 	};
 }
-/** Full rebuild: clears `messagesEl` and renders every turn from scratch.
-* Used for the initial mount (and other full resets, e.g. "clear chat").
-* For incremental updates once turns are already rendered, use
-* `appendTurns`/`updateTurn` instead - re-running this on every message
-* causes O(n^2) growth and collapses any expanded `<details>` elements. */
-function renderTurns(messagesEl, turns, app, component, callbacks = {}) {
-	messagesEl.empty();
-	const result = {
+//#endregion
+//#region src/view/render-turns.ts
+var NEAR_BOTTOM_THRESHOLD_PX = 80;
+function isNearBottom(messagesEl) {
+	const el = messagesEl;
+	return el.scrollHeight - (el.scrollTop + el.clientHeight) <= NEAR_BOTTOM_THRESHOLD_PX;
+}
+function storeFilled(result, turn, filled) {
+	result.turnEls.set(turn, filled.textEl);
+	if (filled.statusLogElements) result.statusLogElements.set(turn, filled.statusLogElements);
+	if (filled.markdownComponent) result.markdownComponents.set(turn, filled.markdownComponent);
+}
+function renderTurnInto(messagesEl, turn, app, component, result, callbacks) {
+	const turnEl = messagesEl.createDiv();
+	result.turnContainers.set(turn, turnEl);
+	storeFilled(result, turn, fillTurn(turnEl, turn, app, component, callbacks));
+}
+function emptyResult() {
+	return {
 		turnEls: /* @__PURE__ */ new Map(),
 		turnContainers: /* @__PURE__ */ new Map(),
 		statusLogElements: /* @__PURE__ */ new Map(),
 		markdownComponents: /* @__PURE__ */ new Map()
 	};
-	for (const turn of turns) {
-		const turnEl = messagesEl.createDiv();
-		const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
-		result.turnContainers.set(turn, turnEl);
-		result.turnEls.set(turn, textEl);
-		if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
-		if (markdownComponent) result.markdownComponents.set(turn, markdownComponent);
-	}
+}
+function renderTurns(messagesEl, turns, app, component, callbacks = {}) {
+	messagesEl.empty();
+	const result = emptyResult();
+	for (const turn of turns) renderTurnInto(messagesEl, turn, app, component, result, callbacks);
 	messagesEl.scrollTo({ top: messagesEl.scrollHeight });
 	return result;
 }
-/**
-* Appends any turns not yet present in `result` to the end of `messagesEl`,
-* mutating `result`'s maps in place. Existing turns' elements are left
-* completely untouched (so expanded `<details>` elsewhere in the
-* conversation don't collapse). Only auto-scrolls if the user was already
-* near the bottom before the append.
-*/
 function appendNewTurns(messagesEl, turns, app, component, result, callbacks = {}) {
 	const newTurns = turns.filter((t) => !result.turnContainers.has(t));
 	if (newTurns.length === 0) return;
 	const wasNearBottom = isNearBottom(messagesEl);
-	for (const turn of newTurns) {
-		const turnEl = messagesEl.createDiv();
-		const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
-		result.turnContainers.set(turn, turnEl);
-		result.turnEls.set(turn, textEl);
-		if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
-		if (markdownComponent) result.markdownComponents.set(turn, markdownComponent);
-	}
+	for (const turn of newTurns) renderTurnInto(messagesEl, turn, app, component, result, callbacks);
 	if (wasNearBottom) messagesEl.scrollTo({ top: messagesEl.scrollHeight });
 }
-/**
-* Re-renders a single already-rendered turn's content in place (its outer
-* container element is reused, not recreated), updating `result`'s maps for
-* that turn. Used when a turn's content changes after its initial render
-* (e.g. a status update, or the final answer replacing the in-progress
-* status). No-op if the turn isn't in `result` yet - callers should fall
-* back to `appendNewTurns` in that case.
-*/
 function updateTurn(messagesEl, turn, app, component, result, callbacks = {}) {
 	const turnEl = result.turnContainers.get(turn);
 	if (!turnEl) return false;
@@ -9827,63 +10096,133 @@ function updateTurn(messagesEl, turn, app, component, result, callbacks = {}) {
 	result.markdownComponents.delete(turn);
 	result.statusLogElements.delete(turn);
 	const wasNearBottom = isNearBottom(messagesEl);
-	const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
-	result.turnEls.set(turn, textEl);
-	if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
-	if (markdownComponent) result.markdownComponents.set(turn, markdownComponent);
+	storeFilled(result, turn, fillTurn(turnEl, turn, app, component, callbacks));
 	if (wasNearBottom) messagesEl.scrollTo({ top: messagesEl.scrollHeight });
 	return true;
 }
-/** Unloads every turn's Markdown-rendering component. Call before clearing
-* or replacing the whole conversation (e.g. "clear chat", view teardown). */
+function updateTurnLive(turn, result, messagesEl) {
+	const streaming = showsStreamingText(turn);
+	const status = !streaming && showsStatus(turn);
+	if (!streaming && !status) return false;
+	const turnEl = result.turnContainers.get(turn);
+	const textEl = result.turnEls.get(turn);
+	if (!turnEl || !textEl) return false;
+	if (streaming) {
+		textEl.removeClass("rag-chat-turn-status");
+		textEl.addClass("rag-chat-turn-streaming");
+		textEl.setText(turn.streamingText);
+	} else {
+		textEl.removeClass("rag-chat-turn-streaming");
+		textEl.addClass("rag-chat-turn-status");
+		textEl.setText(turn.status);
+	}
+	if (turn.steps && turn.steps.length > 0) {
+		const wasNearBottom = isNearBottom(messagesEl);
+		let statusLogElements = result.statusLogElements.get(turn);
+		if (!statusLogElements) {
+			statusLogElements = renderStatusLog(turnEl, turn);
+			result.statusLogElements.set(turn, statusLogElements);
+		} else appendStatusLogLine(statusLogElements, turn);
+		if (wasNearBottom) messagesEl.scrollTo({ top: messagesEl.scrollHeight });
+	}
+	return true;
+}
 function unloadAllTurns(result) {
 	for (const component of result.markdownComponents.values()) component.unload();
 	result.markdownComponents.clear();
 }
 //#endregion
-//#region src/tts/short-answer.ts
-var CITATION_MARKUP_PATTERN = /\[Seite\s+[^\]]+\]|\[Referenz:\s*[^\]]+\]/i;
-var SHORT_ANSWER_PROMPT = "Fasse die folgende Antwort für eine Sprachausgabe in 1-2 kurzen, klaren Sätzen zusammen. Behalte exakte Zahlen, Einheiten und Anzugsdrehmomente unverändert bei. Keine Zitatmarker, keine Seitencodes, keine Markdown-Symbole.";
-/**
-* Derives a short, spoken-friendly answer from an already-completed long
-* answer. Never re-runs retrieval or the agent loop, so the spoken number
-* can never drift from the long answer's number - critical for
-* safety-relevant values like torque specs.
-*
-* Fast path: if the long answer is already short and free of citation
-* markup, it is returned unchanged (trimmed), skipping the extra Flash call
-* entirely. Otherwise, a single tool-less generatePlainText call summarizes
-* it.
-*/
-async function buildShortAnswer(longText, settings, opts) {
-	const trimmed = longText.trim();
-	if (trimmed.length <= 240 && !CITATION_MARKUP_PATTERN.test(trimmed)) return trimmed;
-	return (await generatePlainText([{
-		role: "user",
-		parts: [{ text: `${SHORT_ANSWER_PROMPT}\n\n---\n\n${trimmed}` }]
-	}], settings, opts)).trim();
+//#region src/view/tts-device-options.ts
+async function refreshTtsDeviceOptions(deps) {
+	deps.selectEl.disabled = true;
+	deps.setDisabled(true);
+	const devices = await listOutputDevices();
+	if (deps.isClosed()) return;
+	deps.selectEl.empty();
+	deps.selectEl.createEl("option", {
+		attr: { value: "" },
+		text: "Systemstandard"
+	});
+	const deviceIds = [];
+	for (const device of devices) {
+		if (!device.deviceId || device.deviceId === "default") continue;
+		deviceIds.push(device.deviceId);
+		deps.selectEl.createEl("option", {
+			attr: { value: device.deviceId },
+			text: device.label || `Gerät ${device.deviceId.slice(0, 8)}`
+		});
+	}
+	const hasCurrent = deps.currentDeviceId === "" || deviceIds.includes(deps.currentDeviceId);
+	deps.selectEl.value = hasCurrent ? deps.currentDeviceId : "";
+	deps.selectEl.disabled = deps.isBusy();
+	deps.setDisabled(deps.isBusy());
+}
+//#endregion
+//#region src/view/tts-controls-controller.ts
+var TtsControlsController = class {
+	constructor(els, plugin, isClosed, isBusy) {
+		this.els = els;
+		this.plugin = plugin;
+		this.isClosed = isClosed;
+		this.isBusy = isBusy;
+	}
+	syncFromSettings() {
+		this.els.volumeSliderEl.value = String(this.plugin.settings.ttsVolume);
+		this.updateVolumeLabel();
+		this.updateCharCounter();
+		this.updateVisibility();
+	}
+	updateVisibility() {
+		this.els.controlsRow.toggleClass("rag-chat-hidden", !this.plugin.settings.ttsEnabled);
+	}
+	updateVolumeLabel() {
+		const pct = Math.round(Number(this.els.volumeSliderEl.value) * 100);
+		this.els.volumeLabelEl.setText(`${pct}%`);
+	}
+	updateCharCounter() {
+		const used = this.plugin.settings.ttsCharCount.toLocaleString("de-DE");
+		const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
+		this.els.charCounterEl.setText(`${used} / ${limit} Zeichen (Freikontingent)`);
+	}
+	refreshDevices() {
+		return refreshTtsDeviceOptions({
+			selectEl: this.els.deviceSelectEl,
+			currentDeviceId: this.plugin.settings.ttsOutputDeviceId,
+			isClosed: this.isClosed,
+			isBusy: this.isBusy,
+			setDisabled: (disabled) => {
+				this.els.deviceRefreshButton.disabled = disabled;
+			}
+		});
+	}
+	async commitVolume() {
+		this.plugin.settings.ttsVolume = Number(this.els.volumeSliderEl.value);
+		await this.plugin.saveSettings();
+	}
+	async commitDevice() {
+		this.plugin.settings.ttsOutputDeviceId = this.els.deviceSelectEl.value;
+		await this.plugin.saveSettings();
+	}
+	onVolumeInput() {
+		setVolume(Number(this.els.volumeSliderEl.value));
+		this.updateVolumeLabel();
+	}
+};
+//#endregion
+//#region src/http/read-json.ts
+function readResponseJson(response) {
+	try {
+		return response.json;
+	} catch (err) {
+		throw new Error(`Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`);
+	}
 }
 //#endregion
 //#region src/tts/client.ts
 var ACCESS_DENIED_MESSAGE = "Zugriff verweigert - Cloud Text-to-Speech API und Billing im Projekt dieses API-Keys aktivieren.";
-/**
-* Synthesizes `text` via Google Cloud Text-to-Speech (Chirp 3: HD) and
-* returns the resulting audio as a base64-encoded string (the raw
-* `audioContent` field from the API response).
-*
-* Uses `settings.ttsApiKey` if set, otherwise falls back to
-* `settings.geminiApiKey` - an AI Studio key can authenticate to this API,
-* but only if the Cloud project behind it has the Text-to-Speech API and
-* billing enabled (otherwise expect an HTTP 403, mapped below to a clear
-* German error).
-*
-* Character-usage accounting is the caller's responsibility (see
-* tts/usage.ts) - this module is a pure HTTP client and must not be called
-* for cached/replayed audio.
-*/
 async function synthesizeSpeech(text, settings, opts) {
-	const apiKey = settings.ttsApiKey || settings.geminiApiKey;
-	if (!apiKey) throw new Error("Google API key is required - set it in RAG Chat settings.");
+	const apiKey = settings.ttsApiKey;
+	if (!apiKey) throw new Error("TTS Google API key is required - set it in RAG Chat settings.");
 	const url = "https://texttospeech.googleapis.com/v1/text:synthesize";
 	const body = {
 		input: { text },
@@ -9911,27 +10250,224 @@ async function synthesizeSpeech(text, settings, opts) {
 		if ((err instanceof Error ? err.message : String(err)).includes("status 403")) throw new Error(ACCESS_DENIED_MESSAGE);
 		throw err;
 	}
-	let json;
-	try {
-		json = response.json;
-	} catch (err) {
-		throw new Error(`Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`);
-	}
+	const json = readResponseJson(response);
 	const audioContent = json?.audioContent;
 	if (typeof audioContent !== "string" || audioContent.length === 0) throw new Error(`Unexpected text:synthesize response shape: ${JSON.stringify(json).slice(0, 300)}`);
 	return audioContent;
 }
 //#endregion
+//#region src/gemini/generate.ts
+async function generatePlainText(contents, settings, opts) {
+	requireApiKey(settings.geminiApiKey);
+	const url = modelUrl(settings.generationModel, "generateContent");
+	const body = {
+		contents,
+		generationConfig: { thinkingConfig: { thinkingBudget: 0 } }
+	};
+	const json = readResponseJson(await requestUrlWithRetry({
+		url,
+		method: "POST",
+		headers: {
+			"x-goog-api-key": settings.geminiApiKey,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(body)
+	}, {
+		label: "Kurzantwort",
+		signal: opts?.signal
+	}));
+	const candidate = json?.candidates?.[0];
+	const parts = candidate?.content?.parts ?? [];
+	if (parts.length === 0) {
+		const msg = blockReasonMessage(json, candidate);
+		if (msg) throw new Error(msg);
+		throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(json).slice(0, 300)}`);
+	}
+	return parts.map((p) => p.text ?? "").join("").trim();
+}
+//#endregion
+//#region src/tts/short-answer.ts
+var CITATION_MARKUP_PATTERN = /\[Seite\s+[^\]]+\]|\[Referenz:\s*[^\]]+\]/i;
+var SHORT_ANSWER_PROMPT = "Fasse die folgende Antwort für eine Sprachausgabe in 1-2 kurzen, klaren Sätzen zusammen. Behalte exakte Zahlen, Einheiten und Anzugsdrehmomente unverändert bei. Keine Zitatmarker, keine Seitencodes, keine Markdown-Symbole.";
+async function buildShortAnswer(longText, settings, opts) {
+	const trimmed = longText.trim();
+	if (trimmed.length <= 240 && !CITATION_MARKUP_PATTERN.test(trimmed)) return trimmed;
+	return (await generatePlainText([{
+		role: "user",
+		parts: [{ text: `${SHORT_ANSWER_PROMPT}\n\n---\n\n${trimmed}` }]
+	}], settings, opts)).trim();
+}
+//#endregion
 //#region src/tts/usage.ts
-/**
-* Records characters actually sent to the Cloud TTS synthesize endpoint and
-* persists the updated cumulative counter. Must be called exactly once per
-* real synthesis API call - never on a cached replay of previously
-* synthesized audio (see ChatTurn.ttsAudioBase64).
-*/
 async function recordCharsUsed(plugin, charCount) {
 	plugin.settings.ttsCharCount += charCount;
 	await plugin.saveSettings();
+}
+//#endregion
+//#region src/view/turn-speech.ts
+function errText(err) {
+	return err instanceof Error ? err.message : String(err);
+}
+var TurnSpeech = class {
+	constructor(host) {
+		this.host = host;
+		this.playingTurn = null;
+	}
+	isSpeaking(turn) {
+		return this.playingTurn === turn;
+	}
+	stop() {
+		stop();
+		this.playingTurn = null;
+	}
+	async handleSpeakClick(turn) {
+		if (this.playingTurn === turn) {
+			stop();
+			this.playingTurn = null;
+			this.host.syncTurn(turn);
+			return;
+		}
+		if (turn.ttsStatus === "generating") return;
+		if (turn.ttsAudioBase64) {
+			this.playTurnAudio(turn, turn.ttsAudioBase64);
+			return;
+		}
+		await this.synthesizeAndPlay(turn);
+	}
+	async synthesizeAndPlay(turn, signal) {
+		turn.ttsStatus = "generating";
+		this.host.syncTurn(turn);
+		try {
+			const shortText = await buildShortAnswer(turn.text, this.host.plugin().settings, { signal });
+			const audio = await synthesizeSpeech(shortText, this.host.plugin().settings, { signal });
+			await recordCharsUsed(this.host.plugin(), shortText.length);
+			if (this.host.isClosed()) return;
+			turn.ttsText = shortText;
+			turn.ttsAudioBase64 = audio;
+			turn.ttsStatus = "ready";
+			this.host.onCharCounterChanged();
+			this.playTurnAudio(turn, audio);
+		} catch (err) {
+			turn.ttsStatus = "error";
+			if (!this.host.isClosed()) {
+				this.host.syncTurn(turn);
+				new obsidian.Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${errText(err)}).`);
+			}
+		}
+	}
+	async playTurnAudio(turn, audioBase64) {
+		setOnEnded(() => {
+			if (this.playingTurn !== turn) return;
+			this.playingTurn = null;
+			if (!this.host.isClosed()) this.host.syncTurn(turn);
+		});
+		this.playingTurn = turn;
+		try {
+			await play(audioBase64, {
+				deviceId: this.host.plugin().settings.ttsOutputDeviceId,
+				volume: this.host.plugin().settings.ttsVolume
+			});
+		} catch (err) {
+			this.playingTurn = null;
+			if (!this.host.isClosed()) new obsidian.Notice(`RAG Chat: Wiedergabe fehlgeschlagen (${errText(err)}).`);
+		}
+		if (!this.host.isClosed()) this.host.syncTurn(turn);
+	}
+};
+//#endregion
+//#region src/view/ui/composer.ts
+function optionToggle(inputRow, title, label) {
+	const toggleLabel = inputRow.createEl("label", {
+		cls: "rag-chat-option-toggle",
+		attr: { title }
+	});
+	const checkbox = toggleLabel.createEl("input", {
+		cls: "rag-chat-option-checkbox",
+		attr: { type: "checkbox" }
+	});
+	toggleLabel.createSpan({ text: label });
+	return checkbox;
+}
+function buildComposer(container) {
+	const clarificationRow = container.createDiv({ cls: "rag-chat-clarification-row" });
+	const cancelClarificationButton = clarificationRow.createEl("button", {
+		cls: "rag-chat-cancel-clarification rag-chat-hidden",
+		text: "Rückfrage abbrechen"
+	});
+	const inputRow = container.createDiv({ cls: "rag-chat-input-row" });
+	const inputEl = inputRow.createEl("textarea", {
+		cls: "rag-chat-input",
+		attr: { placeholder: "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)" }
+	});
+	const sendButton = inputRow.createEl("button", {
+		cls: "rag-chat-send",
+		text: "Fragen"
+	});
+	const thinkingCheckboxEl = optionToggle(inputRow, "Lässt das Modell vor der Antwort nachdenken - genauer, aber spürbar langsamer.", "Denken");
+	const webSearchCheckboxEl = optionToggle(inputRow, "Erlaubt dem Modell, das Web nach zusätzlichem Kontext zu durchsuchen - fügt Latenz hinzu.", "Websuche");
+	const ttsToggleLabel = inputRow.createEl("label", { cls: "rag-chat-tts-toggle" });
+	const ttsCheckboxEl = ttsToggleLabel.createEl("input", {
+		cls: "rag-chat-tts-checkbox",
+		attr: { type: "checkbox" }
+	});
+	ttsToggleLabel.createSpan({ text: "Sprachausgabe" });
+	return {
+		clarificationRow,
+		cancelClarificationButton,
+		inputEl,
+		sendButton,
+		thinkingCheckboxEl,
+		webSearchCheckboxEl,
+		ttsCheckboxEl
+	};
+}
+//#endregion
+//#region src/view/ui/toolbar.ts
+function buildToolbar(container) {
+	const toolbarRow = container.createDiv({ cls: "rag-chat-toolbar-row" });
+	const modelControls = toolbarRow.createDiv({ cls: "rag-chat-model-controls" });
+	const modelSelectEl = modelControls.createEl("select", { cls: "rag-chat-model-select" });
+	const modelRefreshButton = modelControls.createEl("button", {
+		cls: "rag-chat-model-refresh",
+		attr: { "aria-label": "Modellliste aktualisieren" }
+	});
+	(0, obsidian.setIcon)(modelRefreshButton, "refresh-cw");
+	return {
+		modelSelectEl,
+		modelRefreshButton,
+		clearButton: toolbarRow.createEl("button", {
+			cls: "rag-chat-clear-button",
+			text: "Chat leeren"
+		})
+	};
+}
+//#endregion
+//#region src/view/ui/tts-controls.ts
+function buildTtsControls(container) {
+	const controlsRow = container.createEl("details", { cls: "rag-chat-tts-controls" });
+	controlsRow.createEl("summary", {
+		cls: "rag-chat-tts-controls-summary",
+		text: "Sprachausgabe-Einstellungen"
+	});
+	const body = controlsRow.createDiv({ cls: "rag-chat-tts-controls-body" });
+	const deviceGroup = body.createDiv({ cls: "rag-chat-tts-device" });
+	const deviceSelectEl = deviceGroup.createEl("select");
+	const deviceRefreshButton = deviceGroup.createEl("button", { attr: { "aria-label": "Audioausgabegeräte aktualisieren" } });
+	(0, obsidian.setIcon)(deviceRefreshButton, "refresh-cw");
+	const volumeGroup = body.createDiv({ cls: "rag-chat-tts-volume" });
+	return {
+		controlsRow,
+		deviceSelectEl,
+		deviceRefreshButton,
+		volumeSliderEl: volumeGroup.createEl("input", { attr: {
+			type: "range",
+			min: "0",
+			max: "1",
+			step: "0.05"
+		} }),
+		volumeLabelEl: volumeGroup.createSpan({ cls: "rag-chat-tts-volume-label" }),
+		charCounterEl: body.createDiv({ cls: "rag-chat-tts-char-counter" })
+	};
 }
 //#endregion
 //#region src/view/view.ts
@@ -9952,12 +10488,17 @@ var RagChatView = class extends obsidian.ItemView {
 		this.rendered = emptyRenderResult();
 		this.closed = false;
 		this.abortController = null;
-		this.ttsPlayingTurn = null;
+		this.speech = new TurnSpeech({
+			plugin: () => this.plugin,
+			isClosed: () => this.closed,
+			syncTurn: (turn) => this.syncTurn(turn),
+			onCharCounterChanged: () => this.ttsController.updateCharCounter()
+		});
 		this.turnCallbacks = {
 			onRetry: (turn) => void this.handleRetryClick(turn),
 			onDelete: (turn) => this.handleDeleteClick(turn),
-			onSpeak: (turn) => void this.handleSpeakClick(turn),
-			isSpeaking: (turn) => this.ttsPlayingTurn === turn
+			onSpeak: (turn) => void this.speech.handleSpeakClick(turn),
+			isSpeaking: (turn) => this.speech.isSpeaking(turn)
 		};
 		this.plugin = plugin;
 	}
@@ -9975,110 +10516,70 @@ var RagChatView = class extends obsidian.ItemView {
 		const container = this.contentEl;
 		container.empty();
 		container.addClass("rag-chat-container");
-		const toolbarRow = container.createDiv({ cls: "rag-chat-toolbar-row" });
-		const modelControls = toolbarRow.createDiv({ cls: "rag-chat-model-controls" });
-		this.modelSelectEl = modelControls.createEl("select", { cls: "rag-chat-model-select" });
-		this.registerDomEvent(this.modelSelectEl, "change", () => {
-			this.handleModelChange();
-		});
-		this.modelRefreshButton = modelControls.createEl("button", {
-			cls: "rag-chat-model-refresh",
-			attr: { "aria-label": "Modellliste aktualisieren" }
-		});
-		(0, obsidian.setIcon)(this.modelRefreshButton, "refresh-cw");
-		this.registerDomEvent(this.modelRefreshButton, "click", () => {
-			this.refreshModelOptions();
-		});
-		const clearButton = toolbarRow.createEl("button", {
-			cls: "rag-chat-clear-button",
-			text: "Chat leeren"
-		});
-		this.registerDomEvent(clearButton, "click", () => {
-			this.handleClearClick();
-		});
+		this.toolbar = buildToolbar(container);
 		this.messagesEl = container.createDiv({ cls: "rag-chat-messages" });
-		const clarificationRow = container.createDiv({ cls: "rag-chat-clarification-row" });
-		this.cancelClarificationButton = clarificationRow.createEl("button", {
-			cls: "rag-chat-cancel-clarification rag-chat-hidden",
-			text: "Rückfrage abbrechen"
-		});
-		this.registerDomEvent(this.cancelClarificationButton, "click", () => {
+		this.composer = buildComposer(container);
+		this.ttsControls = buildTtsControls(container);
+		this.ttsController = new TtsControlsController(this.ttsControls, this.plugin, () => this.closed, () => this.busy);
+		this.wireToolbar();
+		this.wireComposer();
+		this.wireTtsControls();
+		this.composer.thinkingCheckboxEl.checked = this.plugin.settings.thinkingEnabled;
+		this.composer.webSearchCheckboxEl.checked = this.plugin.settings.webSearchEnabled;
+		this.composer.ttsCheckboxEl.checked = this.plugin.settings.ttsEnabled;
+		this.ttsController.syncFromSettings();
+		this.ttsController.refreshDevices();
+		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
+		this.updateClarificationAffordance();
+		this.refreshModelOptions();
+	}
+	wireToolbar() {
+		this.registerDomEvent(this.toolbar.modelSelectEl, "change", () => void this.handleModelChange());
+		this.registerDomEvent(this.toolbar.modelRefreshButton, "click", () => void this.refreshModelOptions());
+		this.registerDomEvent(this.toolbar.clearButton, "click", () => void this.handleClearClick());
+	}
+	wireComposer() {
+		const c = this.composer;
+		this.registerDomEvent(c.cancelClarificationButton, "click", () => {
 			abandonPendingClarification(this.session);
 			this.updateClarificationAffordance();
-			this.inputEl.placeholder = inputPlaceholder(this.session);
+			c.inputEl.placeholder = inputPlaceholder(this.session);
 		});
-		const inputRow = container.createDiv({ cls: "rag-chat-input-row" });
-		this.inputEl = inputRow.createEl("textarea", {
-			cls: "rag-chat-input",
-			attr: { placeholder: "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)" }
-		});
-		this.registerDomEvent(this.inputEl, "keydown", (evt) => {
+		this.registerDomEvent(c.inputEl, "keydown", (evt) => {
 			if (evt.key === "Enter" && !evt.shiftKey) {
 				evt.preventDefault();
 				this.handleSend();
 			}
 		});
-		this.sendButton = inputRow.createEl("button", {
-			cls: "rag-chat-send",
-			text: "Fragen"
-		});
-		this.registerDomEvent(this.sendButton, "click", () => {
+		this.registerDomEvent(c.sendButton, "click", () => {
 			if (this.busy) this.handleCancelClick();
 			else this.handleSend();
 		});
-		const ttsToggleLabel = inputRow.createEl("label", { cls: "rag-chat-tts-toggle" });
-		this.ttsCheckboxEl = ttsToggleLabel.createEl("input", {
-			cls: "rag-chat-tts-checkbox",
-			attr: { type: "checkbox" }
-		});
-		this.ttsCheckboxEl.checked = this.plugin.settings.ttsEnabled;
-		ttsToggleLabel.createSpan({ text: "Sprachausgabe" });
-		this.registerDomEvent(this.ttsCheckboxEl, "change", () => {
-			this.plugin.settings.ttsEnabled = this.ttsCheckboxEl.checked;
+		this.registerDomEvent(c.thinkingCheckboxEl, "change", () => {
+			this.plugin.settings.thinkingEnabled = c.thinkingCheckboxEl.checked;
 			this.plugin.saveSettings();
-			this.updateTtsControlsVisibility();
 		});
-		this.ttsControlsRow = container.createDiv({ cls: "rag-chat-tts-controls" });
-		const deviceGroup = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-device" });
-		this.ttsDeviceSelectEl = deviceGroup.createEl("select");
-		this.registerDomEvent(this.ttsDeviceSelectEl, "change", () => {
-			this.handleTtsDeviceChange();
+		this.registerDomEvent(c.webSearchCheckboxEl, "change", () => {
+			this.plugin.settings.webSearchEnabled = c.webSearchCheckboxEl.checked;
+			this.plugin.saveSettings();
 		});
-		this.ttsDeviceRefreshButton = deviceGroup.createEl("button", { attr: { "aria-label": "Audioausgabegeräte aktualisieren" } });
-		(0, obsidian.setIcon)(this.ttsDeviceRefreshButton, "refresh-cw");
-		this.registerDomEvent(this.ttsDeviceRefreshButton, "click", () => {
-			this.refreshTtsDeviceOptions();
+		this.registerDomEvent(c.ttsCheckboxEl, "change", () => {
+			this.plugin.settings.ttsEnabled = c.ttsCheckboxEl.checked;
+			this.plugin.saveSettings();
+			this.ttsController.updateVisibility();
 		});
-		const volumeGroup = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-volume" });
-		this.ttsVolumeSliderEl = volumeGroup.createEl("input", { attr: {
-			type: "range",
-			min: "0",
-			max: "1",
-			step: "0.05"
-		} });
-		this.ttsVolumeSliderEl.value = String(this.plugin.settings.ttsVolume);
-		this.ttsVolumeLabelEl = volumeGroup.createSpan({ cls: "rag-chat-tts-volume-label" });
-		this.updateTtsVolumeLabel();
-		this.registerDomEvent(this.ttsVolumeSliderEl, "input", () => {
-			setVolume(Number(this.ttsVolumeSliderEl.value));
-			this.updateTtsVolumeLabel();
-		});
-		this.registerDomEvent(this.ttsVolumeSliderEl, "change", () => {
-			this.handleTtsVolumeCommit();
-		});
-		this.ttsCharCounterEl = this.ttsControlsRow.createDiv({ cls: "rag-chat-tts-char-counter" });
-		this.updateTtsCharCounter();
-		this.updateTtsControlsVisibility();
-		this.refreshTtsDeviceOptions();
-		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
-		this.updateClarificationAffordance();
-		this.refreshModelOptions();
+	}
+	wireTtsControls() {
+		const t = this.ttsControls;
+		this.registerDomEvent(t.deviceSelectEl, "change", () => void this.ttsController.commitDevice());
+		this.registerDomEvent(t.deviceRefreshButton, "click", () => void this.ttsController.refreshDevices());
+		this.registerDomEvent(t.volumeSliderEl, "input", () => this.ttsController.onVolumeInput());
+		this.registerDomEvent(t.volumeSliderEl, "change", () => void this.ttsController.commitVolume());
 	}
 	async onClose() {
 		this.closed = true;
 		this.abortController?.abort();
-		stop();
-		this.ttsPlayingTurn = null;
+		this.speech.stop();
 		unloadAllTurns(this.rendered);
 		this.contentEl.empty();
 	}
@@ -10092,164 +10593,52 @@ var RagChatView = class extends obsidian.ItemView {
 		this.session = createChatSessionState();
 		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
 		this.updateClarificationAffordance();
-		this.inputEl.placeholder = inputPlaceholder(this.session);
+		this.composer.inputEl.placeholder = inputPlaceholder(this.session);
 	}
 	async handleClearClick() {
 		const confirmed = await confirmModal(this.app, "Chat leeren? Der bisherige Verlauf geht verloren.");
 		if (this.closed) return;
 		if (confirmed) this.clearChat();
-		this.inputEl.focus();
+		this.composer.inputEl.focus();
 	}
 	setBusy(busy) {
 		this.busy = busy;
-		this.sendButton.setText(busy ? "Abbrechen" : "Fragen");
-		this.modelSelectEl.disabled = busy;
-		this.modelRefreshButton.disabled = busy;
+		this.composer.sendButton.setText(busy ? "Abbrechen" : "Fragen");
+		this.toolbar.modelSelectEl.disabled = busy;
+		this.toolbar.modelRefreshButton.disabled = busy;
 	}
-	async refreshModelOptions() {
-		const currentModel = this.plugin.settings.generationModel;
-		this.modelSelectEl.disabled = true;
-		this.modelRefreshButton.disabled = true;
-		const models = await listFlashModels(this.plugin.settings.geminiApiKey);
-		if (this.closed) return;
-		const options = models.some((model) => model.id === currentModel) ? models : [{
-			id: currentModel,
-			displayName: currentModel
-		}, ...models];
-		this.modelSelectEl.empty();
-		for (const model of options) this.modelSelectEl.createEl("option", {
-			attr: { value: model.id },
-			text: model.displayName
+	refreshModelOptions() {
+		return refreshModelOptions({
+			selectEl: this.toolbar.modelSelectEl,
+			apiKey: this.plugin.settings.geminiApiKey,
+			currentModel: this.plugin.settings.generationModel,
+			isClosed: () => this.closed,
+			isBusy: () => this.busy,
+			setDisabled: (disabled) => {
+				this.toolbar.modelRefreshButton.disabled = disabled;
+			}
 		});
-		this.modelSelectEl.value = currentModel;
-		this.modelSelectEl.disabled = this.busy;
-		this.modelRefreshButton.disabled = this.busy;
 	}
 	async handleModelChange() {
-		const value = this.modelSelectEl.value;
+		const value = this.toolbar.modelSelectEl.value;
 		if (!value || value === this.plugin.settings.generationModel) return;
 		this.plugin.settings.generationModel = value;
 		await this.plugin.saveSettings();
-	}
-	updateTtsControlsVisibility() {
-		this.ttsControlsRow.toggleClass("rag-chat-hidden", !this.plugin.settings.ttsEnabled);
-	}
-	updateTtsVolumeLabel() {
-		const pct = Math.round(Number(this.ttsVolumeSliderEl.value) * 100);
-		this.ttsVolumeLabelEl.setText(`${pct}%`);
-	}
-	async handleTtsVolumeCommit() {
-		this.plugin.settings.ttsVolume = Number(this.ttsVolumeSliderEl.value);
-		await this.plugin.saveSettings();
-	}
-	updateTtsCharCounter() {
-		const used = this.plugin.settings.ttsCharCount.toLocaleString("de-DE");
-		const limit = TTS_FREE_TIER_CHAR_LIMIT.toLocaleString("de-DE");
-		this.ttsCharCounterEl.setText(`${used} / ${limit} Zeichen (Freikontingent)`);
-	}
-	async refreshTtsDeviceOptions() {
-		this.ttsDeviceSelectEl.disabled = true;
-		this.ttsDeviceRefreshButton.disabled = true;
-		const devices = await listOutputDevices();
-		if (this.closed) return;
-		this.ttsDeviceSelectEl.empty();
-		this.ttsDeviceSelectEl.createEl("option", {
-			attr: { value: "" },
-			text: "Systemstandard"
-		});
-		const deviceIds = [];
-		for (const device of devices) {
-			if (!device.deviceId || device.deviceId === "default") continue;
-			deviceIds.push(device.deviceId);
-			this.ttsDeviceSelectEl.createEl("option", {
-				attr: { value: device.deviceId },
-				text: device.label || `Gerät ${device.deviceId.slice(0, 8)}`
-			});
-		}
-		const current = this.plugin.settings.ttsOutputDeviceId;
-		const hasCurrent = current === "" || deviceIds.includes(current);
-		this.ttsDeviceSelectEl.value = hasCurrent ? current : "";
-		this.ttsDeviceSelectEl.disabled = this.busy;
-		this.ttsDeviceRefreshButton.disabled = this.busy;
-	}
-	async handleTtsDeviceChange() {
-		this.plugin.settings.ttsOutputDeviceId = this.ttsDeviceSelectEl.value;
-		await this.plugin.saveSettings();
-	}
-	/** Plays already-synthesized audio for `turn`, tracking it as the
-	* "currently speaking" turn so the speaker button reflects a stop state,
-	* and clearing that state (re-rendering the turn) once playback ends. */
-	async playTurnAudio(turn, audioBase64) {
-		setOnEnded(() => {
-			if (this.ttsPlayingTurn !== turn) return;
-			this.ttsPlayingTurn = null;
-			if (!this.closed) this.syncTurn(turn);
-		});
-		this.ttsPlayingTurn = turn;
-		try {
-			await play(audioBase64, {
-				deviceId: this.plugin.settings.ttsOutputDeviceId,
-				volume: this.plugin.settings.ttsVolume
-			});
-		} catch (err) {
-			this.ttsPlayingTurn = null;
-			if (!this.closed) new obsidian.Notice(`RAG Chat: Wiedergabe fehlgeschlagen (${err instanceof Error ? err.message : String(err)}).`);
-		}
-		if (!this.closed) this.syncTurn(turn);
-	}
-	/**
-	* Runs the short-answer -> synthesize -> cache -> play pipeline for a
-	* turn that doesn't have cached TTS audio yet, then plays it. Any failure
-	* is caught and surfaces a Notice only - the already-displayed long
-	* answer is never touched. Char-usage is recorded exactly once here, per
-	* real synthesis call (never for cached replays - see handleSpeakClick).
-	*/
-	async synthesizeAndPlay(turn, signal) {
-		turn.ttsStatus = "generating";
-		this.syncTurn(turn);
-		try {
-			const shortText = await buildShortAnswer(turn.text, this.plugin.settings, { signal });
-			const audio = await synthesizeSpeech(shortText, this.plugin.settings, { signal });
-			await recordCharsUsed(this.plugin, shortText.length);
-			if (this.closed) return;
-			turn.ttsText = shortText;
-			turn.ttsAudioBase64 = audio;
-			turn.ttsStatus = "ready";
-			this.updateTtsCharCounter();
-			this.playTurnAudio(turn, audio);
-		} catch (err) {
-			turn.ttsStatus = "error";
-			if (!this.closed) {
-				this.syncTurn(turn);
-				new obsidian.Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${err instanceof Error ? err.message : String(err)}).`);
-			}
-		}
-	}
-	async handleSpeakClick(turn) {
-		if (this.ttsPlayingTurn === turn) {
-			stop();
-			this.ttsPlayingTurn = null;
-			this.syncTurn(turn);
-			return;
-		}
-		if (turn.ttsStatus === "generating") return;
-		if (turn.ttsAudioBase64) {
-			this.playTurnAudio(turn, turn.ttsAudioBase64);
-			return;
-		}
-		await this.synthesizeAndPlay(turn);
 	}
 	async handleCancelClick() {
 		const confirmed = await confirmModal(this.app, "Anfrage wirklich abbrechen?");
 		if (this.closed) return;
 		if (confirmed) this.abortController?.abort();
-		this.inputEl.focus();
+		this.composer.inputEl.focus();
 	}
 	updateClarificationAffordance() {
-		this.cancelClarificationButton.toggleClass("rag-chat-hidden", this.session.pendingAgentState === null);
+		this.composer.cancelClarificationButton.toggleClass("rag-chat-hidden", this.session.pendingAgentState === null);
 	}
 	syncTurn(turn) {
 		if (!updateTurn(this.messagesEl, turn, this.app, this, this.rendered, this.turnCallbacks)) appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered, this.turnCallbacks);
+	}
+	syncTurnLive(turn) {
+		if (!updateTurnLive(turn, this.rendered, this.messagesEl)) this.syncTurn(turn);
 	}
 	rebuildTurns() {
 		unloadAllTurns(this.rendered);
@@ -10277,7 +10666,11 @@ var RagChatView = class extends obsidian.ItemView {
 				},
 				onStep: () => {
 					if (this.closed || !currentTurn) return;
-					this.syncTurn(currentTurn);
+					this.syncTurnLive(currentTurn);
+				},
+				onTextDelta: () => {
+					if (this.closed || !currentTurn) return;
+					this.syncTurnLive(currentTurn);
 				},
 				onError: (message) => {
 					if (this.closed) return;
@@ -10287,13 +10680,13 @@ var RagChatView = class extends obsidian.ItemView {
 					cancelled = true;
 					if (this.closed) return;
 					this.rebuildTurns();
-					this.inputEl.value = originalMessage;
-					this.inputEl.focus();
+					this.composer.inputEl.value = originalMessage;
+					this.composer.inputEl.focus();
 					new obsidian.Notice("Anfrage abgebrochen.");
 				},
 				onTurnDone: (turn) => {
 					if (this.closed || !this.plugin.settings.ttsEnabled) return;
-					this.synthesizeAndPlay(turn, controller.signal);
+					this.speech.synthesizeAndPlay(turn, controller.signal);
 				}
 			});
 		} finally {
@@ -10302,15 +10695,15 @@ var RagChatView = class extends obsidian.ItemView {
 				if (!cancelled && currentTurn) this.syncTurn(currentTurn);
 				this.updateClarificationAffordance();
 				this.setBusy(false);
-				this.inputEl.placeholder = inputPlaceholder(this.session);
+				this.composer.inputEl.placeholder = inputPlaceholder(this.session);
 			}
 		}
 	}
 	async handleSend() {
 		if (this.busy) return;
-		const message = this.inputEl.value.trim();
+		const message = this.composer.inputEl.value.trim();
 		if (!message) return;
-		this.inputEl.value = "";
+		this.composer.inputEl.value = "";
 		await this.runChatAction((deps) => sendMessage(this.session, message, deps));
 	}
 	async handleRetryClick(turn) {
@@ -10321,10 +10714,10 @@ var RagChatView = class extends obsidian.ItemView {
 		const message = discardFailedTurn(this.session, turn);
 		if (message === null) return;
 		this.rebuildTurns();
-		this.inputEl.value = message;
-		this.inputEl.focus();
+		this.composer.inputEl.value = message;
+		this.composer.inputEl.focus();
 		this.updateClarificationAffordance();
-		this.inputEl.placeholder = inputPlaceholder(this.session);
+		this.composer.inputEl.placeholder = inputPlaceholder(this.session);
 	}
 };
 //#endregion
@@ -10345,70 +10738,11 @@ async function readManifest(vault, pluginDir) {
 	return JSON.parse(raw);
 }
 //#endregion
-//#region src/secure-storage.ts
-var ENC_PREFIX = "enc:v1:";
-var KEY_LEN = 32;
-var SALT_LEN = 16;
-var IV_LEN = 12;
-var SCRYPT_PARAMS = {
-	N: 16384,
-	r: 8,
-	p: 1
-};
-function scrypt(password, salt, keylen, options) {
-	return new Promise((resolve, reject) => {
-		(0, node_crypto.scrypt)(password, salt, keylen, options, (err, derivedKey) => {
-			if (err) reject(err);
-			else resolve(derivedKey);
-		});
-	});
-}
-function getMachineFingerprint() {
-	return [
-		node_os.hostname(),
-		node_os.platform(),
-		node_os.arch(),
-		node_os.cpus()?.[0]?.model ?? "unknown-cpu",
-		String(node_os.totalmem()),
-		node_os.homedir()
-	].join("|");
-}
-async function deriveKey(salt) {
-	return await scrypt(getMachineFingerprint(), salt, KEY_LEN, SCRYPT_PARAMS);
-}
-async function encryptSecret(plain) {
-	if (!plain) return "";
-	const salt = (0, node_crypto.randomBytes)(SALT_LEN);
-	const key = await deriveKey(salt);
-	const iv = (0, node_crypto.randomBytes)(IV_LEN);
-	const cipher = (0, node_crypto.createCipheriv)("aes-256-gcm", key, iv);
-	const ciphertext = Buffer.concat([cipher.update(plain, "utf8"), cipher.final()]);
-	const tag = cipher.getAuthTag();
-	return ENC_PREFIX + Buffer.concat([
-		salt,
-		iv,
-		tag,
-		ciphertext
-	]).toString("base64");
-}
-async function decryptSecret(stored) {
-	if (!stored) return "";
-	if (!stored.startsWith(ENC_PREFIX)) throw new Error("unrecognized secret format");
-	const payload = Buffer.from(stored.slice(7), "base64");
-	const salt = payload.subarray(0, SALT_LEN);
-	const iv = payload.subarray(SALT_LEN, 28);
-	const tag = payload.subarray(28, 44);
-	const ciphertext = payload.subarray(44);
-	const key = await deriveKey(salt);
-	const decipher = (0, node_crypto.createDecipheriv)("aes-256-gcm", key, iv);
-	decipher.setAuthTag(tag);
-	return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString("utf8");
-}
-//#endregion
 //#region src/main.ts
 var RagChatPlugin = class extends obsidian.Plugin {
 	constructor(..._args) {
 		super(..._args);
+		this.store = new SettingsStore(this);
 		this.manifestCache = null;
 	}
 	async onload() {
@@ -10462,12 +10796,6 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		this.manifestCache = await readManifest(this.app.vault, this.getPluginDir());
 		return this.manifestCache;
 	}
-	/**
-	* Clears both the manifest cache and the loaded-index cache, then reloads
-	* the manifest and re-validates it against current settings. Backs the
-	* "RAG: Index neu laden" command, for when the underlying index files
-	* changed on disk (e.g. a rebuilt corpus) independent of a plugin reload.
-	*/
 	async reloadIndex() {
 		this.manifestCache = null;
 		clearIndicesCache();
@@ -10479,12 +10807,6 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			new obsidian.Notice(`RAG Chat: konnte rag-manifest.json nicht laden (${err instanceof Error ? err.message : String(err)}). Index ggf. neu bauen.`, 1e4);
 		}
 	}
-	/**
-	* Re-runs manifest/settings validation (embeddingModel/outputDim parity)
-	* against the cached manifest and surfaces any mismatch as a Notice. Only
-	* warns once at onload() otherwise, even though outputDim/embeddingModel
-	* can change live via the settings tab.
-	*/
 	async revalidateManifest() {
 		const warnings = validateManifest(await this.getManifest(), this.settings);
 		for (const w of warnings) new obsidian.Notice(`RAG Chat: ${w}`, 1e4);
@@ -10503,48 +10825,11 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		workspace.revealLeaf(leaf);
 	}
 	async loadSettings() {
-		const raw = await this.loadData() ?? {};
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, raw);
-		const storedApiKey = raw.geminiApiKey;
-		try {
-			this.settings.geminiApiKey = await decryptSecret(storedApiKey);
-			this.lastEncryptedApiKeyPlaintext = this.settings.geminiApiKey;
-			this.lastEncryptedApiKeyCiphertext = storedApiKey;
-		} catch (err) {
-			this.settings.geminiApiKey = "";
-			this.lastEncryptedApiKeyPlaintext = void 0;
-			this.lastEncryptedApiKeyCiphertext = void 0;
-			if (storedApiKey) new obsidian.Notice("RAG Chat: Google API key (GEMINI_API_KEY) konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.", 1e4);
-		}
-		const storedTtsApiKey = raw.ttsApiKey;
-		try {
-			this.settings.ttsApiKey = await decryptSecret(storedTtsApiKey);
-			this.lastEncryptedTtsApiKeyPlaintext = this.settings.ttsApiKey;
-			this.lastEncryptedTtsApiKeyCiphertext = storedTtsApiKey;
-		} catch (err) {
-			this.settings.ttsApiKey = "";
-			this.lastEncryptedTtsApiKeyPlaintext = void 0;
-			this.lastEncryptedTtsApiKeyCiphertext = void 0;
-			if (storedTtsApiKey) new obsidian.Notice("RAG Chat: TTS API-Key konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.", 1e4);
-		}
+		await this.store.load();
+		this.settings = this.store.settings;
 	}
 	async saveSettings() {
-		const toPersist = { ...this.settings };
-		if (this.settings.geminiApiKey === this.lastEncryptedApiKeyPlaintext && this.lastEncryptedApiKeyCiphertext !== void 0) toPersist.geminiApiKey = this.lastEncryptedApiKeyCiphertext;
-		else {
-			const encrypted = await encryptSecret(this.settings.geminiApiKey);
-			toPersist.geminiApiKey = encrypted;
-			this.lastEncryptedApiKeyPlaintext = this.settings.geminiApiKey;
-			this.lastEncryptedApiKeyCiphertext = encrypted;
-		}
-		if (this.settings.ttsApiKey === this.lastEncryptedTtsApiKeyPlaintext && this.lastEncryptedTtsApiKeyCiphertext !== void 0) toPersist.ttsApiKey = this.lastEncryptedTtsApiKeyCiphertext;
-		else {
-			const encrypted = await encryptSecret(this.settings.ttsApiKey);
-			toPersist.ttsApiKey = encrypted;
-			this.lastEncryptedTtsApiKeyPlaintext = this.settings.ttsApiKey;
-			this.lastEncryptedTtsApiKeyCiphertext = encrypted;
-		}
-		await this.saveData(toPersist);
+		await this.store.save();
 	}
 };
 //#endregion

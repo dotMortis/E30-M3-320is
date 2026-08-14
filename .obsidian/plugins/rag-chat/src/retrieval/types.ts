@@ -97,6 +97,8 @@ export interface ChatTurn {
   role: "user" | "assistant";
   text: string;
   status?: string;
+
+  streamingText?: string;
   steps?: PipelineStep[];
   citations?: ContextBlock[];
   webCitations?: WebCitation[];
@@ -104,9 +106,9 @@ export interface ChatTurn {
   webGroundingSupports?: GroundingSupport[];
   isClarifying?: boolean;
   retry?: { message: string; pendingBefore: PendingAgentState | null };
-  /** Cached short/spoken-friendly answer text (see tts/short-answer.ts). */
+
   ttsText?: string;
-  /** Cached synthesized MP3 (base64), so replay never re-hits the TTS API. */
+
   ttsAudioBase64?: string;
   ttsStatus?: "generating" | "ready" | "error";
 }

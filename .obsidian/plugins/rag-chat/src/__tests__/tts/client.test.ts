@@ -16,16 +16,24 @@ beforeEach(async () => {
 });
 
 describe("synthesizeSpeech", () => {
-  it("throws immediately when neither ttsApiKey nor geminiApiKey is set, without a network call", async () => {
-    await expect(synthesizeSpeech("Text", fakeSettings({ geminiApiKey: "", ttsApiKey: "" }))).rejects.toThrow(
+  it("throws immediately when ttsApiKey is empty, without a network call", async () => {
+    await expect(synthesizeSpeech("Text", fakeSettings({ ttsApiKey: "" }))).rejects.toThrow(
       "Google API key is required"
     );
+    expect(requestUrl).not.toHaveBeenCalled();
+  });
+
+  it("throws without a network call even when geminiApiKey is set (never falls back)", async () => {
+    await expect(
+      synthesizeSpeech("Text", fakeSettings({ ttsApiKey: "", geminiApiKey: "gemini-key" }))
+    ).rejects.toThrow("Google API key is required");
     expect(requestUrl).not.toHaveBeenCalled();
   });
 
   it("posts to the text:synthesize endpoint with the shaped request body", async () => {
     mockRequestUrlSequence([fakeResponse(200, { audioContent: "QUJD" })]);
     await synthesizeSpeech("Zylinderkopfschrauben: 30 Nm.", fakeSettings({
+      ttsApiKey: "tts-key",
       ttsLanguageCode: "de-DE",
       ttsVoiceName: "de-DE-Chirp3-HD-Laomedeia",
     }));
@@ -46,28 +54,23 @@ describe("synthesizeSpeech", () => {
     expect(call.headers["X-Goog-Api-Key"]).toBe("tts-only-key");
   });
 
-  it("falls back to geminiApiKey when ttsApiKey is empty", async () => {
-    mockRequestUrlSequence([fakeResponse(200, { audioContent: "QUJD" })]);
-    await synthesizeSpeech("Text", fakeSettings({ ttsApiKey: "", geminiApiKey: "gemini-key" }));
-    const call = requestUrl.mock.calls[0][0] as { headers: Record<string, string> };
-    expect(call.headers["X-Goog-Api-Key"]).toBe("gemini-key");
-  });
-
   it("returns the base64 audioContent from the response", async () => {
     mockRequestUrlSequence([fakeResponse(200, { audioContent: "QUJD" })]);
-    const audio = await synthesizeSpeech("Text", fakeSettings());
+    const audio = await synthesizeSpeech("Text", fakeSettings({ ttsApiKey: "tts-key" }));
     expect(audio).toBe("QUJD");
   });
 
   it("maps an HTTP 403 to a clear German error about billing/API enablement", async () => {
     mockRequestUrlSequence([errorResponse(403, "Permission denied")]);
-    await expect(synthesizeSpeech("Text", fakeSettings())).rejects.toThrow(
+    await expect(synthesizeSpeech("Text", fakeSettings({ ttsApiKey: "tts-key" }))).rejects.toThrow(
       "Cloud Text-to-Speech API und Billing im Projekt dieses API-Keys aktivieren"
     );
   });
 
   it("throws a descriptive error when the response has no audioContent", async () => {
     mockRequestUrlSequence([fakeResponse(200, { unexpected: true })]);
-    await expect(synthesizeSpeech("Text", fakeSettings())).rejects.toThrow("Unexpected text:synthesize response shape");
+    await expect(synthesizeSpeech("Text", fakeSettings({ ttsApiKey: "tts-key" }))).rejects.toThrow(
+      "Unexpected text:synthesize response shape"
+    );
   });
 });

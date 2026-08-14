@@ -9,7 +9,10 @@ export interface RagChatSettings {
   enableFuzzySearchLeg: boolean;
   maxAgentRounds: number;
 
-  // --- TTS (voice output) ---
+  thinkingEnabled: boolean;
+
+  webSearchEnabled: boolean;
+
   ttsEnabled: boolean;
   ttsApiKey: string;
   ttsLanguageCode: string;
@@ -29,6 +32,8 @@ export const DEFAULT_SETTINGS: RagChatSettings = {
   rrfK: 2,
   enableFuzzySearchLeg: true,
   maxAgentRounds: 5,
+  thinkingEnabled: false,
+  webSearchEnabled: false,
 
   ttsEnabled: false,
   ttsApiKey: "",

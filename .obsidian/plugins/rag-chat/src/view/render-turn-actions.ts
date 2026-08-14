@@ -6,11 +6,9 @@ import { showsStatus } from "./render-status-log";
 export interface TurnActionCallbacks {
   onRetry?: (turn: ChatTurn) => void;
   onDelete?: (turn: ChatTurn) => void;
-  /** Clicking the speaker/stop button: plays cached audio instantly, lazily
-   * synthesizes if not cached yet, or stops playback if this turn is
-   * currently speaking. */
+
   onSpeak?: (turn: ChatTurn) => void;
-  /** Whether this turn's TTS audio is the one currently playing. */
+
   isSpeaking?: (turn: ChatTurn) => boolean;
 }
 

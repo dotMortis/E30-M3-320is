@@ -16,8 +16,6 @@ export const ENGINE_OVERVIEW_BLOCK: ContextBlock = {
   fullText: "# Motorübersicht S14 B20 B23\n\nÜbersicht des S14-Motors.",
 };
 
-/** Same seitencode as TORQUE_BLOCK but a different note - simulates the "47
- * known seitencode collisions" case from PLAN.md. */
 export const TORQUE_COLLISION_BLOCK: ContextBlock = {
   notePath: "11-09/anzugsdrehmomente-anhang.md",
   seitencode: "11-09",

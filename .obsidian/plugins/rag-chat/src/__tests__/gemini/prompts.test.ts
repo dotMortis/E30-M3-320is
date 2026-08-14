@@ -21,20 +21,35 @@ const UNKNOWN_TOOL: FunctionDeclaration = {
 
 describe("SYSTEM_PROMPT", () => {
   it("instructs the model to answer in German", () => {
-    expect(SYSTEM_PROMPT).toContain("Antworte auf Deutsch.");
+    expect(SYSTEM_PROMPT(true)).toContain("Antworte auf Deutsch.");
+    expect(SYSTEM_PROMPT(false)).toContain("Antworte auf Deutsch.");
   });
 
   it("pins the exact '[Seite <code>]' citation format", () => {
-    expect(SYSTEM_PROMPT).toContain('"[Seite <code>]"');
+    expect(SYSTEM_PROMPT(true)).toContain('"[Seite <code>]"');
   });
 
   it("pins the exact '[Referenz: <titel>]' citation format for reference docs", () => {
-    expect(SYSTEM_PROMPT).toContain('"[Referenz: <titel>]"');
+    expect(SYSTEM_PROMPT(true)).toContain('"[Referenz: <titel>]"');
   });
 
   it("contains no tool descriptions of its own (tools are appended dynamically)", () => {
-    expect(SYSTEM_PROMPT).not.toContain("search_manual");
-    expect(SYSTEM_PROMPT).not.toContain("google_search");
+    expect(SYSTEM_PROMPT(true)).not.toContain("search_manual");
+    expect(SYSTEM_PROMPT(false)).not.toContain("search_manual");
+  });
+
+  it("instructs the model to be concise and avoid filler/unsolicited background", () => {
+    expect(SYSTEM_PROMPT(true)).toContain("kurz und klar");
+  });
+
+  it("mentions web research as a source only when google_search is included", () => {
+    expect(SYSTEM_PROMPT(true)).toContain("Web-Rechercheergebnissen");
+    expect(SYSTEM_PROMPT(false)).not.toContain("Web-Rechercheergebnissen");
+  });
+
+  it("only instructs citing web-source URLs when google_search is included", () => {
+    expect(SYSTEM_PROMPT(true)).toContain("Nenne bei Web-Quellen die URL");
+    expect(SYSTEM_PROMPT(false)).not.toContain("Nenne bei Web-Quellen die URL");
   });
 });
 
@@ -84,8 +99,7 @@ describe("buildToolsSuffix", () => {
   it("derives each real tool's description text from FUNCTION_DECLARATIONS (single source of truth)", () => {
     const suffix = buildToolsSuffix(FUNCTION_DECLARATIONS, false);
     for (const decl of FUNCTION_DECLARATIONS) {
-      // The declaration's own description text must appear verbatim in the
-      // prompt suffix - i.e. it wasn't hand-duplicated/re-written separately.
+
       expect(suffix).toContain(decl.description);
     }
   });

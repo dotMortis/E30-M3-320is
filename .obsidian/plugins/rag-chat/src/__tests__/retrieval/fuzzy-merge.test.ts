@@ -31,15 +31,14 @@ describe("mergeWithFuzzy", () => {
     const fuzzy = [fakeFuzzyHit({ notePath: "a.md", rank: 0 })];
     const result = mergeWithFuzzy(hybrid, fuzzy, 10, 2);
     expect(result[0].notePath).toBe("a.md");
-    // Hybrid leg rank 0 + fuzzy leg rank 0, both at k=2: 1/3 + 1/3.
+
     expect(result[0].score).toBeCloseTo(1 / 3 + 1 / 3);
-    // The hybrid hit's own identity (rowId) is preserved, not overwritten by the fuzzy synthetic one.
+
     expect(result[0].rowId).toBe("a");
   });
 
   it("keeps the best (first, highest-ranked) hybrid chunk when two hybrid hits share a notePath", () => {
-    // Regression test for the fuzzy-merge dedup bug: a note with two chunks
-    // must keep the better-ranked chunk's identity, not whichever is last.
+
     const hybrid = [
       fakeHit({ rowId: "note.md#best", notePath: "note.md", score: 10 }),
       fakeHit({ rowId: "note.md#worse", notePath: "note.md", score: 1 }),

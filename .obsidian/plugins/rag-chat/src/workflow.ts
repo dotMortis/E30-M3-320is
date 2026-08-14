@@ -2,7 +2,7 @@ import type { Vault } from "obsidian";
 import { describeEmbedding, describeRetrieval } from "./agent/status-text";
 import { NOOP_STEP_REPORTER, type StepReporter } from "./agent/step-reporter";
 import { runAgentLoop, resumeAgentLoop } from "./agent/loop";
-import type { PendingAgentState } from "./agent/types";
+import type { AgentResult, PendingAgentState } from "./agent/types";
 import type { GroundingChunk, GroundingSupport } from "./gemini/types";
 import { embedQuery } from "./retrieval/embeddings";
 import { federatedHybridSearch } from "./retrieval/hybrid-search";
@@ -20,6 +20,8 @@ export interface WorkflowParams {
   indices: CachedIndices;
   fuzzyApi: FuzzySearchApi | null;
   reporter?: StepReporter;
+
+  onTextDelta?: (text: string) => void;
   signal?: AbortSignal;
 }
 
@@ -39,6 +41,20 @@ export interface WorkflowAwaitingClarification {
 }
 
 export type WorkflowResult = WorkflowDone | WorkflowAwaitingClarification;
+
+function toWorkflowResult(result: AgentResult): WorkflowResult {
+  if (result.status === "awaiting_clarification") {
+    return { status: "awaiting_clarification", question: result.question, pending: result.pending };
+  }
+  return {
+    status: "done",
+    text: result.text,
+    manualCitations: result.manualCitations,
+    webCitations: result.webCitations,
+    webGroundingChunks: result.webGroundingChunks,
+    webGroundingSupports: result.webGroundingSupports,
+  };
+}
 
 async function baselineRetrieve(
   query: string,
@@ -86,7 +102,7 @@ async function baselineRetrieve(
 }
 
 export async function answerQuestion(params: WorkflowParams): Promise<WorkflowResult> {
-  const { question, history, settings, vault, indices, fuzzyApi, reporter, signal } = params;
+  const { question, history, settings, vault, indices, fuzzyApi, reporter, onTextDelta, signal } = params;
 
   if (signal?.aborted) {
     throw new Error(ABORT_ERROR_MESSAGE);
@@ -98,20 +114,9 @@ export async function answerQuestion(params: WorkflowParams): Promise<WorkflowRe
     question,
     history,
     baselineBlocks,
-    ctx: { settings, vault, indices, fuzzyApi, reporter: rep, signal },
+    ctx: { settings, vault, indices, fuzzyApi, reporter: rep, onTextDelta, signal },
   });
-
-  if (result.status === "awaiting_clarification") {
-    return { status: "awaiting_clarification", question: result.question, pending: result.pending };
-  }
-  return {
-    status: "done",
-    text: result.text,
-    manualCitations: result.manualCitations,
-    webCitations: result.webCitations,
-    webGroundingChunks: result.webGroundingChunks,
-    webGroundingSupports: result.webGroundingSupports,
-  };
+  return toWorkflowResult(result);
 }
 
 export async function continueAnswer(
@@ -123,15 +128,5 @@ export async function continueAnswer(
     throw new Error(ABORT_ERROR_MESSAGE);
   }
   const result = await resumeAgentLoop(pending, userAnswer, signal);
-  if (result.status === "awaiting_clarification") {
-    return { status: "awaiting_clarification", question: result.question, pending: result.pending };
-  }
-  return {
-    status: "done",
-    text: result.text,
-    manualCitations: result.manualCitations,
-    webCitations: result.webCitations,
-    webGroundingChunks: result.webGroundingChunks,
-    webGroundingSupports: result.webGroundingSupports,
-  };
+  return toWorkflowResult(result);
 }

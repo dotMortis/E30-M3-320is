@@ -1,10 +1,5 @@
 import { Keymap, type App, type Component } from "obsidian";
 
-/**
- * Wires up internal-link anchors within `el`. Listeners are registered via
- * `component.registerDomEvent` so they're automatically torn down when
- * `component` unloads, instead of leaking for the lifetime of the view.
- */
 export function wireInternalLinks(el: HTMLElement, app: App, component: Component): void {
   const sourcePath = "";
   el.querySelectorAll<HTMLAnchorElement>("a.internal-link").forEach((a) => {

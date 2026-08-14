@@ -1,12 +1,5 @@
 import type { ContextBlock } from "./types";
 
-/**
- * Escapes text before it's interpolated into the pseudo-XML context block
- * sent to the model. Without this, a note containing a literal `</document>`
- * or stray `<`/`>` could corrupt document-boundary attribution in the
- * prompt (letting note content masquerade as a different/additional
- * <document> block, or break out of an attribute).
- */
 export function escapeXml(text: string): string {
   return text
     .replace(/&/g, "&amp;")

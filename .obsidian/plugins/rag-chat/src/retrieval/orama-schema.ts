@@ -2,9 +2,6 @@ import { create, load, save, type AnyOrama } from "@orama/orama";
 import { restoreFromFile } from "@orama/plugin-data-persistence/server";
 import { stemmer as germanStemmer, language as germanLanguage } from "@orama/stemmers/german";
 
-// German stopword list for the BM25 tokenizer below - hand-curated for this
-// corpus (workshop-manual German), not sourced from an off-the-shelf list;
-// extend it if a search behaves oddly because a common word skews scoring.
 export const GERMAN_STOPWORDS = [
   "der", "die", "das", "des", "dem", "den", "ein", "eine", "einer", "eines", "einem", "einen",
   "und", "oder", "aber", "sowie", "sowohl", "weder", "noch",

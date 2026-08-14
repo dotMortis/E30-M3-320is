@@ -2,14 +2,6 @@ import { rrfMerge } from "./rrf";
 import { FUZZY_RANK_OFFSET } from "../constants";
 import type { FuzzySearchHit, RetrievedHit } from "./types";
 
-/**
- * Folds the fuzzy (vault-search) leg into the already-fused hybrid results
- * via the same Reciprocal Rank Fusion model used for text+vector (see
- * retrieval/rrf.ts), keyed by notePath rather than chunk rowId - a note can
- * have multiple hybrid chunks; the fuzzy leg only knows about whole notes.
- * `rrfK` is the same fusion constant used for the text/vector legs
- * (settings.rrfK), keeping a single tunable knob for all fusion stages.
- */
 export function mergeWithFuzzy(
   hybridHits: RetrievedHit[],
   fuzzyHits: FuzzySearchHit[],

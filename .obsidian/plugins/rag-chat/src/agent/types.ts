@@ -10,6 +10,8 @@ export interface AgentLoopContext {
   indices: CachedIndices;
   fuzzyApi: FuzzySearchApi | null;
   reporter?: StepReporter;
+
+  onTextDelta?: (text: string) => void;
   signal?: AbortSignal;
 }
 

@@ -37,13 +37,6 @@ export async function executeTool(
       const notePath = String(fc.args?.notePath ?? "").trim();
       if (!notePath) return { error: "notePath darf nicht leer sein." };
 
-      // `seitencode` may legitimately be an empty string (reference-doc
-      // sources have no seitencode) - so only reject when the key is
-      // entirely absent from the call's args, not merely empty. `sektion`
-      // and `titel` are never legitimately blank for a real hit, so those
-      // are rejected on either an absent key or a blank value. This avoids
-      // silently blank-defaulting missing values and overwriting a good
-      // baseline ContextBlock (from earlier retrieval) with empty metadata.
       const args = fc.args ?? {};
       const missingKeys = ["seitencode", "sektion", "titel"].filter((key) => !(key in args));
       if (missingKeys.length > 0) {

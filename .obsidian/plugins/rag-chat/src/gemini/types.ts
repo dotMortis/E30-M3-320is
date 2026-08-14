@@ -1,10 +1,6 @@
 export interface GeminiPart {
   text?: string;
-  // `id` correlates a functionCall with its functionResponse - required when
-  // multiple calls (or google_search + custom tools) appear in the same
-  // turn, since the model may not otherwise be able to tell which response
-  // belongs to which call. Optional because not every response includes it
-  // (e.g. simple single-tool turns).
+
   functionCall?: { id?: string; name: string; args: Record<string, unknown> };
   functionResponse?: { id?: string; name: string; response: Record<string, unknown> };
 }

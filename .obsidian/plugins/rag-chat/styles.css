@@ -181,6 +181,13 @@
   animation: rag-chat-status-pulse 1.4s ease-in-out infinite;
 }
 
+/* Streaming answer text is plain (unrendered) markdown source until the
+ * round completes - preserve line breaks since there's no markdown
+ * paragraph handling yet. */
+.rag-chat-turn-streaming {
+  white-space: pre-wrap;
+}
+
 @keyframes rag-chat-status-pulse {
   0%,
   100% {
@@ -384,6 +391,7 @@
   flex: 0 0 auto;
 }
 
+.rag-chat-option-toggle,
 .rag-chat-tts-toggle {
   display: flex;
   align-items: center;
@@ -395,14 +403,24 @@
 }
 
 .rag-chat-tts-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   padding: 4px 8px;
   font-size: var(--font-ui-smaller);
   color: var(--text-muted);
   border-top: 1px solid var(--background-modifier-border);
+}
+
+.rag-chat-tts-controls-summary {
+  cursor: pointer;
+  user-select: none;
+  list-style: revert;
+}
+
+.rag-chat-tts-controls-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
+  padding-top: 6px;
 }
 
 .rag-chat-tts-device {
