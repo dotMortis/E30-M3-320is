@@ -170,7 +170,7 @@ async function requestUrlWithRetry(params, opts) {
 	const label = opts?.label ?? "Anfrage";
 	const signal = opts?.signal;
 	let lastResponse;
-	for (let attempt = 1; attempt <= 5; attempt++) {
+	for (let attempt = 1; attempt <= 1; attempt++) {
 		if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 		let response;
 		try {
@@ -178,19 +178,19 @@ async function requestUrlWithRetry(params, opts) {
 		} catch (err) {
 			if (signal?.aborted) throw err;
 			const message = err instanceof Error ? err.message : String(err);
-			if (attempt === 5) throw new Error(`${label} fehlgeschlagen: ${message}`);
-			await sleep(computeDelayMs(attempt), signal, (seconds) => opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
-			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/5) …`);
+			if (attempt === 1) throw new Error(`${label} fehlgeschlagen: ${message}`);
+			await sleep(computeDelayMs(attempt), signal, (seconds) => opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch in ${seconds}s (${attempt}/1) …`));
+			opts?.onStatus?.(`${label} fehlgeschlagen (${message}) – erneuter Versuch (${attempt}/1) …`);
 			continue;
 		}
 		if (response.status < 400) return response;
 		lastResponse = response;
-		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 5) {
+		if (!RETRYABLE_STATUSES.has(response.status) || attempt === 1) {
 			const msg = extractErrorMessage(response);
 			throw new Error(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`);
 		}
-		await sleep(computeDelayMs(attempt, retryAfterHeaderValue(response)), signal, (seconds) => opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${seconds}s (${attempt}/5) …`));
-		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch (${attempt}/5) …`);
+		await sleep(computeDelayMs(attempt, retryAfterHeaderValue(response)), signal, (seconds) => opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch in ${seconds}s (${attempt}/1) …`));
+		opts?.onStatus?.(`${label} überlastet (Status ${response.status}) – erneuter Versuch (${attempt}/1) …`);
 	}
 	throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
 }
@@ -8990,8 +8990,27 @@ async function sendMessageUnguarded(state, message, deps) {
 		assistantTurn.webCitations = [];
 		assistantTurn.webGroundingChunks = [];
 		assistantTurn.webGroundingSupports = [];
+		assistantTurn.retry = {
+			message,
+			pendingBefore: pendingBeforeSend
+		};
 		deps.onError?.(errMessage);
 	}
+}
+function discardFailedTurn(state, turn) {
+	if (state.busy) return null;
+	const idx = state.turns.indexOf(turn);
+	if (idx < 1 || !turn.retry) return null;
+	if (state.turns[idx - 1].role !== "user") return null;
+	const { message, pendingBefore } = turn.retry;
+	state.turns.splice(idx - 1, 2);
+	state.pendingAgentState = pendingBefore;
+	return message;
+}
+async function retryTurn(state, turn, deps) {
+	const message = discardFailedTurn(state, turn);
+	if (message === null) return;
+	await sendMessage(state, message, deps);
 }
 //#endregion
 //#region src/view/confirm-modal.ts
@@ -9309,6 +9328,49 @@ function renderStatusLog(turnEl, turn) {
 	};
 }
 //#endregion
+//#region src/view/clipboard.ts
+async function copyToClipboard(text) {
+	try {
+		await navigator.clipboard.writeText(text);
+		return true;
+	} catch {
+		return false;
+	}
+}
+//#endregion
+//#region src/view/render-turn-actions.ts
+var COPY_ICON_RESET_MS = 1500;
+function renderTurnActions(turnEl, turn, component, callbacks) {
+	const canCopy = turn.text.length > 0 && !showsStatus(turn);
+	if (!canCopy && !turn.retry) return;
+	const actionsEl = turnEl.createDiv({ cls: "rag-chat-turn-actions" });
+	if (canCopy) {
+		const copyButton = actionsEl.createEl("button", {
+			cls: "rag-chat-action-button rag-chat-copy-button",
+			attr: { "aria-label": "In Zwischenablage kopieren" }
+		});
+		(0, obsidian.setIcon)(copyButton, "copy");
+		component.registerDomEvent(copyButton, "click", () => {
+			copyToClipboard(turn.text).then((ok) => {
+				(0, obsidian.setIcon)(copyButton, ok ? "check" : "x");
+				setTimeout(() => (0, obsidian.setIcon)(copyButton, "copy"), COPY_ICON_RESET_MS);
+			});
+		});
+	}
+	if (turn.retry) {
+		const retryButton = actionsEl.createEl("button", {
+			cls: "rag-chat-action-button rag-chat-retry-button",
+			text: "Erneut versuchen"
+		});
+		component.registerDomEvent(retryButton, "click", () => callbacks.onRetry?.(turn));
+		const deleteButton = actionsEl.createEl("button", {
+			cls: "rag-chat-action-button rag-chat-delete-button",
+			text: "Löschen"
+		});
+		component.registerDomEvent(deleteButton, "click", () => callbacks.onDelete?.(turn));
+	}
+}
+//#endregion
 //#region src/view/wire-links.ts
 /**
 * Wires up internal-link anchors within `el`. Listeners are registered via
@@ -9351,7 +9413,7 @@ function isNearBottom(messagesEl) {
 * previous Markdown-rendering component for this turn must be unloaded by
 * the caller first.
 */
-function fillTurn(turnEl, turn, app, parentComponent) {
+function fillTurn(turnEl, turn, app, parentComponent, callbacks) {
 	turnEl.empty();
 	const cls = ["rag-chat-turn", `rag-chat-turn-${turn.role}`];
 	if (turn.isClarifying) cls.push("rag-chat-turn-clarifying");
@@ -9377,6 +9439,7 @@ function fillTurn(turnEl, turn, app, parentComponent) {
 	renderWebCitations(turnEl, turn);
 	let statusLogElements;
 	if (turn.steps && turn.steps.length > 0) statusLogElements = renderStatusLog(turnEl, turn);
+	renderTurnActions(turnEl, turn, parentComponent, callbacks);
 	return {
 		textEl,
 		statusLogElements,
@@ -9388,7 +9451,7 @@ function fillTurn(turnEl, turn, app, parentComponent) {
 * For incremental updates once turns are already rendered, use
 * `appendTurns`/`updateTurn` instead - re-running this on every message
 * causes O(n^2) growth and collapses any expanded `<details>` elements. */
-function renderTurns(messagesEl, turns, app, component) {
+function renderTurns(messagesEl, turns, app, component, callbacks = {}) {
 	messagesEl.empty();
 	const result = {
 		turnEls: /* @__PURE__ */ new Map(),
@@ -9398,7 +9461,7 @@ function renderTurns(messagesEl, turns, app, component) {
 	};
 	for (const turn of turns) {
 		const turnEl = messagesEl.createDiv();
-		const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component);
+		const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
 		result.turnContainers.set(turn, turnEl);
 		result.turnEls.set(turn, textEl);
 		if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
@@ -9414,13 +9477,13 @@ function renderTurns(messagesEl, turns, app, component) {
 * conversation don't collapse). Only auto-scrolls if the user was already
 * near the bottom before the append.
 */
-function appendNewTurns(messagesEl, turns, app, component, result) {
+function appendNewTurns(messagesEl, turns, app, component, result, callbacks = {}) {
 	const newTurns = turns.filter((t) => !result.turnContainers.has(t));
 	if (newTurns.length === 0) return;
 	const wasNearBottom = isNearBottom(messagesEl);
 	for (const turn of newTurns) {
 		const turnEl = messagesEl.createDiv();
-		const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component);
+		const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
 		result.turnContainers.set(turn, turnEl);
 		result.turnEls.set(turn, textEl);
 		if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
@@ -9436,14 +9499,14 @@ function appendNewTurns(messagesEl, turns, app, component, result) {
 * status). No-op if the turn isn't in `result` yet - callers should fall
 * back to `appendNewTurns` in that case.
 */
-function updateTurn(messagesEl, turn, app, component, result) {
+function updateTurn(messagesEl, turn, app, component, result, callbacks = {}) {
 	const turnEl = result.turnContainers.get(turn);
 	if (!turnEl) return false;
 	result.markdownComponents.get(turn)?.unload();
 	result.markdownComponents.delete(turn);
 	result.statusLogElements.delete(turn);
 	const wasNearBottom = isNearBottom(messagesEl);
-	const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component);
+	const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
 	result.turnEls.set(turn, textEl);
 	if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
 	if (markdownComponent) result.markdownComponents.set(turn, markdownComponent);
@@ -9475,6 +9538,10 @@ var RagChatView = class extends obsidian.ItemView {
 		this.rendered = emptyRenderResult();
 		this.closed = false;
 		this.abortController = null;
+		this.turnCallbacks = {
+			onRetry: (turn) => void this.handleRetryClick(turn),
+			onDelete: (turn) => this.handleDeleteClick(turn)
+		};
 		this.plugin = plugin;
 	}
 	getViewType() {
@@ -9542,7 +9609,7 @@ var RagChatView = class extends obsidian.ItemView {
 			if (this.busy) this.handleCancelClick();
 			else this.handleSend();
 		});
-		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
 		this.updateClarificationAffordance();
 		this.refreshModelOptions();
 	}
@@ -9560,7 +9627,7 @@ var RagChatView = class extends obsidian.ItemView {
 		this.abortController?.abort();
 		unloadAllTurns(this.rendered);
 		this.session = createChatSessionState();
-		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
 		this.updateClarificationAffordance();
 		this.inputEl.placeholder = inputPlaceholder(this.session);
 	}
@@ -9611,20 +9678,21 @@ var RagChatView = class extends obsidian.ItemView {
 		this.cancelClarificationButton.toggleClass("rag-chat-hidden", this.session.pendingAgentState === null);
 	}
 	syncTurn(turn) {
-		if (!updateTurn(this.messagesEl, turn, this.app, this, this.rendered)) appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered);
+		if (!updateTurn(this.messagesEl, turn, this.app, this, this.rendered, this.turnCallbacks)) appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered, this.turnCallbacks);
 	}
-	async handleSend() {
+	rebuildTurns() {
+		unloadAllTurns(this.rendered);
+		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
+	}
+	async runChatAction(action, opts) {
 		if (this.busy) return;
-		const message = this.inputEl.value.trim();
-		if (!message) return;
-		this.inputEl.value = "";
 		this.setBusy(true);
 		const controller = new AbortController();
 		this.abortController = controller;
 		let currentTurn = null;
 		let cancelled = false;
 		try {
-			await sendMessage(this.session, message, {
+			await action({
 				settings: this.plugin.settings,
 				vault: this.app.vault,
 				getIndices: async () => getIndices(this.plugin.getPluginDirFullPath(), await this.plugin.getManifest()),
@@ -9633,7 +9701,8 @@ var RagChatView = class extends obsidian.ItemView {
 				onTurnStarted: (turn) => {
 					if (this.closed) return;
 					currentTurn = turn;
-					appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered);
+					if (opts?.fullRerenderOnStart) this.rebuildTurns();
+					else appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered, this.turnCallbacks);
 				},
 				onStep: () => {
 					if (this.closed || !currentTurn) return;
@@ -9646,8 +9715,7 @@ var RagChatView = class extends obsidian.ItemView {
 				onCancelled: (originalMessage) => {
 					cancelled = true;
 					if (this.closed) return;
-					unloadAllTurns(this.rendered);
-					this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+					this.rebuildTurns();
 					this.inputEl.value = originalMessage;
 					this.inputEl.focus();
 					new obsidian.Notice("Anfrage abgebrochen.");
@@ -9662,6 +9730,26 @@ var RagChatView = class extends obsidian.ItemView {
 				this.inputEl.placeholder = inputPlaceholder(this.session);
 			}
 		}
+	}
+	async handleSend() {
+		if (this.busy) return;
+		const message = this.inputEl.value.trim();
+		if (!message) return;
+		this.inputEl.value = "";
+		await this.runChatAction((deps) => sendMessage(this.session, message, deps));
+	}
+	async handleRetryClick(turn) {
+		await this.runChatAction((deps) => retryTurn(this.session, turn, deps), { fullRerenderOnStart: true });
+	}
+	handleDeleteClick(turn) {
+		if (this.busy) return;
+		const message = discardFailedTurn(this.session, turn);
+		if (message === null) return;
+		this.rebuildTurns();
+		this.inputEl.value = message;
+		this.inputEl.focus();
+		this.updateClarificationAffordance();
+		this.inputEl.placeholder = inputPlaceholder(this.session);
 	}
 };
 //#endregion

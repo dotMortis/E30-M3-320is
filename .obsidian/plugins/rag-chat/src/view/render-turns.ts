@@ -5,6 +5,7 @@ import { linkifyWebCitations } from "../citations/web-citations";
 import type { ChatTurn } from "../retrieval/types";
 import { renderManualCitations, renderWebCitations } from "./render-citations";
 import { renderStatusLog, showsStatus, type StatusLogElements } from "./render-status-log";
+import { renderTurnActions, type TurnActionCallbacks } from "./render-turn-actions";
 import { wireInternalLinks } from "./wire-links";
 
 export interface RenderTurnsResult {
@@ -37,7 +38,8 @@ function fillTurn(
   turnEl: HTMLElement,
   turn: ChatTurn,
   app: App,
-  parentComponent: Component
+  parentComponent: Component,
+  callbacks: TurnActionCallbacks
 ): { textEl: HTMLElement; statusLogElements?: StatusLogElements; markdownComponent?: Component } {
   turnEl.empty();
   const cls = ["rag-chat-turn", `rag-chat-turn-${turn.role}`];
@@ -76,6 +78,8 @@ function fillTurn(
     statusLogElements = renderStatusLog(turnEl, turn);
   }
 
+  renderTurnActions(turnEl, turn, parentComponent, callbacks);
+
   return { textEl, statusLogElements, markdownComponent };
 }
 
@@ -84,7 +88,13 @@ function fillTurn(
  * For incremental updates once turns are already rendered, use
  * `appendTurns`/`updateTurn` instead - re-running this on every message
  * causes O(n^2) growth and collapses any expanded `<details>` elements. */
-export function renderTurns(messagesEl: HTMLElement, turns: ChatTurn[], app: App, component: Component): RenderTurnsResult {
+export function renderTurns(
+  messagesEl: HTMLElement,
+  turns: ChatTurn[],
+  app: App,
+  component: Component,
+  callbacks: TurnActionCallbacks = {}
+): RenderTurnsResult {
   messagesEl.empty();
   const result: RenderTurnsResult = {
     turnEls: new Map(),
@@ -95,7 +105,7 @@ export function renderTurns(messagesEl: HTMLElement, turns: ChatTurn[], app: App
 
   for (const turn of turns) {
     const turnEl = messagesEl.createDiv();
-    const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component);
+    const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
     result.turnContainers.set(turn, turnEl);
     result.turnEls.set(turn, textEl);
     if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
@@ -113,14 +123,21 @@ export function renderTurns(messagesEl: HTMLElement, turns: ChatTurn[], app: App
  * conversation don't collapse). Only auto-scrolls if the user was already
  * near the bottom before the append.
  */
-export function appendNewTurns(messagesEl: HTMLElement, turns: ChatTurn[], app: App, component: Component, result: RenderTurnsResult): void {
+export function appendNewTurns(
+  messagesEl: HTMLElement,
+  turns: ChatTurn[],
+  app: App,
+  component: Component,
+  result: RenderTurnsResult,
+  callbacks: TurnActionCallbacks = {}
+): void {
   const newTurns = turns.filter((t) => !result.turnContainers.has(t));
   if (newTurns.length === 0) return;
 
   const wasNearBottom = isNearBottom(messagesEl);
   for (const turn of newTurns) {
     const turnEl = messagesEl.createDiv();
-    const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component);
+    const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
     result.turnContainers.set(turn, turnEl);
     result.turnEls.set(turn, textEl);
     if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
@@ -137,7 +154,14 @@ export function appendNewTurns(messagesEl: HTMLElement, turns: ChatTurn[], app: 
  * status). No-op if the turn isn't in `result` yet - callers should fall
  * back to `appendNewTurns` in that case.
  */
-export function updateTurn(messagesEl: HTMLElement, turn: ChatTurn, app: App, component: Component, result: RenderTurnsResult): boolean {
+export function updateTurn(
+  messagesEl: HTMLElement,
+  turn: ChatTurn,
+  app: App,
+  component: Component,
+  result: RenderTurnsResult,
+  callbacks: TurnActionCallbacks = {}
+): boolean {
   const turnEl = result.turnContainers.get(turn);
   if (!turnEl) return false;
 
@@ -146,7 +170,7 @@ export function updateTurn(messagesEl: HTMLElement, turn: ChatTurn, app: App, co
   result.statusLogElements.delete(turn);
 
   const wasNearBottom = isNearBottom(messagesEl);
-  const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component);
+  const { textEl, statusLogElements, markdownComponent } = fillTurn(turnEl, turn, app, component, callbacks);
   result.turnEls.set(turn, textEl);
   if (statusLogElements) result.statusLogElements.set(turn, statusLogElements);
   if (markdownComponent) result.markdownComponents.set(turn, markdownComponent);

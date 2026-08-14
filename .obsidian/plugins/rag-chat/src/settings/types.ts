@@ -19,5 +19,5 @@ export const DEFAULT_SETTINGS: RagChatSettings = {
   similarity: 0.55,
   rrfK: 2,
   enableFuzzySearchLeg: true,
-  maxAgentRounds: 4,
+  maxAgentRounds: 5,
 };

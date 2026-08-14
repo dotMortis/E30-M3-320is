@@ -1,4 +1,5 @@
 import type { AnyOrama } from "@orama/orama";
+import type { PendingAgentState } from "../agent/types";
 import type { GroundingChunk, GroundingSupport } from "../gemini/types";
 
 export interface RagManifest {
@@ -102,6 +103,7 @@ export interface ChatTurn {
   webGroundingChunks?: GroundingChunk[];
   webGroundingSupports?: GroundingSupport[];
   isClarifying?: boolean;
+  retry?: { message: string; pendingBefore: PendingAgentState | null };
 }
 
 export interface FuzzySearchHit {

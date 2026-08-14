@@ -137,6 +137,25 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
     assistantTurn.webCitations = [];
     assistantTurn.webGroundingChunks = [];
     assistantTurn.webGroundingSupports = [];
+    assistantTurn.retry = { message, pendingBefore: pendingBeforeSend };
     deps.onError?.(errMessage);
   }
+}
+
+export function discardFailedTurn(state: ChatSessionState, turn: ChatTurn): string | null {
+  if (state.busy) return null;
+  const idx = state.turns.indexOf(turn);
+  if (idx < 1 || !turn.retry) return null;
+  const userTurn = state.turns[idx - 1];
+  if (userTurn.role !== "user") return null;
+  const { message, pendingBefore } = turn.retry;
+  state.turns.splice(idx - 1, 2);
+  state.pendingAgentState = pendingBefore;
+  return message;
+}
+
+export async function retryTurn(state: ChatSessionState, turn: ChatTurn, deps: SendMessageDeps): Promise<void> {
+  const message = discardFailedTurn(state, turn);
+  if (message === null) return;
+  await sendMessage(state, message, deps);
 }

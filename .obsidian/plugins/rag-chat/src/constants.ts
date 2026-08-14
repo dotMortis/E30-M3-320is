@@ -50,7 +50,7 @@ export const HTTP_RETRY_BACKOFF_FACTOR = 2;
 export const HTTP_RETRY_JITTER_RATIO = 0.2;
 
 /** How long to wait for a single HTTP request before aborting it, in ms. */
-export const HTTP_REQUEST_TIMEOUT_MS = 30_000;
+export const HTTP_REQUEST_TIMEOUT_MS = 45_000;
 
 /** How often the retry backoff countdown (onStatus's "erneuter Versuch in Ns") ticks, in ms. */
 export const HTTP_RETRY_COUNTDOWN_TICK_MS = 1000;

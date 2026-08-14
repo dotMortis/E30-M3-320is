@@ -55,6 +55,8 @@
   border-radius: 8px;
   padding: 8px 10px;
   font-size: var(--font-text-size);
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .rag-chat-turn-user {
@@ -333,6 +335,34 @@
 .rag-chat-cancel-clarification {
   font-size: var(--font-ui-smaller);
   color: var(--text-muted);
+}
+
+.rag-chat-turn-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.rag-chat-action-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+  padding: 2px 6px;
+}
+
+.rag-chat-action-button:hover {
+  color: var(--text-normal);
+}
+
+.rag-chat-copy-button {
+  padding: 2px 4px;
+}
+
+.rag-chat-retry-button,
+.rag-chat-delete-button {
+  color: var(--text-error);
 }
 
 .rag-chat-input-row {

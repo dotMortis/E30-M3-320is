@@ -4,13 +4,17 @@ import { getIndices } from "../retrieval/index-cache";
 import {
   abandonPendingClarification,
   createChatSessionState,
+  discardFailedTurn,
   inputPlaceholder,
+  retryTurn,
   sendMessage,
   type ChatSessionState,
+  type SendMessageDeps,
 } from "./controller";
 import { confirmModal } from "./confirm-modal";
 import { getFuzzySearchApi } from "./fuzzy-search-plugin";
 import { appendNewTurns, renderTurns, unloadAllTurns, updateTurn, type RenderTurnsResult } from "./render-turns";
+import type { TurnActionCallbacks } from "./render-turn-actions";
 import type { ChatTurn } from "../retrieval/types";
 import { listFlashModels } from "../gemini/models";
 
@@ -38,6 +42,10 @@ export class RagChatView extends ItemView {
   private rendered: RenderTurnsResult = emptyRenderResult();
   private closed = false;
   private abortController: AbortController | null = null;
+  private readonly turnCallbacks: TurnActionCallbacks = {
+    onRetry: (turn) => void this.handleRetryClick(turn),
+    onDelete: (turn) => this.handleDeleteClick(turn),
+  };
 
   constructor(leaf: WorkspaceLeaf, plugin: RagChatPlugin) {
     super(leaf);
@@ -117,7 +125,7 @@ export class RagChatView extends ItemView {
       }
     });
 
-    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
     this.updateClarificationAffordance();
     void this.refreshModelOptions();
   }
@@ -138,7 +146,7 @@ export class RagChatView extends ItemView {
     this.abortController?.abort();
     unloadAllTurns(this.rendered);
     this.session = createChatSessionState();
-    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
     this.updateClarificationAffordance();
     this.inputEl.placeholder = inputPlaceholder(this.session);
   }
@@ -197,16 +205,21 @@ export class RagChatView extends ItemView {
   }
 
   private syncTurn(turn: ChatTurn): void {
-    if (!updateTurn(this.messagesEl, turn, this.app, this, this.rendered)) {
-      appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered);
+    if (!updateTurn(this.messagesEl, turn, this.app, this, this.rendered, this.turnCallbacks)) {
+      appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered, this.turnCallbacks);
     }
   }
 
-  private async handleSend(): Promise<void> {
+  private rebuildTurns(): void {
+    unloadAllTurns(this.rendered);
+    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
+  }
+
+  private async runChatAction(
+    action: (deps: SendMessageDeps) => Promise<void>,
+    opts?: { fullRerenderOnStart?: boolean }
+  ): Promise<void> {
     if (this.busy) return;
-    const message = this.inputEl.value.trim();
-    if (!message) return;
-    this.inputEl.value = "";
     this.setBusy(true);
 
     const controller = new AbortController();
@@ -215,7 +228,7 @@ export class RagChatView extends ItemView {
     let currentTurn: ChatTurn | null = null;
     let cancelled = false;
     try {
-      await sendMessage(this.session, message, {
+      await action({
         settings: this.plugin.settings,
         vault: this.app.vault,
         getIndices: async () => getIndices(this.plugin.getPluginDirFullPath(), await this.plugin.getManifest()),
@@ -224,7 +237,11 @@ export class RagChatView extends ItemView {
         onTurnStarted: (turn) => {
           if (this.closed) return;
           currentTurn = turn;
-          appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered);
+          if (opts?.fullRerenderOnStart) {
+            this.rebuildTurns();
+          } else {
+            appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered, this.turnCallbacks);
+          }
         },
         onStep: () => {
           if (this.closed || !currentTurn) return;
@@ -237,8 +254,7 @@ export class RagChatView extends ItemView {
         onCancelled: (originalMessage) => {
           cancelled = true;
           if (this.closed) return;
-          unloadAllTurns(this.rendered);
-          this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this);
+          this.rebuildTurns();
           this.inputEl.value = originalMessage;
           this.inputEl.focus();
           new Notice("Anfrage abgebrochen.");
@@ -253,5 +269,28 @@ export class RagChatView extends ItemView {
         this.inputEl.placeholder = inputPlaceholder(this.session);
       }
     }
+  }
+
+  private async handleSend(): Promise<void> {
+    if (this.busy) return;
+    const message = this.inputEl.value.trim();
+    if (!message) return;
+    this.inputEl.value = "";
+    await this.runChatAction((deps) => sendMessage(this.session, message, deps));
+  }
+
+  private async handleRetryClick(turn: ChatTurn): Promise<void> {
+    await this.runChatAction((deps) => retryTurn(this.session, turn, deps), { fullRerenderOnStart: true });
+  }
+
+  private handleDeleteClick(turn: ChatTurn): void {
+    if (this.busy) return;
+    const message = discardFailedTurn(this.session, turn);
+    if (message === null) return;
+    this.rebuildTurns();
+    this.inputEl.value = message;
+    this.inputEl.focus();
+    this.updateClarificationAffordance();
+    this.inputEl.placeholder = inputPlaceholder(this.session);
   }
 }
