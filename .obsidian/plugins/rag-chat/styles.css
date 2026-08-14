@@ -238,10 +238,86 @@
 .rag-chat-status-log-list {
   margin: 4px 0 0;
   padding-left: 1.4em;
+  list-style: none;
 }
 
-.rag-chat-status-log-item {
-  margin: 2px 0;
+.rag-chat-step {
+  margin: 4px 0;
+}
+
+.rag-chat-step-details {
+  width: 100%;
+}
+
+.rag-chat-step-summary {
+  cursor: pointer;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  user-select: none;
+}
+
+.rag-chat-step-kind {
+  font-weight: 600;
+  color: var(--text-accent);
+  white-space: nowrap;
+}
+
+.rag-chat-step-title {
+  flex: 1;
+}
+
+.rag-chat-step-status {
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.rag-chat-step-status-error {
+  color: var(--text-error);
+}
+
+.rag-chat-step-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin: 2px 0 0 1.2em;
+}
+
+.rag-chat-step-body {
+  margin: 4px 0 4px 1.2em;
+  font-size: 0.92em;
+}
+
+.rag-chat-step-narration {
+  color: var(--text-normal);
+}
+
+.rag-chat-step-error {
+  color: var(--text-error);
+}
+
+.rag-chat-step-hits {
+  margin: 4px 0;
+  padding-left: 1.2em;
+}
+
+.rag-chat-step-json {
+  margin-top: 4px;
+}
+
+.rag-chat-step-json summary {
+  cursor: pointer;
+}
+
+.rag-chat-step-json pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--background-secondary);
+  padding: 4px 6px;
+  border-radius: 4px;
+  max-height: 240px;
+  overflow: auto;
 }
 
 .rag-chat-hidden {

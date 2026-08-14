@@ -1,7 +1,8 @@
 import type { Vault } from "obsidian";
 import type { PendingAgentState } from "../agent/types";
+import { createStepReporter } from "../agent/step-reporter";
 import { answerQuestion, continueAnswer, type WorkflowResult } from "../workflow";
-import type { CachedIndices, ChatTurn, FuzzySearchApi } from "../retrieval/types";
+import type { CachedIndices, ChatTurn, FuzzySearchApi, PipelineStep } from "../retrieval/types";
 import type { RagChatSettings } from "../settings/types";
 
 export interface ChatSessionState {
@@ -22,7 +23,7 @@ export interface SendMessageDeps {
   getIndices: () => Promise<CachedIndices>;
   getFuzzyApi: () => FuzzySearchApi | null;
   onTurnStarted?: (assistantTurn: ChatTurn) => void;
-  onStatus?: (status: string) => void;
+  onStep?: (step: PipelineStep) => void;
   onError?: (message: string) => void;
   onCancelled?: (originalMessage: string) => void;
   signal?: AbortSignal;
@@ -94,17 +95,19 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
   state.turns.push(assistantTurn);
   deps.onTurnStarted?.(assistantTurn);
 
-  const onStatus = (status: string) => {
-    assistantTurn.status = status;
-    (assistantTurn.statusLog ??= []).push(status);
-    deps.onStatus?.(status);
-  };
+  const reporter = createStepReporter((step) => {
+    assistantTurn.status = step.title;
+    const steps = (assistantTurn.steps ??= []);
+    if (!steps.includes(step)) steps.push(step);
+    deps.onStep?.(step);
+  });
 
   try {
     let result: WorkflowResult;
     if (isResuming && state.pendingAgentState) {
       const pending = state.pendingAgentState;
       state.pendingAgentState = null;
+      pending.ctx.reporter = reporter;
       result = await continueAnswer(pending, message, deps.signal);
     } else {
       result = await answerQuestion({
@@ -114,7 +117,7 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
         vault: deps.vault,
         indices: await deps.getIndices(),
         fuzzyApi: deps.getFuzzyApi(),
-        onStatus,
+        reporter,
         signal: deps.signal,
       });
     }

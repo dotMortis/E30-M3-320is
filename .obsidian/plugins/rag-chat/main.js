@@ -8049,6 +8049,113 @@ function clearIndicesCache() {
 	cachedPromise = null;
 }
 //#endregion
+//#region src/agent/step-reporter.ts
+function createStepReporter(onStep) {
+	let counter = 0;
+	const start = (input) => {
+		const step = {
+			id: `step-${++counter}`,
+			status: "running",
+			startedAt: Date.now(),
+			...input
+		};
+		onStep?.(step);
+		return step;
+	};
+	const update = (step, patch) => {
+		Object.assign(step, patch);
+		onStep?.(step);
+	};
+	const finish = (step, patch) => {
+		if (patch) Object.assign(step, patch);
+		step.status = "done";
+		step.finishedAt = Date.now();
+		step.durationMs = step.finishedAt - step.startedAt;
+		onStep?.(step);
+	};
+	const fail = (step, errorMessage) => {
+		step.status = "error";
+		step.errorMessage = errorMessage;
+		step.finishedAt = Date.now();
+		step.durationMs = step.finishedAt - step.startedAt;
+		onStep?.(step);
+	};
+	const record = (input) => {
+		const step = start(input);
+		finish(step);
+		return step;
+	};
+	return {
+		start,
+		update,
+		finish,
+		fail,
+		record
+	};
+}
+var NOOP_STEP_REPORTER = createStepReporter();
+//#endregion
+//#region src/agent/status-text.ts
+function mergeGrounding(map, chunks) {
+	for (const c of chunks) if (c.uri) map.set(c.uri, c);
+}
+function describeCall(fc) {
+	switch (fc.name) {
+		case "search_manual": return `durchsuche Handbuch nach "${String(fc.args?.query ?? "")}"`;
+		case "search_manual_fuzzy": return `durchsuche Handbuch (tippfehlertolerant) nach "${String(fc.args?.query ?? "")}"`;
+		case "get_manual_page": return `hole Seite ${String(fc.args?.seitencode ?? fc.args?.notePath ?? "")}`;
+		default: return `führe ${fc.name} aus`;
+	}
+}
+function extractToolHits(response) {
+	if (!Array.isArray(response.hits)) return void 0;
+	return response.hits.map((h) => ({
+		seitencode: h.seitencode,
+		sektion: h.sektion,
+		titel: h.titel
+	}));
+}
+function describeToolNarration(fc, response) {
+	if (typeof response.error === "string") return `Fehler bei ${fc.name}: ${response.error}`;
+	switch (fc.name) {
+		case "search_manual":
+		case "search_manual_fuzzy": {
+			const hits = Array.isArray(response.hits) ? response.hits : [];
+			if (hits.length === 0) return "Keine Treffer im Handbuch gefunden.";
+			const list = hits.map((h) => `${h.titel} [${h.seitencode || "Referenz"}]`).join(", ");
+			return `${hits.length} Treffer gefunden: ${list}.`;
+		}
+		case "get_manual_page": {
+			const seitencode = String(response.seitencode ?? "");
+			const titel = String(response.titel ?? "");
+			const fullText = typeof response.fullText === "string" ? response.fullText : "";
+			return `Seite "${titel}"${seitencode ? ` [${seitencode}]` : ""} vollständig geladen (${fullText.length} Zeichen).`;
+		}
+		default: return `Werkzeug ${fc.name} ausgeführt.`;
+	}
+}
+function describeEmbedding(model, outputDim) {
+	return `Such-Embedding mit Modell "${model}" erzeugt (${outputDim} Dimensionen).`;
+}
+function describeRetrieval(query, hitCount, usedFuzzy) {
+	return `${usedFuzzy ? "Hybrid-Suche (Volltext + Vektor), kombiniert mit tippfehlertoleranter Suche" : "Hybrid-Suche (Volltext + Vektor)"} nach "${query}": ${hitCount} Seite(n)/Abschnitt(e) gefunden.`;
+}
+function describeRoundDecision(round, maxRounds, functionCalls) {
+	if (functionCalls.length === 0) return `Runde ${round}/${maxRounds}: Modell hat genug Informationen und antwortet direkt, ohne weitere Werkzeugaufrufe.`;
+	const names = functionCalls.map((fc) => fc.name).join(", ");
+	return `Runde ${round}/${maxRounds}: Modell entscheidet sich für ${functionCalls.length} Werkzeugaufruf(e): ${names}.`;
+}
+function describeClarification(question, batchedToolNames) {
+	if (batchedToolNames.length === 0) return `Modell stellt eine Rückfrage: "${question}"`;
+	return `Modell stellt eine Rückfrage: "${question}" (zusätzlich in derselben Runde ausgeführt: ${batchedToolNames.join(", ")}).`;
+}
+function describeBudgetExhausted(round, maxRounds) {
+	return `Werkzeug-Budget erreicht (${round}/${maxRounds} Runden) - erstelle abschließende Antwort ohne weitere Werkzeugaufrufe.`;
+}
+function describeFinalAnswer(text, manualCitations, webCitations) {
+	return `Antwort erstellt (${text.trim().length} Zeichen) mit ${manualCitations.length} Handbuch-Zitat(en) und ${webCitations.length} Web-Zitat(en).`;
+}
+//#endregion
 //#region src/gemini/history.ts
 function buildHistoryContents(history) {
 	return history.map((t) => ({
@@ -8374,12 +8481,13 @@ async function readNoteOrNull(vault, notePath) {
 }
 //#endregion
 //#region src/agent/execute-tool.ts
-async function executeTool(fc, ctx, state) {
+async function executeTool(fc, ctx, state, step) {
 	switch (fc.name) {
 		case "search_manual": {
 			const query = String(fc.args?.query ?? "");
 			if (!query.trim()) return { error: "query darf nicht leer sein." };
-			const vector = await embedQuery(query, ctx.settings, ctx.onStatus, ctx.signal);
+			const onStatus = step ? (status) => ctx.reporter?.update(step, { title: status }) : void 0;
+			const vector = await embedQuery(query, ctx.settings, onStatus, ctx.signal);
 			return { hits: toCompactHits(await federatedHybridSearch(ctx.indices, query, vector, ctx.settings)) };
 		}
 		case "search_manual_fuzzy": {
@@ -8427,50 +8535,50 @@ async function executeTool(fc, ctx, state) {
 	}
 }
 //#endregion
-//#region src/agent/status-text.ts
-function mergeGrounding(map, chunks) {
-	for (const c of chunks) if (c.uri) map.set(c.uri, c);
-}
-function describeCall(fc) {
-	switch (fc.name) {
-		case "search_manual": return `durchsuche Handbuch nach "${String(fc.args?.query ?? "")}"`;
-		case "search_manual_fuzzy": return `durchsuche Handbuch (tippfehlertolerant) nach "${String(fc.args?.query ?? "")}"`;
-		case "get_manual_page": return `hole Seite ${String(fc.args?.seitencode ?? fc.args?.notePath ?? "")}`;
-		default: return `führe ${fc.name} aus`;
-	}
-}
-function describeResult(fc, response) {
-	if (typeof response.error === "string") return `Fehler: ${response.error}`;
-	switch (fc.name) {
-		case "search_manual":
-		case "search_manual_fuzzy": return `${Array.isArray(response.hits) ? response.hits.length : 0} Treffer`;
-		case "get_manual_page": return `Seite geladen (${String(response.seitencode ?? response.notePath ?? "")})`;
-		default: return "erledigt";
-	}
-}
-//#endregion
 //#region src/agent/loop.ts
 async function driveLoop(state, ctx) {
 	const maxRounds = ctx.settings.maxAgentRounds;
+	const reporter = ctx.reporter ?? NOOP_STEP_REPORTER;
 	const declarations = ctx.settings.enableFuzzySearchLeg ? FUNCTION_DECLARATIONS : FUNCTION_DECLARATIONS.filter((d) => d.name !== "search_manual_fuzzy");
 	while (state.round < maxRounds) {
 		if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 		state.round++;
-		ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: denke nach …`);
+		const roundStep = reporter.start({
+			kind: "llm_round",
+			round: state.round,
+			title: `Runde ${state.round}/${maxRounds}: Modell denkt nach …`,
+			model: ctx.settings.generationModel
+		});
 		const result = await generateWithTools(state.contents, declarations, ctx.settings, {
-			onStatus: ctx.onStatus,
+			onStatus: (status) => reporter.update(roundStep, { title: status }),
 			signal: ctx.signal
 		});
 		mergeGrounding(state.webCitations, result.groundingChunks);
 		const functionCalls = result.parts.filter((p) => Boolean(p.functionCall)).map((p) => p.functionCall);
-		if (functionCalls.length === 0) return {
-			status: "done",
-			text: result.parts.map((p) => p.text ?? "").join(""),
-			manualCitations: [...state.manualPages.values()],
-			webCitations: [...state.webCitations.values()],
-			webGroundingChunks: result.groundingChunks,
-			webGroundingSupports: result.groundingSupports
-		};
+		reporter.finish(roundStep, {
+			title: `Runde ${state.round}/${maxRounds}: Modellantwort erhalten`,
+			narration: describeRoundDecision(state.round, maxRounds, functionCalls)
+		});
+		if (functionCalls.length === 0) {
+			const text = result.parts.map((p) => p.text ?? "").join("");
+			const manualCitations = [...state.manualPages.values()];
+			const webCitations = [...state.webCitations.values()];
+			reporter.record({
+				kind: "final_answer",
+				round: state.round,
+				title: "Antwort fertiggestellt",
+				model: ctx.settings.generationModel,
+				narration: describeFinalAnswer(text, manualCitations, webCitations)
+			});
+			return {
+				status: "done",
+				text,
+				manualCitations,
+				webCitations,
+				webGroundingChunks: result.groundingChunks,
+				webGroundingSupports: result.groundingSupports
+			};
+		}
 		state.contents.push({
 			role: "model",
 			parts: result.parts
@@ -8480,14 +8588,26 @@ async function driveLoop(state, ctx) {
 		const responseParts = [];
 		for (const fc of otherCalls) {
 			if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-			ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: ${describeCall(fc)} …`);
+			const toolStep = reporter.start({
+				kind: "tool_call",
+				round: state.round,
+				title: describeCall(fc),
+				toolName: fc.name,
+				toolArgs: fc.args,
+				model: fc.name === "search_manual" ? ctx.settings.embeddingModel : void 0
+			});
 			let response;
 			try {
-				response = await executeTool(fc, ctx, state);
+				response = await executeTool(fc, ctx, state, toolStep);
 			} catch (err) {
 				response = { error: err instanceof Error ? err.message : String(err) };
 			}
-			ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: ${describeResult(fc, response)}`);
+			if (typeof response.error === "string") reporter.fail(toolStep, response.error);
+			else reporter.finish(toolStep, {
+				toolResult: response,
+				hits: extractToolHits(response),
+				narration: describeToolNarration(fc, response)
+			});
 			responseParts.push({ functionResponse: {
 				...fc.id ? { id: fc.id } : {},
 				name: fc.name,
@@ -8498,35 +8618,66 @@ async function driveLoop(state, ctx) {
 			role: "user",
 			parts: responseParts
 		});
-		if (askUserCall) return {
-			status: "awaiting_clarification",
-			question: String(askUserCall.args?.question ?? "Kannst du das bitte genauer beschreiben?"),
-			pending: {
-				state,
-				ctx: {
-					...ctx,
-					settings: { ...ctx.settings }
+		if (askUserCall) {
+			const question = String(askUserCall.args?.question ?? "Kannst du das bitte genauer beschreiben?");
+			reporter.record({
+				kind: "clarification",
+				round: state.round,
+				title: `Rückfrage an Nutzer: "${question}"`,
+				narration: describeClarification(question, otherCalls.map((fc) => fc.name))
+			});
+			return {
+				status: "awaiting_clarification",
+				question,
+				pending: {
+					state,
+					ctx: {
+						...ctx,
+						settings: { ...ctx.settings }
+					}
 				}
-			}
-		};
+			};
+		}
 	}
 	if (ctx.signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-	ctx.onStatus?.("Werkzeug-Budget erreicht - erstelle abschließende Antwort …");
+	reporter.record({
+		kind: "budget_exhausted",
+		round: state.round,
+		title: "Werkzeug-Budget erreicht",
+		narration: describeBudgetExhausted(state.round, maxRounds)
+	});
 	state.contents.push({
 		role: "user",
 		parts: [{ text: "Das Werkzeug-Budget für diese Frage ist aufgebraucht. Antworte jetzt direkt und vollständig mit den bisher verfügbaren Informationen, ohne weitere Werkzeugaufrufe." }]
 	});
+	const finalStep = reporter.start({
+		kind: "llm_round",
+		round: state.round,
+		title: "Erzwungene finale Antwort: Modell denkt nach …",
+		model: ctx.settings.generationModel
+	});
 	const final = await generateWithTools(state.contents, null, ctx.settings, {
 		includeGoogleSearch: false,
-		onStatus: ctx.onStatus,
+		onStatus: (status) => reporter.update(finalStep, { title: status }),
 		signal: ctx.signal
 	});
 	mergeGrounding(state.webCitations, final.groundingChunks);
+	const text = final.parts.map((p) => p.text ?? "").join("");
+	const manualCitations = [...state.manualPages.values()];
+	const webCitations = [...state.webCitations.values()];
+	reporter.finish(finalStep, { title: "Erzwungene finale Antwort erhalten" });
+	reporter.record({
+		kind: "final_answer",
+		round: state.round,
+		title: "Antwort fertiggestellt",
+		model: ctx.settings.generationModel,
+		narration: describeFinalAnswer(text, manualCitations, webCitations)
+	});
 	return {
 		status: "done",
-		text: final.parts.map((p) => p.text ?? "").join(""),
-		manualCitations: [...state.manualPages.values()],
-		webCitations: [...state.webCitations.values()],
+		text,
+		manualCitations,
+		webCitations,
 		webGroundingChunks: final.groundingChunks,
 		webGroundingSupports: final.groundingSupports
 	};
@@ -8637,30 +8788,54 @@ async function expandToParentNotes(hits, vault, referenceChunks) {
 }
 //#endregion
 //#region src/workflow.ts
-async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, onStatus, signal) {
-	const hybridHits = await federatedHybridSearch(indices, query, await embedQuery(query, settings, onStatus, signal), settings);
+async function baselineRetrieve(query, settings, indices, fuzzyApi, vault, reporter, signal) {
+	const embeddingStep = reporter.start({
+		kind: "embedding",
+		title: "Erzeuge Such-Embedding …",
+		model: settings.embeddingModel
+	});
+	const vector = await embedQuery(query, settings, (status) => reporter.update(embeddingStep, { title: status }), signal);
+	reporter.finish(embeddingStep, {
+		title: "Such-Embedding erzeugt",
+		narration: describeEmbedding(settings.embeddingModel, settings.outputDim)
+	});
+	const retrievalStep = reporter.start({
+		kind: "retrieval",
+		title: `Durchsuche Handbuch nach "${query}" …`
+	});
+	const hybridHits = await federatedHybridSearch(indices, query, vector, settings);
 	let hits = hybridHits;
+	let usedFuzzy = false;
 	if (settings.enableFuzzySearchLeg && fuzzyApi) try {
 		hits = mergeWithFuzzy(hybridHits, (await fuzzyApi.search(query, 10)).results, settings.topK, settings.rrfK);
+		usedFuzzy = true;
 	} catch {}
+	reporter.finish(retrievalStep, {
+		title: `Handbuchsuche nach "${query}" abgeschlossen`,
+		narration: describeRetrieval(query, hits.length, usedFuzzy),
+		hits: hits.map((h) => ({
+			seitencode: h.seitencode,
+			sektion: h.sektion,
+			titel: h.titel,
+			score: h.score
+		}))
+	});
 	return expandToParentNotes(hits, vault, indices.referenceChunks);
 }
 async function answerQuestion(params) {
-	const { question, history, settings, vault, indices, fuzzyApi, onStatus, signal } = params;
+	const { question, history, settings, vault, indices, fuzzyApi, reporter, signal } = params;
 	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
-	onStatus?.("Durchsuche Handbuch …");
-	const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, onStatus, signal);
-	onStatus?.(`Basis-Suche: ${baselineBlocks.length} Seite(n) gefunden`);
+	const rep = reporter ?? NOOP_STEP_REPORTER;
 	const result = await runAgentLoop({
 		question,
 		history,
-		baselineBlocks,
+		baselineBlocks: await baselineRetrieve(question, settings, indices, fuzzyApi, vault, rep, signal),
 		ctx: {
 			settings,
 			vault,
 			indices,
 			fuzzyApi,
-			onStatus,
+			reporter: rep,
 			signal
 		}
 	});
@@ -8760,16 +8935,18 @@ async function sendMessageUnguarded(state, message, deps) {
 	};
 	state.turns.push(assistantTurn);
 	deps.onTurnStarted?.(assistantTurn);
-	const onStatus = (status) => {
-		assistantTurn.status = status;
-		(assistantTurn.statusLog ??= []).push(status);
-		deps.onStatus?.(status);
-	};
+	const reporter = createStepReporter((step) => {
+		assistantTurn.status = step.title;
+		const steps = assistantTurn.steps ??= [];
+		if (!steps.includes(step)) steps.push(step);
+		deps.onStep?.(step);
+	});
 	try {
 		let result;
 		if (isResuming && state.pendingAgentState) {
 			const pending = state.pendingAgentState;
 			state.pendingAgentState = null;
+			pending.ctx.reporter = reporter;
 			result = await continueAnswer(pending, message, deps.signal);
 		} else result = await answerQuestion({
 			question: message,
@@ -8778,7 +8955,7 @@ async function sendMessageUnguarded(state, message, deps) {
 			vault: deps.vault,
 			indices: await deps.getIndices(),
 			fuzzyApi: deps.getFuzzyApi(),
-			onStatus,
+			reporter,
 			signal: deps.signal
 		});
 		applyResult(assistantTurn, state, result);
@@ -9019,18 +9196,100 @@ function renderWebCitations(turnEl, turn) {
 function showsStatus(turn) {
 	return turn.role === "assistant" && turn.text.length === 0 && Boolean(turn.status);
 }
-function renderStatusLog(turnEl, turn) {
-	const log = turn.statusLog;
-	const details = turnEl.createEl("details", { cls: "rag-chat-status-log" });
-	const summaryEl = details.createEl("summary", { text: `Rechercheverlauf (${log.length} Schritte)` });
-	const listEl = details.createEl("ul", { cls: "rag-chat-status-log-list" });
-	for (const line of log) listEl.createEl("li", {
-		cls: "rag-chat-status-log-item",
-		text: line
+var KIND_LABELS = {
+	retrieval: "Suche",
+	embedding: "Embedding",
+	llm_round: "Modell-Runde",
+	tool_call: "Werkzeugaufruf",
+	clarification: "Rückfrage",
+	budget_exhausted: "Budget",
+	final_answer: "Antwort"
+};
+var STATUS_LABELS = {
+	running: "läuft …",
+	done: "fertig",
+	error: "Fehler"
+};
+function formatDuration(step) {
+	if (typeof step.durationMs !== "number") return null;
+	return step.durationMs >= 1e3 ? `${(step.durationMs / 1e3).toFixed(1)}s` : `${step.durationMs}ms`;
+}
+function renderStepMeta(metaEl, step) {
+	if (step.round) metaEl.createSpan({
+		cls: "rag-chat-step-round",
+		text: `Runde ${step.round}`
 	});
+	if (step.model) metaEl.createSpan({
+		cls: "rag-chat-step-model",
+		text: `Modell: ${step.model}`
+	});
+	const duration = formatDuration(step);
+	if (duration) metaEl.createSpan({
+		cls: "rag-chat-step-duration",
+		text: duration
+	});
+}
+function renderJsonDetails(container, summaryText, cls, value) {
+	const jsonDetails = container.createEl("details", { cls: `rag-chat-step-json ${cls}` });
+	jsonDetails.createEl("summary", { text: summaryText });
+	jsonDetails.createEl("pre", { text: JSON.stringify(value, null, 2) });
+}
+function renderStepBody(bodyEl, step) {
+	if (step.narration) bodyEl.createDiv({
+		cls: "rag-chat-step-narration",
+		text: step.narration
+	});
+	if (step.errorMessage) bodyEl.createDiv({
+		cls: "rag-chat-step-error",
+		text: step.errorMessage
+	});
+	if (step.hits && step.hits.length > 0) {
+		const hitsList = bodyEl.createEl("ul", { cls: "rag-chat-step-hits" });
+		for (const hit of step.hits) {
+			const scoreText = typeof hit.score === "number" ? ` (${hit.score.toFixed(2)})` : "";
+			hitsList.createEl("li", { text: `${hit.titel} [${hit.seitencode || "Referenz"}]${scoreText}` });
+		}
+	}
+	if (step.toolArgs && Object.keys(step.toolArgs).length > 0) renderJsonDetails(bodyEl, "Argumente", "rag-chat-step-json-args", step.toolArgs);
+	if (step.toolResult) renderJsonDetails(bodyEl, "Ergebnis", "rag-chat-step-json-result", step.toolResult);
+}
+function fillStepEl(itemEl, step) {
+	itemEl.empty();
+	itemEl.addClass("rag-chat-step");
+	itemEl.addClass(`rag-chat-step-${step.status}`);
+	const details = itemEl.createEl("details", { cls: "rag-chat-step-details" });
+	if (step.status === "error") details.setAttribute("open", "");
+	const summary = details.createEl("summary", { cls: "rag-chat-step-summary" });
+	summary.createSpan({
+		cls: "rag-chat-step-kind",
+		text: KIND_LABELS[step.kind]
+	});
+	summary.createSpan({
+		cls: "rag-chat-step-title",
+		text: step.title
+	});
+	summary.createSpan({
+		cls: `rag-chat-step-status rag-chat-step-status-${step.status}`,
+		text: STATUS_LABELS[step.status]
+	});
+	renderStepMeta(details.createDiv({ cls: "rag-chat-step-meta" }), step);
+	renderStepBody(details.createDiv({ cls: "rag-chat-step-body" }), step);
+}
+function renderStatusLog(turnEl, turn) {
+	const steps = turn.steps;
+	const details = turnEl.createEl("details", { cls: "rag-chat-status-log" });
+	const summaryEl = details.createEl("summary", { text: `Rechercheverlauf (${steps.length} Schritte)` });
+	const listEl = details.createEl("ul", { cls: "rag-chat-status-log-list" });
+	const stepEls = /* @__PURE__ */ new Map();
+	for (const step of steps) {
+		const itemEl = listEl.createEl("li");
+		fillStepEl(itemEl, step);
+		stepEls.set(step.id, itemEl);
+	}
 	return {
 		listEl,
-		summaryEl
+		summaryEl,
+		stepEls
 	};
 }
 //#endregion
@@ -9101,7 +9360,7 @@ function fillTurn(turnEl, turn, app, parentComponent) {
 	renderManualCitations(turnEl, turn, app, parentComponent);
 	renderWebCitations(turnEl, turn);
 	let statusLogElements;
-	if (turn.statusLog && turn.statusLog.length > 0) statusLogElements = renderStatusLog(turnEl, turn);
+	if (turn.steps && turn.steps.length > 0) statusLogElements = renderStatusLog(turnEl, turn);
 	return {
 		textEl,
 		statusLogElements,
@@ -9360,7 +9619,7 @@ var RagChatView = class extends obsidian.ItemView {
 					currentTurn = turn;
 					appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered);
 				},
-				onStatus: () => {
+				onStep: () => {
 					if (this.closed || !currentTurn) return;
 					this.syncTurn(currentTurn);
 				},

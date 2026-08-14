@@ -32,7 +32,7 @@ export const FUZZY_LEG_RESULT_LIMIT = 10;
 export const FUZZY_RANK_OFFSET = 0;
 
 /** Maximum number of attempts (including the first) for retryable HTTP requests. */
-export const HTTP_MAX_ATTEMPTS = 3;
+export const HTTP_MAX_ATTEMPTS = 5;
 
 /** Base delay for exponential backoff between retryable HTTP requests, in ms. */
 export const HTTP_RETRY_BASE_DELAY_MS = 1000;

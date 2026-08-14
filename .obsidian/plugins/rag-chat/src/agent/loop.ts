@@ -5,12 +5,23 @@ import type { GeminiContent, GeminiPart } from "../gemini/types";
 import { buildContextXml, escapeXml } from "../retrieval/context-xml";
 import type { ChatTurn, ContextBlock } from "../retrieval/types";
 import { executeTool } from "./execute-tool";
-import { describeCall, describeResult, mergeGrounding } from "./status-text";
+import {
+  describeCall,
+  describeBudgetExhausted,
+  describeClarification,
+  describeFinalAnswer,
+  describeRoundDecision,
+  describeToolNarration,
+  extractToolHits,
+  mergeGrounding,
+} from "./status-text";
+import { NOOP_STEP_REPORTER } from "./step-reporter";
 import { FUNCTION_DECLARATIONS } from "./tool-declarations";
 import type { AgentLoopContext, AgentLoopState, AgentResult, PendingAgentState } from "./types";
 
 async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<AgentResult> {
   const maxRounds = ctx.settings.maxAgentRounds;
+  const reporter = ctx.reporter ?? NOOP_STEP_REPORTER;
   const declarations = ctx.settings.enableFuzzySearchLeg
     ? FUNCTION_DECLARATIONS
     : FUNCTION_DECLARATIONS.filter((d) => d.name !== "search_manual_fuzzy");
@@ -20,10 +31,15 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
       throw new Error(ABORT_ERROR_MESSAGE);
     }
     state.round++;
-    ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: denke nach …`);
+    const roundStep = reporter.start({
+      kind: "llm_round",
+      round: state.round,
+      title: `Runde ${state.round}/${maxRounds}: Modell denkt nach …`,
+      model: ctx.settings.generationModel,
+    });
 
     const result = await generateWithTools(state.contents, declarations, ctx.settings, {
-      onStatus: ctx.onStatus,
+      onStatus: (status) => reporter.update(roundStep, { title: status }),
       signal: ctx.signal,
     });
     mergeGrounding(state.webCitations, result.groundingChunks);
@@ -32,13 +48,27 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
       .filter((p): p is GeminiPart & { functionCall: NonNullable<GeminiPart["functionCall"]> } => Boolean(p.functionCall))
       .map((p) => p.functionCall);
 
+    reporter.finish(roundStep, {
+      title: `Runde ${state.round}/${maxRounds}: Modellantwort erhalten`,
+      narration: describeRoundDecision(state.round, maxRounds, functionCalls),
+    });
+
     if (functionCalls.length === 0) {
       const text = result.parts.map((p) => p.text ?? "").join("");
+      const manualCitations = [...state.manualPages.values()];
+      const webCitations = [...state.webCitations.values()];
+      reporter.record({
+        kind: "final_answer",
+        round: state.round,
+        title: "Antwort fertiggestellt",
+        model: ctx.settings.generationModel,
+        narration: describeFinalAnswer(text, manualCitations, webCitations),
+      });
       return {
         status: "done",
         text,
-        manualCitations: [...state.manualPages.values()],
-        webCitations: [...state.webCitations.values()],
+        manualCitations,
+        webCitations,
         webGroundingChunks: result.groundingChunks,
         webGroundingSupports: result.groundingSupports,
       };
@@ -59,14 +89,29 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
       if (ctx.signal?.aborted) {
         throw new Error(ABORT_ERROR_MESSAGE);
       }
-      ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: ${describeCall(fc)} …`);
+      const toolStep = reporter.start({
+        kind: "tool_call",
+        round: state.round,
+        title: describeCall(fc),
+        toolName: fc.name,
+        toolArgs: fc.args,
+        model: fc.name === "search_manual" ? ctx.settings.embeddingModel : undefined,
+      });
       let response: Record<string, unknown>;
       try {
-        response = await executeTool(fc, ctx, state);
+        response = await executeTool(fc, ctx, state, toolStep);
       } catch (err) {
         response = { error: err instanceof Error ? err.message : String(err) };
       }
-      ctx.onStatus?.(`Runde ${state.round}/${maxRounds}: ${describeResult(fc, response)}`);
+      if (typeof response.error === "string") {
+        reporter.fail(toolStep, response.error);
+      } else {
+        reporter.finish(toolStep, {
+          toolResult: response,
+          hits: extractToolHits(response),
+          narration: describeToolNarration(fc, response),
+        });
+      }
       responseParts.push({ functionResponse: { ...(fc.id ? { id: fc.id } : {}), name: fc.name, response } });
     }
     if (responseParts.length > 0) {
@@ -75,6 +120,12 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
 
     if (askUserCall) {
       const question = String(askUserCall.args?.question ?? "Kannst du das bitte genauer beschreiben?");
+      reporter.record({
+        kind: "clarification",
+        round: state.round,
+        title: `Rückfrage an Nutzer: "${question}"`,
+        narration: describeClarification(question, otherCalls.map((fc) => fc.name)),
+      });
       // Snapshot settings at the moment we pause: `ctx.settings` is normally
       // a live reference to the plugin's mutable settings object, which
       // could change while we're waiting on the user's answer (e.g. they
@@ -89,7 +140,12 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
   if (ctx.signal?.aborted) {
     throw new Error(ABORT_ERROR_MESSAGE);
   }
-  ctx.onStatus?.("Werkzeug-Budget erreicht - erstelle abschließende Antwort …");
+  reporter.record({
+    kind: "budget_exhausted",
+    round: state.round,
+    title: "Werkzeug-Budget erreicht",
+    narration: describeBudgetExhausted(state.round, maxRounds),
+  });
   state.contents.push({
     role: "user",
     parts: [
@@ -100,18 +156,34 @@ async function driveLoop(state: AgentLoopState, ctx: AgentLoopContext): Promise<
       },
     ],
   });
+  const finalStep = reporter.start({
+    kind: "llm_round",
+    round: state.round,
+    title: "Erzwungene finale Antwort: Modell denkt nach …",
+    model: ctx.settings.generationModel,
+  });
   const final = await generateWithTools(state.contents, null, ctx.settings, {
     includeGoogleSearch: false,
-    onStatus: ctx.onStatus,
+    onStatus: (status) => reporter.update(finalStep, { title: status }),
     signal: ctx.signal,
   });
   mergeGrounding(state.webCitations, final.groundingChunks);
   const text = final.parts.map((p) => p.text ?? "").join("");
+  const manualCitations = [...state.manualPages.values()];
+  const webCitations = [...state.webCitations.values()];
+  reporter.finish(finalStep, { title: "Erzwungene finale Antwort erhalten" });
+  reporter.record({
+    kind: "final_answer",
+    round: state.round,
+    title: "Antwort fertiggestellt",
+    model: ctx.settings.generationModel,
+    narration: describeFinalAnswer(text, manualCitations, webCitations),
+  });
   return {
     status: "done",
     text,
-    manualCitations: [...state.manualPages.values()],
-    webCitations: [...state.webCitations.values()],
+    manualCitations,
+    webCitations,
     webGroundingChunks: final.groundingChunks,
     webGroundingSupports: final.groundingSupports,
   };

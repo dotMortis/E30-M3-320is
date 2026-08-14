@@ -1,4 +1,6 @@
 import type { Vault } from "obsidian";
+import { describeEmbedding, describeRetrieval } from "./agent/status-text";
+import { NOOP_STEP_REPORTER, type StepReporter } from "./agent/step-reporter";
 import { runAgentLoop, resumeAgentLoop } from "./agent/loop";
 import type { PendingAgentState } from "./agent/types";
 import type { GroundingChunk, GroundingSupport } from "./gemini/types";
@@ -17,7 +19,7 @@ export interface WorkflowParams {
   vault: Vault;
   indices: CachedIndices;
   fuzzyApi: FuzzySearchApi | null;
-  onStatus?: (status: string) => void;
+  reporter?: StepReporter;
   signal?: AbortSignal;
 }
 
@@ -44,38 +46,59 @@ async function baselineRetrieve(
   indices: CachedIndices,
   fuzzyApi: FuzzySearchApi | null,
   vault: Vault,
-  onStatus?: (status: string) => void,
+  reporter: StepReporter,
   signal?: AbortSignal
 ): Promise<ContextBlock[]> {
-  const vector = await embedQuery(query, settings, onStatus, signal);
+  const embeddingStep = reporter.start({
+    kind: "embedding",
+    title: "Erzeuge Such-Embedding …",
+    model: settings.embeddingModel,
+  });
+  const vector = await embedQuery(query, settings, (status) => reporter.update(embeddingStep, { title: status }), signal);
+  reporter.finish(embeddingStep, {
+    title: "Such-Embedding erzeugt",
+    narration: describeEmbedding(settings.embeddingModel, settings.outputDim),
+  });
+
+  const retrievalStep = reporter.start({
+    kind: "retrieval",
+    title: `Durchsuche Handbuch nach "${query}" …`,
+  });
   const hybridHits = await federatedHybridSearch(indices, query, vector, settings);
 
   let hits = hybridHits;
+  let usedFuzzy = false;
   if (settings.enableFuzzySearchLeg && fuzzyApi) {
     try {
       const fuzzy = await fuzzyApi.search(query, FUZZY_LEG_RESULT_LIMIT);
       hits = mergeWithFuzzy(hybridHits, fuzzy.results, settings.topK, settings.rrfK);
+      usedFuzzy = true;
     } catch {}
   }
+
+  reporter.finish(retrievalStep, {
+    title: `Handbuchsuche nach "${query}" abgeschlossen`,
+    narration: describeRetrieval(query, hits.length, usedFuzzy),
+    hits: hits.map((h) => ({ seitencode: h.seitencode, sektion: h.sektion, titel: h.titel, score: h.score })),
+  });
 
   return expandToParentNotes(hits, vault, indices.referenceChunks);
 }
 
 export async function answerQuestion(params: WorkflowParams): Promise<WorkflowResult> {
-  const { question, history, settings, vault, indices, fuzzyApi, onStatus, signal } = params;
+  const { question, history, settings, vault, indices, fuzzyApi, reporter, signal } = params;
 
   if (signal?.aborted) {
     throw new Error(ABORT_ERROR_MESSAGE);
   }
-  onStatus?.("Durchsuche Handbuch …");
-  const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, onStatus, signal);
-  onStatus?.(`Basis-Suche: ${baselineBlocks.length} Seite(n) gefunden`);
+  const rep = reporter ?? NOOP_STEP_REPORTER;
+  const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, rep, signal);
 
   const result = await runAgentLoop({
     question,
     history,
     baselineBlocks,
-    ctx: { settings, vault, indices, fuzzyApi, onStatus, signal },
+    ctx: { settings, vault, indices, fuzzyApi, reporter: rep, signal },
   });
 
   if (result.status === "awaiting_clarification") {

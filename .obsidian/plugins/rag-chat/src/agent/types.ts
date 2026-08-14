@@ -1,4 +1,5 @@
 import type { Vault } from "obsidian";
+import type { StepReporter } from "./step-reporter";
 import type { GeminiContent, GroundingChunk, GroundingSupport } from "../gemini/types";
 import type { CachedIndices, ContextBlock, FuzzySearchApi, WebCitation } from "../retrieval/types";
 import type { RagChatSettings } from "../settings/types";
@@ -8,7 +9,7 @@ export interface AgentLoopContext {
   vault: Vault;
   indices: CachedIndices;
   fuzzyApi: FuzzySearchApi | null;
-  onStatus?: (status: string) => void;
+  reporter?: StepReporter;
   signal?: AbortSignal;
 }
 

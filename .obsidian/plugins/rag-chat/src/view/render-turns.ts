@@ -72,7 +72,7 @@ function fillTurn(
   renderWebCitations(turnEl, turn);
 
   let statusLogElements: StatusLogElements | undefined;
-  if (turn.statusLog && turn.statusLog.length > 0) {
+  if (turn.steps && turn.steps.length > 0) {
     statusLogElements = renderStatusLog(turnEl, turn);
   }
 

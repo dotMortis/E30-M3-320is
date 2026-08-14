@@ -4,6 +4,7 @@ import { fakeSettings } from "./fixtures/settings";
 import { DEFAULT_SETTINGS } from "../settings/types";
 import { TORQUE_BLOCK } from "./fixtures/context-blocks";
 import { fakeHit } from "./fixtures/retrieved-hits";
+import { createStepReporter } from "../agent/step-reporter";
 import type { FuzzySearchApi } from "../retrieval/types";
 
 const embedQuery = vi.fn();
@@ -54,7 +55,7 @@ describe("answerQuestion", () => {
       indices,
       fuzzyApi: null,
     });
-    expect(embedQuery).toHaveBeenCalledWith("und was ist mit 16-03?", expect.anything(), undefined, undefined);
+    expect(embedQuery).toHaveBeenCalledWith("und was ist mit 16-03?", expect.anything(), expect.any(Function), undefined);
     expect(federatedHybridSearch).toHaveBeenCalledWith(
       indices,
       "und was ist mit 16-03?",
@@ -111,11 +112,13 @@ describe("answerQuestion", () => {
     expect(mergeWithFuzzy).not.toHaveBeenCalled();
   });
 
-  it("calls onStatus with progress labels including the baseline hit count", async () => {
-    const onStatus = vi.fn();
-    await answerQuestion({ question: "Frage?", history: [], settings: fakeSettings(), vault, indices, fuzzyApi: null, onStatus });
-    expect(onStatus).toHaveBeenCalledWith("Durchsuche Handbuch …");
-    expect(onStatus).toHaveBeenCalledWith(expect.stringContaining("Basis-Suche:"));
+  it("reports embedding and retrieval steps to the provided reporter", async () => {
+    const onStep = vi.fn();
+    const reporter = createStepReporter(onStep);
+    await answerQuestion({ question: "Frage?", history: [], settings: fakeSettings(), vault, indices, fuzzyApi: null, reporter });
+    const kinds = onStep.mock.calls.map(([step]) => step.kind);
+    expect(kinds).toContain("embedding");
+    expect(kinds).toContain("retrieval");
   });
 
   it("maps a 'done' agent result to WorkflowDone", async () => {

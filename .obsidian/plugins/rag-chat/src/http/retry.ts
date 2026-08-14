@@ -1,4 +1,8 @@
-import { requestUrl, type RequestUrlParam, type RequestUrlResponse } from "obsidian";
+import {
+  requestUrl,
+  type RequestUrlParam,
+  type RequestUrlResponse,
+} from "obsidian";
 import {
   ABORT_ERROR_MESSAGE,
   HTTP_MAX_ATTEMPTS,
@@ -41,7 +45,10 @@ function extractErrorMessage(response: RequestUrlResponse): string | undefined {
  * instead - the underlying request may keep running in the background, but
  * our caller stops waiting and can retry/fail instead of hanging.
  */
-function requestWithTimeout(params: RequestUrlParam, signal?: AbortSignal): Promise<RequestUrlResponse> {
+function requestWithTimeout(
+  params: RequestUrlParam,
+  signal?: AbortSignal,
+): Promise<RequestUrlResponse> {
   if (signal?.aborted) return Promise.reject(new Error(ABORT_ERROR_MESSAGE));
   return new Promise((resolve, reject) => {
     let settled = false;
@@ -54,12 +61,18 @@ function requestWithTimeout(params: RequestUrlParam, signal?: AbortSignal): Prom
     };
     const onAbort = () => finish(() => reject(new Error(ABORT_ERROR_MESSAGE)));
     const timer = setTimeout(() => {
-      finish(() => reject(new Error(`Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1000}s`)));
+      finish(() =>
+        reject(
+          new Error(
+            `Zeitüberschreitung nach ${HTTP_REQUEST_TIMEOUT_MS / 1000}s`,
+          ),
+        ),
+      );
     }, HTTP_REQUEST_TIMEOUT_MS);
     signal?.addEventListener("abort", onAbort, { once: true });
     requestUrl({ ...params, throw: false }).then(
       (response) => finish(() => resolve(response)),
-      (err) => finish(() => reject(err))
+      (err) => finish(() => reject(err)),
     );
   });
 }
@@ -77,13 +90,16 @@ function computeDelayMs(attempt: number, retryAfterHeader?: string): number {
     const dateMs = Date.parse(retryAfterHeader);
     if (!Number.isNaN(dateMs)) return Math.max(0, dateMs - Date.now());
   }
-  const exponential = HTTP_RETRY_BASE_DELAY_MS * HTTP_RETRY_BACKOFF_FACTOR ** (attempt - 1);
+  const exponential =
+    HTTP_RETRY_BASE_DELAY_MS * HTTP_RETRY_BACKOFF_FACTOR ** (attempt - 1);
   const capped = Math.min(exponential, HTTP_RETRY_MAX_DELAY_MS);
   const jitter = (Math.random() * 2 - 1) * capped * HTTP_RETRY_JITTER_RATIO;
   return Math.max(0, Math.round(capped + jitter));
 }
 
-function retryAfterHeaderValue(response: RequestUrlResponse): string | undefined {
+function retryAfterHeaderValue(
+  response: RequestUrlResponse,
+): string | undefined {
   const headers = response.headers ?? {};
   return headers["retry-after"] ?? headers["Retry-After"];
 }
@@ -99,7 +115,11 @@ function retryAfterHeaderValue(response: RequestUrlResponse): string | undefined
  */
 export async function requestUrlWithRetry(
   params: RequestUrlParam,
-  opts?: { onStatus?: (status: string) => void; label?: string; signal?: AbortSignal }
+  opts?: {
+    onStatus?: (status: string) => void;
+    label?: string;
+    signal?: AbortSignal;
+  },
 ): Promise<RequestUrlResponse> {
   const label = opts?.label ?? "Anfrage";
   const signal = opts?.signal;
@@ -122,7 +142,7 @@ export async function requestUrlWithRetry(
       }
       const delay = computeDelayMs(attempt);
       opts?.onStatus?.(
-        `${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`
+        `${label} fehlgeschlagen (${message}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
       );
       await sleep(delay, signal);
       continue;
@@ -134,15 +154,19 @@ export async function requestUrlWithRetry(
     const retryable = RETRYABLE_STATUSES.has(response.status);
     if (!retryable || attempt === HTTP_MAX_ATTEMPTS) {
       const msg = extractErrorMessage(response);
-      throw new Error(`Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`);
+      throw new Error(
+        `Request failed, status ${response.status}${msg ? `: ${msg}` : ""}`,
+      );
     }
 
     const delay = computeDelayMs(attempt, retryAfterHeaderValue(response));
     opts?.onStatus?.(
-      `${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`
+      `${label} überlastet (Status ${response.status}) – erneuter Versuch in ${Math.round(delay / 1000)}s (${attempt}/${HTTP_MAX_ATTEMPTS}) …`,
     );
     await sleep(delay, signal);
   }
 
-  throw new Error(`Request failed, status ${lastResponse?.status ?? "unknown"}`);
+  throw new Error(
+    `Request failed, status ${lastResponse?.status ?? "unknown"}`,
+  );
 }

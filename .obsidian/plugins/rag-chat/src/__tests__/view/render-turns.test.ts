@@ -3,6 +3,7 @@ import { Component, type App } from "obsidian";
 import { makeEl, type FakeElement } from "../mocks/dom";
 import { createFakeWorkspace } from "../mocks/fake-app";
 import { REFERENCE_BLOCK, TORQUE_BLOCK } from "../fixtures/context-blocks";
+import { fakeStep } from "../fixtures/pipeline-steps";
 import type { ChatTurn } from "../../retrieval/types";
 
 vi.mock("obsidian", async () => {
@@ -103,14 +104,14 @@ describe("renderTurns", () => {
 
   it("renders the status log block when the turn has accumulated status lines", () => {
     const messagesEl = makeEl("div");
-    const turns: ChatTurn[] = [{ role: "assistant", text: "Antwort", statusLog: ["Schritt 1"] }];
+    const turns: ChatTurn[] = [{ role: "assistant", text: "Antwort", steps: [fakeStep({ title: "Schritt 1" })] }];
     const result = renderTurns(messagesEl as unknown as HTMLElement, turns, makeApp(), new Component());
     const turnEl = messagesEl.children[0];
     expect(turnEl.querySelectorAll("details.rag-chat-status-log")).toHaveLength(1);
     expect(result.statusLogElements.has(turns[0])).toBe(true);
   });
 
-  it("does not render a status log block when statusLog is empty or absent", () => {
+  it("does not render a status log block when steps is empty or absent", () => {
     const messagesEl = makeEl("div");
     const turns: ChatTurn[] = [{ role: "assistant", text: "Antwort" }];
     renderTurns(messagesEl as unknown as HTMLElement, turns, makeApp(), new Component());
@@ -167,7 +168,7 @@ describe("appendNewTurns", () => {
 
   it("does not collapse an expanded <details> status-log on an earlier turn when a new turn is appended", () => {
     const messagesEl = makeEl("div");
-    const turns: ChatTurn[] = [{ role: "assistant", text: "Antwort", statusLog: ["Schritt 1"] }];
+    const turns: ChatTurn[] = [{ role: "assistant", text: "Antwort", steps: [fakeStep({ title: "Schritt 1" })] }];
     const result = renderTurns(messagesEl as unknown as HTMLElement, turns, makeApp(), new Component());
     const details = messagesEl.children[0].querySelectorAll("details.rag-chat-status-log")[0];
     details.setAttribute("open", "true"); // simulate the user having expanded it
@@ -241,7 +242,7 @@ describe("updateTurn", () => {
 
   it("does not touch a different turn's expanded <details> status-log", () => {
     const messagesEl = makeEl("div");
-    const turnA: ChatTurn = { role: "assistant", text: "A", statusLog: ["a1"] };
+    const turnA: ChatTurn = { role: "assistant", text: "A", steps: [fakeStep({ title: "a1" })] };
     const turnB: ChatTurn = { role: "assistant", text: "", status: "..." };
     const turns: ChatTurn[] = [turnA, turnB];
     const result = renderTurns(messagesEl as unknown as HTMLElement, turns, makeApp(), new Component());

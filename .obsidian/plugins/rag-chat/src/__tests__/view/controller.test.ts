@@ -160,18 +160,18 @@ describe("sendMessage", () => {
     expect(statusAtStart).toBe("Setze Suche fort …");
   });
 
-  it("records onStatus calls into the assistant turn's statusLog and forwards them to deps.onStatus", async () => {
-    answerQuestion.mockImplementation(async ({ onStatus }: { onStatus?: (s: string) => void }) => {
-      onStatus?.("Durchsuche Handbuch …");
-      onStatus?.("Basis-Suche: 3 Seite(n) gefunden");
+  it("records reporter steps into the assistant turn's steps and forwards them to deps.onStep", async () => {
+    answerQuestion.mockImplementation(async ({ reporter }: { reporter?: any }) => {
+      const step = reporter.start({ kind: "retrieval", title: "Durchsuche Handbuch …" });
+      reporter.finish(step, { title: "Basis-Suche: 3 Seite(n) gefunden" });
       return DONE_RESULT;
     });
     const state = createChatSessionState();
-    const onStatus = vi.fn();
-    await sendMessage(state, "Frage?", { ...baseDeps, onStatus });
-    expect(state.turns[1].statusLog).toEqual(["Durchsuche Handbuch …", "Basis-Suche: 3 Seite(n) gefunden"]);
-    expect(onStatus).toHaveBeenCalledWith("Durchsuche Handbuch …");
-    expect(onStatus).toHaveBeenCalledWith("Basis-Suche: 3 Seite(n) gefunden");
+    const onStep = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onStep });
+    expect(state.turns[1].steps).toHaveLength(1);
+    expect(state.turns[1].steps![0].title).toBe("Basis-Suche: 3 Seite(n) gefunden");
+    expect(onStep).toHaveBeenCalledTimes(2);
   });
 
   it("sets an error message on the turn and calls onError when the workflow throws", async () => {

@@ -56,11 +56,47 @@ export interface WebCitation {
   title: string;
 }
 
+export type PipelineStepKind =
+  | "retrieval"
+  | "embedding"
+  | "llm_round"
+  | "tool_call"
+  | "clarification"
+  | "budget_exhausted"
+  | "final_answer";
+
+export type PipelineStepStatus = "running" | "done" | "error";
+
+export interface PipelineStepHit {
+  seitencode: string;
+  sektion: string;
+  titel: string;
+  score?: number;
+}
+
+export interface PipelineStep {
+  id: string;
+  kind: PipelineStepKind;
+  round?: number;
+  title: string;
+  narration?: string;
+  model?: string;
+  status: PipelineStepStatus;
+  startedAt: number;
+  finishedAt?: number;
+  durationMs?: number;
+  toolName?: string;
+  toolArgs?: Record<string, unknown>;
+  toolResult?: Record<string, unknown>;
+  hits?: PipelineStepHit[];
+  errorMessage?: string;
+}
+
 export interface ChatTurn {
   role: "user" | "assistant";
   text: string;
   status?: string;
-  statusLog?: string[];
+  steps?: PipelineStep[];
   citations?: ContextBlock[];
   webCitations?: WebCitation[];
   webGroundingChunks?: GroundingChunk[];

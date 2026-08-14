@@ -226,7 +226,7 @@ export class RagChatView extends ItemView {
           currentTurn = turn;
           appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered);
         },
-        onStatus: () => {
+        onStep: () => {
           if (this.closed || !currentTurn) return;
           this.syncTurn(currentTurn);
         },

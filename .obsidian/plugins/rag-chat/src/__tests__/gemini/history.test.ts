@@ -47,9 +47,9 @@ describe("buildHistoryContents", () => {
     expect(result.map((c) => c.parts[0].text)).toEqual(["erste Frage", "erste Antwort", "zweite Frage"]);
   });
 
-  it("ignores non-text fields on the turn (citations, statusLog, etc.)", () => {
+  it("ignores non-text fields on the turn (citations, steps, etc.)", () => {
     const history: ChatTurn[] = [
-      { role: "assistant", text: "Antwort", statusLog: ["step 1"], citations: [], isClarifying: true },
+      { role: "assistant", text: "Antwort", steps: [], citations: [], isClarifying: true },
     ];
     expect(buildHistoryContents(history)).toEqual([{ role: "model", parts: [{ text: "Antwort" }] }]);
   });

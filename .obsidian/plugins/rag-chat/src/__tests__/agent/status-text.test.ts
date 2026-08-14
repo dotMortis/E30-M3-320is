@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { describeCall, describeResult, mergeGrounding } from "../../agent/status-text";
+import {
+  describeBudgetExhausted,
+  describeCall,
+  describeClarification,
+  describeEmbedding,
+  describeFinalAnswer,
+  describeRetrieval,
+  describeRoundDecision,
+  describeToolNarration,
+  extractToolHits,
+  mergeGrounding,
+} from "../../agent/status-text";
 import type { GroundingChunk } from "../../gemini/types";
 import type { WebCitation } from "../../retrieval/types";
 
@@ -67,38 +78,119 @@ describe("describeCall", () => {
   });
 });
 
-describe("describeResult", () => {
+describe("describeToolNarration", () => {
   it("reports the error message when the response has an error field", () => {
-    expect(describeResult({ name: "search_manual", args: {} }, { error: "query darf nicht leer sein." })).toBe(
-      "Fehler: query darf nicht leer sein."
+    expect(describeToolNarration({ name: "search_manual", args: {} }, { error: "query darf nicht leer sein." })).toBe(
+      "Fehler bei search_manual: query darf nicht leer sein."
     );
   });
 
-  it("reports the hit count for search_manual", () => {
-    expect(describeResult({ name: "search_manual", args: {} }, { hits: [1, 2, 3] })).toBe("3 Treffer");
-  });
-
-  it("reports the hit count for search_manual_fuzzy", () => {
-    expect(describeResult({ name: "search_manual_fuzzy", args: {} }, { hits: [] })).toBe("0 Treffer");
-  });
-
-  it("treats a non-array hits field as 0 hits", () => {
-    expect(describeResult({ name: "search_manual", args: {} }, {})).toBe("0 Treffer");
-  });
-
-  it("reports the loaded page for get_manual_page, preferring seitencode", () => {
-    expect(describeResult({ name: "get_manual_page", args: {} }, { seitencode: "16-01", notePath: "16-01.md" })).toBe(
-      "Seite geladen (16-01)"
+  it("lists the hits for search_manual", () => {
+    const hits = [{ seitencode: "16-01", sektion: "Kraftstoff", titel: "Tank" }];
+    expect(describeToolNarration({ name: "search_manual", args: {} }, { hits })).toBe(
+      "1 Treffer gefunden: Tank [16-01]."
     );
   });
 
-  it("falls back to notePath for get_manual_page when seitencode is missing from the response", () => {
-    expect(describeResult({ name: "get_manual_page", args: {} }, { notePath: "16-01.md" })).toBe(
-      "Seite geladen (16-01.md)"
+  it("reports no hits for search_manual_fuzzy", () => {
+    expect(describeToolNarration({ name: "search_manual_fuzzy", args: {} }, { hits: [] })).toBe(
+      "Keine Treffer im Handbuch gefunden."
     );
   });
 
-  it("returns a generic 'erledigt' for an unknown tool name", () => {
-    expect(describeResult({ name: "unknown_tool", args: {} }, {})).toBe("erledigt");
+  it("treats a non-array hits field as no hits", () => {
+    expect(describeToolNarration({ name: "search_manual", args: {} }, {})).toBe("Keine Treffer im Handbuch gefunden.");
+  });
+
+  it("reports the loaded page for get_manual_page including character count", () => {
+    expect(
+      describeToolNarration(
+        { name: "get_manual_page", args: {} },
+        { seitencode: "16-01", titel: "Tank", fullText: "abcde" }
+      )
+    ).toBe('Seite "Tank" [16-01] vollständig geladen (5 Zeichen).');
+  });
+
+  it("omits the seitencode bracket for a reference doc with no seitencode", () => {
+    expect(
+      describeToolNarration({ name: "get_manual_page", args: {} }, { seitencode: "", titel: "Glossar", fullText: "abc" })
+    ).toBe('Seite "Glossar" vollständig geladen (3 Zeichen).');
+  });
+
+  it("returns a generic description for an unknown tool name", () => {
+    expect(describeToolNarration({ name: "unknown_tool", args: {} }, {})).toBe("Werkzeug unknown_tool ausgeführt.");
+  });
+});
+
+describe("extractToolHits", () => {
+  it("maps the response's hits to the compact PipelineStepHit shape", () => {
+    const hits = [{ notePath: "16-01.md", seitencode: "16-01", sektion: "Kraftstoff", titel: "Tank" }];
+    expect(extractToolHits({ hits })).toEqual([{ seitencode: "16-01", sektion: "Kraftstoff", titel: "Tank" }]);
+  });
+
+  it("returns undefined when there is no hits array", () => {
+    expect(extractToolHits({})).toBeUndefined();
+  });
+});
+
+describe("describeEmbedding", () => {
+  it("mentions the model and output dimensions", () => {
+    expect(describeEmbedding("gemini-embedding-2", 3072)).toBe(
+      'Such-Embedding mit Modell "gemini-embedding-2" erzeugt (3072 Dimensionen).'
+    );
+  });
+});
+
+describe("describeRetrieval", () => {
+  it("mentions hybrid search alone when fuzzy wasn't used", () => {
+    expect(describeRetrieval("Bremse", 5, false)).toBe(
+      'Hybrid-Suche (Volltext + Vektor) nach "Bremse": 5 Seite(n)/Abschnitt(e) gefunden.'
+    );
+  });
+
+  it("mentions the fuzzy leg when it was merged in", () => {
+    expect(describeRetrieval("Bremse", 5, true)).toContain("tippfehlertoleranter Suche");
+  });
+});
+
+describe("describeRoundDecision", () => {
+  it("describes answering directly when there are no function calls", () => {
+    expect(describeRoundDecision(1, 4, [])).toBe(
+      "Runde 1/4: Modell hat genug Informationen und antwortet direkt, ohne weitere Werkzeugaufrufe."
+    );
+  });
+
+  it("lists the chosen tool names", () => {
+    expect(describeRoundDecision(2, 4, [{ name: "search_manual", args: {} }, { name: "ask_user", args: {} }])).toBe(
+      "Runde 2/4: Modell entscheidet sich für 2 Werkzeugaufruf(e): search_manual, ask_user."
+    );
+  });
+});
+
+describe("describeClarification", () => {
+  it("mentions only the question when nothing else ran in the same round", () => {
+    expect(describeClarification("Welches Baujahr?", [])).toBe('Modell stellt eine Rückfrage: "Welches Baujahr?"');
+  });
+
+  it("mentions batched tool calls executed alongside the clarification", () => {
+    expect(describeClarification("Welches Baujahr?", ["search_manual"])).toBe(
+      'Modell stellt eine Rückfrage: "Welches Baujahr?" (zusätzlich in derselben Runde ausgeführt: search_manual).'
+    );
+  });
+});
+
+describe("describeBudgetExhausted", () => {
+  it("mentions the round count and total", () => {
+    expect(describeBudgetExhausted(4, 4)).toBe(
+      "Werkzeug-Budget erreicht (4/4 Runden) - erstelle abschließende Antwort ohne weitere Werkzeugaufrufe."
+    );
+  });
+});
+
+describe("describeFinalAnswer", () => {
+  it("reports text length and citation counts", () => {
+    expect(describeFinalAnswer("Antwort", [{}], [])).toBe(
+      "Antwort erstellt (7 Zeichen) mit 1 Handbuch-Zitat(en) und 0 Web-Zitat(en)."
+    );
   });
 });
