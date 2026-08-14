@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { App } from "obsidian";
+import { Component, type App } from "obsidian";
 import { makeEl, type FakeElement } from "../mocks/dom";
 import { createFakeWorkspace } from "../mocks/fake-app";
 
@@ -25,7 +25,7 @@ describe("wireInternalLinks", () => {
     const anchor = container.createEl("a", { cls: "internal-link", attr: { href: "16-01.md" } });
     const { app, workspace } = makeApp();
 
-    wireInternalLinks(container as unknown as HTMLElement, app);
+    wireInternalLinks(container as unknown as HTMLElement, app, new Component());
 
     const preventDefault = vi.fn();
     anchor.dispatch("click", { preventDefault });
@@ -39,7 +39,7 @@ describe("wireInternalLinks", () => {
     const anchor = container.createEl("a", { cls: "internal-link", attr: { href: "16-01.md" } });
     const { app, workspace } = makeApp();
 
-    wireInternalLinks(container as unknown as HTMLElement, app);
+    wireInternalLinks(container as unknown as HTMLElement, app, new Component());
     anchor.dispatch("click", { preventDefault: vi.fn(), ctrlKey: true });
 
     expect(workspace.openLinkTextCalls[0].newLeaf).toBe(true);
@@ -50,7 +50,7 @@ describe("wireInternalLinks", () => {
     const anchor = container.createEl("a", { cls: "internal-link" });
     const { app, workspace } = makeApp();
 
-    wireInternalLinks(container as unknown as HTMLElement, app);
+    wireInternalLinks(container as unknown as HTMLElement, app, new Component());
     anchor.dispatch("click", { preventDefault: vi.fn() });
 
     expect(workspace.openLinkTextCalls).toEqual([]);
@@ -61,7 +61,7 @@ describe("wireInternalLinks", () => {
     const anchor = container.createEl("a", { cls: "internal-link", attr: { href: "16-01.md" } });
     const { app, workspace } = makeApp();
 
-    wireInternalLinks(container as unknown as HTMLElement, app);
+    wireInternalLinks(container as unknown as HTMLElement, app, new Component());
     anchor.dispatch("mouseover", { type: "mouseover" });
 
     expect(workspace.triggerCalls).toHaveLength(1);
@@ -74,7 +74,7 @@ describe("wireInternalLinks", () => {
     const anchor = container.createEl("a", { cls: "internal-link" });
     const { app, workspace } = makeApp();
 
-    wireInternalLinks(container as unknown as HTMLElement, app);
+    wireInternalLinks(container as unknown as HTMLElement, app, new Component());
     anchor.dispatch("mouseover", {});
 
     expect(workspace.triggerCalls).toEqual([]);
@@ -86,7 +86,7 @@ describe("wireInternalLinks", () => {
     container.createEl("a", { cls: "internal-link", attr: { href: "b.md" } });
     const { app, workspace } = makeApp();
 
-    wireInternalLinks(container as unknown as HTMLElement, app);
+    wireInternalLinks(container as unknown as HTMLElement, app, new Component());
     for (const anchor of container.querySelectorAll("a.internal-link")) {
       (anchor as FakeElement).dispatch("click", { preventDefault: vi.fn() });
     }
@@ -99,8 +99,21 @@ describe("wireInternalLinks", () => {
     container.createEl("a", { cls: "external-link", attr: { href: "https://example.com" } });
     const { app, workspace } = makeApp();
 
-    wireInternalLinks(container as unknown as HTMLElement, app);
+    wireInternalLinks(container as unknown as HTMLElement, app, new Component());
     expect(container.querySelectorAll("a.internal-link")).toHaveLength(0);
+    expect(workspace.openLinkTextCalls).toEqual([]);
+  });
+
+  it("registers listeners via the component so they're removed when the component unloads", () => {
+    const container = makeEl("div");
+    const anchor = container.createEl("a", { cls: "internal-link", attr: { href: "16-01.md" } });
+    const { app, workspace } = makeApp();
+    const component = new Component();
+
+    wireInternalLinks(container as unknown as HTMLElement, app, component);
+    component.unload();
+    anchor.dispatch("click", { preventDefault: vi.fn() });
+
     expect(workspace.openLinkTextCalls).toEqual([]);
   });
 });

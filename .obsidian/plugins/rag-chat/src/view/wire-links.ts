@@ -1,14 +1,19 @@
-import { Keymap, type App } from "obsidian";
+import { Keymap, type App, type Component } from "obsidian";
 
-export function wireInternalLinks(el: HTMLElement, app: App): void {
+/**
+ * Wires up internal-link anchors within `el`. Listeners are registered via
+ * `component.registerDomEvent` so they're automatically torn down when
+ * `component` unloads, instead of leaking for the lifetime of the view.
+ */
+export function wireInternalLinks(el: HTMLElement, app: App, component: Component): void {
   const sourcePath = "";
   el.querySelectorAll<HTMLAnchorElement>("a.internal-link").forEach((a) => {
-    a.addEventListener("click", (evt: MouseEvent) => {
+    component.registerDomEvent(a, "click", (evt: MouseEvent) => {
       evt.preventDefault();
       const href = a.getAttribute("href");
       if (href) void app.workspace.openLinkText(href, sourcePath, Keymap.isModEvent(evt));
     });
-    a.addEventListener("mouseover", (evt: MouseEvent) => {
+    component.registerDomEvent(a, "mouseover", (evt: MouseEvent) => {
       const href = a.getAttribute("href");
       if (!href) return;
       app.workspace.trigger("hover-link", {

@@ -9,6 +9,7 @@ const readFileSync = vi.fn();
 vi.mock("node:fs", () => ({ readFileSync }));
 
 let getIndices: typeof import("../../retrieval/index-cache").getIndices;
+let clearIndicesCache: typeof import("../../retrieval/index-cache").clearIndicesCache;
 
 const REFERENCE_CHUNKS_JSON = JSON.stringify({
   "row-1": { text: "Sonderwerkzeug-Text", titel: "Sonderwerkzeuge", notePath: "Referenz/Sonderwerkzeuge.md" },
@@ -22,7 +23,7 @@ beforeEach(async () => {
   loadTextIndex.mockResolvedValue({ marker: "textDb" });
   loadVectorShard.mockImplementation(async (path: string) => ({ marker: "vectorDb", path }));
   readFileSync.mockReturnValue(REFERENCE_CHUNKS_JSON);
-  ({ getIndices } = await import("../../retrieval/index-cache"));
+  ({ getIndices, clearIndicesCache } = await import("../../retrieval/index-cache"));
 });
 
 describe("getIndices", () => {
@@ -73,5 +74,50 @@ describe("getIndices", () => {
     const first = await getIndices("/plugin/dir", fakeManifest());
     const second = await getIndices("/plugin/dir", fakeManifest());
     expect(second).toBe(first);
+  });
+
+  it("reloads when the manifest's corpusHash changes, even for the same pluginDir", async () => {
+    await getIndices("/plugin/dir", fakeManifest({ corpusHash: "hash-a" }));
+    await getIndices("/plugin/dir", fakeManifest({ corpusHash: "hash-b" }));
+    expect(loadTextIndex).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not reload when corpusHash and pluginDir are both unchanged", async () => {
+    await getIndices("/plugin/dir", fakeManifest({ corpusHash: "hash-a" }));
+    await getIndices("/plugin/dir", fakeManifest({ corpusHash: "hash-a" }));
+    expect(loadTextIndex).toHaveBeenCalledTimes(1);
+  });
+
+  it("caches the in-flight promise: concurrent calls before the first resolves only load once", async () => {
+    let resolveLoad!: () => void;
+    loadTextIndex.mockReturnValue(
+      new Promise((resolve) => {
+        resolveLoad = () => resolve({ marker: "textDb" });
+      })
+    );
+    const first = getIndices("/plugin/dir", fakeManifest());
+    const second = getIndices("/plugin/dir", fakeManifest());
+    resolveLoad();
+    const [firstResult, secondResult] = await Promise.all([first, second]);
+    expect(loadTextIndex).toHaveBeenCalledTimes(1);
+    expect(secondResult).toBe(firstResult);
+  });
+
+  it("does not cache a failed load, allowing the next call to retry", async () => {
+    loadTextIndex.mockRejectedValueOnce(new Error("disk error"));
+    await expect(getIndices("/plugin/dir", fakeManifest())).rejects.toThrow("disk error");
+
+    loadTextIndex.mockResolvedValueOnce({ marker: "textDb" });
+    const result = await getIndices("/plugin/dir", fakeManifest());
+    expect(result.textDb).toEqual({ marker: "textDb" });
+  });
+
+  describe("clearIndicesCache", () => {
+    it("forces the next getIndices call to reload from disk even with an unchanged key", async () => {
+      await getIndices("/plugin/dir", fakeManifest());
+      clearIndicesCache();
+      await getIndices("/plugin/dir", fakeManifest());
+      expect(loadTextIndex).toHaveBeenCalledTimes(2);
+    });
   });
 });

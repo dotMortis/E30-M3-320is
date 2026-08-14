@@ -275,6 +275,21 @@
   margin: 2px 0;
 }
 
+.rag-chat-hidden {
+  display: none !important;
+}
+
+.rag-chat-clarification-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 8px;
+}
+
+.rag-chat-cancel-clarification {
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
 .rag-chat-input-row {
   display: flex;
   gap: 6px;

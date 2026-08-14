@@ -18,18 +18,30 @@ export class RagChatSettingTab extends PluginSettingTab {
       text: "Google (gemini-embedding-2 + gemini-3.6-flash) is used for both query embeddings and generation.",
     });
 
+    let apiKeyInputEl: HTMLInputElement | undefined;
     new Setting(containerEl)
       .setName("Google API key (GEMINI_API_KEY)")
       .setDesc("Required for query embeddings and generation.")
-      .addText((text) =>
+      .addText((text) => {
         text
           .setPlaceholder("AIza...")
           .setValue(this.plugin.settings.geminiApiKey)
           .onChange(async (value) => {
             this.plugin.settings.geminiApiKey = value.trim();
             await this.plugin.saveSettings();
-          })
-      );
+          });
+        apiKeyInputEl = text.inputEl;
+        apiKeyInputEl.type = "password";
+      })
+      .addButton((button) => {
+        button.setIcon("eye").setTooltip("API-Schlüssel anzeigen/verbergen");
+        button.onClick(() => {
+          if (!apiKeyInputEl) return;
+          const revealed = apiKeyInputEl.type === "text";
+          apiKeyInputEl.type = revealed ? "password" : "text";
+          button.setIcon(revealed ? "eye" : "eye-off");
+        });
+      });
 
     new Setting(containerEl)
       .setName("Embedding model")
@@ -38,6 +50,7 @@ export class RagChatSettingTab extends PluginSettingTab {
         text.setValue(this.plugin.settings.embeddingModel).onChange(async (value) => {
           this.plugin.settings.embeddingModel = value.trim();
           await this.plugin.saveSettings();
+          await this.plugin.revalidateManifest();
         })
       );
 
@@ -59,6 +72,7 @@ export class RagChatSettingTab extends PluginSettingTab {
           if (!Number.isNaN(n) && n > 0) {
             this.plugin.settings.outputDim = n;
             await this.plugin.saveSettings();
+            await this.plugin.revalidateManifest();
           }
         })
       );

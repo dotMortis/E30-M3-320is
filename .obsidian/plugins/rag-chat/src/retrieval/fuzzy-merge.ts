@@ -1,38 +1,36 @@
-import { maxScore } from "./rrf";
+import { rrfMerge } from "./rrf";
+import { FUZZY_RANK_OFFSET } from "../constants";
 import type { FuzzySearchHit, RetrievedHit } from "./types";
 
-const HYBRID_LEG_WEIGHT = 0.7;
-const FUZZY_LEG_WEIGHT = 0.3;
+/**
+ * Folds the fuzzy (vault-search) leg into the already-fused hybrid results
+ * via the same Reciprocal Rank Fusion model used for text+vector (see
+ * retrieval/rrf.ts), keyed by notePath rather than chunk rowId - a note can
+ * have multiple hybrid chunks; the fuzzy leg only knows about whole notes.
+ * `rrfK` is the same fusion constant used for the text/vector legs
+ * (settings.rrfK), keeping a single tunable knob for all fusion stages.
+ */
+export function mergeWithFuzzy(
+  hybridHits: RetrievedHit[],
+  fuzzyHits: FuzzySearchHit[],
+  topK: number,
+  rrfK: number
+): RetrievedHit[] {
+  const hybridLeg = hybridHits.map((h, i) => ({ key: h.notePath, rank: i, item: h }));
+  const fuzzyLeg = fuzzyHits.map((f, i) => ({
+    key: f.notePath,
+    rank: i + FUZZY_RANK_OFFSET,
+    item: {
+      score: 0,
+      rowId: `${f.notePath}::fuzzy`,
+      notePath: f.notePath,
+      seitencode: f.seitencode,
+      sektion: f.sektion,
+      titel: f.titel,
+      kind: "text" as const,
+    },
+  }));
 
-export function mergeWithFuzzy(hybridHits: RetrievedHit[], fuzzyHits: FuzzySearchHit[], topK: number): RetrievedHit[] {
-  const maxHybrid = maxScore(hybridHits);
-  const merged = new Map<string, RetrievedHit>();
-
-  for (const h of hybridHits) {
-    const normalized = maxHybrid > 0 ? h.score / maxHybrid : 0;
-    merged.set(h.notePath, { ...h, score: normalized * HYBRID_LEG_WEIGHT });
-  }
-
-  const n = fuzzyHits.length;
-  for (let i = 0; i < n; i++) {
-    const f = fuzzyHits[i];
-    const rankScore = n > 1 ? 1 - i / (n - 1) : 1;
-    const contribution = rankScore * FUZZY_LEG_WEIGHT;
-    const existing = merged.get(f.notePath);
-    if (existing) {
-      existing.score += contribution;
-    } else {
-      merged.set(f.notePath, {
-        score: contribution,
-        rowId: `${f.notePath}::fuzzy`,
-        notePath: f.notePath,
-        seitencode: f.seitencode,
-        sektion: f.sektion,
-        titel: f.titel,
-        kind: "text",
-      });
-    }
-  }
-
-  return [...merged.values()].sort((a, b) => b.score - a.score).slice(0, topK);
+  const merged = rrfMerge([hybridLeg, fuzzyLeg], rrfK);
+  return merged.slice(0, topK).map(({ item, score }) => ({ ...item, score }));
 }

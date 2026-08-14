@@ -2,20 +2,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Vault } from "obsidian";
 import { resetObsidianMocks } from "../mocks/obsidian";
 import { FakeFileSystemAdapter } from "../mocks/fake-app";
-import { fakeManifest } from "../fixtures/manifest";
 
 vi.mock("obsidian", async () => {
   const mock = await import("../mocks/obsidian");
   return mock;
 });
 
-let getPluginDir: typeof import("../../plugin/manifest").getPluginDir;
-let getPluginDirFullPath: typeof import("../../plugin/manifest").getPluginDirFullPath;
-let readManifest: typeof import("../../plugin/manifest").readManifest;
+let getPluginDir: typeof import("../../plugin/paths").getPluginDir;
+let getPluginDirFullPath: typeof import("../../plugin/paths").getPluginDirFullPath;
 
 beforeEach(async () => {
   resetObsidianMocks();
-  ({ getPluginDir, getPluginDirFullPath, readManifest } = await import("../../plugin/manifest"));
+  ({ getPluginDir, getPluginDirFullPath } = await import("../../plugin/paths"));
 });
 
 describe("getPluginDir", () => {
@@ -40,21 +38,5 @@ describe("getPluginDirFullPath", () => {
     const vault = { adapter: {} } as unknown as Vault;
     const result = getPluginDirFullPath(vault, { dir: ".obsidian/plugins/rag-chat", id: "rag-chat" });
     expect(result).toBe(".obsidian/plugins/rag-chat");
-  });
-});
-
-describe("readManifest", () => {
-  it("reads and parses rag-manifest.json from pluginDir via the vault adapter", async () => {
-    const manifest = fakeManifest();
-    const adapter = new FakeFileSystemAdapter({ "/plugin/dir/rag-manifest.json": JSON.stringify(manifest) });
-    const vault = { adapter } as unknown as Vault;
-    const result = await readManifest(vault, "/plugin/dir");
-    expect(result).toEqual(manifest);
-  });
-
-  it("propagates a read failure (e.g. missing file) to the caller", async () => {
-    const adapter = new FakeFileSystemAdapter({});
-    const vault = { adapter } as unknown as Vault;
-    await expect(readManifest(vault, "/plugin/dir")).rejects.toThrow();
   });
 });

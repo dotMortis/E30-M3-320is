@@ -7,6 +7,13 @@ import type { RagChatSettings } from "../settings/types";
 export interface ChatSessionState {
   turns: ChatTurn[];
   pendingAgentState: PendingAgentState | null;
+  /**
+   * True while a sendMessage() call is in flight for this session. Guarded
+   * here (not just via the view's own `busy` UI flag) so any caller -
+   * including a second concurrent invocation from a different code path -
+   * can't kick off a second workflow against the same session state.
+   */
+  busy: boolean;
 }
 
 export interface SendMessageDeps {
@@ -17,10 +24,21 @@ export interface SendMessageDeps {
   onTurnStarted?: (assistantTurn: ChatTurn) => void;
   onStatus?: (status: string) => void;
   onError?: (message: string) => void;
+  signal?: AbortSignal;
 }
 
 export function createChatSessionState(): ChatSessionState {
-  return { turns: [], pendingAgentState: null };
+  return { turns: [], pendingAgentState: null, busy: false };
+}
+
+/**
+ * Abandons a pending ask_user clarification without answering it, so the
+ * next message the user sends is routed to a fresh answerQuestion() call
+ * instead of being blindly submitted as "the answer" to a question they may
+ * no longer even remember (or that's no longer relevant).
+ */
+export function abandonPendingClarification(state: ChatSessionState): void {
+  state.pendingAgentState = null;
 }
 
 export function inputPlaceholder(state: ChatSessionState): string {
@@ -50,6 +68,17 @@ function applyResult(turn: ChatTurn, state: ChatSessionState, result: WorkflowRe
 }
 
 export async function sendMessage(state: ChatSessionState, message: string, deps: SendMessageDeps): Promise<void> {
+  if (state.busy) return;
+  state.busy = true;
+
+  try {
+    await sendMessageUnguarded(state, message, deps);
+  } finally {
+    state.busy = false;
+  }
+}
+
+async function sendMessageUnguarded(state: ChatSessionState, message: string, deps: SendMessageDeps): Promise<void> {
   const isResuming = state.pendingAgentState !== null;
 
   const history = [...state.turns];
@@ -73,7 +102,7 @@ export async function sendMessage(state: ChatSessionState, message: string, deps
     if (isResuming && state.pendingAgentState) {
       const pending = state.pendingAgentState;
       state.pendingAgentState = null;
-      result = await continueAnswer(pending, message);
+      result = await continueAnswer(pending, message, deps.signal);
     } else {
       result = await answerQuestion({
         question: message,
@@ -83,6 +112,7 @@ export async function sendMessage(state: ChatSessionState, message: string, deps
         indices: await deps.getIndices(),
         fuzzyApi: deps.getFuzzyApi(),
         onStatus,
+        signal: deps.signal,
       });
     }
     applyResult(assistantTurn, state, result);

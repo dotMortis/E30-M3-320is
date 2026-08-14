@@ -10,10 +10,13 @@ vi.mock("../../workflow", () => ({ answerQuestion, continueAnswer }));
 let createChatSessionState: typeof import("../../view/controller").createChatSessionState;
 let inputPlaceholder: typeof import("../../view/controller").inputPlaceholder;
 let sendMessage: typeof import("../../view/controller").sendMessage;
+let abandonPendingClarification: typeof import("../../view/controller").abandonPendingClarification;
 
 beforeEach(async () => {
   vi.clearAllMocks();
-  ({ createChatSessionState, inputPlaceholder, sendMessage } = await import("../../view/controller"));
+  ({ createChatSessionState, inputPlaceholder, sendMessage, abandonPendingClarification } = await import(
+    "../../view/controller"
+  ));
 });
 
 const baseDeps = {
@@ -127,7 +130,7 @@ describe("sendMessage", () => {
 
     await sendMessage(state, "1988", baseDeps);
 
-    expect(continueAnswer).toHaveBeenCalledWith(pending, "1988");
+    expect(continueAnswer).toHaveBeenCalledWith(pending, "1988", undefined);
     expect(answerQuestion).not.toHaveBeenCalled();
     expect(state.pendingAgentState).toBeNull();
   });
@@ -194,5 +197,46 @@ describe("sendMessage", () => {
     const state = createChatSessionState();
     await sendMessage(state, "Frage?", baseDeps);
     expect(state.turns[1].text).toBe("Fehler: plain string failure");
+  });
+
+  it("ignores a concurrent sendMessage call while one is already in flight for the same session", async () => {
+    let resolveFirst!: (v: typeof DONE_RESULT) => void;
+    answerQuestion.mockReturnValueOnce(new Promise((resolve) => (resolveFirst = resolve)));
+    const state = createChatSessionState();
+
+    const first = sendMessage(state, "Erste Frage", baseDeps);
+    const second = sendMessage(state, "Zweite Frage (sollte ignoriert werden)", baseDeps);
+
+    resolveFirst(DONE_RESULT);
+    await Promise.all([first, second]);
+
+    expect(answerQuestion).toHaveBeenCalledTimes(1);
+    // Only the first message's user+assistant turns were pushed.
+    expect(state.turns).toHaveLength(2);
+    expect(state.turns[0]).toEqual({ role: "user", text: "Erste Frage" });
+  });
+
+  it("allows a new sendMessage call once the previous one has finished", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    await sendMessage(state, "Erste Frage", baseDeps);
+    await sendMessage(state, "Zweite Frage", baseDeps);
+    expect(answerQuestion).toHaveBeenCalledTimes(2);
+    expect(state.turns).toHaveLength(4);
+  });
+});
+
+describe("abandonPendingClarification", () => {
+  it("clears pendingAgentState so the next message starts a fresh answerQuestion", async () => {
+    const state = createChatSessionState();
+    state.pendingAgentState = { state: {}, ctx: {} } as any;
+
+    abandonPendingClarification(state);
+    expect(state.pendingAgentState).toBeNull();
+
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    await sendMessage(state, "Neue, unabhängige Frage", baseDeps);
+    expect(answerQuestion).toHaveBeenCalled();
+    expect(continueAnswer).not.toHaveBeenCalled();
   });
 });

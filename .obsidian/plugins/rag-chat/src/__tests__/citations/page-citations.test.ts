@@ -30,6 +30,25 @@ describe("linkifyCitations", () => {
     expect(result).not.toContain("[[");
   });
 
+  it("HTML-escapes an unmatched code containing markup instead of injecting it raw", () => {
+    const text = '[Seite "><img src=x onerror=alert(1)>]';
+    const result = linkifyCitations(text, [TORQUE_BLOCK]);
+    expect(result).not.toContain("<img");
+    expect(result).toContain("&lt;img src=x onerror=alert(1)&gt;");
+    expect(result).toContain("&quot;&gt;");
+  });
+
+  it("HTML-escapes an ambiguous code's summary text instead of injecting it raw", () => {
+    const text = '[Seite <script>alert(1)</script>]';
+    const collisionCitations = [
+      { ...TORQUE_BLOCK, seitencode: "<script>alert(1)</script>" },
+      { ...TORQUE_COLLISION_BLOCK, seitencode: "<script>alert(1)</script>" },
+    ];
+    const result = linkifyCitations(text, collisionCitations);
+    expect(result).not.toContain("<script>");
+    expect(result).toContain("<summary>&lt;script&gt;alert(1)&lt;/script&gt;</summary>");
+  });
+
   it("renders an ambiguous seitencode (collision across >1 retrieved page) as a details/summary block", () => {
     const text = "Siehe [Seite 11-09] für Details.";
     const result = linkifyCitations(text, [TORQUE_BLOCK, TORQUE_COLLISION_BLOCK]);

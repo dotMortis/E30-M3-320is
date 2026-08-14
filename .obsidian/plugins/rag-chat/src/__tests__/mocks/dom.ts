@@ -5,7 +5,11 @@ export interface FakeElement {
   classes: Set<string>;
   text: string;
   value: string;
+  type: string;
   disabled: boolean;
+  scrollTop: number;
+  scrollHeight: number;
+  clientHeight: number;
   attrs: Record<string, string>;
   listeners: Record<string, ((evt: unknown) => void)[]>;
   classList: {
@@ -21,6 +25,7 @@ export interface FakeElement {
   ): FakeElement;
   addClass(cls: string): FakeElement;
   removeClass(cls: string): FakeElement;
+  toggleClass(classes: string | string[], value: boolean): void;
   empty(): FakeElement;
   setText(text: string): FakeElement;
   appendText(text: string): FakeElement;
@@ -63,7 +68,11 @@ export function makeEl(tag: string, parent: FakeElement | null = null): FakeElem
     classes: new Set(),
     text: "",
     value: "",
+    type: "text",
     disabled: false,
+    scrollTop: 0,
+    scrollHeight: 0,
+    clientHeight: 0,
     attrs: {},
     listeners: {},
     classList: {
@@ -103,6 +112,13 @@ export function makeEl(tag: string, parent: FakeElement | null = null): FakeElem
       el.classes.delete(cls);
       return el;
     },
+    toggleClass(classes, value) {
+      const list = Array.isArray(classes) ? classes : [classes];
+      for (const c of list) {
+        if (value) el.classes.add(c);
+        else el.classes.delete(c);
+      }
+    },
     empty() {
       el.children = [];
       return el;
@@ -123,7 +139,9 @@ export function makeEl(tag: string, parent: FakeElement | null = null): FakeElem
     },
     scrollIntoView() {},
     focus() {},
-    scrollTo() {},
+    scrollTo(opts) {
+      if (typeof opts?.top === "number") el.scrollTop = opts.top;
+    },
     addEventListener(type, fn) {
       (el.listeners[type] ??= []).push(fn);
     },

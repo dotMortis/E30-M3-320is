@@ -3,8 +3,7 @@ import { rrfMerge } from "./rrf";
 import type { RagMetadata } from "./orama-schema";
 import type { RagChatSettings } from "../settings/types";
 import type { CachedIndices, RetrievedHit } from "./types";
-
-const CANDIDATE_POOL_LIMIT = 5000;
+import { CANDIDATE_POOL_LIMIT } from "../constants";
 
 export async function federatedHybridSearch(
   indices: CachedIndices,
@@ -30,16 +29,23 @@ export async function federatedHybridSearch(
   );
   const vectorHits = vectorResultsPerShard.flatMap((r) => r.hits);
 
-  const textHitsSorted = [...textResult.hits]
-    .sort((a, b) => b.score - a.score)
-    .map((h) => ({ document: h.document as unknown as RagMetadata, score: h.score }));
-  const vectorHitsSorted = [...vectorHits]
-    .sort((a, b) => b.score - a.score)
-    .map((h) => ({ document: h.document as unknown as RagMetadata, score: h.score }));
+  const textHitsSorted = [...textResult.hits].sort((a, b) => b.score - a.score);
+  const vectorHitsSorted = [...vectorHits].sort((a, b) => b.score - a.score);
 
-  const merged = rrfMerge(textHitsSorted, vectorHitsSorted, settings.rrfK);
+  const textLeg = textHitsSorted.map((h, i) => ({
+    key: (h.document as unknown as RagMetadata).rowId,
+    rank: i,
+    item: h.document as unknown as RagMetadata,
+  }));
+  const vectorLeg = vectorHitsSorted.map((h, i) => ({
+    key: (h.document as unknown as RagMetadata).rowId,
+    rank: i,
+    item: h.document as unknown as RagMetadata,
+  }));
 
-  return merged.slice(0, settings.topK).map(({ score, doc }) => ({
+  const merged = rrfMerge([textLeg, vectorLeg], settings.rrfK);
+
+  return merged.slice(0, settings.topK).map(({ score, item: doc }) => ({
     score,
     rowId: doc.rowId,
     notePath: doc.notePath,

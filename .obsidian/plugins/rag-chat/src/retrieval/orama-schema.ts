@@ -2,8 +2,9 @@ import { create, load, save, type AnyOrama } from "@orama/orama";
 import { restoreFromFile } from "@orama/plugin-data-persistence/server";
 import { stemmer as germanStemmer, language as germanLanguage } from "@orama/stemmers/german";
 
-export const EMBEDDING_DIMS = 3072;
-
+// German stopword list for the BM25 tokenizer below - hand-curated for this
+// corpus (workshop-manual German), not sourced from an off-the-shelf list;
+// extend it if a search behaves oddly because a common word skews scoring.
 export const GERMAN_STOPWORDS = [
   "der", "die", "das", "des", "dem", "den", "ein", "eine", "einer", "eines", "einem", "einen",
   "und", "oder", "aber", "sowie", "sowohl", "weder", "noch",
@@ -40,11 +41,6 @@ export const TEXT_SCHEMA = {
   text: "string",
 } as const;
 
-export const VECTOR_SCHEMA = {
-  ...METADATA_FIELDS,
-  embedding: `vector[${EMBEDDING_DIMS}]`,
-} as const;
-
 export interface RagMetadata {
   rowId: string;
   seitencode: string;
@@ -59,10 +55,6 @@ export interface RagMetadata {
 
 export interface RagTextDocument extends RagMetadata {
   text: string;
-}
-
-export interface RagVectorDocument extends RagMetadata {
-  embedding: number[] | null;
 }
 
 export async function loadTextIndex(indexPath: string): Promise<AnyOrama> {

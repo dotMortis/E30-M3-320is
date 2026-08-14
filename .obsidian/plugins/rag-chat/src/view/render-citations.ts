@@ -1,8 +1,8 @@
-import type { App } from "obsidian";
+import type { App, Component } from "obsidian";
 import { buildWebCitationSnippets } from "../citations/web-citations";
 import type { ChatTurn } from "../retrieval/types";
 
-export function renderManualCitations(turnEl: HTMLElement, turn: ChatTurn, app: App): void {
+export function renderManualCitations(turnEl: HTMLElement, turn: ChatTurn, app: App, component: Component): void {
   if (!turn.citations || turn.citations.length === 0) return;
   const citeEl = turnEl.createDiv({ cls: "rag-chat-citations" });
   citeEl.createSpan({ text: "Quellen (Handbuch): " });
@@ -12,7 +12,7 @@ export function renderManualCitations(turnEl: HTMLElement, turn: ChatTurn, app: 
       cls: "rag-chat-citation-link",
       text: label,
     });
-    link.addEventListener("click", (evt: MouseEvent) => {
+    component.registerDomEvent(link, "click", (evt: MouseEvent) => {
       evt.preventDefault();
       void app.workspace.openLinkText(block.notePath, "", false);
     });

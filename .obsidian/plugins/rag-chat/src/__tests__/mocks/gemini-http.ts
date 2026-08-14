@@ -27,6 +27,7 @@ export function embedContentResponse(values: number[]): FakeRequestUrlResponse {
 }
 
 export interface FunctionCallSpec {
+  id?: string;
   name: string;
   args: Record<string, unknown>;
 }
@@ -53,7 +54,7 @@ export function generateContentResponse(opts: {
   const parts: Record<string, unknown>[] = [];
   if (opts.text !== undefined) parts.push({ text: opts.text });
   for (const fc of opts.functionCalls ?? []) {
-    parts.push({ functionCall: { name: fc.name, args: fc.args } });
+    parts.push({ functionCall: { ...(fc.id ? { id: fc.id } : {}), name: fc.name, args: fc.args } });
   }
 
   const candidate: Record<string, unknown> = {

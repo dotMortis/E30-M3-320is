@@ -3,6 +3,15 @@ import type { RagChatSettings } from "../settings/types";
 import { buildToolsSuffix, SYSTEM_PROMPT } from "./prompts";
 import type { FunctionDeclaration, GenerateWithToolsResult, GeminiContent, GroundingChunk, GroundingSupport } from "./types";
 
+/** Human-readable messages for a blocked/truncated generation, keyed by the
+ * Gemini API's `promptFeedback.blockReason` or a non-STOP `finishReason`. */
+const BLOCK_REASON_MESSAGES: Record<string, string> = {
+  SAFETY: "Die Antwort wurde von Sicherheitsfiltern blockiert (SAFETY).",
+  RECITATION: "Die Antwort wurde blockiert - möglicherweise wörtliche Wiedergabe urheberrechtlich geschützten Materials (RECITATION).",
+  MAX_TOKENS: "Die Antwort wurde wegen Erreichens des Token-Limits abgebrochen, bevor Inhalt erzeugt wurde (MAX_TOKENS).",
+  OTHER: "Die Antwort wurde aus einem nicht näher spezifizierten Grund blockiert (OTHER).",
+};
+
 export async function generateWithTools(
   contents: GeminiContent[],
   functionDeclarations: FunctionDeclaration[] | null,
@@ -45,10 +54,28 @@ export async function generateWithTools(
     { onStatus: opts?.onStatus, label: "Generierung" }
   );
 
-  const candidate = response.json?.candidates?.[0];
+  // `response.json` is a throwing getter (it lazily JSON.parses the raw
+  // body) - a non-JSON 200 response must surface a clean error here rather
+  // than an uncaught parse exception.
+  let json: any;
+  try {
+    json = response.json;
+  } catch (err) {
+    throw new Error(
+      `Antwort konnte nicht als JSON gelesen werden: ${err instanceof Error ? err.message : String(err)}`
+    );
+  }
+
+  const candidate = json?.candidates?.[0];
   const parts = candidate?.content?.parts ?? [];
   if (parts.length === 0) {
-    throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(response.json).slice(0, 300)}`);
+    const blockReason = json?.promptFeedback?.blockReason as string | undefined;
+    const finishReason = candidate?.finishReason as string | undefined;
+    const reason = blockReason ?? (finishReason && finishReason !== "STOP" ? finishReason : undefined);
+    if (reason) {
+      throw new Error(BLOCK_REASON_MESSAGES[reason] ?? `Die Antwort wurde blockiert/abgebrochen (Grund: ${reason}).`);
+    }
+    throw new Error(`Unexpected generateContent response shape: ${JSON.stringify(json).slice(0, 300)}`);
   }
 
   const rawChunks = candidate?.groundingMetadata?.groundingChunks ?? [];

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildToolsSuffix, SYSTEM_PROMPT } from "../../gemini/prompts";
+import { FUNCTION_DECLARATIONS } from "../../agent/tool-declarations";
 import type { FunctionDeclaration } from "../../gemini/types";
 
 const SEARCH_MANUAL: FunctionDeclaration = {
@@ -78,5 +79,19 @@ describe("buildToolsSuffix", () => {
   it("starts with a double newline to cleanly separate from the base SYSTEM_PROMPT", () => {
     expect(buildToolsSuffix(null, true).startsWith("\n\n")).toBe(true);
     expect(buildToolsSuffix(null, false).startsWith("\n\n")).toBe(true);
+  });
+
+  it("derives each real tool's description text from FUNCTION_DECLARATIONS (single source of truth)", () => {
+    const suffix = buildToolsSuffix(FUNCTION_DECLARATIONS, false);
+    for (const decl of FUNCTION_DECLARATIONS) {
+      // The declaration's own description text must appear verbatim in the
+      // prompt suffix - i.e. it wasn't hand-duplicated/re-written separately.
+      expect(suffix).toContain(decl.description);
+    }
+  });
+
+  it("includes the real get_manual_page's actual parameter names in order", () => {
+    const suffix = buildToolsSuffix(FUNCTION_DECLARATIONS, false);
+    expect(suffix).toContain("get_manual_page(notePath, seitencode, sektion, titel):");
   });
 });

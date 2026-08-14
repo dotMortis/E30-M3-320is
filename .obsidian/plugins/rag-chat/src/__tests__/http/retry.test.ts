@@ -101,4 +101,74 @@ describe("requestUrlWithRetry", () => {
     mockRequestUrlSequence([fakeResponse(400, undefined, "")]);
     await expect(requestUrlWithRetry({ url: "https://example.com" })).rejects.toThrow("Request failed, status 400");
   });
+
+  it("retries a rejecting (network-level failure) requestUrl call and succeeds on the next attempt", async () => {
+    vi.useFakeTimers();
+    requestUrl.mockRejectedValueOnce(new Error("getaddrinfo ENOTFOUND"));
+    requestUrl.mockResolvedValueOnce(fakeResponse(200, { ok: true }));
+
+    const promise = requestUrlWithRetry({ url: "https://example.com" });
+    await vi.advanceTimersByTimeAsync(4000);
+    const response = await promise;
+
+    expect(response.status).toBe(200);
+    expect(requestUrl).toHaveBeenCalledTimes(2);
+  });
+
+  it("gives up after MAX_ATTEMPTS network-level rejections with a descriptive error", async () => {
+    vi.useFakeTimers();
+    requestUrl.mockRejectedValue(new Error("connection reset"));
+
+    const promise = requestUrlWithRetry({ url: "https://example.com" }, { label: "Generierung" });
+    const expectation = expect(promise).rejects.toThrow("Generierung fehlgeschlagen: connection reset");
+    await vi.advanceTimersByTimeAsync(8000);
+    await expectation;
+
+    expect(requestUrl).toHaveBeenCalledTimes(3);
+  });
+
+  it("times out and retries a request that never resolves", async () => {
+    vi.useFakeTimers();
+    requestUrl.mockReturnValueOnce(new Promise(() => {})); // never resolves
+    requestUrl.mockResolvedValueOnce(fakeResponse(200, { ok: true }));
+
+    const promise = requestUrlWithRetry({ url: "https://example.com" });
+    await vi.advanceTimersByTimeAsync(30_000); // exceeds HTTP_REQUEST_TIMEOUT_MS
+    await vi.advanceTimersByTimeAsync(4000); // retry backoff delay
+    const response = await promise;
+
+    expect(response.status).toBe(200);
+    expect(requestUrl).toHaveBeenCalledTimes(2);
+  });
+
+  it("grows the retry delay across successive attempts (exponential backoff)", async () => {
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, "setTimeout");
+    mockRequestUrlSequence([errorResponse(503, "a"), errorResponse(503, "b"), fakeResponse(200, {})]);
+
+    const promise = requestUrlWithRetry({ url: "https://example.com" });
+    await vi.advanceTimersByTimeAsync(30_000);
+    await promise;
+
+    // Filter out the per-attempt timeout timers (HTTP_REQUEST_TIMEOUT_MS) to
+    // isolate the two backoff-sleep delays between the three attempts.
+    const sleepDelays = setTimeoutSpy.mock.calls.map((call) => call[1] as number).filter((ms) => ms < 10_000);
+    expect(sleepDelays).toHaveLength(2);
+    expect(sleepDelays[1]).toBeGreaterThan(sleepDelays[0]);
+  });
+
+  it("treats 429 as retryable, respecting a Retry-After header (in seconds) over the computed backoff", async () => {
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, "setTimeout");
+    const rateLimited = fakeResponse(429, { error: { message: "rate limited" } });
+    rateLimited.headers = { "retry-after": "5" };
+    mockRequestUrlSequence([rateLimited, fakeResponse(200, {})]);
+
+    const promise = requestUrlWithRetry({ url: "https://example.com" });
+    await vi.advanceTimersByTimeAsync(5000);
+    await promise;
+
+    const sleepDelays = setTimeoutSpy.mock.calls.map((call) => call[1] as number).filter((ms) => ms < 10_000);
+    expect(sleepDelays).toEqual([5000]);
+  });
 });

@@ -16,8 +16,49 @@ export class Notice {
 }
 
 export class Component {
-  load(): void {}
-  unload(): void {}
+  private domEventCleanups: (() => void)[] = [];
+  private children: Component[] = [];
+  private registeredCallbacks: (() => void)[] = [];
+
+  load(): void {
+    this.onload();
+  }
+
+  onload(): void {}
+
+  unload(): void {
+    for (const cleanup of this.domEventCleanups.splice(0)) cleanup();
+    for (const cb of this.registeredCallbacks.splice(0)) cb();
+    for (const child of this.children.splice(0)) child.unload();
+    this.onunload();
+  }
+
+  onunload(): void {}
+
+  addChild<T extends Component>(child: T): T {
+    this.children.push(child);
+    return child;
+  }
+
+  removeChild<T extends Component>(child: T): T {
+    this.children = this.children.filter((c) => c !== child);
+    return child;
+  }
+
+  register(cb: () => void): void {
+    this.registeredCallbacks.push(cb);
+  }
+
+  registerEvent(_eventRef: unknown): void {}
+
+  registerInterval(id: number): number {
+    return id;
+  }
+
+  registerDomEvent(el: FakeElement, type: string, callback: (evt: unknown) => void): void {
+    el.addEventListener(type, callback);
+    this.domEventCleanups.push(() => el.removeEventListener(type, callback));
+  }
 }
 
 export class Plugin {
@@ -116,6 +157,10 @@ export class TextComponent {
     this.el = containerEl.createEl("input");
   }
 
+  get inputEl(): FakeElement {
+    return this.el;
+  }
+
   setPlaceholder(placeholder: string): this {
     this.el.setAttribute("placeholder", placeholder);
     return this;
@@ -164,11 +209,52 @@ export class ToggleComponent {
   }
 }
 
+export class ButtonComponent {
+  el: FakeElement;
+  private clickHandler?: (evt: unknown) => void | Promise<void>;
+  private tooltip = "";
+  private icon = "";
+
+  constructor(containerEl: FakeElement) {
+    this.el = containerEl.createEl("button");
+  }
+
+  setIcon(icon: string): this {
+    this.icon = icon;
+    this.el.setAttribute("data-icon", icon);
+    return this;
+  }
+
+  getIcon(): string {
+    return this.icon;
+  }
+
+  setTooltip(tooltip: string): this {
+    this.tooltip = tooltip;
+    this.el.setAttribute("aria-label", tooltip);
+    return this;
+  }
+
+  getTooltip(): string {
+    return this.tooltip;
+  }
+
+  onClick(fn: (evt: unknown) => void | Promise<void>): this {
+    this.clickHandler = fn;
+    this.el.addEventListener("click", (evt) => void this.clickHandler?.(evt));
+    return this;
+  }
+
+  async triggerClick(): Promise<void> {
+    await this.clickHandler?.({});
+  }
+}
+
 export class Setting {
   static instances: Setting[] = [];
   containerEl: FakeElement;
   settingEl: FakeElement;
-  components: (TextComponent | ToggleComponent)[] = [];
+  components: (TextComponent | ToggleComponent | ButtonComponent)[] = [];
 
   constructor(containerEl: FakeElement) {
     this.containerEl = containerEl;
@@ -195,6 +281,13 @@ export class Setting {
 
   addToggle(cb: (toggle: ToggleComponent) => void): this {
     const component = new ToggleComponent(this.settingEl);
+    this.components.push(component);
+    cb(component);
+    return this;
+  }
+
+  addButton(cb: (button: ButtonComponent) => void): this {
+    const component = new ButtonComponent(this.settingEl);
     this.components.push(component);
     cb(component);
     return this;

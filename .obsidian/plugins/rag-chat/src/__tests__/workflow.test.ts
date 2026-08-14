@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Vault } from "obsidian";
 import { fakeSettings } from "./fixtures/settings";
+import { DEFAULT_SETTINGS } from "../settings/types";
 import { TORQUE_BLOCK } from "./fixtures/context-blocks";
 import { fakeHit } from "./fixtures/retrieved-hits";
 import type { FuzzySearchApi } from "../retrieval/types";
@@ -14,9 +15,6 @@ vi.mock("../retrieval/hybrid-search", () => ({ federatedHybridSearch }));
 const mergeWithFuzzy = vi.fn();
 vi.mock("../retrieval/fuzzy-merge", () => ({ mergeWithFuzzy }));
 
-const resolveFollowupQuery = vi.fn();
-vi.mock("../retrieval/followup", () => ({ resolveFollowupQuery }));
-
 const expandToParentNotes = vi.fn();
 vi.mock("../retrieval/parent-notes", () => ({ expandToParentNotes }));
 
@@ -29,7 +27,6 @@ let continueAnswer: typeof import("../workflow").continueAnswer;
 
 beforeEach(async () => {
   vi.clearAllMocks();
-  resolveFollowupQuery.mockImplementation((q: string) => q);
   embedQuery.mockResolvedValue([0.1, 0.2]);
   federatedHybridSearch.mockResolvedValue([fakeHit({ rowId: "a", notePath: "a.md" })]);
   expandToParentNotes.mockResolvedValue([TORQUE_BLOCK]);
@@ -48,8 +45,7 @@ const indices = { textDb: {}, vectorDbs: [], referenceChunks: new Map() } as any
 const vault = {} as unknown as Vault;
 
 describe("answerQuestion", () => {
-  it("resolves the follow-up query and uses it for retrieval, but passes the ORIGINAL question to the agent loop", async () => {
-    resolveFollowupQuery.mockReturnValue("Wie baue ich den Tank aus? und was ist mit 16-03?");
+  it("uses the raw, unmodified question for both baseline retrieval and the agent loop", async () => {
     await answerQuestion({
       question: "und was ist mit 16-03?",
       history: [],
@@ -58,9 +54,10 @@ describe("answerQuestion", () => {
       indices,
       fuzzyApi: null,
     });
+    expect(embedQuery).toHaveBeenCalledWith("und was ist mit 16-03?", expect.anything(), undefined);
     expect(federatedHybridSearch).toHaveBeenCalledWith(
       indices,
-      "Wie baue ich den Tank aus? und was ist mit 16-03?",
+      "und was ist mit 16-03?",
       [0.1, 0.2],
       expect.anything()
     );
@@ -102,7 +99,7 @@ describe("answerQuestion", () => {
     mergeWithFuzzy.mockReturnValue([fakeHit({ rowId: "merged", notePath: "merged.md" })]);
     await answerQuestion({ question: "Frage?", history: [], settings: fakeSettings({ enableFuzzySearchLeg: true, topK: 5 }), vault, indices, fuzzyApi });
     expect(fuzzyApi.search).toHaveBeenCalledWith("Frage?", 10);
-    expect(mergeWithFuzzy).toHaveBeenCalledWith(expect.anything(), expect.anything(), 5);
+    expect(mergeWithFuzzy).toHaveBeenCalledWith(expect.anything(), expect.anything(), 5, DEFAULT_SETTINGS.rrfK);
     expect(expandToParentNotes).toHaveBeenCalledWith([fakeHit({ rowId: "merged", notePath: "merged.md" })], vault, indices.referenceChunks);
   });
 
@@ -153,7 +150,7 @@ describe("continueAnswer", () => {
     });
     const pending = { state: {}, ctx: {} } as any;
     const result = await continueAnswer(pending, "1988");
-    expect(resumeAgentLoop).toHaveBeenCalledWith(pending, "1988");
+    expect(resumeAgentLoop).toHaveBeenCalledWith(pending, "1988", undefined);
     expect(result).toMatchObject({ status: "done", text: "Fortgesetzte Antwort" });
   });
 

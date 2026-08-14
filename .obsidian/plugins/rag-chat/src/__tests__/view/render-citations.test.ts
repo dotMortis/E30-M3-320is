@@ -1,10 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
-import type { App } from "obsidian";
+import { Component, type App } from "obsidian";
 import { makeEl } from "../mocks/dom";
 import { createFakeWorkspace } from "../mocks/fake-app";
 import { renderManualCitations, renderWebCitations } from "../../view/render-citations";
 import { REFERENCE_BLOCK, TORQUE_BLOCK } from "../fixtures/context-blocks";
 import type { ChatTurn } from "../../retrieval/types";
+
+vi.mock("obsidian", async () => {
+  const mock = await import("../mocks/obsidian");
+  return mock;
+});
 
 function makeApp() {
   const workspace = createFakeWorkspace();
@@ -15,7 +20,7 @@ describe("renderManualCitations", () => {
   it("renders nothing when the turn has no citations", () => {
     const turnEl = makeEl("div");
     const { app } = makeApp();
-    renderManualCitations(turnEl as unknown as HTMLElement, { role: "assistant", text: "x" }, app);
+    renderManualCitations(turnEl as unknown as HTMLElement, { role: "assistant", text: "x" }, app, new Component());
     expect(turnEl.children).toHaveLength(0);
   });
 
@@ -23,7 +28,7 @@ describe("renderManualCitations", () => {
     const turnEl = makeEl("div");
     const { app } = makeApp();
     const turn: ChatTurn = { role: "assistant", text: "x", citations: [TORQUE_BLOCK] };
-    renderManualCitations(turnEl as unknown as HTMLElement, turn, app);
+    renderManualCitations(turnEl as unknown as HTMLElement, turn, app, new Component());
     const link = turnEl.children[0].children.find((c) => c.tag === "a")!;
     expect(link.text).toBe(`${TORQUE_BLOCK.seitencode} (${TORQUE_BLOCK.sektion})`);
   });
@@ -32,7 +37,7 @@ describe("renderManualCitations", () => {
     const turnEl = makeEl("div");
     const { app } = makeApp();
     const turn: ChatTurn = { role: "assistant", text: "x", citations: [REFERENCE_BLOCK] };
-    renderManualCitations(turnEl as unknown as HTMLElement, turn, app);
+    renderManualCitations(turnEl as unknown as HTMLElement, turn, app, new Component());
     const link = turnEl.children[0].children.find((c) => c.tag === "a")!;
     expect(link.text).toBe(`${REFERENCE_BLOCK.titel} (${REFERENCE_BLOCK.sektion})`);
   });
@@ -41,7 +46,7 @@ describe("renderManualCitations", () => {
     const turnEl = makeEl("div");
     const { app, workspace } = makeApp();
     const turn: ChatTurn = { role: "assistant", text: "x", citations: [TORQUE_BLOCK] };
-    renderManualCitations(turnEl as unknown as HTMLElement, turn, app);
+    renderManualCitations(turnEl as unknown as HTMLElement, turn, app, new Component());
     const link = turnEl.children[0].children.find((c) => c.tag === "a")!;
     link.dispatch("click", { preventDefault: vi.fn() });
     expect(workspace.openLinkTextCalls).toEqual([{ linktext: TORQUE_BLOCK.notePath, sourcePath: "", newLeaf: false }]);
@@ -51,9 +56,21 @@ describe("renderManualCitations", () => {
     const turnEl = makeEl("div");
     const { app } = makeApp();
     const turn: ChatTurn = { role: "assistant", text: "x", citations: [TORQUE_BLOCK, REFERENCE_BLOCK] };
-    renderManualCitations(turnEl as unknown as HTMLElement, turn, app);
+    renderManualCitations(turnEl as unknown as HTMLElement, turn, app, new Component());
     const links = turnEl.children[0].children.filter((c) => c.tag === "a");
     expect(links).toHaveLength(2);
+  });
+
+  it("registers the click listener via the component so it's removed when the component unloads", () => {
+    const turnEl = makeEl("div");
+    const { app, workspace } = makeApp();
+    const turn: ChatTurn = { role: "assistant", text: "x", citations: [TORQUE_BLOCK] };
+    const component = new Component();
+    renderManualCitations(turnEl as unknown as HTMLElement, turn, app, component);
+    component.unload();
+    const link = turnEl.children[0].children.find((c) => c.tag === "a")!;
+    link.dispatch("click", { preventDefault: vi.fn() });
+    expect(workspace.openLinkTextCalls).toEqual([]);
   });
 });
 

@@ -3,17 +3,21 @@ import { DEFAULT_SETTINGS, type RagChatSettings } from "./settings/types";
 import { RagChatSettingTab } from "./settings/settings-tab";
 import { RAG_CHAT_VIEW_TYPE, RagChatView } from "./view/view";
 import { validateManifest } from "./retrieval/embeddings";
+import { clearIndicesCache } from "./retrieval/index-cache";
 import type { RagManifest } from "./retrieval/types";
-import { getPluginDir, getPluginDirFullPath, readManifest } from "./plugin/manifest";
+import { getPluginDir, getPluginDirFullPath } from "./plugin/paths";
+import { readManifest } from "./retrieval/manifest";
 import { decryptSecret, encryptSecret } from "./secure-storage";
-
-const ENCRYPTED_FIELDS: { field: "geminiApiKey"; label: string }[] = [
-  { field: "geminiApiKey", label: "Google API key (GEMINI_API_KEY)" },
-];
 
 export default class RagChatPlugin extends Plugin {
   settings!: RagChatSettings;
   private manifestCache: RagManifest | null = null;
+  // Caches the last plaintext geminiApiKey we encrypted, and its ciphertext,
+  // so saveSettings() (called on every settings-tab keystroke/toggle, not
+  // just API-key changes) can skip a full encrypt round-trip (fresh
+  // salt/IV) when the key itself hasn't actually changed since last save.
+  private lastEncryptedApiKeyPlaintext: string | undefined;
+  private lastEncryptedApiKeyCiphertext: string | undefined;
 
   async onload(): Promise<void> {
     await this.loadSettings();
@@ -32,6 +36,24 @@ export default class RagChatPlugin extends Plugin {
       },
     });
 
+    this.addCommand({
+      id: "rag-chat-reload-index",
+      name: "RAG: Index neu laden",
+      callback: () => {
+        void this.reloadIndex();
+      },
+    });
+
+    this.addCommand({
+      id: "rag-chat-clear",
+      name: "RAG: Chat leeren",
+      callback: () => {
+        for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) {
+          if (leaf.view instanceof RagChatView) leaf.view.clearChat();
+        }
+      },
+    });
+
     this.addSettingTab(new RagChatSettingTab(this.app, this));
 
     // Ensure the RAG Chat view is present in the right sidebar once the
@@ -44,9 +66,7 @@ export default class RagChatPlugin extends Plugin {
     });
 
     try {
-      const manifest = await this.getManifest();
-      const warnings = validateManifest(manifest, this.settings);
-      for (const w of warnings) new Notice(`RAG Chat: ${w}`, 10000);
+      await this.revalidateManifest();
     } catch (err) {
       new Notice(
         `RAG Chat: konnte rag-manifest.json nicht laden (${err instanceof Error ? err.message : String(err)}). Index ggf. neu bauen.`,
@@ -71,6 +91,39 @@ export default class RagChatPlugin extends Plugin {
     return this.manifestCache;
   }
 
+  /**
+   * Clears both the manifest cache and the loaded-index cache, then reloads
+   * the manifest and re-validates it against current settings. Backs the
+   * "RAG: Index neu laden" command, for when the underlying index files
+   * changed on disk (e.g. a rebuilt corpus) independent of a plugin reload.
+   */
+  async reloadIndex(): Promise<void> {
+    this.manifestCache = null;
+    clearIndicesCache();
+    try {
+      await this.getManifest();
+      await this.revalidateManifest();
+      new Notice("RAG Chat: Index-Cache geleert, Manifest neu geladen.", 6000);
+    } catch (err) {
+      new Notice(
+        `RAG Chat: konnte rag-manifest.json nicht laden (${err instanceof Error ? err.message : String(err)}). Index ggf. neu bauen.`,
+        10000
+      );
+    }
+  }
+
+  /**
+   * Re-runs manifest/settings validation (embeddingModel/outputDim parity)
+   * against the cached manifest and surfaces any mismatch as a Notice. Only
+   * warns once at onload() otherwise, even though outputDim/embeddingModel
+   * can change live via the settings tab.
+   */
+  async revalidateManifest(): Promise<void> {
+    const manifest = await this.getManifest();
+    const warnings = validateManifest(manifest, this.settings);
+    for (const w of warnings) new Notice(`RAG Chat: ${w}`, 10000);
+  }
+
   async activateView(options?: { focus?: boolean }): Promise<void> {
     const focus = options?.focus ?? true;
     const { workspace } = this.app;
@@ -93,27 +146,36 @@ export default class RagChatPlugin extends Plugin {
     const raw = ((await this.loadData()) ?? {}) as Record<string, unknown>;
     this.settings = Object.assign({}, DEFAULT_SETTINGS, raw) as RagChatSettings;
 
-    for (const { field, label } of ENCRYPTED_FIELDS) {
-      const storedValue = raw[field] as string | undefined;
-      try {
-        this.settings[field] = await decryptSecret(storedValue);
-      } catch (err) {
-        this.settings[field] = "";
-        if (storedValue) {
-          new Notice(
-            `RAG Chat: ${label} konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.`,
-            10000
-          );
-        }
+    const storedApiKey = raw.geminiApiKey as string | undefined;
+    try {
+      this.settings.geminiApiKey = await decryptSecret(storedApiKey);
+      this.lastEncryptedApiKeyPlaintext = this.settings.geminiApiKey;
+      this.lastEncryptedApiKeyCiphertext = storedApiKey;
+    } catch (err) {
+      this.settings.geminiApiKey = "";
+      this.lastEncryptedApiKeyPlaintext = undefined;
+      this.lastEncryptedApiKeyCiphertext = undefined;
+      if (storedApiKey) {
+        new Notice(
+          "RAG Chat: Google API key (GEMINI_API_KEY) konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.",
+          10000
+        );
       }
     }
   }
 
   async saveSettings(): Promise<void> {
     const toPersist: Record<string, unknown> = { ...this.settings };
-    for (const { field } of ENCRYPTED_FIELDS) {
-      toPersist[field] = await encryptSecret(this.settings[field]);
+
+    if (this.settings.geminiApiKey === this.lastEncryptedApiKeyPlaintext && this.lastEncryptedApiKeyCiphertext !== undefined) {
+      toPersist.geminiApiKey = this.lastEncryptedApiKeyCiphertext;
+    } else {
+      const encrypted = await encryptSecret(this.settings.geminiApiKey);
+      toPersist.geminiApiKey = encrypted;
+      this.lastEncryptedApiKeyPlaintext = this.settings.geminiApiKey;
+      this.lastEncryptedApiKeyCiphertext = encrypted;
     }
+
     await this.saveData(toPersist);
   }
 }

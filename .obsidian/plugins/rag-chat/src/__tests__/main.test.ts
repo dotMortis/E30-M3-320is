@@ -72,6 +72,48 @@ describe("RagChatPlugin.saveSettings", () => {
     expect(persisted.geminiApiKey.startsWith("enc:v1:")).toBe(true);
     expect(persisted.topK).toBe(10);
   });
+
+  it("reuses the previous ciphertext (skips re-encryption) when geminiApiKey is unchanged across saves", async () => {
+    const { plugin } = makePlugin({ loadData: {} });
+    await plugin.loadSettings();
+    plugin.settings.geminiApiKey = "plaintext-key";
+    await plugin.saveSettings();
+    const firstCiphertext = (plugin.saveData as any).mock.calls[0][0].geminiApiKey;
+
+    // Change an unrelated field, save again without touching geminiApiKey.
+    plugin.settings.topK = 12;
+    await plugin.saveSettings();
+    const secondCiphertext = (plugin.saveData as any).mock.calls[1][0].geminiApiKey;
+
+    expect(secondCiphertext).toBe(firstCiphertext);
+  });
+
+  it("re-encrypts with fresh ciphertext when geminiApiKey actually changes", async () => {
+    const { plugin } = makePlugin({ loadData: {} });
+    await plugin.loadSettings();
+    plugin.settings.geminiApiKey = "first-key";
+    await plugin.saveSettings();
+    const firstCiphertext = (plugin.saveData as any).mock.calls[0][0].geminiApiKey;
+
+    plugin.settings.geminiApiKey = "second-key";
+    await plugin.saveSettings();
+    const secondCiphertext = (plugin.saveData as any).mock.calls[1][0].geminiApiKey;
+
+    expect(secondCiphertext).not.toBe(firstCiphertext);
+    const { decryptSecret } = await import("../secure-storage");
+    expect(await decryptSecret(secondCiphertext)).toBe("second-key");
+  });
+
+  it("re-encrypts (does not persist stale ciphertext) after a load whose stored key failed to decrypt", async () => {
+    const { plugin } = makePlugin({ loadData: { geminiApiKey: "garbage-not-encrypted-format" } });
+    await plugin.loadSettings();
+    plugin.settings.geminiApiKey = "new-real-key";
+    await plugin.saveSettings();
+
+    const persisted = (plugin.saveData as any).mock.calls[0][0];
+    const { decryptSecret } = await import("../secure-storage");
+    expect(await decryptSecret(persisted.geminiApiKey)).toBe("new-real-key");
+  });
 });
 
 describe("RagChatPlugin.getPluginDir / getPluginDirFullPath", () => {
@@ -140,5 +182,95 @@ describe("RagChatPlugin.onload", () => {
     const { plugin } = makePlugin({ loadData: {}, adapterFiles: {} });
     await expect(plugin.onload()).resolves.toBeUndefined();
     expect(Notice.instances.some((n) => n.message.includes("konnte rag-manifest.json nicht laden"))).toBe(true);
+  });
+
+  it("registers the reload-index command", async () => {
+    const manifest = fakeManifest();
+    const { plugin } = makePlugin({
+      loadData: {},
+      adapterFiles: { ".obsidian/plugins/rag-chat/rag-manifest.json": JSON.stringify(manifest) },
+    });
+    await plugin.onload();
+    const mocked = plugin as unknown as MockPlugin;
+    expect(mocked.commands.map((c) => c.id)).toContain("rag-chat-reload-index");
+  });
+
+  it("registers the clear-chat command", async () => {
+    const manifest = fakeManifest();
+    const { plugin } = makePlugin({
+      loadData: {},
+      adapterFiles: { ".obsidian/plugins/rag-chat/rag-manifest.json": JSON.stringify(manifest) },
+    });
+    await plugin.onload();
+    const mocked = plugin as unknown as MockPlugin;
+    expect(mocked.commands.map((c) => c.id)).toContain("rag-chat-clear");
+  });
+
+  it("the clear-chat command calls clearChat() on every open RagChatView leaf", async () => {
+    const manifest = fakeManifest();
+    const { plugin, app } = makePlugin({
+      loadData: {},
+      adapterFiles: { ".obsidian/plugins/rag-chat/rag-manifest.json": JSON.stringify(manifest) },
+    });
+    await plugin.onload();
+
+    const { RagChatView } = await import("../view/view");
+    const fakeView = Object.create(RagChatView.prototype);
+    const clearChat = vi.fn();
+    fakeView.clearChat = clearChat;
+    (app.workspace as any).getLeavesOfType = () => [{ view: fakeView }];
+
+    const mocked = plugin as unknown as MockPlugin;
+    const command = mocked.commands.find((c) => c.id === "rag-chat-clear")!;
+    command.callback();
+    expect(clearChat).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("RagChatPlugin.reloadIndex", () => {
+  it("clears the cached manifest and reloads it from disk", async () => {
+    const manifest = fakeManifest();
+    const { plugin, app } = makePlugin({
+      loadData: {},
+      adapterFiles: { ".obsidian/plugins/rag-chat/rag-manifest.json": JSON.stringify(manifest) },
+    });
+    await plugin.loadSettings();
+    await plugin.getManifest();
+    const readSpy = vi.spyOn(app.vault.adapter, "read");
+
+    await plugin.reloadIndex();
+
+    expect(readSpy).toHaveBeenCalledTimes(1);
+    expect(Notice.instances.some((n) => n.message.includes("Index-Cache geleert"))).toBe(true);
+  });
+
+  it("shows a Notice (does not throw) when the manifest fails to reload", async () => {
+    const { plugin } = makePlugin({ loadData: {}, adapterFiles: {} });
+    await expect(plugin.reloadIndex()).resolves.toBeUndefined();
+    expect(Notice.instances.some((n) => n.message.includes("konnte rag-manifest.json nicht laden"))).toBe(true);
+  });
+});
+
+describe("RagChatPlugin.revalidateManifest", () => {
+  it("shows a Notice when the manifest mismatches current settings", async () => {
+    const manifest = fakeManifest({ embeddingModel: "some-other-model" });
+    const { plugin } = makePlugin({
+      loadData: {},
+      adapterFiles: { ".obsidian/plugins/rag-chat/rag-manifest.json": JSON.stringify(manifest) },
+    });
+    await plugin.loadSettings();
+    await plugin.revalidateManifest();
+    expect(Notice.instances.some((n) => n.message.includes("some-other-model"))).toBe(true);
+  });
+
+  it("shows no Notice when the manifest matches current settings", async () => {
+    const manifest = fakeManifest();
+    const { plugin } = makePlugin({
+      loadData: {},
+      adapterFiles: { ".obsidian/plugins/rag-chat/rag-manifest.json": JSON.stringify(manifest) },
+    });
+    await plugin.loadSettings();
+    await plugin.revalidateManifest();
+    expect(Notice.instances).toHaveLength(0);
   });
 });

@@ -1,5 +1,5 @@
 import type { ContextBlock } from "../retrieval/types";
-import { escapeWikilinkPath } from "./util";
+import { renderCitationMatch } from "./util";
 
 export function linkifyReferenceCitations(text: string, citations: ContextBlock[]): string {
   const referenceBlocks = citations.filter((b) => !b.seitencode);
@@ -15,10 +15,11 @@ export function linkifyReferenceCitations(text: string, citations: ContextBlock[
   return text.replace(/\[Referenz:\s*([^\]]+)\]/gi, (whole, inner: string) => {
     const titel = inner.trim();
     if (!titel) return whole;
-    const matches = byTitel.get(titel);
-    if (!matches) {
-      return `<span class="rag-chat-citation-unverified" title="Konnte nicht gegen die abgerufenen Quellen dieser Antwort verifiziert werden">${titel}</span>`;
-    }
-    return `[Referenz: [[${escapeWikilinkPath(matches[0].notePath)}|${titel}]]]`;
+    // Reference docs don't have a seitencode/sektion that reliably
+    // disambiguates a titel collision (sektion is often the same generic
+    // category, e.g. "Referenz", for every reference doc) - notePath is the
+    // one field guaranteed to differ between two distinct colliding docs.
+    const rendered = renderCitationMatch(titel, byTitel.get(titel), (m) => m.notePath);
+    return `[Referenz: ${rendered}]`;
   });
 }

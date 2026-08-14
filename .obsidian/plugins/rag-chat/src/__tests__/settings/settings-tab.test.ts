@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { resetObsidianMocks, Setting, TextComponent, ToggleComponent } from "../mocks/obsidian";
+import { ButtonComponent, resetObsidianMocks, Setting, TextComponent, ToggleComponent } from "../mocks/obsidian";
 import type { FakeElement } from "../mocks/dom";
 import { fakeSettings } from "../fixtures/settings";
 
@@ -16,7 +16,11 @@ beforeEach(async () => {
 });
 
 function makeTab() {
-  const plugin = { settings: fakeSettings(), saveSettings: vi.fn().mockResolvedValue(undefined) };
+  const plugin = {
+    settings: fakeSettings(),
+    saveSettings: vi.fn().mockResolvedValue(undefined),
+    revalidateManifest: vi.fn().mockResolvedValue(undefined),
+  };
   const tab = new RagChatSettingTab({} as any, plugin as any);
   tab.display();
   const containerEl = tab.containerEl as unknown as FakeElement;
@@ -40,6 +44,25 @@ describe("RagChatSettingTab.display", () => {
     expect(apiKeyText.value).toBe(plugin.settings.geminiApiKey);
   });
 
+  it("masks the API key input as a password field", () => {
+    makeTab();
+    const apiKeyText = Setting.instances[0].components[0] as TextComponent;
+    expect(apiKeyText.inputEl.type).toBe("password");
+  });
+
+  it("reveals the API key as plain text when the reveal button is clicked, then re-masks on a second click", async () => {
+    makeTab();
+    const apiKeyText = Setting.instances[0].components[0] as TextComponent;
+    const revealButton = Setting.instances[0].components[1] as ButtonComponent;
+    expect(apiKeyText.inputEl.type).toBe("password");
+
+    await revealButton.triggerClick();
+    expect(apiKeyText.inputEl.type).toBe("text");
+
+    await revealButton.triggerClick();
+    expect(apiKeyText.inputEl.type).toBe("password");
+  });
+
   it("updates and trims settings.geminiApiKey on change, then saves", async () => {
     const { plugin } = makeTab();
     const apiKeyText = Setting.instances[0].components[0] as TextComponent;
@@ -55,6 +78,13 @@ describe("RagChatSettingTab.display", () => {
     expect(plugin.settings.embeddingModel).toBe("gemini-embedding-3");
   });
 
+  it("re-validates the manifest after an embeddingModel change (parity can silently break live)", async () => {
+    const { plugin } = makeTab();
+    const text = Setting.instances[1].components[0] as TextComponent;
+    await text.triggerChange("gemini-embedding-3");
+    expect(plugin.revalidateManifest).toHaveBeenCalledTimes(1);
+  });
+
   it("updates settings.generationModel on change", async () => {
     const { plugin } = makeTab();
     const text = Setting.instances[2].components[0] as TextComponent;
@@ -68,6 +98,27 @@ describe("RagChatSettingTab.display", () => {
     await text.triggerChange("768");
     expect(plugin.settings.outputDim).toBe(768);
     expect(plugin.saveSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it("re-validates the manifest after an outputDim change (parity can silently break live)", async () => {
+    const { plugin } = makeTab();
+    const text = Setting.instances[3].components[0] as TextComponent;
+    await text.triggerChange("768");
+    expect(plugin.revalidateManifest).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not re-validate the manifest for a rejected (invalid) outputDim change", async () => {
+    const { plugin } = makeTab();
+    const text = Setting.instances[3].components[0] as TextComponent;
+    await text.triggerChange("not-a-number");
+    expect(plugin.revalidateManifest).not.toHaveBeenCalled();
+  });
+
+  it("does not re-validate the manifest for unrelated settings changes (e.g. topK)", async () => {
+    const { plugin } = makeTab();
+    const text = Setting.instances[4].components[0] as TextComponent;
+    await text.triggerChange("12");
+    expect(plugin.revalidateManifest).not.toHaveBeenCalled();
   });
 
   it("rejects a non-numeric outputDim without mutating settings or saving", async () => {

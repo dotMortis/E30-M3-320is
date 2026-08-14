@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { generateContentResponse, errorResponse, mockRequestUrlSequence, requestUrl } from "../mocks/gemini-http";
+import { fakeResponse, generateContentResponse, errorResponse, mockRequestUrlSequence, requestUrl } from "../mocks/gemini-http";
 import { resetObsidianMocks } from "../mocks/obsidian";
 import { fakeSettings } from "../fixtures/settings";
 import type { FunctionDeclaration, GeminiContent } from "../../gemini/types";
@@ -95,6 +95,48 @@ describe("generateWithTools", () => {
 
   it("throws when the response has no parts at all", async () => {
     mockRequestUrlSequence([errorResponse(200, "irrelevant")]);
+    await expect(generateWithTools(CONTENTS, null, fakeSettings())).rejects.toThrow(
+      "Unexpected generateContent response shape"
+    );
+  });
+
+  it("throws a clean error instead of an uncaught parse exception when response.json is not valid JSON", async () => {
+    mockRequestUrlSequence([fakeResponse(200, undefined, "not valid json {{{")]);
+    await expect(generateWithTools(CONTENTS, null, fakeSettings())).rejects.toThrow(
+      "Antwort konnte nicht als JSON gelesen werden"
+    );
+  });
+
+  it("surfaces an actionable SAFETY-block error instead of a generic shape-mismatch throw", async () => {
+    mockRequestUrlSequence([
+      fakeResponse(200, { candidates: [{ content: { parts: [] }, finishReason: "SAFETY" }] }),
+    ]);
+    await expect(generateWithTools(CONTENTS, null, fakeSettings())).rejects.toThrow("SAFETY");
+  });
+
+  it("surfaces an actionable RECITATION-block error", async () => {
+    mockRequestUrlSequence([
+      fakeResponse(200, { candidates: [{ content: { parts: [] }, finishReason: "RECITATION" }] }),
+    ]);
+    await expect(generateWithTools(CONTENTS, null, fakeSettings())).rejects.toThrow("RECITATION");
+  });
+
+  it("surfaces an actionable MAX_TOKENS error when finishReason is MAX_TOKENS and there are no parts", async () => {
+    mockRequestUrlSequence([
+      fakeResponse(200, { candidates: [{ content: { parts: [] }, finishReason: "MAX_TOKENS" }] }),
+    ]);
+    await expect(generateWithTools(CONTENTS, null, fakeSettings())).rejects.toThrow("MAX_TOKENS");
+  });
+
+  it("surfaces promptFeedback.blockReason even when there are no candidates at all", async () => {
+    mockRequestUrlSequence([fakeResponse(200, { promptFeedback: { blockReason: "SAFETY" }, candidates: [] })]);
+    await expect(generateWithTools(CONTENTS, null, fakeSettings())).rejects.toThrow("SAFETY");
+  });
+
+  it("does not treat a normal STOP finishReason with empty parts as a safety block (falls through to shape-mismatch)", async () => {
+    mockRequestUrlSequence([
+      fakeResponse(200, { candidates: [{ content: { parts: [] }, finishReason: "STOP" }] }),
+    ]);
     await expect(generateWithTools(CONTENTS, null, fakeSettings())).rejects.toThrow(
       "Unexpected generateContent response shape"
     );

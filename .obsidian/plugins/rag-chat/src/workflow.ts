@@ -5,10 +5,10 @@ import type { GroundingChunk, GroundingSupport } from "./gemini/types";
 import { embedQuery } from "./retrieval/embeddings";
 import { federatedHybridSearch } from "./retrieval/hybrid-search";
 import { mergeWithFuzzy } from "./retrieval/fuzzy-merge";
-import { resolveFollowupQuery } from "./retrieval/followup";
 import { expandToParentNotes } from "./retrieval/parent-notes";
 import type { CachedIndices, ChatTurn, ContextBlock, FuzzySearchApi, WebCitation } from "./retrieval/types";
 import type { RagChatSettings } from "./settings/types";
+import { FUZZY_LEG_RESULT_LIMIT } from "./constants";
 
 export interface WorkflowParams {
   question: string;
@@ -18,6 +18,7 @@ export interface WorkflowParams {
   indices: CachedIndices;
   fuzzyApi: FuzzySearchApi | null;
   onStatus?: (status: string) => void;
+  signal?: AbortSignal;
 }
 
 export interface WorkflowDone {
@@ -51,8 +52,8 @@ async function baselineRetrieve(
   let hits = hybridHits;
   if (settings.enableFuzzySearchLeg && fuzzyApi) {
     try {
-      const fuzzy = await fuzzyApi.search(query, 10);
-      hits = mergeWithFuzzy(hybridHits, fuzzy.results, settings.topK);
+      const fuzzy = await fuzzyApi.search(query, FUZZY_LEG_RESULT_LIMIT);
+      hits = mergeWithFuzzy(hybridHits, fuzzy.results, settings.topK, settings.rrfK);
     } catch {}
   }
 
@@ -60,19 +61,17 @@ async function baselineRetrieve(
 }
 
 export async function answerQuestion(params: WorkflowParams): Promise<WorkflowResult> {
-  const { question, history, settings, vault, indices, fuzzyApi, onStatus } = params;
-
-  const resolvedQuery = resolveFollowupQuery(question, history);
+  const { question, history, settings, vault, indices, fuzzyApi, onStatus, signal } = params;
 
   onStatus?.("Durchsuche Handbuch …");
-  const baselineBlocks = await baselineRetrieve(resolvedQuery, settings, indices, fuzzyApi, vault, onStatus);
+  const baselineBlocks = await baselineRetrieve(question, settings, indices, fuzzyApi, vault, onStatus);
   onStatus?.(`Basis-Suche: ${baselineBlocks.length} Seite(n) gefunden`);
 
   const result = await runAgentLoop({
     question,
     history,
     baselineBlocks,
-    ctx: { settings, vault, indices, fuzzyApi, onStatus },
+    ctx: { settings, vault, indices, fuzzyApi, onStatus, signal },
   });
 
   if (result.status === "awaiting_clarification") {
@@ -88,8 +87,12 @@ export async function answerQuestion(params: WorkflowParams): Promise<WorkflowRe
   };
 }
 
-export async function continueAnswer(pending: PendingAgentState, userAnswer: string): Promise<WorkflowResult> {
-  const result = await resumeAgentLoop(pending, userAnswer);
+export async function continueAnswer(
+  pending: PendingAgentState,
+  userAnswer: string,
+  signal?: AbortSignal
+): Promise<WorkflowResult> {
+  const result = await resumeAgentLoop(pending, userAnswer, signal);
   if (result.status === "awaiting_clarification") {
     return { status: "awaiting_clarification", question: result.question, pending: result.pending };
   }

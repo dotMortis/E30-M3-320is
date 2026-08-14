@@ -1,3 +1,4 @@
+import { FUNCTION_DECLARATIONS } from "../agent/tool-declarations";
 import type { FunctionDeclaration } from "./types";
 
 export const SYSTEM_PROMPT = `Du bist ein Experte für den BMW E30 M3 / 320is und assistierst bei Reparaturen.
@@ -28,23 +29,20 @@ Struktur jeder Antwort:
 
 Antworte auf Deutsch.`;
 
-const TOOL_DESCRIPTIONS: Record<string, string> = {
-  search_manual:
-    "search_manual(query): durchsucht das Werkstatthandbuch (Hybrid-Suche: Volltext + Vektor) mit einer " +
-    "von dir gewählten Suchanfrage und liefert eine kompakte Liste möglicher Seiten (Titel, Seitencode, " +
-    "Sektion, notePath) - noch keinen vollen Seitentext.",
-  search_manual_fuzzy:
-    "search_manual_fuzzy(query): durchsucht das Handbuch tippfehler- und synonymtolerant. Nützlich bei " +
-    "umgangssprachlichen Formulierungen oder wenn search_manual nichts Passendes liefert.",
-  get_manual_page:
-    "get_manual_page(notePath, seitencode, sektion, titel): liest eine bestimmte, bereits über eine der " +
-    "Suchen gefundene Handbuchseite vollständig ein, wenn du mehr Details brauchst. Gib exakt die Werte " +
-    "zurück, die dir die Suche für diesen Treffer geliefert hat.",
-  ask_user:
-    "ask_user(question): stellt dem Nutzer eine kurze Rückfrage, falls die Frage mehrdeutig ist oder eine " +
-    "für die Antwort wichtige Information fehlt (z.B. Baujahr, Motorvariante, welches Bauteil genau). " +
-    "Nutze dies sparsam - nur wenn eine Rückfrage die Antwort deutlich verbessern würde.",
-};
+/**
+ * Derived from `FUNCTION_DECLARATIONS` (the single source of truth for tool
+ * name/parameters/description - see agent/tool-declarations.ts) so the
+ * natural-language prompt suffix and the API's function-calling schema can't
+ * drift apart. Formatted as "name(param1, param2): description" per tool.
+ */
+function toolParamNames(decl: FunctionDeclaration): string[] {
+  const properties = (decl.parameters as { properties?: Record<string, unknown> } | undefined)?.properties;
+  return properties ? Object.keys(properties) : [];
+}
+
+const TOOL_DESCRIPTIONS: Record<string, string> = Object.fromEntries(
+  FUNCTION_DECLARATIONS.map((decl) => [decl.name, `${decl.name}(${toolParamNames(decl).join(", ")}): ${decl.description}`])
+);
 
 const GOOGLE_SEARCH_DESCRIPTION =
   "google_search: durchsucht das Web nach aktuellen, öffentlich verfügbaren Informationen.";

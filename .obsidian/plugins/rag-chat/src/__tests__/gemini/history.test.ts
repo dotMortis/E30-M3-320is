@@ -32,6 +32,11 @@ describe("buildHistoryContents", () => {
     expect(buildHistoryContents(history)).toEqual([]);
   });
 
+  it("emits trimmed text, not the raw untrimmed turn.text (matches the emptiness check it passed)", () => {
+    const history: ChatTurn[] = [{ role: "user", text: "  Frage mit Leerzeichen drumherum  \n" }];
+    expect(buildHistoryContents(history)).toEqual([{ role: "user", parts: [{ text: "Frage mit Leerzeichen drumherum" }] }]);
+  });
+
   it("preserves turn order across multiple turns", () => {
     const history: ChatTurn[] = [
       { role: "user", text: "erste Frage" },
