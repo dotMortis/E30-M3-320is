@@ -33,25 +33,27 @@ export function buildComposer(container: HTMLElement): ComposerElements {
     },
   });
 
-  const sendButton = inputRow.createEl("button", { cls: "rag-chat-send", text: "Fragen" });
+  const controlsRow = container.createDiv({ cls: "rag-chat-input-controls" });
 
   const thinkingCheckboxEl = optionToggle(
-    inputRow,
+    controlsRow,
     "Lässt das Modell vor der Antwort nachdenken - genauer, aber spürbar langsamer.",
     "Denken",
   );
   const webSearchCheckboxEl = optionToggle(
-    inputRow,
+    controlsRow,
     "Erlaubt dem Modell, das Web nach zusätzlichem Kontext zu durchsuchen - fügt Latenz hinzu.",
     "Websuche",
   );
 
-  const ttsToggleLabel = inputRow.createEl("label", { cls: "rag-chat-tts-toggle" });
+  const ttsToggleLabel = controlsRow.createEl("label", { cls: "rag-chat-tts-toggle" });
   const ttsCheckboxEl = ttsToggleLabel.createEl("input", {
     cls: "rag-chat-tts-checkbox",
     attr: { type: "checkbox" },
   });
   ttsToggleLabel.createSpan({ text: "Sprachausgabe" });
+
+  const sendButton = controlsRow.createEl("button", { cls: "rag-chat-send", text: "Fragen" });
 
   return {
     clarificationRow,

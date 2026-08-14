@@ -373,22 +373,29 @@
 }
 
 .rag-chat-input-row {
-  display: flex;
-  gap: 6px;
-  padding: 8px;
+  padding: 8px 8px 0;
   border-top: 1px solid var(--background-modifier-border);
 }
 
 .rag-chat-input {
-  flex: 1 1 auto;
+  width: 100%;
   resize: none;
   min-height: 2.5em;
   max-height: 8em;
   font-family: inherit;
 }
 
+.rag-chat-input-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 6px 8px 8px;
+}
+
 .rag-chat-send {
   flex: 0 0 auto;
+  margin-left: auto;
 }
 
 .rag-chat-option-toggle,
