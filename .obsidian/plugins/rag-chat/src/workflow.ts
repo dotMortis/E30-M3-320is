@@ -1,6 +1,7 @@
 import type { Vault } from "obsidian";
 import { describeEmbedding, describeRetrieval } from "./agent/status-text";
 import { NOOP_STEP_REPORTER, type StepReporter } from "./agent/step-reporter";
+import { runAudioAgentLoop } from "./agent/audio-loop";
 import { runAgentLoop, resumeAgentLoop } from "./agent/loop";
 import type { AgentResult, PendingAgentState } from "./agent/types";
 import type { GroundingChunk, GroundingSupport } from "./gemini/types";
@@ -21,6 +22,22 @@ export interface WorkflowParams {
   fuzzyApi: FuzzySearchApi | null;
   reporter?: StepReporter;
 
+  onTextDelta?: (text: string) => void;
+  onShortAnswerReady?: (text: string) => void;
+  signal?: AbortSignal;
+}
+
+export interface AudioWorkflowParams {
+  base64Audio: string;
+  mimeType: string;
+  history: ChatTurn[];
+  settings: RagChatSettings;
+  vault: Vault;
+  indices: CachedIndices;
+  fuzzyApi: FuzzySearchApi | null;
+  reporter?: StepReporter;
+
+  onTranscriptReady?: (text: string) => void;
   onTextDelta?: (text: string) => void;
   onShortAnswerReady?: (text: string) => void;
   signal?: AbortSignal;
@@ -119,6 +136,37 @@ export async function answerQuestion(params: WorkflowParams): Promise<WorkflowRe
     history,
     baselineBlocks,
     ctx: { settings, vault, indices, fuzzyApi, reporter: rep, onTextDelta, onShortAnswerReady, signal },
+  });
+  return toWorkflowResult(result);
+}
+
+export async function answerQuestionFromAudio(params: AudioWorkflowParams): Promise<WorkflowResult> {
+  const {
+    base64Audio,
+    mimeType,
+    history,
+    settings,
+    vault,
+    indices,
+    fuzzyApi,
+    reporter,
+    onTranscriptReady,
+    onTextDelta,
+    onShortAnswerReady,
+    signal,
+  } = params;
+
+  if (signal?.aborted) {
+    throw new Error(ABORT_ERROR_MESSAGE);
+  }
+  const rep = reporter ?? NOOP_STEP_REPORTER;
+
+  const result = await runAudioAgentLoop({
+    base64Audio,
+    mimeType,
+    history,
+    ctx: { settings, vault, indices, fuzzyApi, reporter: rep, onTextDelta, onShortAnswerReady, onTranscriptReady, signal },
+    retrieve: (transcript) => baselineRetrieve(transcript, settings, indices, fuzzyApi, vault, rep, signal),
   });
   return toWorkflowResult(result);
 }

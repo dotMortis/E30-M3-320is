@@ -105,7 +105,8 @@ var DEFAULT_SETTINGS = {
 	ttsVoiceName: "de-DE-Chirp3-HD-Laomedeia",
 	ttsOutputDeviceId: "",
 	ttsVolume: 1,
-	ttsCharCount: 0
+	ttsCharCount: 0,
+	micInputDeviceId: ""
 };
 //#endregion
 //#region src/settings/settings-store.ts
@@ -441,6 +442,60 @@ function renderGenerationModel(containerEl, plugin) {
 	refreshModelOptions();
 }
 //#endregion
+//#region src/stt/devices.ts
+async function listInputDevices() {
+	if (!navigator.mediaDevices?.enumerateDevices) return [];
+	return (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audioinput");
+}
+//#endregion
+//#region src/tts/devices.ts
+async function listOutputDevices() {
+	if (!navigator.mediaDevices?.enumerateDevices) return [];
+	return (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audiooutput");
+}
+async function unlockDeviceLabels() {
+	if (!navigator.mediaDevices?.getUserMedia) return;
+	try {
+		const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+		for (const track of stream.getTracks()) track.stop();
+	} catch {}
+}
+//#endregion
+//#region src/settings/sections/mic-input.ts
+function renderMicInputSection(containerEl, plugin) {
+	let deviceDropdown;
+	const refreshDeviceOptions = async () => {
+		if (!deviceDropdown) return;
+		const devices = await listInputDevices();
+		const current = plugin.settings.micInputDeviceId;
+		deviceDropdown.selectEl.empty();
+		deviceDropdown.addOption("", "Systemstandard");
+		for (const device of devices) {
+			if (!device.deviceId || device.deviceId === "default") continue;
+			deviceDropdown.addOption(device.deviceId, device.label || `Gerät ${device.deviceId.slice(0, 8)}`);
+		}
+		const hasCurrent = current === "" || devices.some((d) => d.deviceId === current);
+		deviceDropdown.setValue(hasCurrent ? current : "");
+	};
+	new obsidian.Setting(containerEl).setName("Mikrofon (Spracheingabe)").setDesc("Mikrofon für die Sprachaufnahme-Taste im Chat. \"Geräte erkennen\" fragt einmalig nach Mikrofonberechtigung, nur um Gerätenamen auszulesen - es wird nichts aufgenommen oder übertragen.").addDropdown((dropdown) => {
+		deviceDropdown = dropdown;
+		dropdown.addOption("", "Systemstandard");
+		dropdown.onChange(async (value) => {
+			plugin.settings.micInputDeviceId = value;
+			await plugin.saveSettings();
+		});
+	}).addButton((button) => {
+		button.setButtonText("Geräte erkennen");
+		button.onClick(async () => {
+			button.setDisabled(true);
+			await unlockDeviceLabels();
+			await refreshDeviceOptions();
+			button.setDisabled(false);
+		});
+	});
+	refreshDeviceOptions();
+}
+//#endregion
 //#region src/settings/sections/retrieval.ts
 function renderRetrievalSection(containerEl, plugin) {
 	new obsidian.Setting(containerEl).setName("Embedding model").setDesc("Must match the model the index was built with (see rag-manifest.json). Google-only.").addText((text) => text.setValue(plugin.settings.embeddingModel).onChange(async (value) => {
@@ -492,19 +547,6 @@ function renderRetrievalKnobs(containerEl, plugin) {
 			await plugin.saveSettings();
 		}
 	});
-}
-//#endregion
-//#region src/tts/devices.ts
-async function listOutputDevices() {
-	if (!navigator.mediaDevices?.enumerateDevices) return [];
-	return (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audiooutput");
-}
-async function unlockDeviceLabels() {
-	if (!navigator.mediaDevices?.getUserMedia) return;
-	try {
-		const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-		for (const track of stream.getTracks()) track.stop();
-	} catch {}
 }
 //#endregion
 //#region src/tts/playback.ts
@@ -593,7 +635,7 @@ function confirmModal(app, message) {
 //#region src/settings/sections/tts-audio.ts
 function renderTtsAudioSection(containerEl, plugin, app) {
 	renderDevicePicker(containerEl, plugin);
-	new obsidian.Setting(containerEl).setName("Lautstärke").addSlider((slider) => slider.setLimits(0, 1, .05).setValue(plugin.settings.ttsVolume).setDynamicTooltip().onChange(async (value) => {
+	new obsidian.Setting(containerEl).setName("Lautstärke").addSlider((slider) => slider.setLimits(0, 1, .01).setValue(plugin.settings.ttsVolume).onChange(async (value) => {
 		setVolume(value);
 		plugin.settings.ttsVolume = value;
 		await plugin.saveSettings();
@@ -774,6 +816,7 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 		renderAgentSection(containerEl, this.plugin);
 		renderTtsVoiceSection(containerEl, this.plugin);
 		renderTtsAudioSection(containerEl, this.plugin, this.app);
+		renderMicInputSection(containerEl, this.plugin);
 	}
 };
 //#endregion
@@ -8490,6 +8533,132 @@ function clearIndicesCache() {
 	cachedPromise = null;
 }
 //#endregion
+//#region src/stt/recorder.ts
+var CANDIDATE_MIME_TYPES = [
+	"audio/webm;codecs=opus",
+	"audio/webm",
+	"audio/ogg;codecs=opus"
+];
+function pickSupportedMimeType() {
+	if (typeof MediaRecorder === "undefined" || !MediaRecorder.isTypeSupported) return void 0;
+	return CANDIDATE_MIME_TYPES.find((candidate) => MediaRecorder.isTypeSupported(candidate));
+}
+/**
+* Records microphone audio for a push-to-talk style workflow: call start(), then
+* later stop() to get the recorded clip. Safe to call stop() even if start()'s
+* getUserMedia permission prompt hasn't resolved yet (e.g. a very quick tap).
+*/
+var MicRecorder = class {
+	constructor() {
+		this.stream = null;
+		this.mediaRecorder = null;
+		this.chunks = [];
+		this.startPromise = null;
+		this.stopRequested = false;
+	}
+	async start(deviceId) {
+		if (!navigator.mediaDevices?.getUserMedia) throw new Error("Mikrofonzugriff wird von dieser Umgebung nicht unterstützt.");
+		const constraints = { audio: deviceId ? { deviceId: { exact: deviceId } } : true };
+		this.startPromise = (async () => {
+			const stream = await navigator.mediaDevices.getUserMedia(constraints);
+			if (this.stopRequested) {
+				for (const track of stream.getTracks()) track.stop();
+				return;
+			}
+			this.stream = stream;
+			const mimeType = pickSupportedMimeType();
+			this.mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : void 0);
+			this.chunks = [];
+			this.mediaRecorder.ondataavailable = (evt) => {
+				if (evt.data && evt.data.size > 0) this.chunks.push(evt.data);
+			};
+			this.mediaRecorder.start();
+		})();
+		return this.startPromise;
+	}
+	/** Stops recording (if started) and releases the microphone. Returns the recorded clip, or null if nothing was recorded. */
+	async stop() {
+		this.stopRequested = true;
+		if (this.startPromise) await this.startPromise.catch(() => void 0);
+		const recorder = this.mediaRecorder;
+		const stream = this.stream;
+		this.mediaRecorder = null;
+		this.stream = null;
+		if (!recorder || recorder.state === "inactive") {
+			if (stream) for (const track of stream.getTracks()) track.stop();
+			return null;
+		}
+		const blob = await new Promise((resolve) => {
+			recorder.addEventListener("stop", () => resolve(new Blob(this.chunks, { type: recorder.mimeType || "audio/webm" })), { once: true });
+			recorder.stop();
+		});
+		if (stream) for (const track of stream.getTracks()) track.stop();
+		return blob;
+	}
+};
+//#endregion
+//#region src/stt/wav-encode.ts
+/**
+* Decodes a recorded audio Blob (typically audio/webm from MediaRecorder) and re-encodes it
+* as 16-bit PCM WAV, base64-encoded. Gemini's documented inline-audio mime types are
+* wav/mp3/aiff/aac/ogg/flac - not webm - so recorder output is normalized here before upload.
+*/
+async function blobToWavBase64(blob) {
+	const arrayBuffer = await blob.arrayBuffer();
+	const AudioContextCtor = window.AudioContext ?? window.webkitAudioContext;
+	if (!AudioContextCtor) throw new Error("AudioContext wird von dieser Umgebung nicht unterstützt.");
+	const audioContext = new AudioContextCtor();
+	try {
+		return {
+			base64: arrayBufferToBase64(encodeWav(await audioContext.decodeAudioData(arrayBuffer))),
+			mimeType: "audio/wav"
+		};
+	} finally {
+		audioContext.close();
+	}
+}
+function encodeWav(audioBuffer) {
+	const numChannels = audioBuffer.numberOfChannels;
+	const sampleRate = audioBuffer.sampleRate;
+	const numFrames = audioBuffer.length;
+	const blockAlign = numChannels * 2;
+	const dataSize = numFrames * blockAlign;
+	const buffer = new ArrayBuffer(44 + dataSize);
+	const view = new DataView(buffer);
+	writeAscii(view, 0, "RIFF");
+	view.setUint32(4, 36 + dataSize, true);
+	writeAscii(view, 8, "WAVE");
+	writeAscii(view, 12, "fmt ");
+	view.setUint32(16, 16, true);
+	view.setUint16(20, 1, true);
+	view.setUint16(22, numChannels, true);
+	view.setUint32(24, sampleRate, true);
+	view.setUint32(28, sampleRate * blockAlign, true);
+	view.setUint16(32, blockAlign, true);
+	view.setUint16(34, 16, true);
+	writeAscii(view, 36, "data");
+	view.setUint32(40, dataSize, true);
+	const channelData = [];
+	for (let ch = 0; ch < numChannels; ch++) channelData.push(audioBuffer.getChannelData(ch));
+	let offset = 44;
+	for (let i = 0; i < numFrames; i++) for (let ch = 0; ch < numChannels; ch++) {
+		const sample = Math.max(-1, Math.min(1, channelData[ch][i]));
+		view.setInt16(offset, sample < 0 ? sample * 32768 : sample * 32767, true);
+		offset += 2;
+	}
+	return buffer;
+}
+function writeAscii(view, offset, text) {
+	for (let i = 0; i < text.length; i++) view.setUint8(offset + i, text.charCodeAt(i));
+}
+function arrayBufferToBase64(buffer) {
+	const bytes = new Uint8Array(buffer);
+	let binary = "";
+	const chunkSize = 32768;
+	for (let i = 0; i < bytes.length; i += chunkSize) binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+	return btoa(binary);
+}
+//#endregion
 //#region src/agent/step-reporter.ts
 function createStepReporter(onStep) {
 	let counter = 0;
@@ -8597,6 +8766,53 @@ function describeFinalAnswer(text, manualCitations, webCitations) {
 	return `Antwort erstellt (${text.trim().length} Zeichen) mit ${manualCitations.length} Handbuch-Zitat(en) und ${webCitations.length} Web-Zitat(en).`;
 }
 //#endregion
+//#region src/gemini/history.ts
+function buildHistoryContents(history) {
+	return history.map((t) => ({
+		...t,
+		text: t.text.trim()
+	})).filter((t) => t.text.length > 0).map((t) => ({
+		role: t.role === "assistant" ? "model" : "user",
+		parts: [{ text: t.text }]
+	}));
+}
+//#endregion
+//#region src/gemini/transcript-block.ts
+var TRANSCRIPT_START = "%%%TRANSCRIPT_START%%%";
+var TRANSCRIPT_END = "%%%TRANSCRIPT_END%%%";
+function splitTranscriptBlock(text) {
+	const startIdx = text.indexOf(TRANSCRIPT_START);
+	if (startIdx === -1) return { transcriptComplete: false };
+	const endIdx = text.indexOf(TRANSCRIPT_END, startIdx + 22);
+	if (endIdx === -1) return { transcriptComplete: false };
+	return {
+		transcript: text.slice(startIdx + 22, endIdx).trim(),
+		transcriptComplete: true
+	};
+}
+function extractFinalTranscript(fullText) {
+	const block = splitTranscriptBlock(fullText);
+	if (block.transcriptComplete) return block.transcript ?? "";
+	return fullText.trim();
+}
+//#endregion
+//#region src/agent/audio-turn.ts
+var AUDIO_TURN_INSTRUCTION = `Transkribiere zuerst wortwörtlich das gesprochene Audio, in der Originalsprache. Gib NUR das Transkript aus, eingeschlossen in ${TRANSCRIPT_START} und ${TRANSCRIPT_END} - keine Anführungszeichen, keine Kommentare, keine Zusätze. Ist kein verständliches Audio zu erkennen, lass den Inhalt zwischen den Markern leer. Beantworte die Frage in dieser Runde noch NICHT - dir fehlt dafür noch der Handbuchkontext, der dir gleich in der nächsten Runde zugeführt wird. Tätige in dieser Runde keinen Funktionsaufruf.`;
+function buildAudioInitialState(base64Audio, mimeType, history) {
+	return {
+		contents: [...buildHistoryContents(history), {
+			role: "user",
+			parts: [{ inlineData: {
+				mimeType,
+				data: base64Audio
+			} }, { text: AUDIO_TURN_INSTRUCTION }]
+		}],
+		round: 0,
+		manualPages: /* @__PURE__ */ new Map(),
+		webCitations: /* @__PURE__ */ new Map()
+	};
+}
+//#endregion
 //#region src/gemini/answer-blocks.ts
 var SHORT_ANSWER_START = "%%%SHORT_ANSWER_START%%%";
 var SHORT_ANSWER_END = "%%%SHORT_ANSWER_END%%%";
@@ -8640,17 +8856,6 @@ function extractFinalAnswer(fullText) {
 		shortAnswer: blocks.shortAnswer
 	};
 	return { text: stripAllMarkers(fullText) };
-}
-//#endregion
-//#region src/gemini/history.ts
-function buildHistoryContents(history) {
-	return history.map((t) => ({
-		...t,
-		text: t.text.trim()
-	})).filter((t) => t.text.length > 0).map((t) => ({
-		role: t.role === "assistant" ? "model" : "user",
-		parts: [{ text: t.text }]
-	}));
 }
 //#endregion
 //#region src/retrieval/context-xml.ts
@@ -8971,10 +9176,8 @@ function buildGenerateBody(contents, functionDeclarations, model, opts) {
 	const tools = [];
 	if (includeGoogleSearch) tools.push({ google_search: {} });
 	if (functionDeclarations && functionDeclarations.length > 0) tools.push({ functionDeclarations });
-	const body = {
-		systemInstruction: { parts: [{ text: SYSTEM_PROMPT(includeGoogleSearch, opts?.ttsRequested === true) + buildToolsSuffix(functionDeclarations, includeGoogleSearch) }] },
-		contents
-	};
+	const body = { contents };
+	if (!opts?.skipSystemInstruction) body.systemInstruction = { parts: [{ text: SYSTEM_PROMPT(includeGoogleSearch, opts?.ttsRequested === true) + buildToolsSuffix(functionDeclarations, includeGoogleSearch) }] };
 	if (tools.length > 0) {
 		body.tools = tools;
 		if (includeGoogleSearch && functionDeclarations && functionDeclarations.length > 0) body.toolConfig = { includeServerSideToolInvocations: true };
@@ -9440,6 +9643,49 @@ async function resumeAgentLoop(pending, userAnswer, signal) {
 	return driveLoop(state, ctx);
 }
 //#endregion
+//#region src/agent/transcript-round.ts
+async function runTranscriptRound(state, ctx) {
+	let roundText = "";
+	let transcriptSent = false;
+	return extractFinalTranscript((await generateWithToolsStreaming(state.contents, null, ctx.settings, {
+		includeGoogleSearch: false,
+		thinkingEnabled: false,
+		ttsRequested: false,
+		skipSystemInstruction: true,
+		onDelta: (chunk) => {
+			roundText += chunk;
+			if (transcriptSent) return;
+			const block = splitTranscriptBlock(roundText);
+			if (block.transcriptComplete) {
+				transcriptSent = true;
+				ctx.onTranscriptReady?.(block.transcript ?? "");
+			}
+		},
+		signal: ctx.signal
+	})).parts.map((p) => p.text ?? "").join(""));
+}
+//#endregion
+//#region src/agent/audio-loop.ts
+async function runAudioAgentLoop(params) {
+	const { base64Audio, mimeType, history, ctx, retrieve } = params;
+	const transcriptState = buildAudioInitialState(base64Audio, mimeType, history);
+	let retrievalPromise = null;
+	const transcript = await runTranscriptRound(transcriptState, {
+		...ctx,
+		onTranscriptReady: (transcript) => {
+			ctx.onTranscriptReady?.(transcript);
+			if (transcript) retrievalPromise ??= retrieve(transcript);
+		}
+	});
+	if (!transcript) throw new Error("Keine verständliche Sprache erkannt.");
+	return runAgentLoop({
+		question: transcript,
+		history,
+		baselineBlocks: await (retrievalPromise ?? retrieve(transcript)),
+		ctx
+	});
+}
+//#endregion
 //#region src/retrieval/fuzzy-merge.ts
 function mergeWithFuzzy(hybridHits, fuzzyHits, topK, rrfK) {
 	return rrfMerge([hybridHits.map((h, i) => ({
@@ -9569,6 +9815,28 @@ async function answerQuestion(params) {
 		}
 	}));
 }
+async function answerQuestionFromAudio(params) {
+	const { base64Audio, mimeType, history, settings, vault, indices, fuzzyApi, reporter, onTranscriptReady, onTextDelta, onShortAnswerReady, signal } = params;
+	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
+	const rep = reporter ?? NOOP_STEP_REPORTER;
+	return toWorkflowResult(await runAudioAgentLoop({
+		base64Audio,
+		mimeType,
+		history,
+		ctx: {
+			settings,
+			vault,
+			indices,
+			fuzzyApi,
+			reporter: rep,
+			onTextDelta,
+			onShortAnswerReady,
+			onTranscriptReady,
+			signal
+		},
+		retrieve: (transcript) => baselineRetrieve(transcript, settings, indices, fuzzyApi, vault, rep, signal)
+	}));
+}
 async function continueAnswer(pending, userAnswer, signal) {
 	if (signal?.aborted) throw new Error(ABORT_ERROR_MESSAGE);
 	return toWorkflowResult(await resumeAgentLoop(pending, userAnswer, signal));
@@ -9619,28 +9887,30 @@ function abandonPendingClarification(state) {
 function inputPlaceholder(state) {
 	return state.pendingAgentState !== null ? "Antwort auf die Rückfrage …" : "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)";
 }
-async function sendMessage(state, message, deps) {
+async function sendMessage(state, message, deps, opts) {
 	if (state.busy) return;
 	state.busy = true;
 	try {
-		await sendMessageUnguarded(state, message, deps);
+		await sendMessageUnguarded(state, message, deps, opts);
 	} finally {
 		state.busy = false;
 	}
 }
-async function sendMessageUnguarded(state, message, deps) {
+async function sendMessageUnguarded(state, message, deps, opts) {
 	const isResuming = state.pendingAgentState !== null;
 	const pendingBeforeSend = state.pendingAgentState;
 	const history = [...state.turns];
 	const userTurn = {
 		role: "user",
-		text: message
+		text: message,
+		originatedFromVoice: opts?.originatedFromVoice
 	};
 	state.turns.push(userTurn);
 	const assistantTurn = {
 		role: "assistant",
 		text: "",
-		status: isResuming ? "Setze Suche fort …" : "Analysiere Frage …"
+		status: isResuming ? "Setze Suche fort …" : "Analysiere Frage …",
+		originatedFromVoice: opts?.originatedFromVoice
 	};
 	state.turns.push(assistantTurn);
 	deps.onTurnStarted?.(assistantTurn);
@@ -9681,6 +9951,7 @@ async function sendMessageUnguarded(state, message, deps) {
 		});
 		applyResult(assistantTurn, state, result);
 		if (result.status === "done") deps.onTurnDone?.(assistantTurn);
+		else deps.onClarificationReady?.(assistantTurn);
 	} catch (err) {
 		if (deps.signal?.aborted) {
 			state.turns.splice(state.turns.length - 2, 2);
@@ -9712,6 +9983,86 @@ async function retryTurn(state, turn, deps) {
 	const message = discardFailedTurn(state, turn);
 	if (message === null) return;
 	await sendMessage(state, message, deps);
+}
+async function sendVoiceMessage(state, audio, deps) {
+	if (state.busy) return;
+	state.busy = true;
+	try {
+		await sendVoiceMessageUnguarded(state, audio, deps);
+	} finally {
+		state.busy = false;
+	}
+}
+async function sendVoiceMessageUnguarded(state, audio, deps) {
+	const pendingBeforeSend = state.pendingAgentState;
+	const history = [...state.turns];
+	const userTurn = {
+		role: "user",
+		text: "",
+		originatedFromVoice: true
+	};
+	state.turns.push(userTurn);
+	const assistantTurn = {
+		role: "assistant",
+		text: "",
+		status: "Transkribiere Sprachaufnahme …",
+		originatedFromVoice: true
+	};
+	state.turns.push(assistantTurn);
+	deps.onTurnStarted?.(assistantTurn);
+	const reporter = createStepReporter((step) => {
+		assistantTurn.status = step.title;
+		const steps = assistantTurn.steps ??= [];
+		if (!steps.includes(step)) steps.push(step);
+		deps.onStep?.(step);
+	});
+	const onTextDelta = (text) => {
+		assistantTurn.streamingText = text || void 0;
+		deps.onTextDelta?.();
+	};
+	const onShortAnswerReady = (text) => {
+		assistantTurn.ttsShortAnswer = text;
+		deps.onShortAnswerReady?.(assistantTurn);
+	};
+	const onTranscriptReady = (text) => {
+		userTurn.text = text;
+		assistantTurn.status = "Analysiere Frage …";
+		deps.onTranscriptReady?.(userTurn);
+	};
+	try {
+		const result = await answerQuestionFromAudio({
+			base64Audio: audio.base64Audio,
+			mimeType: audio.mimeType,
+			history,
+			settings: deps.settings,
+			vault: deps.vault,
+			indices: await deps.getIndices(),
+			fuzzyApi: deps.getFuzzyApi(),
+			reporter,
+			onTranscriptReady,
+			onTextDelta,
+			onShortAnswerReady,
+			signal: deps.signal
+		});
+		applyResult(assistantTurn, state, result);
+		if (result.status === "done") deps.onTurnDone?.(assistantTurn);
+		else deps.onClarificationReady?.(assistantTurn);
+	} catch (err) {
+		if (deps.signal?.aborted) {
+			state.turns.splice(state.turns.length - 2, 2);
+			state.pendingAgentState = pendingBeforeSend;
+			deps.onCancelled?.(userTurn.text);
+			return;
+		}
+		state.pendingAgentState = null;
+		const errMessage = err instanceof Error ? err.message : String(err);
+		applyError(assistantTurn, errMessage);
+		if (userTurn.text) assistantTurn.retry = {
+			message: userTurn.text,
+			pendingBefore: pendingBeforeSend
+		};
+		deps.onError?.(errMessage);
+	}
 }
 //#endregion
 //#region src/view/fuzzy-search-plugin.ts
@@ -10395,7 +10746,7 @@ async function recordCharsUsed(plugin, charCount) {
 }
 //#endregion
 //#region src/view/turn-speech.ts
-function errText(err) {
+function errText$1(err) {
 	return err instanceof Error ? err.message : String(err);
 }
 var TurnSpeech = class {
@@ -10412,7 +10763,8 @@ var TurnSpeech = class {
 		this.playingTurn = null;
 	}
 	beginStreamingSpeech(turn, shortText, signal) {
-		if (!this.host.plugin().settings.ttsEnabled || !shortText) return;
+		if (!shortText) return;
+		if (!turn.originatedFromVoice && !this.host.plugin().settings.ttsEnabled) return;
 		const promise = synthesizeSpeech(shortText, this.host.plugin().settings, { signal }).catch(() => null);
 		this.speculativeAudio.set(turn, promise);
 	}
@@ -10446,7 +10798,7 @@ var TurnSpeech = class {
 			turn.ttsStatus = "error";
 			if (!this.host.isClosed()) {
 				this.host.syncTurn(turn);
-				new obsidian.Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${errText(err)}).`);
+				new obsidian.Notice(`RAG Chat: Sprachausgabe fehlgeschlagen (${errText$1(err)}).`);
 			}
 		}
 	}
@@ -10478,7 +10830,7 @@ var TurnSpeech = class {
 			});
 		} catch (err) {
 			this.playingTurn = null;
-			if (!this.host.isClosed()) new obsidian.Notice(`RAG Chat: Wiedergabe fehlgeschlagen (${errText(err)}).`);
+			if (!this.host.isClosed()) new obsidian.Notice(`RAG Chat: Wiedergabe fehlgeschlagen (${errText$1(err)}).`);
 		}
 		if (!this.host.isClosed()) this.host.syncTurn(turn);
 	}
@@ -10516,10 +10868,20 @@ function buildComposer(container) {
 		attr: { type: "checkbox" }
 	});
 	ttsToggleLabel.createSpan({ text: "Sprachausgabe" });
+	const micButton = controlsRow.createEl("button", {
+		cls: "rag-chat-mic-button",
+		attr: {
+			type: "button",
+			"aria-label": "Gedrückt halten, um eine Sprachnachricht aufzunehmen (oder Strg+Alt+Umschalt+F12)",
+			title: "Gedrückt halten, um eine Sprachnachricht aufzunehmen (oder Strg+Alt+Umschalt+F12)"
+		}
+	});
+	(0, obsidian.setIcon)(micButton, "mic");
 	return {
 		clarificationRow,
 		cancelClarificationButton,
 		inputEl,
+		micButton,
 		sendButton: controlsRow.createEl("button", {
 			cls: "rag-chat-send",
 			text: "Fragen"
@@ -10580,6 +10942,11 @@ function buildTtsControls(container) {
 //#endregion
 //#region src/view/view.ts
 var RAG_CHAT_VIEW_TYPE = "rag-chat-view";
+/** Recordings shorter than this are treated as accidental taps and silently discarded. */
+var MIN_RECORDING_MS = 300;
+function errText(err) {
+	return err instanceof Error ? err.message : String(err);
+}
 function emptyRenderResult() {
 	return {
 		turnEls: /* @__PURE__ */ new Map(),
@@ -10596,6 +10963,9 @@ var RagChatView = class extends obsidian.ItemView {
 		this.rendered = emptyRenderResult();
 		this.closed = false;
 		this.abortController = null;
+		this.recording = false;
+		this.recorder = null;
+		this.recordingStartedAt = 0;
 		this.speech = new TurnSpeech({
 			plugin: () => this.plugin,
 			isClosed: () => this.closed,
@@ -10631,6 +11001,7 @@ var RagChatView = class extends obsidian.ItemView {
 		this.ttsController = new TtsControlsController(this.ttsControls, this.plugin, () => this.closed, () => this.busy);
 		this.wireToolbar();
 		this.wireComposer();
+		this.wireMic();
 		this.wireTtsControls();
 		this.composer.thinkingCheckboxEl.checked = this.plugin.settings.thinkingEnabled;
 		this.composer.webSearchCheckboxEl.checked = this.plugin.settings.webSearchEnabled;
@@ -10677,6 +11048,68 @@ var RagChatView = class extends obsidian.ItemView {
 			this.ttsController.updateVisibility();
 		});
 	}
+	wireMic() {
+		const c = this.composer;
+		const start = (evt) => {
+			evt.preventDefault();
+			this.startVoiceRecording();
+		};
+		const stop = () => {
+			if (this.recording) this.stopVoiceRecordingAndSend();
+		};
+		this.registerDomEvent(c.micButton, "mousedown", start);
+		this.registerDomEvent(c.micButton, "mouseup", stop);
+		this.registerDomEvent(c.micButton, "mouseleave", stop);
+		if (typeof window !== "undefined") {
+			this.registerDomEvent(window, "mouseup", stop);
+			this.registerDomEvent(window, "blur", stop);
+		}
+	}
+	startVoiceRecording() {
+		if (this.closed || this.busy || this.recording) return;
+		this.recording = true;
+		this.recordingStartedAt = Date.now();
+		this.composer.micButton.addClass("is-recording");
+		const recorder = new MicRecorder();
+		this.recorder = recorder;
+		recorder.start(this.plugin.settings.micInputDeviceId || void 0).catch((err) => {
+			if (this.recorder !== recorder) return;
+			this.recording = false;
+			this.recorder = null;
+			if (!this.closed) {
+				this.composer.micButton.removeClass("is-recording");
+				new obsidian.Notice(`RAG Chat: Mikrofonzugriff fehlgeschlagen (${errText(err)}).`);
+			}
+		});
+	}
+	async stopVoiceRecordingAndSend() {
+		if (!this.recording || !this.recorder) return;
+		this.recording = false;
+		this.composer.micButton.removeClass("is-recording");
+		const recorder = this.recorder;
+		this.recorder = null;
+		const startedAt = this.recordingStartedAt;
+		let blob;
+		try {
+			blob = await recorder.stop();
+		} catch (err) {
+			if (!this.closed) new obsidian.Notice(`RAG Chat: Aufnahme fehlgeschlagen (${errText(err)}).`);
+			return;
+		}
+		if (this.closed) return;
+		if (!blob || Date.now() - startedAt < MIN_RECORDING_MS) return;
+		if (this.busy) return;
+		try {
+			const { base64, mimeType } = await blobToWavBase64(blob);
+			if (this.closed) return;
+			await this.runChatAction((deps) => sendVoiceMessage(this.session, {
+				base64Audio: base64,
+				mimeType
+			}, deps));
+		} catch (err) {
+			if (!this.closed) new obsidian.Notice(`RAG Chat: Sprachaufnahme fehlgeschlagen (${errText(err)}).`);
+		}
+	}
 	wireTtsControls() {
 		const t = this.ttsControls;
 		this.registerDomEvent(t.deviceSelectEl, "change", () => void this.ttsController.commitDevice());
@@ -10712,6 +11145,7 @@ var RagChatView = class extends obsidian.ItemView {
 	setBusy(busy) {
 		this.busy = busy;
 		this.composer.sendButton.setText(busy ? "Abbrechen" : "Fragen");
+		this.composer.micButton.disabled = busy;
 		this.toolbar.modelSelectEl.disabled = busy;
 		this.toolbar.modelRefreshButton.disabled = busy;
 	}
@@ -10784,6 +11218,10 @@ var RagChatView = class extends obsidian.ItemView {
 					if (this.closed) return;
 					this.speech.beginStreamingSpeech(turn, turn.ttsShortAnswer ?? "", controller.signal);
 				},
+				onTranscriptReady: (turn) => {
+					if (this.closed) return;
+					this.syncTurn(turn);
+				},
 				onError: (message) => {
 					if (this.closed) return;
 					new obsidian.Notice(`RAG Chat error: ${message}`);
@@ -10797,7 +11235,13 @@ var RagChatView = class extends obsidian.ItemView {
 					new obsidian.Notice("Anfrage abgebrochen.");
 				},
 				onTurnDone: (turn) => {
-					if (this.closed || !this.plugin.settings.ttsEnabled) return;
+					if (this.closed) return;
+					if (!turn.originatedFromVoice && !this.plugin.settings.ttsEnabled) return;
+					this.speech.synthesizeAndPlay(turn, controller.signal);
+				},
+				onClarificationReady: (turn) => {
+					if (this.closed) return;
+					if (!turn.originatedFromVoice && !this.plugin.settings.ttsEnabled) return;
 					this.speech.synthesizeAndPlay(turn, controller.signal);
 				}
 			});
@@ -10811,12 +11255,12 @@ var RagChatView = class extends obsidian.ItemView {
 			}
 		}
 	}
-	async handleSend() {
+	async handleSend(overrideMessage, opts) {
 		if (this.busy) return;
-		const message = this.composer.inputEl.value.trim();
+		const message = (overrideMessage ?? this.composer.inputEl.value).trim();
 		if (!message) return;
 		this.composer.inputEl.value = "";
-		await this.runChatAction((deps) => sendMessage(this.session, message, deps));
+		await this.runChatAction((deps) => sendMessage(this.session, message, deps, opts));
 	}
 	async handleRetryClick(turn) {
 		await this.runChatAction((deps) => retryTurn(this.session, turn, deps), { fullRerenderOnStart: true });
@@ -10851,11 +11295,31 @@ async function readManifest(vault, pluginDir) {
 }
 //#endregion
 //#region src/main.ts
+var PUSH_TO_TALK_KEY = "F12";
 var RagChatPlugin = class extends obsidian.Plugin {
 	constructor(..._args) {
 		super(..._args);
 		this.store = new SettingsStore(this);
 		this.manifestCache = null;
+		this.pushToTalkActive = false;
+		this.handlePushToTalkKeyDown = (evt) => {
+			if (!(evt.ctrlKey && evt.altKey && evt.shiftKey && evt.key === PUSH_TO_TALK_KEY)) return;
+			evt.preventDefault();
+			if (this.pushToTalkActive) return;
+			const view = this.getFirstChatView();
+			if (!view) {
+				new obsidian.Notice("RAG Chat: Bitte zuerst die Chat-Ansicht öffnen.");
+				return;
+			}
+			this.pushToTalkActive = true;
+			view.startVoiceRecording();
+		};
+		this.handlePushToTalkKeyUp = (evt) => {
+			if (evt.key !== PUSH_TO_TALK_KEY || !this.pushToTalkActive) return;
+			evt.preventDefault();
+			this.pushToTalkActive = false;
+			this.getFirstChatView()?.stopVoiceRecordingAndSend();
+		};
 	}
 	async onload() {
 		await this.loadSettings();
@@ -10885,6 +11349,10 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			}
 		});
 		this.addSettingTab(new RagChatSettingTab(this.app, this));
+		if (typeof window !== "undefined") {
+			window.addEventListener("keydown", this.handlePushToTalkKeyDown);
+			window.addEventListener("keyup", this.handlePushToTalkKeyUp);
+		}
 		this.app.workspace.onLayoutReady(() => {
 			this.activateView({ focus: false });
 		});
@@ -10896,6 +11364,14 @@ var RagChatPlugin = class extends obsidian.Plugin {
 	}
 	onunload() {
 		dispose();
+		if (typeof window !== "undefined") {
+			window.removeEventListener("keydown", this.handlePushToTalkKeyDown);
+			window.removeEventListener("keyup", this.handlePushToTalkKeyUp);
+		}
+	}
+	getFirstChatView() {
+		for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) if (leaf.view instanceof RagChatView) return leaf.view;
+		return null;
 	}
 	getPluginDir() {
 		return getPluginDir(this.manifest);

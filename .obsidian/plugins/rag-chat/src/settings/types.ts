@@ -20,6 +20,8 @@ export interface RagChatSettings {
   ttsOutputDeviceId: string;
   ttsVolume: number;
   ttsCharCount: number;
+
+  micInputDeviceId: string;
 }
 
 export const DEFAULT_SETTINGS: RagChatSettings = {
@@ -42,4 +44,6 @@ export const DEFAULT_SETTINGS: RagChatSettings = {
   ttsOutputDeviceId: "",
   ttsVolume: 1.0,
   ttsCharCount: 0,
+
+  micInputDeviceId: "",
 };

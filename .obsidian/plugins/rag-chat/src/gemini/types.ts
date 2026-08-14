@@ -3,6 +3,8 @@ export interface GeminiPart {
 
   functionCall?: { id?: string; name: string; args: Record<string, unknown> };
   functionResponse?: { id?: string; name: string; response: Record<string, unknown> };
+
+  inlineData?: { mimeType: string; data: string };
 }
 
 export interface GeminiContent {

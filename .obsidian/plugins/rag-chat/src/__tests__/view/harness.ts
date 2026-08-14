@@ -19,8 +19,9 @@ export const getIndices = vi.fn();
 vi.mock("../../retrieval/index-cache", () => ({ getIndices }));
 
 export const answerQuestion = vi.fn();
+export const answerQuestionFromAudio = vi.fn();
 export const continueAnswer = vi.fn();
-vi.mock("../../workflow", () => ({ answerQuestion, continueAnswer }));
+vi.mock("../../workflow", () => ({ answerQuestion, answerQuestionFromAudio, continueAnswer }));
 
 export const confirmModal = vi.fn();
 vi.mock("../../view/confirm-modal", () => ({ confirmModal }));
@@ -36,6 +37,18 @@ vi.mock("../../tts/usage", () => ({ recordCharsUsed }));
 
 export const listOutputDevices = vi.fn().mockResolvedValue([]);
 vi.mock("../../tts/devices", () => ({ listOutputDevices }));
+
+export const micRecorderStart = vi.fn().mockResolvedValue(undefined);
+export const micRecorderStop = vi.fn().mockResolvedValue(new Blob(["fake-audio"], { type: "audio/webm" }));
+vi.mock("../../stt/recorder", () => ({
+  MicRecorder: vi.fn().mockImplementation(function MicRecorder(this: { start: unknown; stop: unknown }) {
+    this.start = micRecorderStart;
+    this.stop = micRecorderStop;
+  }),
+}));
+
+export const blobToWavBase64 = vi.fn().mockResolvedValue({ base64: "QUJD", mimeType: "audio/wav" });
+vi.mock("../../stt/wav-encode", () => ({ blobToWavBase64 }));
 
 export const ttsPlaybackMock = {
   play: vi.fn().mockResolvedValue(undefined),

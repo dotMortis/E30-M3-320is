@@ -137,4 +137,11 @@ describe("generateWithTools request shape", () => {
     expect(body.systemInstruction.parts[0].text).toContain("%%%SHORT_ANSWER_START%%%");
   });
 
+  it("omits systemInstruction entirely when skipSystemInstruction is set, for bare calls like transcription", async () => {
+    mockRequestUrlSequence([generateContentResponse({ text: "Antwort" })]);
+    await generateWithTools(CONTENTS, [SEARCH_MANUAL], fakeSettings(), { skipSystemInstruction: true });
+    const body = JSON.parse((requestUrl.mock.calls[0][0] as { body: string }).body);
+    expect(body.systemInstruction).toBeUndefined();
+  });
+
 });

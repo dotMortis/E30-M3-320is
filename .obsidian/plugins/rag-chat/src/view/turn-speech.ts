@@ -33,7 +33,8 @@ export class TurnSpeech {
   }
 
   beginStreamingSpeech(turn: ChatTurn, shortText: string, signal?: AbortSignal): void {
-    if (!this.host.plugin().settings.ttsEnabled || !shortText) return;
+    if (!shortText) return;
+    if (!turn.originatedFromVoice && !this.host.plugin().settings.ttsEnabled) return;
     const promise = synthesizeSpeech(shortText, this.host.plugin().settings, { signal }).catch(() => null);
     this.speculativeAudio.set(turn, promise);
   }

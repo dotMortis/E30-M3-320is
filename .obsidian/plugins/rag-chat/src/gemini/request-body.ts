@@ -6,6 +6,8 @@ export interface GenerateOpts {
   includeGoogleSearch?: boolean;
   thinkingEnabled?: boolean;
   ttsRequested?: boolean;
+  /** Skips the domain system prompt and tools suffix entirely, for bare, non-agentic calls (e.g. transcription). */
+  skipSystemInstruction?: boolean;
 }
 
 export function buildGenerateBody(
@@ -21,14 +23,13 @@ export function buildGenerateBody(
     tools.push({ functionDeclarations });
   }
 
-  const systemInstructionText =
-    SYSTEM_PROMPT(includeGoogleSearch, opts?.ttsRequested === true) +
-    buildToolsSuffix(functionDeclarations, includeGoogleSearch);
-
-  const body: Record<string, unknown> = {
-    systemInstruction: { parts: [{ text: systemInstructionText }] },
-    contents,
-  };
+  const body: Record<string, unknown> = { contents };
+  if (!opts?.skipSystemInstruction) {
+    const systemInstructionText =
+      SYSTEM_PROMPT(includeGoogleSearch, opts?.ttsRequested === true) +
+      buildToolsSuffix(functionDeclarations, includeGoogleSearch);
+    body.systemInstruction = { parts: [{ text: systemInstructionText }] };
+  }
   if (tools.length > 0) {
     body.tools = tools;
     if (includeGoogleSearch && functionDeclarations && functionDeclarations.length > 0) {

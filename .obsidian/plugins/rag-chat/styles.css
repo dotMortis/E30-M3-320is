@@ -398,6 +398,31 @@
   margin-left: auto;
 }
 
+.rag-chat-mic-button {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.rag-chat-mic-button.is-recording {
+  color: var(--text-on-accent);
+  background-color: var(--text-error);
+  animation: rag-chat-mic-pulse 1s ease-in-out infinite;
+}
+
+@keyframes rag-chat-mic-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
 .rag-chat-option-toggle,
 .rag-chat-tts-toggle {
   display: flex;

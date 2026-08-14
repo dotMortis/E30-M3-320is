@@ -13,6 +13,7 @@ export interface AgentLoopContext {
 
   onTextDelta?: (text: string) => void;
   onShortAnswerReady?: (text: string) => void;
+  onTranscriptReady?: (text: string) => void;
   signal?: AbortSignal;
 }
 

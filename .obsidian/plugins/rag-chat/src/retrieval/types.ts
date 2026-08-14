@@ -107,6 +107,8 @@ export interface ChatTurn {
   isClarifying?: boolean;
   retry?: { message: string; pendingBefore: PendingAgentState | null };
 
+  originatedFromVoice?: boolean;
+
   ttsText?: string;
   ttsShortAnswer?: string;
 

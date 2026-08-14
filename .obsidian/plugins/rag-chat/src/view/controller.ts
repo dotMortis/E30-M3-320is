@@ -1,7 +1,7 @@
 import type { Vault } from "obsidian";
 import type { PendingAgentState } from "../agent/types";
 import { createStepReporter } from "../agent/step-reporter";
-import { answerQuestion, continueAnswer, type WorkflowResult } from "../workflow";
+import { answerQuestion, answerQuestionFromAudio, continueAnswer, type WorkflowResult } from "../workflow";
 import type { CachedIndices, ChatTurn, FuzzySearchApi, PipelineStep } from "../retrieval/types";
 import type { RagChatSettings } from "../settings/types";
 import { applyError, applyResult } from "./apply-result";
@@ -23,10 +23,12 @@ export interface SendMessageDeps {
 
   onTextDelta?: () => void;
   onShortAnswerReady?: (assistantTurn: ChatTurn) => void;
+  onTranscriptReady?: (userTurn: ChatTurn) => void;
   onError?: (message: string) => void;
   onCancelled?: (originalMessage: string) => void;
 
   onTurnDone?: (assistantTurn: ChatTurn) => void;
+  onClarificationReady?: (assistantTurn: ChatTurn) => void;
   signal?: AbortSignal;
 }
 
@@ -44,28 +46,44 @@ export function inputPlaceholder(state: ChatSessionState): string {
     : "Frage zum Handbuch stellen... (z.B. Anzugsdrehmoment Zylinderkopf)";
 }
 
-export async function sendMessage(state: ChatSessionState, message: string, deps: SendMessageDeps): Promise<void> {
+export interface SendMessageOptions {
+  /** Marks the resulting turns as voice-originated so the reply is spoken even if TTS is off. */
+  originatedFromVoice?: boolean;
+}
+
+export async function sendMessage(
+  state: ChatSessionState,
+  message: string,
+  deps: SendMessageDeps,
+  opts?: SendMessageOptions,
+): Promise<void> {
   if (state.busy) return;
   state.busy = true;
 
   try {
-    await sendMessageUnguarded(state, message, deps);
+    await sendMessageUnguarded(state, message, deps, opts);
   } finally {
     state.busy = false;
   }
 }
 
-async function sendMessageUnguarded(state: ChatSessionState, message: string, deps: SendMessageDeps): Promise<void> {
+async function sendMessageUnguarded(
+  state: ChatSessionState,
+  message: string,
+  deps: SendMessageDeps,
+  opts?: SendMessageOptions,
+): Promise<void> {
   const isResuming = state.pendingAgentState !== null;
   const pendingBeforeSend = state.pendingAgentState;
 
   const history = [...state.turns];
-  const userTurn: ChatTurn = { role: "user", text: message };
+  const userTurn: ChatTurn = { role: "user", text: message, originatedFromVoice: opts?.originatedFromVoice };
   state.turns.push(userTurn);
   const assistantTurn: ChatTurn = {
     role: "assistant",
     text: "",
     status: isResuming ? "Setze Suche fort …" : "Analysiere Frage …",
+    originatedFromVoice: opts?.originatedFromVoice,
   };
   state.turns.push(assistantTurn);
   deps.onTurnStarted?.(assistantTurn);
@@ -111,6 +129,8 @@ async function sendMessageUnguarded(state: ChatSessionState, message: string, de
     applyResult(assistantTurn, state, result);
     if (result.status === "done") {
       deps.onTurnDone?.(assistantTurn);
+    } else {
+      deps.onClarificationReady?.(assistantTurn);
     }
   } catch (err) {
     if (deps.signal?.aborted) {
@@ -143,4 +163,93 @@ export async function retryTurn(state: ChatSessionState, turn: ChatTurn, deps: S
   const message = discardFailedTurn(state, turn);
   if (message === null) return;
   await sendMessage(state, message, deps);
+}
+
+export interface VoiceMessage {
+  base64Audio: string;
+  mimeType: string;
+}
+
+export async function sendVoiceMessage(state: ChatSessionState, audio: VoiceMessage, deps: SendMessageDeps): Promise<void> {
+  if (state.busy) return;
+  state.busy = true;
+
+  try {
+    await sendVoiceMessageUnguarded(state, audio, deps);
+  } finally {
+    state.busy = false;
+  }
+}
+
+async function sendVoiceMessageUnguarded(state: ChatSessionState, audio: VoiceMessage, deps: SendMessageDeps): Promise<void> {
+  const pendingBeforeSend = state.pendingAgentState;
+  const history = [...state.turns];
+
+  const userTurn: ChatTurn = { role: "user", text: "", originatedFromVoice: true };
+  state.turns.push(userTurn);
+  const assistantTurn: ChatTurn = {
+    role: "assistant",
+    text: "",
+    status: "Transkribiere Sprachaufnahme …",
+    originatedFromVoice: true,
+  };
+  state.turns.push(assistantTurn);
+  deps.onTurnStarted?.(assistantTurn);
+
+  const reporter = createStepReporter((step) => {
+    assistantTurn.status = step.title;
+    const steps = (assistantTurn.steps ??= []);
+    if (!steps.includes(step)) steps.push(step);
+    deps.onStep?.(step);
+  });
+  const onTextDelta = (text: string) => {
+    assistantTurn.streamingText = text || undefined;
+    deps.onTextDelta?.();
+  };
+  const onShortAnswerReady = (text: string) => {
+    assistantTurn.ttsShortAnswer = text;
+    deps.onShortAnswerReady?.(assistantTurn);
+  };
+  const onTranscriptReady = (text: string) => {
+    userTurn.text = text;
+    assistantTurn.status = "Analysiere Frage …";
+    deps.onTranscriptReady?.(userTurn);
+  };
+
+  try {
+    const result = await answerQuestionFromAudio({
+      base64Audio: audio.base64Audio,
+      mimeType: audio.mimeType,
+      history,
+      settings: deps.settings,
+      vault: deps.vault,
+      indices: await deps.getIndices(),
+      fuzzyApi: deps.getFuzzyApi(),
+      reporter,
+      onTranscriptReady,
+      onTextDelta,
+      onShortAnswerReady,
+      signal: deps.signal,
+    });
+    applyResult(assistantTurn, state, result);
+    if (result.status === "done") {
+      deps.onTurnDone?.(assistantTurn);
+    } else {
+      deps.onClarificationReady?.(assistantTurn);
+    }
+  } catch (err) {
+    if (deps.signal?.aborted) {
+      state.turns.splice(state.turns.length - 2, 2);
+      state.pendingAgentState = pendingBeforeSend;
+      deps.onCancelled?.(userTurn.text);
+      return;
+    }
+    state.pendingAgentState = null;
+    const errMessage = err instanceof Error ? err.message : String(err);
+    applyError(assistantTurn, errMessage);
+    if (userTurn.text) {
+      assistantTurn.retry = { message: userTurn.text, pendingBefore: pendingBeforeSend };
+    }
+    deps.onError?.(errMessage);
+  }
 }

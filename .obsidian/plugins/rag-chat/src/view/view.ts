@@ -2,6 +2,8 @@ import { ItemView, Notice, type WorkspaceLeaf } from "obsidian";
 import type RagChatPlugin from "../main";
 import { getIndices } from "../retrieval/index-cache";
 import type { ChatTurn } from "../retrieval/types";
+import { MicRecorder } from "../stt/recorder";
+import { blobToWavBase64 } from "../stt/wav-encode";
 import { confirmModal } from "./confirm-modal";
 import {
   abandonPendingClarification,
@@ -10,8 +12,10 @@ import {
   inputPlaceholder,
   retryTurn,
   sendMessage,
+  sendVoiceMessage,
   type ChatSessionState,
   type SendMessageDeps,
+  type SendMessageOptions,
 } from "./controller";
 import { getFuzzySearchApi } from "./fuzzy-search-plugin";
 import { refreshModelOptions } from "./model-options";
@@ -31,6 +35,13 @@ import { buildToolbar, type ToolbarElements } from "./ui/toolbar";
 import { buildTtsControls, type TtsControlsElements } from "./ui/tts-controls";
 
 export const RAG_CHAT_VIEW_TYPE = "rag-chat-view";
+
+/** Recordings shorter than this are treated as accidental taps and silently discarded. */
+const MIN_RECORDING_MS = 300;
+
+function errText(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
 
 function emptyRenderResult(): RenderTurnsResult {
   return {
@@ -53,6 +64,9 @@ export class RagChatView extends ItemView {
   private rendered: RenderTurnsResult = emptyRenderResult();
   private closed = false;
   private abortController: AbortController | null = null;
+  private recording = false;
+  private recorder: MicRecorder | null = null;
+  private recordingStartedAt = 0;
   private readonly speech = new TurnSpeech({
     plugin: () => this.plugin,
     isClosed: () => this.closed,
@@ -102,23 +116,44 @@ export class RagChatView extends ItemView {
 
     this.wireToolbar();
     this.wireComposer();
+    this.wireMic();
     this.wireTtsControls();
 
-    this.composer.thinkingCheckboxEl.checked = this.plugin.settings.thinkingEnabled;
-    this.composer.webSearchCheckboxEl.checked = this.plugin.settings.webSearchEnabled;
+    this.composer.thinkingCheckboxEl.checked =
+      this.plugin.settings.thinkingEnabled;
+    this.composer.webSearchCheckboxEl.checked =
+      this.plugin.settings.webSearchEnabled;
     this.composer.ttsCheckboxEl.checked = this.plugin.settings.ttsEnabled;
     this.ttsController.syncFromSettings();
     void this.ttsController.refreshDevices();
 
-    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
+    this.rendered = renderTurns(
+      this.messagesEl,
+      this.session.turns,
+      this.app,
+      this,
+      this.turnCallbacks,
+    );
     this.updateClarificationAffordance();
     void this.refreshModelOptions();
   }
 
   private wireToolbar(): void {
-    this.registerDomEvent(this.toolbar.modelSelectEl, "change", () => void this.handleModelChange());
-    this.registerDomEvent(this.toolbar.modelRefreshButton, "click", () => void this.refreshModelOptions());
-    this.registerDomEvent(this.toolbar.clearButton, "click", () => void this.handleClearClick());
+    this.registerDomEvent(
+      this.toolbar.modelSelectEl,
+      "change",
+      () => void this.handleModelChange(),
+    );
+    this.registerDomEvent(
+      this.toolbar.modelRefreshButton,
+      "click",
+      () => void this.refreshModelOptions(),
+    );
+    this.registerDomEvent(
+      this.toolbar.clearButton,
+      "click",
+      () => void this.handleClearClick(),
+    );
   }
 
   private wireComposer(): void {
@@ -153,12 +188,102 @@ export class RagChatView extends ItemView {
     });
   }
 
+  private wireMic(): void {
+    const c = this.composer;
+    const start = (evt: Event) => {
+      evt.preventDefault();
+      this.startVoiceRecording();
+    };
+    const stop = () => {
+      if (this.recording) void this.stopVoiceRecordingAndSend();
+    };
+    this.registerDomEvent(c.micButton, "mousedown", start);
+    this.registerDomEvent(c.micButton, "mouseup", stop);
+    this.registerDomEvent(c.micButton, "mouseleave", stop);
+    // Fallback in case the mouse is released (or the window loses focus) outside the button.
+    if (typeof window !== "undefined") {
+      this.registerDomEvent(window, "mouseup", stop);
+      this.registerDomEvent(window, "blur", stop);
+    }
+  }
+
+  startVoiceRecording(): void {
+    if (this.closed || this.busy || this.recording) return;
+    this.recording = true;
+    this.recordingStartedAt = Date.now();
+    this.composer.micButton.addClass("is-recording");
+
+    const recorder = new MicRecorder();
+    this.recorder = recorder;
+    recorder
+      .start(this.plugin.settings.micInputDeviceId || undefined)
+      .catch((err) => {
+        if (this.recorder !== recorder) return;
+        this.recording = false;
+        this.recorder = null;
+        if (!this.closed) {
+          this.composer.micButton.removeClass("is-recording");
+          new Notice(
+            `RAG Chat: Mikrofonzugriff fehlgeschlagen (${errText(err)}).`,
+          );
+        }
+      });
+  }
+
+  async stopVoiceRecordingAndSend(): Promise<void> {
+    if (!this.recording || !this.recorder) return;
+    this.recording = false;
+    this.composer.micButton.removeClass("is-recording");
+    const recorder = this.recorder;
+    this.recorder = null;
+    const startedAt = this.recordingStartedAt;
+
+    let blob: Blob | null;
+    try {
+      blob = await recorder.stop();
+    } catch (err) {
+      if (!this.closed)
+        new Notice(`RAG Chat: Aufnahme fehlgeschlagen (${errText(err)}).`);
+      return;
+    }
+    if (this.closed) return;
+    if (!blob || Date.now() - startedAt < MIN_RECORDING_MS) return;
+
+    if (this.busy) return;
+    try {
+      const { base64, mimeType } = await blobToWavBase64(blob);
+      if (this.closed) return;
+      await this.runChatAction((deps) =>
+        sendVoiceMessage(this.session, { base64Audio: base64, mimeType }, deps),
+      );
+    } catch (err) {
+      if (!this.closed)
+        new Notice(
+          `RAG Chat: Sprachaufnahme fehlgeschlagen (${errText(err)}).`,
+        );
+    }
+  }
+
   private wireTtsControls(): void {
     const t = this.ttsControls;
-    this.registerDomEvent(t.deviceSelectEl, "change", () => void this.ttsController.commitDevice());
-    this.registerDomEvent(t.deviceRefreshButton, "click", () => void this.ttsController.refreshDevices());
-    this.registerDomEvent(t.volumeSliderEl, "input", () => this.ttsController.onVolumeInput());
-    this.registerDomEvent(t.volumeSliderEl, "change", () => void this.ttsController.commitVolume());
+    this.registerDomEvent(
+      t.deviceSelectEl,
+      "change",
+      () => void this.ttsController.commitDevice(),
+    );
+    this.registerDomEvent(
+      t.deviceRefreshButton,
+      "click",
+      () => void this.ttsController.refreshDevices(),
+    );
+    this.registerDomEvent(t.volumeSliderEl, "input", () =>
+      this.ttsController.onVolumeInput(),
+    );
+    this.registerDomEvent(
+      t.volumeSliderEl,
+      "change",
+      () => void this.ttsController.commitVolume(),
+    );
   }
 
   async onClose(): Promise<void> {
@@ -178,13 +303,22 @@ export class RagChatView extends ItemView {
     this.abortController?.abort();
     unloadAllTurns(this.rendered);
     this.session = createChatSessionState();
-    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
+    this.rendered = renderTurns(
+      this.messagesEl,
+      this.session.turns,
+      this.app,
+      this,
+      this.turnCallbacks,
+    );
     this.updateClarificationAffordance();
     this.composer.inputEl.placeholder = inputPlaceholder(this.session);
   }
 
   private async handleClearClick(): Promise<void> {
-    const confirmed = await confirmModal(this.app, "Chat leeren? Der bisherige Verlauf geht verloren.");
+    const confirmed = await confirmModal(
+      this.app,
+      "Chat leeren? Der bisherige Verlauf geht verloren.",
+    );
     if (this.closed) return;
     if (confirmed) this.clearChat();
     this.composer.inputEl.focus();
@@ -193,6 +327,7 @@ export class RagChatView extends ItemView {
   private setBusy(busy: boolean): void {
     this.busy = busy;
     this.composer.sendButton.setText(busy ? "Abbrechen" : "Fragen");
+    this.composer.micButton.disabled = busy;
     this.toolbar.modelSelectEl.disabled = busy;
     this.toolbar.modelRefreshButton.disabled = busy;
   }
@@ -218,7 +353,10 @@ export class RagChatView extends ItemView {
   }
 
   private async handleCancelClick(): Promise<void> {
-    const confirmed = await confirmModal(this.app, "Anfrage wirklich abbrechen?");
+    const confirmed = await confirmModal(
+      this.app,
+      "Anfrage wirklich abbrechen?",
+    );
     if (this.closed) return;
     if (confirmed) this.abortController?.abort();
     this.composer.inputEl.focus();
@@ -232,8 +370,24 @@ export class RagChatView extends ItemView {
   }
 
   private syncTurn(turn: ChatTurn): void {
-    if (!updateTurn(this.messagesEl, turn, this.app, this, this.rendered, this.turnCallbacks)) {
-      appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered, this.turnCallbacks);
+    if (
+      !updateTurn(
+        this.messagesEl,
+        turn,
+        this.app,
+        this,
+        this.rendered,
+        this.turnCallbacks,
+      )
+    ) {
+      appendNewTurns(
+        this.messagesEl,
+        this.session.turns,
+        this.app,
+        this,
+        this.rendered,
+        this.turnCallbacks,
+      );
     }
   }
 
@@ -245,7 +399,13 @@ export class RagChatView extends ItemView {
 
   private rebuildTurns(): void {
     unloadAllTurns(this.rendered);
-    this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
+    this.rendered = renderTurns(
+      this.messagesEl,
+      this.session.turns,
+      this.app,
+      this,
+      this.turnCallbacks,
+    );
   }
 
   private async runChatAction(
@@ -265,14 +425,25 @@ export class RagChatView extends ItemView {
         settings: this.plugin.settings,
         vault: this.app.vault,
         getIndices: async () =>
-          getIndices(this.plugin.getPluginDirFullPath(), await this.plugin.getManifest()),
+          getIndices(
+            this.plugin.getPluginDirFullPath(),
+            await this.plugin.getManifest(),
+          ),
         getFuzzyApi: () => getFuzzySearchApi(this.app),
         signal: controller.signal,
         onTurnStarted: (turn) => {
           if (this.closed) return;
           currentTurn = turn;
           if (opts?.fullRerenderOnStart) this.rebuildTurns();
-          else appendNewTurns(this.messagesEl, this.session.turns, this.app, this, this.rendered, this.turnCallbacks);
+          else
+            appendNewTurns(
+              this.messagesEl,
+              this.session.turns,
+              this.app,
+              this,
+              this.rendered,
+              this.turnCallbacks,
+            );
         },
         onStep: () => {
           if (this.closed || !currentTurn) return;
@@ -284,7 +455,15 @@ export class RagChatView extends ItemView {
         },
         onShortAnswerReady: (turn) => {
           if (this.closed) return;
-          this.speech.beginStreamingSpeech(turn, turn.ttsShortAnswer ?? "", controller.signal);
+          this.speech.beginStreamingSpeech(
+            turn,
+            turn.ttsShortAnswer ?? "",
+            controller.signal,
+          );
+        },
+        onTranscriptReady: (turn) => {
+          if (this.closed) return;
+          this.syncTurn(turn);
         },
         onError: (message) => {
           if (this.closed) return;
@@ -299,7 +478,14 @@ export class RagChatView extends ItemView {
           new Notice("Anfrage abgebrochen.");
         },
         onTurnDone: (turn) => {
-          if (this.closed || !this.plugin.settings.ttsEnabled) return;
+          if (this.closed) return;
+          if (!turn.originatedFromVoice && !this.plugin.settings.ttsEnabled)
+            return;
+          void this.speech.synthesizeAndPlay(turn, controller.signal);
+        },
+        onClarificationReady: (turn) => {
+          if (this.closed) return;
+          if (!turn.originatedFromVoice && !this.plugin.settings.ttsEnabled) return;
           void this.speech.synthesizeAndPlay(turn, controller.signal);
         },
       });
@@ -314,16 +500,23 @@ export class RagChatView extends ItemView {
     }
   }
 
-  private async handleSend(): Promise<void> {
+  private async handleSend(
+    overrideMessage?: string,
+    opts?: SendMessageOptions,
+  ): Promise<void> {
     if (this.busy) return;
-    const message = this.composer.inputEl.value.trim();
+    const message = (overrideMessage ?? this.composer.inputEl.value).trim();
     if (!message) return;
     this.composer.inputEl.value = "";
-    await this.runChatAction((deps) => sendMessage(this.session, message, deps));
+    await this.runChatAction((deps) =>
+      sendMessage(this.session, message, deps, opts),
+    );
   }
 
   private async handleRetryClick(turn: ChatTurn): Promise<void> {
-    await this.runChatAction((deps) => retryTurn(this.session, turn, deps), { fullRerenderOnStart: true });
+    await this.runChatAction((deps) => retryTurn(this.session, turn, deps), {
+      fullRerenderOnStart: true,
+    });
   }
 
   private handleDeleteClick(turn: ChatTurn): void {

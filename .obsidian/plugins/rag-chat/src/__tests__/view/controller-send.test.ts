@@ -87,6 +87,32 @@ describe("sendMessage", () => {
     expect(onTurnDone).not.toHaveBeenCalled();
   });
 
+  it("calls onClarificationReady with the assistant turn for an 'awaiting_clarification' result", async () => {
+    const pending = { state: {}, ctx: {} } as any;
+    answerQuestion.mockResolvedValue({ status: "awaiting_clarification", question: "Welches Baujahr?", pending });
+    const state = createChatSessionState();
+    const onClarificationReady = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onClarificationReady });
+    expect(onClarificationReady).toHaveBeenCalledTimes(1);
+    expect(onClarificationReady).toHaveBeenCalledWith(state.turns[1]);
+  });
+
+  it("does not call onClarificationReady for a genuine 'done' result", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    const onClarificationReady = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onClarificationReady });
+    expect(onClarificationReady).not.toHaveBeenCalled();
+  });
+
+  it("does not call onClarificationReady when the workflow throws (error path)", async () => {
+    answerQuestion.mockRejectedValue(new Error("boom"));
+    const state = createChatSessionState();
+    const onClarificationReady = vi.fn();
+    await sendMessage(state, "Frage?", { ...baseDeps, onClarificationReady });
+    expect(onClarificationReady).not.toHaveBeenCalled();
+  });
+
   it("falls back to a default message when the final text is empty", async () => {
     answerQuestion.mockResolvedValue({ ...DONE_RESULT, text: "   " });
     const state = createChatSessionState();
@@ -126,6 +152,22 @@ describe("sendMessage", () => {
     const turn = onShortAnswerReady.mock.calls[0][0];
     expect(turn).toBe(state.turns[1]);
     expect(turn.ttsShortAnswer).toBe("Kurze Antwort.");
+  });
+
+  it("stamps originatedFromVoice on both the user and assistant turn when passed in opts", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    await sendMessage(state, "Anzugsdrehmoment?", baseDeps, { originatedFromVoice: true });
+    expect(state.turns[0].originatedFromVoice).toBe(true);
+    expect(state.turns[1].originatedFromVoice).toBe(true);
+  });
+
+  it("does not set originatedFromVoice when opts are omitted", async () => {
+    answerQuestion.mockResolvedValue(DONE_RESULT);
+    const state = createChatSessionState();
+    await sendMessage(state, "Anzugsdrehmoment?", baseDeps);
+    expect(state.turns[0].originatedFromVoice).toBeUndefined();
+    expect(state.turns[1].originatedFromVoice).toBeUndefined();
   });
 
   it("uses continueAnswer instead of answerQuestion when a pending clarification exists", async () => {

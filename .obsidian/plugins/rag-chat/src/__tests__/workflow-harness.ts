@@ -19,7 +19,11 @@ export const runAgentLoop = vi.fn();
 export const resumeAgentLoop = vi.fn();
 vi.mock("../agent/loop", () => ({ runAgentLoop, resumeAgentLoop }));
 
+export const runAudioAgentLoop = vi.fn();
+vi.mock("../agent/audio-loop", () => ({ runAudioAgentLoop }));
+
 export let answerQuestion: typeof import("../workflow").answerQuestion;
+export let answerQuestionFromAudio: typeof import("../workflow").answerQuestionFromAudio;
 export let continueAnswer: typeof import("../workflow").continueAnswer;
 
 beforeEach(async () => {
@@ -35,8 +39,17 @@ beforeEach(async () => {
     webGroundingChunks: [],
     webGroundingSupports: [],
   });
+  runAudioAgentLoop.mockResolvedValue({
+    status: "done",
+    text: "Antwort",
+    manualCitations: [TORQUE_BLOCK],
+    webCitations: [],
+    webGroundingChunks: [],
+    webGroundingSupports: [],
+  });
   const mod = await import("../workflow");
   answerQuestion = mod.answerQuestion;
+  answerQuestionFromAudio = mod.answerQuestionFromAudio;
   continueAnswer = mod.continueAnswer;
 });
 

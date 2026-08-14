@@ -16,6 +16,7 @@ export { fakeSettings } from "../fixtures/settings";
 
 export let runAgentLoop: typeof import("../../agent/loop").runAgentLoop;
 export let resumeAgentLoop: typeof import("../../agent/loop").resumeAgentLoop;
+export let runAudioAgentLoop: typeof import("../../agent/audio-loop").runAudioAgentLoop;
 
 beforeEach(async () => {
   resetObsidianMocks();
@@ -23,6 +24,7 @@ beforeEach(async () => {
   const mod = await import("../../agent/loop");
   runAgentLoop = mod.runAgentLoop;
   resumeAgentLoop = mod.resumeAgentLoop;
+  runAudioAgentLoop = (await import("../../agent/audio-loop")).runAudioAgentLoop;
 });
 
 export async function makeCtx(overrides: Partial<AgentLoopContext> = {}): Promise<AgentLoopContext> {

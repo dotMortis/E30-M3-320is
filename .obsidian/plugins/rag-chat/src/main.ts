@@ -10,10 +10,13 @@ import { getPluginDir, getPluginDirFullPath } from "./plugin/paths";
 import { readManifest } from "./retrieval/manifest";
 import { dispose as disposeTtsPlayback } from "./tts/playback";
 
+const PUSH_TO_TALK_KEY = "F12";
+
 export default class RagChatPlugin extends Plugin {
   settings!: RagChatSettings;
   private readonly store = new SettingsStore(this);
   private manifestCache: RagManifest | null = null;
+  private pushToTalkActive = false;
 
   async onload(): Promise<void> {
     await this.loadSettings();
@@ -52,6 +55,11 @@ export default class RagChatPlugin extends Plugin {
 
     this.addSettingTab(new RagChatSettingTab(this.app, this));
 
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", this.handlePushToTalkKeyDown);
+      window.addEventListener("keyup", this.handlePushToTalkKeyUp);
+    }
+
     this.app.workspace.onLayoutReady(() => {
       void this.activateView({ focus: false });
     });
@@ -68,6 +76,42 @@ export default class RagChatPlugin extends Plugin {
 
   onunload(): void {
     disposeTtsPlayback();
+    if (typeof window !== "undefined") {
+      window.removeEventListener("keydown", this.handlePushToTalkKeyDown);
+      window.removeEventListener("keyup", this.handlePushToTalkKeyUp);
+    }
+  }
+
+  /**
+   * Global push-to-talk hotkey (Ctrl+Alt+Shift+F12): mirrors the mic button in the chat view -
+   * hold to record, release to transcribe and send. Works while the RAG Chat view is open,
+   * even if it isn't the focused pane.
+   */
+  private readonly handlePushToTalkKeyDown = (evt: KeyboardEvent): void => {
+    if (!(evt.ctrlKey && evt.altKey && evt.shiftKey && evt.key === PUSH_TO_TALK_KEY)) return;
+    evt.preventDefault();
+    if (this.pushToTalkActive) return;
+    const view = this.getFirstChatView();
+    if (!view) {
+      new Notice("RAG Chat: Bitte zuerst die Chat-Ansicht öffnen.");
+      return;
+    }
+    this.pushToTalkActive = true;
+    view.startVoiceRecording();
+  };
+
+  private readonly handlePushToTalkKeyUp = (evt: KeyboardEvent): void => {
+    if (evt.key !== PUSH_TO_TALK_KEY || !this.pushToTalkActive) return;
+    evt.preventDefault();
+    this.pushToTalkActive = false;
+    void this.getFirstChatView()?.stopVoiceRecordingAndSend();
+  };
+
+  private getFirstChatView(): RagChatView | null {
+    for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) {
+      if (leaf.view instanceof RagChatView) return leaf.view;
+    }
+    return null;
   }
 
   getPluginDir(): string {

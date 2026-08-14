@@ -1,7 +1,10 @@
+import { setIcon } from "obsidian";
+
 export interface ComposerElements {
   clarificationRow: HTMLElement;
   cancelClarificationButton: HTMLButtonElement;
   inputEl: HTMLTextAreaElement;
+  micButton: HTMLButtonElement;
   sendButton: HTMLButtonElement;
   thinkingCheckboxEl: HTMLInputElement;
   webSearchCheckboxEl: HTMLInputElement;
@@ -53,12 +56,23 @@ export function buildComposer(container: HTMLElement): ComposerElements {
   });
   ttsToggleLabel.createSpan({ text: "Sprachausgabe" });
 
+  const micButton = controlsRow.createEl("button", {
+    cls: "rag-chat-mic-button",
+    attr: {
+      type: "button",
+      "aria-label": "Gedrückt halten, um eine Sprachnachricht aufzunehmen (oder Strg+Alt+Umschalt+F12)",
+      title: "Gedrückt halten, um eine Sprachnachricht aufzunehmen (oder Strg+Alt+Umschalt+F12)",
+    },
+  });
+  setIcon(micButton, "mic");
+
   const sendButton = controlsRow.createEl("button", { cls: "rag-chat-send", text: "Fragen" });
 
   return {
     clarificationRow,
     cancelClarificationButton,
     inputEl,
+    micButton,
     sendButton,
     thinkingCheckboxEl,
     webSearchCheckboxEl,

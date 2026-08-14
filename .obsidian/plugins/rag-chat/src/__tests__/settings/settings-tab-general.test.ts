@@ -9,9 +9,9 @@ describe("RagChatSettingTab.display (general & retrieval)", () => {
     expect(containerEl.children.some((c) => c.tag === "h2" && c.text === "RAG Chat")).toBe(true);
   });
 
-  it("creates exactly 16 Setting rows", () => {
+  it("creates exactly 17 Setting rows", () => {
     makeTab();
-    expect(Setting.instances).toHaveLength(16);
+    expect(Setting.instances).toHaveLength(17);
   });
 
   it("pre-fills the API key field with the current setting value", () => {

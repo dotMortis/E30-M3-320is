@@ -92,15 +92,39 @@ describe("RagChatView", () => {
       expect(buildShortAnswer).not.toHaveBeenCalled();
     });
 
-    it("does not run the TTS pipeline for an awaiting_clarification result even when voice output is enabled", async () => {
+    it("runs the TTS pipeline for an awaiting_clarification result when voice output is enabled", async () => {
       getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
       answerQuestion.mockResolvedValue({
         status: "awaiting_clarification",
         question: "Welches Baujahr?",
         pending: { state: {}, ctx: {} },
       });
+      buildShortAnswer.mockResolvedValue("Welches Baujahr?");
+      synthesizeSpeech.mockResolvedValue("base64audio");
+
       const { view, plugin } = makeView();
       plugin.settings.ttsEnabled = true;
+      await view.onOpen();
+
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const button = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      button.dispatch("click");
+
+      await vi.waitFor(() =>
+        expect(synthesizeSpeech).toHaveBeenCalledWith("Welches Baujahr?", plugin.settings, expect.anything()),
+      );
+      await vi.waitFor(() => expect(ttsPlaybackMock.play).toHaveBeenCalledWith("base64audio", expect.anything()));
+    });
+
+    it("does not run the TTS pipeline for an awaiting_clarification result when voice output is disabled", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockResolvedValue({
+        status: "awaiting_clarification",
+        question: "Welches Baujahr?",
+        pending: { state: {}, ctx: {} },
+      });
+      const { view } = makeView();
       await view.onOpen();
 
       const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
