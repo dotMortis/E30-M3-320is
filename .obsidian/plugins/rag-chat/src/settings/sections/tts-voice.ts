@@ -32,6 +32,7 @@ export function renderTtsVoiceSection(containerEl: HTMLElement, plugin: RagChatP
       plugin.settings.ttsApiKey = value;
       await plugin.saveSettings();
     },
+    isLocked: () => plugin.store.isSecretLocked("ttsApiKey"),
   });
 
   renderVoicePickers(containerEl, plugin);

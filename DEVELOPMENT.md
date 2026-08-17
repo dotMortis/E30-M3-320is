@@ -123,6 +123,10 @@ pio run -d receiver -t upload -t monitor
 pio run -d remote -t upload -t monitor
 ```
 
+Both boards must always run the same `shared/protocol.h`, so reflash them as a
+pair — the packet's magic tag is bumped whenever the wire layout changes, so a
+half-upgraded pair refuses to talk instead of misparsing.
+
 Rebuilding the PC-side serial bridge (only needed if you change
 `hardware/voice-remote/bridge/main.go` — the prebuilt binaries under
 `.obsidian/plugins/rag-chat/bin/` already ship committed, same as `main.js`):
@@ -130,8 +134,20 @@ Rebuilding the PC-side serial bridge (only needed if you change
 ```sh
 mise install   # picks up the pinned `go` version
 cd hardware/voice-remote/bridge
+go test ./...  # also run by build.sh
 ./build.sh
 ```
+
+`build.sh` builds with `-trimpath -buildvcs=false`, so the committed binaries
+are byte-reproducible from the committed source.
+
+Troubleshooting a remote that doesn't respond: the bridge now reports *why* it
+can't connect. The status line under "Hardware-Fernbedienung" in the plugin
+settings shows the concrete reason (no matching USB device, port could not be
+opened, permission denied), and the same detail plus any bridge stderr is logged
+to the developer console (Ctrl+Shift+I). If the receiver's serial line reports
+`ERR stale-epoch-repair-needed`, the remote's NVS was wiped — hold the
+receiver's BOOT button while resetting it to re-pair.
 
 Full design, security model, and provisioning steps:
 `hardware/voice-remote/PLAN.md`.

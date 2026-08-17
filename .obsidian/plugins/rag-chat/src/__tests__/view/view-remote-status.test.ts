@@ -35,17 +35,43 @@ describe("RagChatView remote status dot", () => {
     expect(dot.classes.has("is-disconnected")).toBe(false);
   });
 
-  it("shows grey 'is-disconnected' for disconnected/starting/error statuses", async () => {
+  it("shows grey 'is-disconnected' for disconnected/starting statuses", async () => {
     const { view } = makeView();
     await view.onOpen();
 
-    for (const status of ["disconnected", "starting", "error"] as const) {
+    for (const status of ["disconnected", "starting"] as const) {
       view.setRemoteStatus(status);
       const dot = getDot(view);
       expect(dot.classes.has("is-visible")).toBe(true);
       expect(dot.classes.has("is-connected")).toBe(false);
       expect(dot.classes.has("is-disconnected")).toBe(true);
+      expect(dot.classes.has("is-error")).toBe(false);
     }
+  });
+
+  it("distinguishes 'error' from a plain disconnect with its own class", async () => {
+    const { view } = makeView();
+    await view.onOpen();
+
+    view.setRemoteStatus("error");
+
+    const dot = getDot(view);
+    expect(dot.classes.has("is-visible")).toBe(true);
+    expect(dot.classes.has("is-error")).toBe(true);
+    expect(dot.classes.has("is-disconnected")).toBe(false);
+    expect(dot.classes.has("is-connected")).toBe(false);
+  });
+
+  it("clears the error class once the link recovers", async () => {
+    const { view } = makeView();
+    await view.onOpen();
+
+    view.setRemoteStatus("error");
+    view.setRemoteStatus("connected");
+
+    const dot = getDot(view);
+    expect(dot.classes.has("is-error")).toBe(false);
+    expect(dot.classes.has("is-connected")).toBe(true);
   });
 
   it("setRemoteStatus(null) hides the dot again", async () => {

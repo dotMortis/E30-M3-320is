@@ -186,5 +186,72 @@ describe("RagChatView", () => {
       );
       expect(micButton.classes.has("is-recording")).toBe(false);
     });
+
+    it("returns false and warns instead of starting while the assistant is busy", async () => {
+      getIndices.mockResolvedValue({ textDb: {}, vectorDbs: [], referenceChunks: new Map() });
+      answerQuestion.mockImplementation(() => new Promise(() => {}));
+
+      const { view } = makeView();
+      await view.onOpen();
+      const input = fake(view.contentEl).querySelectorAll("textarea.rag-chat-input")[0];
+      const sendButton = fake(view.contentEl).querySelectorAll("button.rag-chat-send")[0];
+      input.value = "Frage?";
+      sendButton.dispatch("click");
+      await vi.waitFor(() => expect(answerQuestion).toHaveBeenCalled());
+
+      expect(view.startVoiceRecording("remote")).toBe(false);
+      expect(micRecorderStart).not.toHaveBeenCalled();
+      expect(Notice.instances.some((n) => n.message.includes("es läuft noch eine Antwort"))).toBe(true);
+    });
+
+    it("returns true when a recording actually starts", async () => {
+      const { view } = makeView();
+      await view.onOpen();
+
+      expect(view.startVoiceRecording("remote")).toBe(true);
+      expect(view.startVoiceRecording("remote")).toBe(false); // already recording
+    });
+
+    it("keeps a remote-initiated recording running across stray mouse events", async () => {
+      const { view } = makeView();
+      await view.onOpen();
+      const micButton = fake(view.contentEl).querySelectorAll("button.rag-chat-mic-button")[0];
+
+      view.startVoiceRecording("remote");
+      await vi.waitFor(() => expect(micRecorderStart).toHaveBeenCalledTimes(1));
+
+      // The mouseup/mouseleave/blur fallbacks exist for the mouse button; a
+      // hands-free remote recording must survive them (it has its own RELEASE
+      // signal plus the plugin's safety timeout).
+      micButton.dispatch("mouseup");
+      micButton.dispatch("mouseleave");
+
+      expect(micRecorderStop).not.toHaveBeenCalled();
+      expect(micButton.classes.has("is-recording")).toBe(true);
+    });
+
+    it("still cancels a mouse-initiated recording when the pointer leaves the button", async () => {
+      const { view } = makeView();
+      await view.onOpen();
+      const micButton = fake(view.contentEl).querySelectorAll("button.rag-chat-mic-button")[0];
+
+      micButton.dispatch("mousedown", { preventDefault: vi.fn() });
+      await vi.waitFor(() => expect(micRecorderStart).toHaveBeenCalledTimes(1));
+
+      micButton.dispatch("mouseleave");
+
+      await vi.waitFor(() => expect(micRecorderStop).toHaveBeenCalledTimes(1));
+    });
+
+    it("tells the plugin when a recording ends so the remote safety timer is cleared", async () => {
+      const { view, plugin } = makeView();
+      await view.onOpen();
+
+      view.startVoiceRecording("remote");
+      await vi.waitFor(() => expect(micRecorderStart).toHaveBeenCalledTimes(1));
+      await view.stopVoiceRecordingAndSend();
+
+      expect(plugin.notifyRecordingEnded).toHaveBeenCalled();
+    });
   });
 });

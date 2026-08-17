@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* Anchors the absolutely-positioned .rag-chat-lock-overlay curtain. */
+  position: relative;
 }
 
 .rag-chat-toolbar-row {
@@ -452,6 +454,13 @@
   background-color: var(--text-muted);
 }
 
+/* Distinct from plain "disconnected": something is actively wrong (bridge
+   crashed, serial port unreadable) and the detail is in the console plus the
+   settings status line. */
+.rag-chat-remote-status-dot.is-error {
+  background-color: var(--color-red, #e93147);
+}
+
 .rag-chat-remote-status-dot.is-pulse {
   animation: rag-chat-remote-pulse 0.4s ease-out;
 }
@@ -537,4 +546,53 @@
 
 .rag-chat-tts-button-error {
   color: var(--text-error);
+}
+
+/* Locked-secrets curtain: blurs the whole chat until the password is entered. */
+.rag-chat-lock-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--background-primary-alt);
+  opacity: 0.92;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.rag-chat-lock-overlay-button {
+  font-size: var(--font-ui-medium);
+  padding: 10px 18px;
+  cursor: pointer;
+}
+
+/* Password prompt modal */
+.rag-chat-password-modal-label {
+  font-weight: var(--font-semibold);
+  margin-bottom: 0;
+}
+
+.rag-chat-password-input {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.rag-chat-password-modal-error {
+  color: var(--text-error);
+  font-size: var(--font-ui-smaller);
+}
+
+.rag-chat-password-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.rag-chat-secret-locked-hint {
+  color: var(--text-accent);
+  margin-top: 4px;
 }

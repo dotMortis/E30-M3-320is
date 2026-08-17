@@ -15,5 +15,6 @@ export function renderApiKeySection(containerEl: HTMLElement, plugin: RagChatPlu
       plugin.settings.geminiApiKey = value;
       await plugin.saveSettings();
     },
+    isLocked: () => plugin.store.isSecretLocked("geminiApiKey"),
   });
 }

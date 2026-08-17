@@ -73,6 +73,10 @@ export class ButtonComponent {
     this.el = containerEl.createEl("button");
   }
 
+  get buttonEl(): FakeElement {
+    return this.el;
+  }
+
   setIcon(icon: string): this {
     this.icon = icon;
     this.el.setAttribute("data-icon", icon);

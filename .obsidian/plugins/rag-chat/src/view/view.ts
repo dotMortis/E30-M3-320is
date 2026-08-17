@@ -40,6 +40,12 @@ export const RAG_CHAT_VIEW_TYPE = "rag-chat-view";
 /** Recordings shorter than this are treated as accidental taps and silently discarded. */
 const MIN_RECORDING_MS = 300;
 
+/**
+ * What started the current recording. The global mouseup/blur fallbacks must
+ * only cancel "mouse" recordings - see wireMic().
+ */
+type RecordingOrigin = "mouse" | "hotkey" | "remote";
+
 function errText(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
@@ -57,6 +63,7 @@ export class RagChatView extends ItemView {
   plugin: RagChatPlugin;
   private session: ChatSessionState = createChatSessionState();
   private messagesEl!: HTMLElement;
+  private lockOverlayEl!: HTMLElement;
   private toolbar!: ToolbarElements;
   private composer!: ComposerElements;
   private ttsControls!: TtsControlsElements;
@@ -66,6 +73,7 @@ export class RagChatView extends ItemView {
   private closed = false;
   private abortController: AbortController | null = null;
   private recording = false;
+  private recordingOrigin: RecordingOrigin | null = null;
   private recorder: MicRecorder | null = null;
   private recordingStartedAt = 0;
   private readonly speech = new TurnSpeech({
@@ -115,11 +123,14 @@ export class RagChatView extends ItemView {
       () => this.busy,
     );
 
+    this.lockOverlayEl = this.buildLockOverlay(container);
+
     this.wireToolbar();
     this.wireComposer();
     this.wireMic();
     this.wireTtsControls();
     this.setRemoteStatus(this.plugin.getRemoteStatus());
+    this.setLocked(this.plugin.isLocked());
 
     this.composer.thinkingCheckboxEl.checked =
       this.plugin.settings.thinkingEnabled;
@@ -138,6 +149,36 @@ export class RagChatView extends ItemView {
     );
     this.updateClarificationAffordance();
     void this.refreshModelOptions();
+  }
+
+  /**
+   * Blurred "locked" curtain over the whole chat. Shown while stored API keys
+   * are still encrypted: clicking it re-opens the password prompt, so a
+   * dismissed startup prompt is always recoverable from the UI itself.
+   */
+  private buildLockOverlay(container: HTMLElement): HTMLElement {
+    const overlay = container.createDiv({ cls: "rag-chat-lock-overlay rag-chat-hidden" });
+    const button = overlay.createEl("button", {
+      cls: "rag-chat-lock-overlay-button",
+      text: "🔒 Entsperren",
+    });
+    button.setAttribute("aria-label", "Gespeicherte API-Schlüssel entsperren");
+    this.registerDomEvent(overlay, "click", () => void this.handleUnlockClick());
+    return overlay;
+  }
+
+  /** Shows/hides the locked curtain. Called by the plugin on state changes. */
+  setLocked(locked: boolean): void {
+    this.lockOverlayEl?.toggleClass("rag-chat-hidden", !locked);
+    this.contentEl.toggleClass("is-locked", locked);
+  }
+
+  private async handleUnlockClick(): Promise<void> {
+    await this.plugin.promptUnlock();
+    if (this.closed) return;
+    this.setLocked(this.plugin.isLocked());
+    // Model list needs the API key, which only just became available.
+    if (!this.plugin.isLocked()) void this.refreshModelOptions();
   }
 
   private wireToolbar(): void {
@@ -194,24 +235,50 @@ export class RagChatView extends ItemView {
     const c = this.composer;
     const start = (evt: Event) => {
       evt.preventDefault();
-      this.startVoiceRecording();
+      this.startVoiceRecording("mouse");
     };
     const stop = () => {
       if (this.recording) void this.stopVoiceRecordingAndSend();
     };
+    // Only cancel *mouse-initiated* recordings: this fallback also fires for
+    // unrelated clicks and whenever the Obsidian window loses focus, which
+    // would otherwise cut a hands-free hardware-remote recording short
+    // (hardware/voice-remote/PLAN.md) - the remote has its own RELEASE signal
+    // plus a safety timeout for that.
+    const stopIfMouseInitiated = () => {
+      if (this.recordingOrigin === "mouse") stop();
+    };
     this.registerDomEvent(c.micButton, "mousedown", start);
-    this.registerDomEvent(c.micButton, "mouseup", stop);
-    this.registerDomEvent(c.micButton, "mouseleave", stop);
+    this.registerDomEvent(c.micButton, "mouseup", stopIfMouseInitiated);
+    this.registerDomEvent(c.micButton, "mouseleave", stopIfMouseInitiated);
     // Fallback in case the mouse is released (or the window loses focus) outside the button.
     if (typeof window !== "undefined") {
-      this.registerDomEvent(window, "mouseup", stop);
-      this.registerDomEvent(window, "blur", stop);
+      this.registerDomEvent(window, "mouseup", stopIfMouseInitiated);
+      this.registerDomEvent(window, "blur", stopIfMouseInitiated);
     }
   }
 
-  startVoiceRecording(): void {
-    if (this.closed || this.busy || this.recording) return;
+  /**
+   * Starts a push-to-talk recording. Returns whether recording actually
+   * started, so callers that arm their own timeout (the hardware remote's
+   * safety timer) don't guard a recording that never began.
+   */
+  startVoiceRecording(origin: RecordingOrigin = "mouse"): boolean {
+    if (this.closed || this.recording) return false;
+    // The overlay blocks the mic button, but the global hotkey and the hardware
+    // remote don't go through the DOM - without this they'd record a whole
+    // message only to fail on the missing API key.
+    if (this.plugin.isLocked()) {
+      new Notice("RAG Chat: API-Schlüssel gesperrt - bitte zuerst entsperren.");
+      void this.handleUnlockClick();
+      return false;
+    }
+    if (this.busy) {
+      new Notice("RAG Chat: Aufnahme nicht möglich - es läuft noch eine Antwort.");
+      return false;
+    }
     this.recording = true;
+    this.recordingOrigin = origin;
     this.recordingStartedAt = Date.now();
     this.composer.micButton.addClass("is-recording");
 
@@ -222,7 +289,9 @@ export class RagChatView extends ItemView {
       .catch((err) => {
         if (this.recorder !== recorder) return;
         this.recording = false;
+        this.recordingOrigin = null;
         this.recorder = null;
+        this.notifyRecordingEnded();
         if (!this.closed) {
           this.composer.micButton.removeClass("is-recording");
           new Notice(
@@ -230,11 +299,14 @@ export class RagChatView extends ItemView {
           );
         }
       });
+    return true;
   }
 
   async stopVoiceRecordingAndSend(): Promise<void> {
     if (!this.recording || !this.recorder) return;
     this.recording = false;
+    this.recordingOrigin = null;
+    this.notifyRecordingEnded();
     this.composer.micButton.removeClass("is-recording");
     const recorder = this.recorder;
     this.recorder = null;
@@ -251,7 +323,10 @@ export class RagChatView extends ItemView {
     if (this.closed) return;
     if (!blob || Date.now() - startedAt < MIN_RECORDING_MS) return;
 
-    if (this.busy) return;
+    if (this.busy) {
+      new Notice("RAG Chat: Aufnahme verworfen - es läuft noch eine Antwort.");
+      return;
+    }
     try {
       const { base64, mimeType } = await blobToWavBase64(blob);
       if (this.closed) return;
@@ -276,7 +351,8 @@ export class RagChatView extends ItemView {
     const visible = status !== null && status !== "unsupported";
     dot.toggleClass("is-visible", visible);
     dot.toggleClass("is-connected", status === "connected");
-    dot.toggleClass("is-disconnected", visible && status !== "connected");
+    dot.toggleClass("is-error", status === "error");
+    dot.toggleClass("is-disconnected", visible && status !== "connected" && status !== "error");
     const labels: Record<RemoteBridgeStatus, string> = {
       connected: "Hardware-Fernbedienung: verbunden",
       starting: "Hardware-Fernbedienung: Verbindungsaufbau...",
@@ -286,6 +362,15 @@ export class RagChatView extends ItemView {
     };
     dot.setAttribute("aria-label", status ? labels[status] : "");
     dot.setAttribute("title", status ? labels[status] : "");
+  }
+
+  /**
+   * Tell the plugin a recording is over, whichever way it ended, so the
+   * hardware remote's safety timer can never outlive it (and fire a
+   * misleading "automatically stopped" notice for an already-sent recording).
+   */
+  private notifyRecordingEnded(): void {
+    this.plugin.notifyRecordingEnded?.();
   }
 
   /** Brief visual confirmation that a real press/release arrived from the remote. */
@@ -447,6 +532,11 @@ export class RagChatView extends ItemView {
     opts?: { fullRerenderOnStart?: boolean },
   ): Promise<void> {
     if (this.busy) return;
+    if (this.plugin.isLocked()) {
+      new Notice("RAG Chat: API-Schlüssel gesperrt - bitte zuerst entsperren.");
+      void this.handleUnlockClick();
+      return;
+    }
     this.setBusy(true);
 
     const controller = new AbortController();

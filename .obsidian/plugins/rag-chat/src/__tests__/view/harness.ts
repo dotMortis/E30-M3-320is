@@ -89,6 +89,9 @@ export function makeView() {
     getPluginDirFullPath: vi.fn().mockReturnValue("/plugin/dir"),
     saveSettings: vi.fn().mockResolvedValue(undefined),
     getRemoteStatus: vi.fn().mockReturnValue(null),
+    notifyRecordingEnded: vi.fn(),
+    isLocked: vi.fn().mockReturnValue(false),
+    promptUnlock: vi.fn().mockResolvedValue(true),
   };
   const leaf = { app };
   const view = new RagChatView(leaf as any, plugin as any);

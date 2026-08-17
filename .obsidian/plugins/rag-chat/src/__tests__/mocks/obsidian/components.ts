@@ -9,11 +9,15 @@ export class Setting {
   static instances: Setting[] = [];
   containerEl: FakeElement;
   settingEl: FakeElement;
+  descEl: FakeElement;
   components: (TextComponent | ToggleComponent | ButtonComponent | DropdownComponent | SliderComponent)[] = [];
 
   constructor(containerEl: FakeElement) {
     this.containerEl = containerEl;
     this.settingEl = containerEl.createDiv({ cls: "setting-item" });
+    // Real Obsidian creates descEl eagerly, and callers append extra nodes to
+    // it (see addSecretText's locked hint), so it must exist before setDesc.
+    this.descEl = this.settingEl.createDiv({ cls: "setting-item-description" });
     Setting.instances.push(this);
   }
 
@@ -23,7 +27,7 @@ export class Setting {
   }
 
   setDesc(desc: string): this {
-    this.settingEl.createDiv({ cls: "setting-item-description", text: desc });
+    this.descEl.setText(desc);
     return this;
   }
 

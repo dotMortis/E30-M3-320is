@@ -9,9 +9,11 @@ describe("RagChatSettingTab.display (general & retrieval)", () => {
     expect(containerEl.children.some((c) => c.tag === "h2" && c.text === "RAG Chat")).toBe(true);
   });
 
-  it("creates exactly 19 Setting rows", () => {
+  it("creates exactly 22 Setting rows", () => {
     makeTab();
-    expect(Setting.instances).toHaveLength(19);
+    // 19 original rows + 3 from the security section (unlock/lock, change
+    // password, reset), which renders last.
+    expect(Setting.instances).toHaveLength(22);
   });
 
   it("pre-fills the API key field with the current setting value", () => {
@@ -39,12 +41,74 @@ describe("RagChatSettingTab.display (general & retrieval)", () => {
     expect(apiKeyText.inputEl.type).toBe("password");
   });
 
-  it("updates and trims settings.geminiApiKey on change, then saves", async () => {
+  /**
+   * Saving a secret asks for the encryption password, so typing must not
+   * persist: otherwise every character of a pasted key pops a prompt.
+   */
+  it("does not save the API key while it is being typed", async () => {
     const { plugin } = makeTab();
     const apiKeyText = Setting.instances[0].components[0] as TextComponent;
+    await apiKeyText.triggerChange("new-key-value");
+    expect(plugin.saveSettings).not.toHaveBeenCalled();
+    expect(plugin.settings.geminiApiKey).not.toBe("new-key-value");
+  });
+
+  it("updates and trims settings.geminiApiKey when the save button is clicked", async () => {
+    const { plugin } = makeTab();
+    const apiKeyText = Setting.instances[0].components[0] as TextComponent;
+    const saveButton = Setting.instances[0].components[2] as ButtonComponent;
+
     await apiKeyText.triggerChange("  new-key-value  ");
+    await saveButton.triggerClick();
+
     expect(plugin.settings.geminiApiKey).toBe("new-key-value");
     expect(plugin.saveSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it("saves the API key on Enter in the input", async () => {
+    const { plugin } = makeTab();
+    const apiKeyText = Setting.instances[0].components[0] as TextComponent;
+
+    await apiKeyText.triggerChange("new-key-value");
+    apiKeyText.inputEl.dispatch("keydown", { key: "Enter", preventDefault: () => {} });
+
+    await vi.waitFor(() => {
+      expect(plugin.settings.geminiApiKey).toBe("new-key-value");
+      expect(plugin.saveSettings).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("keeps the save button disabled until the key actually changes, and again afterwards", async () => {
+    const { plugin } = makeTab();
+    const apiKeyText = Setting.instances[0].components[0] as TextComponent;
+    const saveButton = Setting.instances[0].components[2] as ButtonComponent;
+    expect(saveButton.el.disabled).toBe(true);
+
+    await apiKeyText.triggerChange("new-key-value");
+    expect(saveButton.el.disabled).toBe(false);
+
+    await saveButton.triggerClick();
+    expect(saveButton.el.disabled).toBe(true);
+
+    // A no-op click can't re-trigger a password prompt.
+    await saveButton.triggerClick();
+    expect(plugin.saveSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it("reverts the field to what was actually persisted (e.g. a cancelled password prompt)", async () => {
+    const { plugin } = makeTab();
+    // Simulate the store rejecting the edit and reverting the setting.
+    plugin.saveSettings.mockImplementation(async () => {
+      plugin.settings.geminiApiKey = "test-api-key";
+    });
+    const apiKeyText = Setting.instances[0].components[0] as TextComponent;
+    const saveButton = Setting.instances[0].components[2] as ButtonComponent;
+
+    await apiKeyText.triggerChange("typed-but-not-confirmed");
+    await saveButton.triggerClick();
+
+    expect(apiKeyText.value).toBe("test-api-key");
+    expect(saveButton.el.disabled).toBe(true);
   });
 
   it("updates settings.embeddingModel on change", async () => {

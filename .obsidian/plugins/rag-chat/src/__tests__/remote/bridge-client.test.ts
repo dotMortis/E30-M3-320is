@@ -5,6 +5,9 @@ const spawnMock = vi.fn();
 const existsSyncMock = vi.fn();
 const chmodSyncMock = vi.fn();
 
+/** Mirrors RESTART_MAX_DELAY_MS in ../../remote/bridge-client.ts. */
+const RESTART_MAX_DELAY_MS = 30_000;
+
 vi.mock("node:child_process", () => ({
   spawn: (...args: unknown[]) => spawnMock(...args),
 }));
@@ -15,6 +18,7 @@ vi.mock("node:fs", () => ({
 
 class FakeChild extends EventEmitter {
   stdout = new EventEmitter();
+  stderr = new EventEmitter();
   kill = vi.fn();
 }
 
@@ -48,6 +52,7 @@ describe("RemoteBridgeClient", () => {
       onPress: vi.fn(),
       onRelease: vi.fn(),
       onStatusChange: vi.fn(),
+      onWarning: vi.fn(),
     };
   }
 
@@ -86,7 +91,7 @@ describe("RemoteBridgeClient", () => {
     expect(spawnMock).toHaveBeenCalledWith(
       "/plugin/dir/bin/serial-bridge-linux-x64",
       [],
-      expect.objectContaining({ stdio: ["pipe", "pipe", "pipe"] }),
+      expect.objectContaining({ stdio: ["pipe", "pipe", "pipe"], windowsHide: true }),
     );
     expect(client.getStatus()).toBe("starting");
   });
@@ -183,33 +188,150 @@ describe("RemoteBridgeClient", () => {
     expect(client.getStatus()).toBe("disconnected");
   });
 
+  it("keeps a disconnect reason as the status detail instead of promoting it to an error", () => {
+    const fakeChild = new FakeChild();
+    spawnMock.mockReturnValue(fakeChild);
+    const callbacks = makeCallbacks();
+    const client = new RemoteBridgeClient("/plugin/dir", callbacks, () => "");
+    client.start();
+
+    fakeChild.stdout.emit(
+      "data",
+      Buffer.from('{"type":"status","connected":false,"message":"Kein Empfänger gefunden."}\n'),
+    );
+
+    // "No receiver attached" is the most ordinary state there is - it must read
+    // as a plain disconnect with a reason, not as an error.
+    expect(client.getStatus()).toBe("disconnected");
+    expect(client.getStatusDetail()).toBe("Kein Empfänger gefunden.");
+    expect(callbacks.onStatusChange).toHaveBeenCalledWith("disconnected", "Kein Empfänger gefunden.");
+  });
+
   it("reports 'error' status on an error event with the message as detail", () => {
     const fakeChild = new FakeChild();
     spawnMock.mockReturnValue(fakeChild);
     const callbacks = makeCallbacks();
-    new RemoteBridgeClient("/plugin/dir", callbacks, () => "").start();
+    const client = new RemoteBridgeClient("/plugin/dir", callbacks, () => "");
+    client.start();
 
-    fakeChild.stdout.emit("data", Buffer.from('{"type":"error","message":"ERR replay-rejected"}\n'));
+    fakeChild.stdout.emit("data", Buffer.from('{"type":"error","message":"/dev/ttyACM0: permission denied"}\n'));
 
-    expect(callbacks.onStatusChange).toHaveBeenCalledWith("error", "ERR replay-rejected");
+    expect(callbacks.onStatusChange).toHaveBeenCalledWith("error", "/dev/ttyACM0: permission denied");
+    expect(client.getStatusDetail()).toBe("/dev/ttyACM0: permission denied");
+  });
+
+  it("routes a device-level 'warning' event to onWarning without touching the link status", () => {
+    const fakeChild = new FakeChild();
+    spawnMock.mockReturnValue(fakeChild);
+    const callbacks = makeCallbacks();
+    const client = new RemoteBridgeClient("/plugin/dir", callbacks, () => "");
+    client.start();
+
+    fakeChild.stdout.emit("data", Buffer.from('{"type":"status","connected":true,"port":"/dev/ttyACM0"}\n'));
+    callbacks.onStatusChange.mockClear();
+    // Receiving an ERR line proves the USB link works, so it must never latch
+    // the indicator into an error state.
+    fakeChild.stdout.emit("data", Buffer.from('{"type":"warning","message":"ERR stale-epoch-repair-needed"}\n'));
+
+    expect(callbacks.onWarning).toHaveBeenCalledWith("ERR stale-epoch-repair-needed");
+    expect(callbacks.onStatusChange).not.toHaveBeenCalled();
+    expect(client.getStatus()).toBe("connected");
   });
 
   it("restarts the process with backoff after an unexpected exit, and resets backoff once a line is parsed", () => {
     vi.useFakeTimers();
-    const firstChild = new FakeChild();
-    const secondChild = new FakeChild();
-    spawnMock.mockReturnValueOnce(firstChild).mockReturnValueOnce(secondChild);
+    const children = [new FakeChild(), new FakeChild(), new FakeChild()];
+    spawnMock.mockImplementation(() => children.shift() ?? new FakeChild());
     const callbacks = makeCallbacks();
+    const first = children[0];
     new RemoteBridgeClient("/plugin/dir", callbacks, () => "").start();
 
     expect(spawnMock).toHaveBeenCalledTimes(1);
-    firstChild.emit("exit", 1, null);
+    first.emit("exit", 1, null);
     expect(callbacks.onStatusChange).toHaveBeenCalledWith("disconnected", undefined);
 
     vi.advanceTimersByTime(999);
     expect(spawnMock).toHaveBeenCalledTimes(1);
     vi.advanceTimersByTime(1);
     expect(spawnMock).toHaveBeenCalledTimes(2);
+
+    // Second child exits too: without a parsed line in between, the backoff
+    // must have doubled to 2s.
+    const second = spawnMock.mock.results[1].value as FakeChild;
+    second.emit("exit", 1, null);
+    vi.advanceTimersByTime(1999);
+    expect(spawnMock).toHaveBeenCalledTimes(2);
+    vi.advanceTimersByTime(1);
+    expect(spawnMock).toHaveBeenCalledTimes(3);
+
+    // A well-formed line proves the child works, so the next crash must go
+    // back to the 1s base delay.
+    const third = spawnMock.mock.results[2].value as FakeChild;
+    third.stdout.emit("data", Buffer.from('{"type":"status","connected":true,"port":"/dev/ttyACM0"}\n'));
+    third.emit("exit", 1, null);
+    vi.advanceTimersByTime(1000);
+    expect(spawnMock).toHaveBeenCalledTimes(4);
+  });
+
+  it("schedules only one restart when both 'error' and 'exit' fire for the same child", () => {
+    vi.useFakeTimers();
+    spawnMock.mockImplementation(() => new FakeChild());
+    new RemoteBridgeClient("/plugin/dir", makeCallbacks(), () => "").start();
+    const child = spawnMock.mock.results[0].value as FakeChild;
+
+    // Node can emit both for one child; two timers would mean two supervised
+    // processes fighting over the same serial port.
+    child.emit("error", new Error("EPIPE"));
+    child.emit("exit", 1, null);
+    vi.advanceTimersByTime(60_000);
+
+    expect(spawnMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("kills a still-running child before spawning a replacement", () => {
+    vi.useFakeTimers();
+    spawnMock.mockImplementation(() => new FakeChild());
+    new RemoteBridgeClient("/plugin/dir", makeCallbacks(), () => "").start();
+    const child = spawnMock.mock.results[0].value as FakeChild;
+
+    // 'error' alone (no exit) leaves the process alive as far as we know.
+    child.emit("error", new Error("boom"));
+    vi.advanceTimersByTime(1000);
+
+    expect(spawnMock).toHaveBeenCalledTimes(2);
+    expect(child.kill).toHaveBeenCalledTimes(1);
+  });
+
+  it("drains stderr so a chatty bridge cannot fill its pipe buffer and stall", () => {
+    const fakeChild = new FakeChild();
+    spawnMock.mockReturnValue(fakeChild);
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    new RemoteBridgeClient("/plugin/dir", makeCallbacks(), () => "").start();
+
+    expect(fakeChild.stderr.listenerCount("data")).toBe(1);
+    fakeChild.stderr.emit("data", Buffer.from("panic: something went wrong\n"));
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("panic: something went wrong"));
+    errorSpy.mockRestore();
+  });
+
+  it("resets the restart backoff on a fresh start() after a crash loop", () => {
+    vi.useFakeTimers();
+    spawnMock.mockImplementation(() => new FakeChild());
+    const client = new RemoteBridgeClient("/plugin/dir", makeCallbacks(), () => "");
+    client.start();
+
+    for (let i = 0; i < 3; i++) {
+      (spawnMock.mock.results[i].value as FakeChild).emit("exit", 1, null);
+      vi.advanceTimersByTime(RESTART_MAX_DELAY_MS);
+    }
+    const spawnsBefore = spawnMock.mock.calls.length;
+
+    client.stop();
+    client.start();
+    (spawnMock.mock.results[spawnsBefore].value as FakeChild).emit("exit", 1, null);
+    vi.advanceTimersByTime(1000);
+
+    expect(spawnMock).toHaveBeenCalledTimes(spawnsBefore + 2);
   });
 
   it("does not restart after stop() is called", () => {

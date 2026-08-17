@@ -23,13 +23,27 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 //#endregion
 let obsidian = require("obsidian");
 let node_crypto = require("node:crypto");
-let node_os = require("node:os");
-node_os = __toESM(node_os, 1);
 let node_fs = require("node:fs");
 let node_child_process = require("node:child_process");
 let node_path = require("node:path");
 //#region src/secure-storage.ts
-var ENC_PREFIX = "enc:v1:";
+/**
+* Current format: secrets are encrypted with a key derived from a *user-supplied
+* password*, so they survive reboots, hardware changes and vault syncs.
+*/
+var ENC_PREFIX = "enc:v2:";
+/**
+* Legacy format (v1) derived its key from a machine fingerprint that included
+* `os.totalmem()`. That value is re-probed from the OS on every process start
+* and is not guaranteed to be byte-identical across reboots (firmware/iGPU
+* memory reservations, memory training, fast-startup accounting), so a reboot
+* could silently make the key underivable and lock the user out of their own
+* secrets. v1 blobs are unrecoverable here (we have no password for them and
+* the fingerprint may already have changed) - we only recognise the prefix so
+* callers can show a precise "please re-enter" message instead of a misleading
+* "wrong password".
+*/
+var LEGACY_ENC_PREFIX = "enc:v1:";
 var KEY_LEN = 32;
 var SALT_LEN = 16;
 var IV_LEN = 12;
@@ -38,6 +52,8 @@ var SCRYPT_PARAMS = {
 	r: 8,
 	p: 1
 };
+/** Thrown for `enc:v1:` values, which no password can recover. */
+var LEGACY_SECRET_ERROR = "legacy-secret-format";
 function scrypt(password, salt, keylen, options) {
 	return new Promise((resolve, reject) => {
 		(0, node_crypto.scrypt)(password, salt, keylen, options, (err, derivedKey) => {
@@ -46,23 +62,22 @@ function scrypt(password, salt, keylen, options) {
 		});
 	});
 }
-function getMachineFingerprint() {
-	return [
-		node_os.hostname(),
-		node_os.platform(),
-		node_os.arch(),
-		node_os.cpus()?.[0]?.model ?? "unknown-cpu",
-		String(node_os.totalmem()),
-		node_os.homedir()
-	].join("|");
+async function deriveKey(password, salt) {
+	return await scrypt(password, salt, KEY_LEN, SCRYPT_PARAMS);
 }
-async function deriveKey(salt) {
-	return await scrypt(getMachineFingerprint(), salt, KEY_LEN, SCRYPT_PARAMS);
+/** True for values this module wrote (i.e. not plaintext, not legacy). */
+function isEncryptedSecret(value) {
+	return typeof value === "string" && value.startsWith(ENC_PREFIX);
 }
-async function encryptSecret(plain) {
+/** True for values written by the pre-password machine-fingerprint scheme. */
+function isLegacySecret(value) {
+	return typeof value === "string" && value.startsWith(LEGACY_ENC_PREFIX);
+}
+async function encryptSecret(plain, password) {
 	if (!plain) return "";
+	if (!password) throw new Error("cannot encrypt without a password");
 	const salt = (0, node_crypto.randomBytes)(SALT_LEN);
-	const key = await deriveKey(salt);
+	const key = await deriveKey(password, salt);
 	const iv = (0, node_crypto.randomBytes)(IV_LEN);
 	const cipher = (0, node_crypto.createCipheriv)("aes-256-gcm", key, iv);
 	const ciphertext = Buffer.concat([cipher.update(plain, "utf8"), cipher.final()]);
@@ -74,18 +89,34 @@ async function encryptSecret(plain) {
 		ciphertext
 	]).toString("base64");
 }
-async function decryptSecret(stored) {
+/**
+* Decrypts a stored secret. Throws when `password` is wrong (the GCM auth tag
+* check fails), which is also how callers verify a password: there is
+* deliberately no password hash stored anywhere.
+*/
+async function decryptSecret(stored, password) {
 	if (!stored) return "";
+	if (isLegacySecret(stored)) throw new Error(LEGACY_SECRET_ERROR);
 	if (!stored.startsWith(ENC_PREFIX)) throw new Error("unrecognized secret format");
 	const payload = Buffer.from(stored.slice(7), "base64");
 	const salt = payload.subarray(0, SALT_LEN);
 	const iv = payload.subarray(SALT_LEN, 28);
 	const tag = payload.subarray(28, 44);
 	const ciphertext = payload.subarray(44);
-	const key = await deriveKey(salt);
+	const key = await deriveKey(password, salt);
 	const decipher = (0, node_crypto.createDecipheriv)("aes-256-gcm", key, iv);
 	decipher.setAuthTag(tag);
 	return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString("utf8");
+}
+/** Whether `password` can decrypt `stored`. Never throws. */
+async function verifyPassword(stored, password) {
+	if (!isEncryptedSecret(stored)) return false;
+	try {
+		await decryptSecret(stored, password);
+		return true;
+	} catch {
+		return false;
+	}
 }
 //#endregion
 //#region src/settings/types.ts
@@ -114,63 +145,292 @@ var DEFAULT_SETTINGS = {
 };
 //#endregion
 //#region src/settings/settings-store.ts
+/** Which settings fields hold password-protected secrets. */
+var SECRET_KEYS = ["geminiApiKey", "ttsApiKey"];
+var SECRET_LABELS = {
+	geminiApiKey: "Google API key (GEMINI_API_KEY)",
+	ttsApiKey: "TTS API-Key"
+};
+function emptySecretState() {
+	return {
+		ciphertext: "",
+		known: void 0,
+		unlocked: false
+	};
+}
 var SettingsStore = class {
 	constructor(plugin) {
 		this.plugin = plugin;
-		this.geminiKeyCache = {
-			plaintext: void 0,
-			ciphertext: void 0
+		this.secrets = {
+			geminiApiKey: emptySecretState(),
+			ttsApiKey: emptySecretState()
 		};
-		this.ttsKeyCache = {
-			plaintext: void 0,
-			ciphertext: void 0
-		};
+		this.promptPassword = null;
+		this.lockListeners = /* @__PURE__ */ new Set();
+	}
+	/** Wires the UI that asks for passwords. Without it, secrets can't be saved. */
+	setPasswordPrompt(prompt) {
+		this.promptPassword = prompt;
+	}
+	/** Notifies listeners whenever lock state changes (see `isLocked`). */
+	onLockStateChange(listener) {
+		this.lockListeners.add(listener);
+		return () => this.lockListeners.delete(listener);
 	}
 	async load() {
 		const raw = await this.plugin.loadData() ?? {};
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, raw);
-		this.settings.geminiApiKey = await this.loadSecret(raw.geminiApiKey, this.geminiKeyCache, "Google API key (GEMINI_API_KEY)");
-		this.settings.ttsApiKey = await this.loadSecret(raw.ttsApiKey, this.ttsKeyCache, "TTS API-Key");
+		for (const key of SECRET_KEYS) {
+			const stored = raw[key];
+			const state = emptySecretState();
+			this.settings[key] = "";
+			if (typeof stored === "string" && stored) {
+				if (isEncryptedSecret(stored)) state.ciphertext = stored;
+				else if (isLegacySecret(stored)) {
+					state.known = "";
+					new obsidian.Notice(`RAG Chat: ${SECRET_LABELS[key]} stammt aus einer älteren Version und kann nicht mehr entschlüsselt werden - bitte in den Einstellungen erneut eingeben.`, 1e4);
+				} else {
+					state.known = stored;
+					state.unlocked = true;
+					this.settings[key] = stored;
+				}
+			} else {
+				state.known = "";
+				state.unlocked = true;
+			}
+			this.secrets[key] = state;
+		}
+		this.notifyLockState();
 	}
 	async save() {
 		const toPersist = { ...this.settings };
-		toPersist.geminiApiKey = await this.persistSecret(this.settings.geminiApiKey, this.geminiKeyCache);
-		toPersist.ttsApiKey = await this.persistSecret(this.settings.ttsApiKey, this.ttsKeyCache);
+		for (const key of SECRET_KEYS) toPersist[key] = await this.resolveCiphertext(key);
 		await this.plugin.saveData(toPersist);
+		this.notifyLockState();
 	}
-	async loadSecret(stored, cache, label) {
-		try {
-			const plaintext = await decryptSecret(stored);
-			cache.plaintext = plaintext;
-			cache.ciphertext = stored;
-			return plaintext;
-		} catch {
-			cache.plaintext = void 0;
-			cache.ciphertext = void 0;
-			if (stored) new obsidian.Notice(`RAG Chat: ${label} konnte nicht entschlüsselt werden (anderes Gerät oder beschädigte Daten?) - bitte in den Einstellungen erneut eingeben.`, 1e4);
+	/** True when at least one stored secret is still encrypted/unavailable. */
+	isLocked() {
+		return SECRET_KEYS.some((key) => this.isSecretLocked(key));
+	}
+	isSecretLocked(key) {
+		const state = this.secrets[key];
+		return Boolean(state.ciphertext) && !state.unlocked;
+	}
+	/** True when any secret exists on disk (i.e. a password has been set). */
+	hasProtectedSecrets() {
+		return SECRET_KEYS.some((key) => Boolean(this.secrets[key].ciphertext));
+	}
+	/**
+	* Tries to decrypt every locked secret with `password`. Each secret is
+	* handled independently, so one bad/foreign blob can't keep the others
+	* locked. Returns which secrets were unlocked and which failed.
+	*/
+	async unlock(password) {
+		const unlocked = [];
+		const failed = [];
+		for (const key of SECRET_KEYS) {
+			if (!this.isSecretLocked(key)) continue;
+			const state = this.secrets[key];
+			try {
+				const plaintext = await decryptSecret(state.ciphertext, password);
+				state.known = plaintext;
+				state.unlocked = true;
+				this.settings[key] = plaintext;
+				unlocked.push(key);
+			} catch {
+				failed.push(key);
+			}
+		}
+		if (unlocked.length) this.notifyLockState();
+		return {
+			unlocked,
+			failed
+		};
+	}
+	/**
+	* Clears decrypted secrets from memory for the rest of the session, without
+	* touching what is on disk.
+	*/
+	lock() {
+		let changed = false;
+		for (const key of SECRET_KEYS) {
+			const state = this.secrets[key];
+			if (!state.ciphertext) continue;
+			state.unlocked = false;
+			state.known = void 0;
+			this.settings[key] = "";
+			changed = true;
+		}
+		if (changed) this.notifyLockState();
+	}
+	/**
+	* Re-encrypts all currently unlocked secrets under `newPassword`.
+	* `currentPassword` must match the existing secrets (verified via the
+	* ciphertext, since no password hash is stored).
+	*/
+	async changePassword(currentPassword, newPassword) {
+		if (!newPassword) return false;
+		const reference = this.anyCiphertext();
+		if (reference && !await verifyPassword(reference, currentPassword)) return false;
+		if (this.isLocked()) return false;
+		for (const key of SECRET_KEYS) {
+			const state = this.secrets[key];
+			const plaintext = this.settings[key];
+			if (!plaintext) {
+				state.ciphertext = "";
+				state.known = "";
+				state.unlocked = true;
+				continue;
+			}
+			state.ciphertext = await encryptSecret(plaintext, newPassword);
+			state.known = plaintext;
+			state.unlocked = true;
+		}
+		await this.save();
+		return true;
+	}
+	/**
+	* Forgotten-password escape hatch: discards every stored secret so the user
+	* can set a new password by entering their API keys again. There is
+	* deliberately no way to recover the old values.
+	*/
+	async resetSecrets() {
+		for (const key of SECRET_KEYS) {
+			this.secrets[key] = {
+				ciphertext: "",
+				known: "",
+				unlocked: true
+			};
+			this.settings[key] = "";
+		}
+		await this.save();
+	}
+	/**
+	* Decides what to persist for one secret, prompting for a password only when
+	* the plaintext actually changed. Unrelated saves (sliders, TTS usage
+	* counter, model dropdowns, ...) therefore never prompt - and, critically,
+	* never overwrite a secret they didn't touch.
+	*/
+	async resolveCiphertext(key) {
+		const state = this.secrets[key];
+		const plaintext = this.settings[key];
+		if (state.known === void 0) {
+			if (!plaintext) return state.ciphertext;
+		} else if (plaintext === state.known) return state.ciphertext;
+		if (!plaintext) {
+			state.ciphertext = "";
+			state.known = "";
+			state.unlocked = true;
 			return "";
 		}
+		const password = await this.requestPasswordFor(key);
+		if (password === null) {
+			this.settings[key] = state.known ?? "";
+			new obsidian.Notice(`RAG Chat: ${SECRET_LABELS[key]} wurde nicht gespeichert (kein Passwort eingegeben).`, 8e3);
+			return state.ciphertext;
+		}
+		state.ciphertext = await encryptSecret(plaintext, password);
+		state.known = plaintext;
+		state.unlocked = true;
+		return state.ciphertext;
 	}
-	async persistSecret(plaintext, cache) {
-		if (plaintext === cache.plaintext && cache.ciphertext !== void 0) return cache.ciphertext;
-		const ciphertext = await encryptSecret(plaintext);
-		cache.plaintext = plaintext;
-		cache.ciphertext = ciphertext;
-		return ciphertext;
+	/**
+	* Asks for the password to encrypt `key` under. When another secret is
+	* already stored, the entered password is verified against it, so both stay
+	* under one password and a typo is caught immediately instead of silently
+	* creating a secret nobody can unlock later.
+	*/
+	async requestPasswordFor(key) {
+		const prompt = this.promptPassword;
+		if (!prompt) {
+			new obsidian.Notice(`RAG Chat: ${SECRET_LABELS[key]} kann nicht gespeichert werden - keine Passwort-Eingabe verfügbar.`, 8e3);
+			return null;
+		}
+		const reference = this.anyCiphertext(key);
+		const mode = reference ? "unlock" : "create";
+		let error;
+		for (;;) {
+			const password = await prompt({
+				mode,
+				label: SECRET_LABELS[key],
+				error
+			});
+			if (password === null) return null;
+			if (!password) {
+				error = "Bitte ein Passwort eingeben.";
+				continue;
+			}
+			if (!reference) return password;
+			if (await verifyPassword(reference, password)) return password;
+			error = "Falsches Passwort - es muss zum bereits gespeicherten Schlüssel passen.";
+		}
+	}
+	/** Any stored ciphertext, optionally excluding one key, for verification. */
+	anyCiphertext(exclude) {
+		for (const key of SECRET_KEYS) {
+			if (key === exclude) continue;
+			if (this.secrets[key].ciphertext) return this.secrets[key].ciphertext;
+		}
+		return "";
+	}
+	notifyLockState() {
+		for (const listener of this.lockListeners) listener();
 	}
 };
 //#endregion
 //#region src/settings/controls/secret-text.ts
+/**
+* A masked secret field with an explicit save button.
+*
+* Saving a secret asks for the encryption password, so it must NOT happen on
+* every keystroke: persisting per character would pop a password prompt for
+* every letter of a pasted API key. Edits are therefore buffered locally and
+* only committed when the user clicks save (or presses Enter).
+*/
 function addSecretText(containerEl, config) {
 	let inputEl;
+	let textComponent;
+	let saveButton;
+	let committed = config.getValue();
+	let pending = committed;
+	let saving = false;
 	const setting = new obsidian.Setting(containerEl).setName(config.name);
 	if (config.desc) setting.setDesc(config.desc);
+	const locked = config.isLocked?.() ?? false;
+	if (locked) setting.descEl.createDiv({
+		cls: "rag-chat-secret-locked-hint",
+		text: "Ein verschlüsselter Schlüssel ist gespeichert, aber gesperrt. Passwort eingeben, um ihn zu nutzen - oder hier einen neuen Schlüssel eintragen und speichern, um ihn zu ersetzen."
+	});
+	const syncSaveButton = () => {
+		saveButton?.setDisabled(saving || pending === committed);
+	};
+	const commit = async () => {
+		if (saving || pending === committed) return;
+		saving = true;
+		syncSaveButton();
+		try {
+			await config.setValue(pending);
+		} finally {
+			saving = false;
+			committed = config.getValue();
+			pending = committed;
+			textComponent?.setValue(committed);
+			syncSaveButton();
+		}
+	};
 	setting.addText((text) => {
-		text.setPlaceholder(config.placeholder ?? "AIza...").setValue(config.getValue()).onChange(async (value) => {
-			await config.setValue(value.trim());
+		textComponent = text;
+		text.setPlaceholder(locked ? "gesperrt - Passwort erforderlich" : config.placeholder ?? "AIza...").setValue(committed).onChange((value) => {
+			pending = value.trim();
+			syncSaveButton();
 		});
 		inputEl = text.inputEl;
 		inputEl.type = "password";
+		inputEl.addEventListener("keydown", (evt) => {
+			if (evt.key !== "Enter") return;
+			evt.preventDefault();
+			commit();
+		});
 	}).addButton((button) => {
 		button.setIcon("eye").setTooltip("API-Schlüssel anzeigen/verbergen");
 		button.onClick(() => {
@@ -179,6 +439,10 @@ function addSecretText(containerEl, config) {
 			inputEl.type = revealed ? "password" : "text";
 			button.setIcon(revealed ? "eye" : "eye-off");
 		});
+	}).addButton((button) => {
+		saveButton = button;
+		button.setIcon("save").setTooltip("API-Schlüssel speichern (fragt nach dem Passwort)").onClick(() => commit());
+		syncSaveButton();
 	});
 	return setting;
 }
@@ -194,7 +458,8 @@ function renderApiKeySection(containerEl, plugin) {
 		setValue: async (value) => {
 			plugin.settings.geminiApiKey = value;
 			await plugin.saveSettings();
-		}
+		},
+		isLocked: () => plugin.store.isSecretLocked("geminiApiKey")
 	});
 }
 //#endregion
@@ -501,14 +766,27 @@ function renderMicInputSection(containerEl, plugin) {
 }
 //#endregion
 //#region src/settings/sections/remote.ts
-function remoteStatusLabel(status, enabled) {
+/**
+* How long to wait after the last keystroke in the port-override field before
+* applying it. Obsidian fires onChange per character, and every apply kills
+* and respawns the bridge child process - without this, typing
+* "/dev/ttyACM0" would restart it a dozen times with nonsense port values.
+*/
+var PORT_OVERRIDE_DEBOUNCE_MS = 600;
+/**
+* Human-readable status. `detail` is the concrete reason reported by the
+* bridge (which port it settled on, why it can't connect, why the platform is
+* unsupported) - it replaces the generic sentence rather than being appended
+* to it, since it says the same thing but specifically.
+*/
+function remoteStatusLabel(status, enabled, detail) {
 	if (!enabled) return "Deaktiviert.";
 	switch (status) {
-		case "connected": return "Verbunden.";
+		case "connected": return detail ? `Verbunden (${detail}).` : "Verbunden.";
 		case "starting": return "Verbindungsaufbau...";
-		case "disconnected": return "Getrennt (Empfänger nicht gefunden oder USB-Kabel nicht angeschlossen).";
-		case "error": return "Fehler - siehe Entwicklertools-Konsole.";
-		case "unsupported": return "Nicht unterstützt (nur Desktop, Windows/Linux x64).";
+		case "disconnected": return detail ? `Getrennt: ${detail}` : "Getrennt (Empfänger nicht gefunden oder USB-Kabel nicht angeschlossen).";
+		case "error": return detail ? `Fehler: ${detail}` : "Fehler - siehe Entwicklertools-Konsole.";
+		case "unsupported": return detail ? `Nicht unterstützt: ${detail}` : "Nicht unterstützt (nur Desktop, Windows/Linux x64).";
 		default: return "Unbekannt.";
 	}
 }
@@ -517,12 +795,19 @@ function remoteStatusLabel(status, enabled) {
 * ESP32 button that starts/stops the mic-button recording remotely over
 * ESP-NOW -> USB serial -> this plugin. Off by default and only relevant on
 * this specific machine's paired hardware.
+*
+* Returns a dispose function that must be called when the settings tab is
+* hidden (it unsubscribes from live bridge status updates).
 */
 function renderRemoteSection(containerEl, plugin) {
 	const statusLine = containerEl.createDiv({ cls: "setting-item-description rag-chat-remote-status-line" });
 	const updateStatusLine = () => {
-		statusLine.setText(`Status: ${remoteStatusLabel(plugin.getRemoteStatus(), plugin.settings.remoteEnabled)}`);
+		const enabled = plugin.settings.remoteEnabled;
+		const status = plugin.getRemoteStatus();
+		const detail = enabled ? plugin.getRemoteStatusDetail?.() : void 0;
+		statusLine.setText(`Status: ${remoteStatusLabel(status, enabled, detail)}`);
 	};
+	const unsubscribe = plugin.onRemoteStatusChange?.(updateStatusLine) ?? (() => void 0);
 	new obsidian.Setting(containerEl).setName("Hardware-Fernbedienung aktivieren").setDesc("Startet/beendet die Sprachaufnahme über eine externe ESP32-Funk-Fernbedienung (siehe hardware/voice-remote/PLAN.md). Nur für dieses Gerät relevant - betrifft keine anderen Nutzer dieses Vaults.").addToggle((toggle) => {
 		toggle.setValue(plugin.settings.remoteEnabled).onChange(async (value) => {
 			plugin.settings.remoteEnabled = value;
@@ -531,16 +816,33 @@ function renderRemoteSection(containerEl, plugin) {
 			updateStatusLine();
 		});
 	});
+	let portDebounce = null;
+	const clearPortDebounce = () => {
+		if (portDebounce) {
+			clearTimeout(portDebounce);
+			portDebounce = null;
+		}
+	};
 	new obsidian.Setting(containerEl).setName("Serieller Port (optional)").setDesc("Nur nötig, falls der Empfänger nicht automatisch gefunden wird, z.B. /dev/ttyACM0 oder COM5. Leer lassen für automatische Erkennung.").addText((text) => {
 		text.setPlaceholder("automatisch").setValue(plugin.settings.remoteSerialPortOverride);
-		text.onChange(async (value) => {
-			plugin.settings.remoteSerialPortOverride = value.trim();
-			await plugin.saveSettings();
-			plugin.refreshRemoteBridge();
-			updateStatusLine();
+		text.onChange((value) => {
+			clearPortDebounce();
+			portDebounce = setTimeout(() => {
+				portDebounce = null;
+				(async () => {
+					plugin.settings.remoteSerialPortOverride = value.trim();
+					await plugin.saveSettings();
+					plugin.refreshRemoteBridge();
+					updateStatusLine();
+				})();
+			}, PORT_OVERRIDE_DEBOUNCE_MS);
 		});
 	});
 	updateStatusLine();
+	return () => {
+		clearPortDebounce();
+		unsubscribe();
+	};
 }
 //#endregion
 //#region src/settings/sections/retrieval.ts
@@ -596,6 +898,228 @@ function renderRetrievalKnobs(containerEl, plugin) {
 	});
 }
 //#endregion
+//#region src/view/confirm-modal.ts
+var ConfirmModal = class extends obsidian.Modal {
+	constructor(app, message, resolveFn) {
+		super(app);
+		this.resolved = false;
+		this.message = message;
+		this.resolveFn = resolveFn;
+	}
+	onOpen() {
+		this.contentEl.createEl("p", { text: this.message });
+		const buttonRow = this.contentEl.createDiv({ cls: "rag-chat-confirm-modal-buttons" });
+		buttonRow.createEl("button", { text: "Nein" }).addEventListener("click", () => {
+			this.settle(false);
+			this.close();
+		});
+		buttonRow.createEl("button", {
+			cls: "mod-warning",
+			text: "Ja"
+		}).addEventListener("click", () => {
+			this.settle(true);
+			this.close();
+		});
+	}
+	onClose() {
+		this.settle(false);
+		this.contentEl.empty();
+	}
+	settle(value) {
+		if (this.resolved) return;
+		this.resolved = true;
+		this.resolveFn(value);
+	}
+};
+function confirmModal(app, message) {
+	return new Promise((resolve) => {
+		new ConfirmModal(app, message, resolve).open();
+	});
+}
+//#endregion
+//#region src/view/password-modal.ts
+var TEXTS = {
+	create: {
+		title: "Passwort festlegen",
+		intro: "Mit diesem Passwort werden deine API-Schlüssel verschlüsselt gespeichert. Es wird nirgends abgelegt - ohne das Passwort sind die Schlüssel nicht wiederherstellbar.",
+		submit: "Speichern"
+	},
+	unlock: {
+		title: "Passwort eingeben",
+		intro: "Passwort eingeben, um die gespeicherten API-Schlüssel zu entsperren.",
+		submit: "Entsperren"
+	}
+};
+var PasswordModal = class extends obsidian.Modal {
+	constructor(app, request, resolveFn) {
+		super(app);
+		this.request = request;
+		this.resolveFn = resolveFn;
+		this.resolved = false;
+	}
+	onOpen() {
+		const texts = TEXTS[this.request.mode];
+		const { contentEl } = this;
+		contentEl.addClass("rag-chat-password-modal");
+		contentEl.createEl("h3", { text: texts.title });
+		if (this.request.label) contentEl.createEl("p", {
+			cls: "rag-chat-password-modal-label",
+			text: this.request.label
+		});
+		contentEl.createEl("p", { text: texts.intro });
+		const errorEl = contentEl.createEl("p", { cls: "rag-chat-password-modal-error" });
+		if (this.request.error) errorEl.setText(this.request.error);
+		else errorEl.addClass("rag-chat-hidden");
+		const passwordEl = contentEl.createEl("input", {
+			cls: "rag-chat-password-input",
+			attr: { placeholder: "Passwort" }
+		});
+		passwordEl.type = "password";
+		let confirmEl = null;
+		if (this.request.mode === "create") {
+			confirmEl = contentEl.createEl("input", {
+				cls: "rag-chat-password-input",
+				attr: { placeholder: "Passwort wiederholen" }
+			});
+			confirmEl.type = "password";
+		}
+		const showError = (message) => {
+			errorEl.setText(message);
+			errorEl.removeClass("rag-chat-hidden");
+		};
+		const submit = () => {
+			const password = passwordEl.value;
+			if (!password) {
+				showError("Bitte ein Passwort eingeben.");
+				return;
+			}
+			if (confirmEl && confirmEl.value !== password) {
+				showError("Die Passwörter stimmen nicht überein.");
+				return;
+			}
+			this.settle(password);
+			this.close();
+		};
+		for (const input of [passwordEl, confirmEl]) input?.addEventListener("keydown", (evt) => {
+			if (evt.key === "Enter") {
+				evt.preventDefault();
+				submit();
+			}
+		});
+		const buttonRow = contentEl.createDiv({ cls: "rag-chat-password-modal-buttons" });
+		buttonRow.createEl("button", { text: "Abbrechen" }).addEventListener("click", () => {
+			this.settle(null);
+			this.close();
+		});
+		buttonRow.createEl("button", {
+			cls: "mod-cta",
+			text: texts.submit
+		}).addEventListener("click", submit);
+		passwordEl.focus();
+	}
+	onClose() {
+		this.settle(null);
+		this.contentEl.empty();
+	}
+	settle(value) {
+		if (this.resolved) return;
+		this.resolved = true;
+		this.resolveFn(value);
+	}
+};
+/** Asks the user for a password. Resolves `null` when cancelled. */
+function passwordModal(app, request) {
+	return new Promise((resolve) => {
+		new PasswordModal(app, request, resolve).open();
+	});
+}
+//#endregion
+//#region src/settings/sections/security.ts
+/**
+* Password protection for the stored API keys.
+*
+* The password is never persisted (not even hashed): correctness is proven by
+* successfully decrypting an existing secret. That is also why "forgot
+* password" can only mean "throw the secrets away".
+*
+* Returns a dispose function that unsubscribes from lock-state updates.
+*/
+function renderSecuritySection(containerEl, plugin, app) {
+	containerEl.createEl("h3", { text: "Sicherheit" });
+	const statusLine = containerEl.createDiv({ cls: "setting-item-description" });
+	const updateStatusLine = () => {
+		if (!plugin.store.hasProtectedSecrets()) {
+			statusLine.setText("Status: Keine Schlüssel gespeichert. Beim nächsten Speichern eines API-Schlüssels wird ein Passwort festgelegt.");
+			return;
+		}
+		statusLine.setText(plugin.store.isLocked() ? "Status: Gespeicherte Schlüssel sind gesperrt - Passwort eingeben, um sie zu nutzen." : "Status: Gespeicherte Schlüssel sind für diese Sitzung entsperrt.");
+	};
+	const unsubscribe = plugin.store.onLockStateChange(() => {
+		updateStatusLine();
+		syncButtons();
+	});
+	let unlockButtonEl;
+	let lockButtonEl;
+	const syncButtons = () => {
+		const has = plugin.store.hasProtectedSecrets();
+		const locked = plugin.store.isLocked();
+		if (unlockButtonEl) unlockButtonEl.disabled = !has || !locked;
+		if (lockButtonEl) lockButtonEl.disabled = !has || locked;
+	};
+	new obsidian.Setting(containerEl).setName("Schlüssel entsperren / sperren").setDesc("Entsperren entschlüsselt die gespeicherten API-Schlüssel für diese Sitzung. Sperren entfernt sie wieder aus dem Speicher, ohne sie zu löschen.").addButton((button) => {
+		button.setButtonText("Entsperren").onClick(async () => {
+			await plugin.promptUnlock();
+			updateStatusLine();
+			syncButtons();
+		});
+		unlockButtonEl = button.buttonEl;
+	}).addButton((button) => {
+		button.setButtonText("Sperren").onClick(() => {
+			plugin.store.lock();
+			updateStatusLine();
+			syncButtons();
+			new obsidian.Notice("RAG Chat: Secrets gesperrt.");
+		});
+		lockButtonEl = button.buttonEl;
+	});
+	new obsidian.Setting(containerEl).setName("Passwort ändern").setDesc("Verschlüsselt die gespeicherten Schlüssel mit einem neuen Passwort. Alle Schlüssel müssen dafür entsperrt sein.").addButton((button) => {
+		button.setButtonText("Passwort ändern").onClick(async () => {
+			if (!plugin.store.hasProtectedSecrets()) {
+				new obsidian.Notice("RAG Chat: Es sind noch keine Schlüssel gespeichert.");
+				return;
+			}
+			if (plugin.store.isLocked() && !await plugin.promptUnlock()) return;
+			const current = await passwordModal(app, {
+				mode: "unlock",
+				label: "Aktuelles Passwort"
+			});
+			if (current === null) return;
+			const next = await passwordModal(app, {
+				mode: "create",
+				label: "Neues Passwort"
+			});
+			if (next === null) return;
+			const ok = await plugin.store.changePassword(current, next);
+			new obsidian.Notice(ok ? "RAG Chat: Passwort geändert." : "RAG Chat: Passwort konnte nicht geändert werden (falsches aktuelles Passwort?).", 8e3);
+			updateStatusLine();
+			syncButtons();
+		});
+	});
+	new obsidian.Setting(containerEl).setName("Passwort vergessen").setDesc("Löscht die verschlüsselt gespeicherten API-Schlüssel. Sie sind ohne Passwort nicht wiederherstellbar - danach Schlüssel und Passwort neu eingeben.").addButton((button) => {
+		button.setButtonText("Schlüssel zurücksetzen").setWarning();
+		button.onClick(async () => {
+			if (!await confirmModal(app, "Gespeicherte API-Schlüssel wirklich löschen? Sie können ohne Passwort nicht wiederhergestellt werden.")) return;
+			await plugin.store.resetSecrets();
+			new obsidian.Notice("RAG Chat: Gespeicherte Schlüssel gelöscht - bitte neu eingeben.", 8e3);
+			updateStatusLine();
+			syncButtons();
+		});
+	});
+	updateStatusLine();
+	syncButtons();
+	return unsubscribe;
+}
+//#endregion
 //#region src/tts/playback.ts
 var audioEl;
 var onEndedCallback = null;
@@ -638,45 +1162,6 @@ function dispose() {
 	audioEl.pause();
 	audioEl.src = "";
 	audioEl = void 0;
-}
-//#endregion
-//#region src/view/confirm-modal.ts
-var ConfirmModal = class extends obsidian.Modal {
-	constructor(app, message, resolveFn) {
-		super(app);
-		this.resolved = false;
-		this.message = message;
-		this.resolveFn = resolveFn;
-	}
-	onOpen() {
-		this.contentEl.createEl("p", { text: this.message });
-		const buttonRow = this.contentEl.createDiv({ cls: "rag-chat-confirm-modal-buttons" });
-		buttonRow.createEl("button", { text: "Nein" }).addEventListener("click", () => {
-			this.settle(false);
-			this.close();
-		});
-		buttonRow.createEl("button", {
-			cls: "mod-warning",
-			text: "Ja"
-		}).addEventListener("click", () => {
-			this.settle(true);
-			this.close();
-		});
-	}
-	onClose() {
-		this.settle(false);
-		this.contentEl.empty();
-	}
-	settle(value) {
-		if (this.resolved) return;
-		this.resolved = true;
-		this.resolveFn(value);
-	}
-};
-function confirmModal(app, message) {
-	return new Promise((resolve) => {
-		new ConfirmModal(app, message, resolve).open();
-	});
 }
 //#endregion
 //#region src/settings/sections/tts-audio.ts
@@ -784,7 +1269,8 @@ function renderTtsVoiceSection(containerEl, plugin) {
 		setValue: async (value) => {
 			plugin.settings.ttsApiKey = value;
 			await plugin.saveSettings();
-		}
+		},
+		isLocked: () => plugin.store.isSecretLocked("ttsApiKey")
 	});
 	renderVoicePickers(containerEl, plugin);
 }
@@ -851,9 +1337,12 @@ function renderVoicePickers(containerEl, plugin) {
 var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 	constructor(app, plugin) {
 		super(app, plugin);
+		this.disposeRemoteSection = null;
+		this.disposeSecuritySection = null;
 		this.plugin = plugin;
 	}
 	display() {
+		this.disposeSections();
 		this.containerEl.empty();
 		const { containerEl } = this;
 		renderApiKeySection(containerEl, this.plugin);
@@ -864,7 +1353,18 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 		renderTtsVoiceSection(containerEl, this.plugin);
 		renderTtsAudioSection(containerEl, this.plugin, this.app);
 		renderMicInputSection(containerEl, this.plugin);
-		renderRemoteSection(containerEl, this.plugin);
+		this.disposeRemoteSection = renderRemoteSection(containerEl, this.plugin);
+		this.disposeSecuritySection = renderSecuritySection(containerEl, this.plugin, this.app);
+	}
+	hide() {
+		this.disposeSections();
+		super.hide();
+	}
+	disposeSections() {
+		this.disposeRemoteSection?.();
+		this.disposeRemoteSection = null;
+		this.disposeSecuritySection?.();
+		this.disposeSecuritySection = null;
 	}
 };
 //#endregion
@@ -11013,6 +11513,7 @@ var RagChatView = class extends obsidian.ItemView {
 		this.closed = false;
 		this.abortController = null;
 		this.recording = false;
+		this.recordingOrigin = null;
 		this.recorder = null;
 		this.recordingStartedAt = 0;
 		this.speech = new TurnSpeech({
@@ -11048,11 +11549,13 @@ var RagChatView = class extends obsidian.ItemView {
 		this.composer = buildComposer(container);
 		this.ttsControls = buildTtsControls(container);
 		this.ttsController = new TtsControlsController(this.ttsControls, this.plugin, () => this.closed, () => this.busy);
+		this.lockOverlayEl = this.buildLockOverlay(container);
 		this.wireToolbar();
 		this.wireComposer();
 		this.wireMic();
 		this.wireTtsControls();
 		this.setRemoteStatus(this.plugin.getRemoteStatus());
+		this.setLocked(this.plugin.isLocked());
 		this.composer.thinkingCheckboxEl.checked = this.plugin.settings.thinkingEnabled;
 		this.composer.webSearchCheckboxEl.checked = this.plugin.settings.webSearchEnabled;
 		this.composer.ttsCheckboxEl.checked = this.plugin.settings.ttsEnabled;
@@ -11061,6 +11564,31 @@ var RagChatView = class extends obsidian.ItemView {
 		this.rendered = renderTurns(this.messagesEl, this.session.turns, this.app, this, this.turnCallbacks);
 		this.updateClarificationAffordance();
 		this.refreshModelOptions();
+	}
+	/**
+	* Blurred "locked" curtain over the whole chat. Shown while stored API keys
+	* are still encrypted: clicking it re-opens the password prompt, so a
+	* dismissed startup prompt is always recoverable from the UI itself.
+	*/
+	buildLockOverlay(container) {
+		const overlay = container.createDiv({ cls: "rag-chat-lock-overlay rag-chat-hidden" });
+		overlay.createEl("button", {
+			cls: "rag-chat-lock-overlay-button",
+			text: "🔒 Entsperren"
+		}).setAttribute("aria-label", "Gespeicherte API-Schlüssel entsperren");
+		this.registerDomEvent(overlay, "click", () => void this.handleUnlockClick());
+		return overlay;
+	}
+	/** Shows/hides the locked curtain. Called by the plugin on state changes. */
+	setLocked(locked) {
+		this.lockOverlayEl?.toggleClass("rag-chat-hidden", !locked);
+		this.contentEl.toggleClass("is-locked", locked);
+	}
+	async handleUnlockClick() {
+		await this.plugin.promptUnlock();
+		if (this.closed) return;
+		this.setLocked(this.plugin.isLocked());
+		if (!this.plugin.isLocked()) this.refreshModelOptions();
 	}
 	wireToolbar() {
 		this.registerDomEvent(this.toolbar.modelSelectEl, "change", () => void this.handleModelChange());
@@ -11102,22 +11630,40 @@ var RagChatView = class extends obsidian.ItemView {
 		const c = this.composer;
 		const start = (evt) => {
 			evt.preventDefault();
-			this.startVoiceRecording();
+			this.startVoiceRecording("mouse");
 		};
 		const stop = () => {
 			if (this.recording) this.stopVoiceRecordingAndSend();
 		};
+		const stopIfMouseInitiated = () => {
+			if (this.recordingOrigin === "mouse") stop();
+		};
 		this.registerDomEvent(c.micButton, "mousedown", start);
-		this.registerDomEvent(c.micButton, "mouseup", stop);
-		this.registerDomEvent(c.micButton, "mouseleave", stop);
+		this.registerDomEvent(c.micButton, "mouseup", stopIfMouseInitiated);
+		this.registerDomEvent(c.micButton, "mouseleave", stopIfMouseInitiated);
 		if (typeof window !== "undefined") {
-			this.registerDomEvent(window, "mouseup", stop);
-			this.registerDomEvent(window, "blur", stop);
+			this.registerDomEvent(window, "mouseup", stopIfMouseInitiated);
+			this.registerDomEvent(window, "blur", stopIfMouseInitiated);
 		}
 	}
-	startVoiceRecording() {
-		if (this.closed || this.busy || this.recording) return;
+	/**
+	* Starts a push-to-talk recording. Returns whether recording actually
+	* started, so callers that arm their own timeout (the hardware remote's
+	* safety timer) don't guard a recording that never began.
+	*/
+	startVoiceRecording(origin = "mouse") {
+		if (this.closed || this.recording) return false;
+		if (this.plugin.isLocked()) {
+			new obsidian.Notice("RAG Chat: API-Schlüssel gesperrt - bitte zuerst entsperren.");
+			this.handleUnlockClick();
+			return false;
+		}
+		if (this.busy) {
+			new obsidian.Notice("RAG Chat: Aufnahme nicht möglich - es läuft noch eine Antwort.");
+			return false;
+		}
 		this.recording = true;
+		this.recordingOrigin = origin;
 		this.recordingStartedAt = Date.now();
 		this.composer.micButton.addClass("is-recording");
 		const recorder = new MicRecorder();
@@ -11125,16 +11671,21 @@ var RagChatView = class extends obsidian.ItemView {
 		recorder.start(this.plugin.settings.micInputDeviceId || void 0).catch((err) => {
 			if (this.recorder !== recorder) return;
 			this.recording = false;
+			this.recordingOrigin = null;
 			this.recorder = null;
+			this.notifyRecordingEnded();
 			if (!this.closed) {
 				this.composer.micButton.removeClass("is-recording");
 				new obsidian.Notice(`RAG Chat: Mikrofonzugriff fehlgeschlagen (${errText(err)}).`);
 			}
 		});
+		return true;
 	}
 	async stopVoiceRecordingAndSend() {
 		if (!this.recording || !this.recorder) return;
 		this.recording = false;
+		this.recordingOrigin = null;
+		this.notifyRecordingEnded();
 		this.composer.micButton.removeClass("is-recording");
 		const recorder = this.recorder;
 		this.recorder = null;
@@ -11148,7 +11699,10 @@ var RagChatView = class extends obsidian.ItemView {
 		}
 		if (this.closed) return;
 		if (!blob || Date.now() - startedAt < MIN_RECORDING_MS) return;
-		if (this.busy) return;
+		if (this.busy) {
+			new obsidian.Notice("RAG Chat: Aufnahme verworfen - es läuft noch eine Antwort.");
+			return;
+		}
 		try {
 			const { base64, mimeType } = await blobToWavBase64(blob);
 			if (this.closed) return;
@@ -11170,7 +11724,8 @@ var RagChatView = class extends obsidian.ItemView {
 		const visible = status !== null && status !== "unsupported";
 		dot.toggleClass("is-visible", visible);
 		dot.toggleClass("is-connected", status === "connected");
-		dot.toggleClass("is-disconnected", visible && status !== "connected");
+		dot.toggleClass("is-error", status === "error");
+		dot.toggleClass("is-disconnected", visible && status !== "connected" && status !== "error");
 		const labels = {
 			connected: "Hardware-Fernbedienung: verbunden",
 			starting: "Hardware-Fernbedienung: Verbindungsaufbau...",
@@ -11180,6 +11735,14 @@ var RagChatView = class extends obsidian.ItemView {
 		};
 		dot.setAttribute("aria-label", status ? labels[status] : "");
 		dot.setAttribute("title", status ? labels[status] : "");
+	}
+	/**
+	* Tell the plugin a recording is over, whichever way it ended, so the
+	* hardware remote's safety timer can never outlive it (and fire a
+	* misleading "automatically stopped" notice for an already-sent recording).
+	*/
+	notifyRecordingEnded() {
+		this.plugin.notifyRecordingEnded?.();
 	}
 	/** Brief visual confirmation that a real press/release arrived from the remote. */
 	pulseRemoteIndicator() {
@@ -11266,6 +11829,11 @@ var RagChatView = class extends obsidian.ItemView {
 	}
 	async runChatAction(action, opts) {
 		if (this.busy) return;
+		if (this.plugin.isLocked()) {
+			new obsidian.Notice("RAG Chat: API-Schlüssel gesperrt - bitte zuerst entsperren.");
+			this.handleUnlockClick();
+			return;
+		}
 		this.setBusy(true);
 		const controller = new AbortController();
 		this.abortController = controller;
@@ -11375,6 +11943,13 @@ async function readManifest(vault, pluginDir) {
 //#region src/remote/bridge-client.ts
 var RESTART_BASE_DELAY_MS = 1e3;
 var RESTART_MAX_DELAY_MS = 3e4;
+/**
+* Hard cap on the unparsed stdout tail we are willing to buffer. The bridge
+* only ever emits short newline-terminated JSON objects, so anything larger
+* means we are not talking to our bridge (or it went haywire) - dropping the
+* buffer is better than growing it without bound for the lifetime of the app.
+*/
+var MAX_STDOUT_BUFFER_BYTES = 65536;
 function binaryNameFor(platform, arch) {
 	if (platform === "win32" && arch === "x64") return "serial-bridge-win32-x64.exe";
 	if (platform === "linux" && arch === "x64") return "serial-bridge-linux-x64";
@@ -11403,6 +11978,7 @@ var RemoteBridgeClient = class {
 	}
 	start() {
 		this.stopped = false;
+		this.restartAttempt = 0;
 		const binaryName = binaryNameFor(process.platform, process.arch);
 		if (!binaryName) {
 			this.setStatus("unsupported", `Nicht unterstützte Plattform: ${process.platform}/${process.arch}`);
@@ -11420,27 +11996,36 @@ var RemoteBridgeClient = class {
 	}
 	stop() {
 		this.stopped = true;
-		if (this.restartTimer) {
-			clearTimeout(this.restartTimer);
-			this.restartTimer = null;
-		}
+		this.clearRestartTimer();
 		this.child?.kill();
 		this.child = null;
+		this.stdoutBuffer = "";
 	}
 	getStatus() {
 		return this.status;
 	}
+	/** Last detail that came with a status change (error text, port name, ...). */
+	getStatusDetail() {
+		return this.statusDetail;
+	}
 	spawnProcess(binaryPath) {
+		if (this.child) {
+			this.child.kill();
+			this.child = null;
+		}
 		this.setStatus("starting");
 		const override = this.getPortOverride();
 		const args = override ? [`-port=${override}`] : [];
 		let child;
 		try {
-			child = (0, node_child_process.spawn)(binaryPath, args, { stdio: [
-				"pipe",
-				"pipe",
-				"pipe"
-			] });
+			child = (0, node_child_process.spawn)(binaryPath, args, {
+				stdio: [
+					"pipe",
+					"pipe",
+					"pipe"
+				],
+				windowsHide: true
+			});
 		} catch (err) {
 			this.setStatus("error", err instanceof Error ? err.message : String(err));
 			this.scheduleRestart(binaryPath);
@@ -11449,6 +12034,10 @@ var RemoteBridgeClient = class {
 		this.child = child;
 		this.stdoutBuffer = "";
 		child.stdout.on("data", (chunk) => this.handleStdout(chunk));
+		child.stderr.on("data", (chunk) => {
+			const text = chunk.toString("utf8").trim();
+			if (text) console.error(`RAG Chat: Fernbedienung-Bridge (stderr): ${text}`);
+		});
 		child.on("error", (err) => {
 			this.setStatus("error", err.message);
 			this.scheduleRestart(binaryPath);
@@ -11462,6 +12051,7 @@ var RemoteBridgeClient = class {
 	}
 	scheduleRestart(binaryPath) {
 		if (this.stopped) return;
+		if (this.restartTimer) return;
 		const delay = Math.min(RESTART_BASE_DELAY_MS * 2 ** this.restartAttempt, RESTART_MAX_DELAY_MS);
 		this.restartAttempt++;
 		this.restartTimer = setTimeout(() => {
@@ -11469,6 +12059,12 @@ var RemoteBridgeClient = class {
 			if (this.stopped) return;
 			this.spawnProcess(binaryPath);
 		}, delay);
+	}
+	clearRestartTimer() {
+		if (this.restartTimer) {
+			clearTimeout(this.restartTimer);
+			this.restartTimer = null;
+		}
 	}
 	handleStdout(chunk) {
 		this.stdoutBuffer += chunk.toString("utf8");
@@ -11478,6 +12074,7 @@ var RemoteBridgeClient = class {
 			this.stdoutBuffer = this.stdoutBuffer.slice(idx + 1);
 			if (line) this.handleLine(line);
 		}
+		if (this.stdoutBuffer.length > MAX_STDOUT_BUFFER_BYTES) this.stdoutBuffer = "";
 	}
 	handleLine(line) {
 		let ev;
@@ -11495,13 +12092,17 @@ var RemoteBridgeClient = class {
 				this.callbacks.onRelease();
 				break;
 			case "status":
-				this.setStatus(ev.connected ? "connected" : "disconnected", ev.port);
+				this.setStatus(ev.connected ? "connected" : "disconnected", ev.port ?? ev.message);
 				break;
-			case "error": this.setStatus("error", ev.message);
+			case "error":
+				this.setStatus("error", ev.message);
+				break;
+			case "warning": this.callbacks.onWarning?.(ev.message ?? "");
 		}
 	}
 	setStatus(status, detail) {
 		this.status = status;
+		this.statusDetail = detail;
 		this.callbacks.onStatusChange(status, detail);
 	}
 };
@@ -11514,14 +12115,26 @@ var PUSH_TO_TALK_KEY = "F12";
 * after this long rather than recording forever.
 */
 var REMOTE_SAFETY_TIMEOUT_MS = 3e4;
+/**
+* Device-level warnings from the receiver (`ERR ...` lines, e.g.
+* "stale-epoch-repair-needed" when the remote's NVS was wiped and the pair
+* needs re-pairing). Always logged, but only surfaced as a Notice this often,
+* so a repeating condition cannot bury the user in toasts.
+*/
+var REMOTE_WARNING_NOTICE_INTERVAL_MS = 6e4;
 var RagChatPlugin = class extends obsidian.Plugin {
 	constructor(..._args) {
 		super(..._args);
 		this.store = new SettingsStore(this);
+		this.unlockPromptOpen = false;
 		this.manifestCache = null;
 		this.pushToTalkActive = false;
 		this.remoteBridge = null;
 		this.remoteSafetyTimer = null;
+		this.remotePressSeq = 0;
+		this.remoteReleasedSeq = 0;
+		this.remoteStatusListeners = /* @__PURE__ */ new Set();
+		this.lastRemoteWarningNoticeAt = 0;
 		this.handlePushToTalkKeyDown = (evt) => {
 			if (!(evt.ctrlKey && evt.altKey && evt.shiftKey && evt.key === PUSH_TO_TALK_KEY)) return;
 			evt.preventDefault();
@@ -11532,7 +12145,7 @@ var RagChatPlugin = class extends obsidian.Plugin {
 				return;
 			}
 			this.pushToTalkActive = true;
-			view.startVoiceRecording();
+			view.startVoiceRecording("hotkey");
 		};
 		this.handlePushToTalkKeyUp = (evt) => {
 			if (evt.key !== PUSH_TO_TALK_KEY || !this.pushToTalkActive) return;
@@ -11542,7 +12155,9 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		};
 	}
 	async onload() {
+		this.store.setPasswordPrompt((request) => passwordModal(this.app, request));
 		await this.loadSettings();
+		this.store.onLockStateChange(() => this.broadcastLockState());
 		this.registerView(RAG_CHAT_VIEW_TYPE, (leaf) => new RagChatView(leaf, this));
 		this.addRibbonIcon("message-circle-question", "RAG Chat öffnen", () => {
 			this.activateView();
@@ -11568,6 +12183,25 @@ var RagChatPlugin = class extends obsidian.Plugin {
 				for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) if (leaf.view instanceof RagChatView) leaf.view.clearChat();
 			}
 		});
+		this.addCommand({
+			id: "rag-chat-unlock-secrets",
+			name: "RAG: Secrets entsperren",
+			callback: () => {
+				this.promptUnlock();
+			}
+		});
+		this.addCommand({
+			id: "rag-chat-lock-secrets",
+			name: "RAG: Secrets sperren",
+			callback: () => {
+				if (!this.store.hasProtectedSecrets()) {
+					new obsidian.Notice("RAG Chat: Keine gespeicherten Secrets vorhanden.");
+					return;
+				}
+				this.store.lock();
+				new obsidian.Notice("RAG Chat: Secrets gesperrt.");
+			}
+		});
 		this.addSettingTab(new RagChatSettingTab(this.app, this));
 		if (typeof window !== "undefined") {
 			window.addEventListener("keydown", this.handlePushToTalkKeyDown);
@@ -11575,6 +12209,7 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		}
 		this.app.workspace.onLayoutReady(() => {
 			this.activateView({ focus: false });
+			this.promptUnlock();
 		});
 		this.refreshRemoteBridge();
 		try {
@@ -11592,6 +12227,46 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		this.clearRemoteSafetyTimer();
 		this.remoteBridge?.stop();
 		this.remoteBridge = null;
+	}
+	/** True when stored secrets exist but aren't decrypted in this session yet. */
+	isLocked() {
+		return this.store.isLocked();
+	}
+	/**
+	* Asks for the password and unlocks whatever it can. Safe to call when
+	* nothing is locked (no-op) and re-entrant-safe, so the startup prompt, the
+	* chat overlay and the command can't stack modals on top of each other.
+	*/
+	async promptUnlock() {
+		if (!this.store.isLocked()) return true;
+		if (this.unlockPromptOpen) return false;
+		this.unlockPromptOpen = true;
+		try {
+			let error;
+			for (;;) {
+				const password = await passwordModal(this.app, {
+					mode: "unlock",
+					error
+				});
+				if (password === null) return false;
+				const { unlocked, failed } = await this.store.unlock(password);
+				if (unlocked.length === 0) {
+					error = "Falsches Passwort.";
+					continue;
+				}
+				if (failed.length) this.noticeUnlockFailures(failed);
+				return true;
+			}
+		} finally {
+			this.unlockPromptOpen = false;
+		}
+	}
+	noticeUnlockFailures(failed) {
+		for (const key of failed) new obsidian.Notice(`RAG Chat: ${SECRET_LABELS[key]} konnte mit diesem Passwort nicht entsperrt werden - bitte in den Einstellungen erneut eingeben.`, 1e4);
+	}
+	broadcastLockState() {
+		const locked = this.store.isLocked();
+		for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) if (leaf.view instanceof RagChatView) leaf.view.setLocked(locked);
 	}
 	getFirstChatView() {
 		for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) if (leaf.view instanceof RagChatView) return leaf.view;
@@ -11613,26 +12288,60 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		this.remoteBridge = new RemoteBridgeClient(this.getPluginDirFullPath(), {
 			onPress: () => void this.handleRemotePress(),
 			onRelease: () => this.handleRemoteRelease(),
-			onStatusChange: (status) => this.broadcastRemoteStatus(status)
+			onStatusChange: (status, detail) => this.handleRemoteStatusChange(status, detail),
+			onWarning: (message) => this.handleRemoteWarning(message)
 		}, () => this.settings.remoteSerialPortOverride);
 		this.remoteBridge.start();
 	}
 	getRemoteStatus() {
 		return this.remoteBridge?.getStatus() ?? null;
 	}
+	/** Extra context for the current status (error text, port name, ...), if any. */
+	getRemoteStatusDetail() {
+		return this.remoteBridge?.getStatusDetail();
+	}
+	/**
+	* Lets an open UI (e.g. the settings tab) follow bridge status changes
+	* instead of showing whatever the status happened to be when it rendered.
+	* Returns an unsubscribe function.
+	*/
+	onRemoteStatusChange(listener) {
+		this.remoteStatusListeners.add(listener);
+		return () => this.remoteStatusListeners.delete(listener);
+	}
+	/**
+	* A remote PRESS. Note this is async (the chat view may still have to be
+	* opened), while handleRemoteRelease is synchronous - so a RELEASE can
+	* genuinely be processed *before* the PRESS that preceded it finishes.
+	* Every press therefore carries a sequence number and bails out if its own
+	* release already arrived, otherwise a quick tap would start a recording
+	* that nothing is left to stop (it would run until the 30s safety timeout
+	* and then send half a minute of audio).
+	*/
 	async handleRemotePress() {
+		const seq = ++this.remotePressSeq;
 		await this.activateView();
 		const view = this.getFirstChatView();
 		if (!view) return;
-		view.startVoiceRecording();
 		view.pulseRemoteIndicator();
+		if (this.remoteReleasedSeq >= seq) return;
+		if (!view.startVoiceRecording("remote")) return;
 		this.armRemoteSafetyTimer();
 	}
 	handleRemoteRelease() {
+		this.remoteReleasedSeq = this.remotePressSeq;
 		this.clearRemoteSafetyTimer();
 		const view = this.getFirstChatView();
 		view?.pulseRemoteIndicator();
 		view?.stopVoiceRecordingAndSend();
+	}
+	/**
+	* Called by the view whenever a recording ends for any reason (manual stop,
+	* window blur, mic failure), so the remote's safety timer can never outlive
+	* the recording it was guarding and fire a misleading notice.
+	*/
+	notifyRecordingEnded() {
+		this.clearRemoteSafetyTimer();
 	}
 	armRemoteSafetyTimer() {
 		this.clearRemoteSafetyTimer();
@@ -11648,8 +12357,35 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			this.remoteSafetyTimer = null;
 		}
 	}
+	/**
+	* The bridge hands us a detail string with every status change (why the
+	* platform is unsupported, which binary is missing, the actual serial open
+	* error). Log it: the settings tab tells the user to look in the developer
+	* console, and this is the only thing that ever puts it there.
+	*/
+	handleRemoteStatusChange(status, detail) {
+		const suffix = detail ? ` (${detail})` : "";
+		if (status === "error" || status === "unsupported") console.error(`RAG Chat: Fernbedienung-Status "${status}"${suffix}`);
+		else console.info(`RAG Chat: Fernbedienung-Status "${status}"${suffix}`);
+		this.broadcastRemoteStatus(status);
+	}
+	/**
+	* Device-level `ERR ...` line from the receiver. Deliberately not a status
+	* change: the USB link is demonstrably fine (we just received a line over
+	* it), and treating device chatter as a link error would latch the UI into
+	* "Fehler" indefinitely, since status is only re-emitted on
+	* connect/disconnect.
+	*/
+	handleRemoteWarning(message) {
+		console.warn(`RAG Chat: Fernbedienung meldet "${message}"`);
+		const now = Date.now();
+		if (now - this.lastRemoteWarningNoticeAt < REMOTE_WARNING_NOTICE_INTERVAL_MS) return;
+		this.lastRemoteWarningNoticeAt = now;
+		new obsidian.Notice(`RAG Chat: Fernbedienung-Hinweis: ${message}`, 6e3);
+	}
 	broadcastRemoteStatus(status) {
 		for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) if (leaf.view instanceof RagChatView) leaf.view.setRemoteStatus(status);
+		for (const listener of this.remoteStatusListeners) listener();
 	}
 	getPluginDir() {
 		return getPluginDir(this.manifest);
