@@ -10,10 +10,20 @@
 //   HB VOICE-REMOTE-RX v1 <millis>  - heartbeat, every VOICE_REMOTE_HEARTBEAT_MS
 //   PRESS                           - validated press event from the remote
 //   RELEASE                         - validated release event from the remote
+//   ERR <reason>                    - device-level complaint (NOT a link error;
+//                                     the bridge forwards these as "warning")
 //
-// Only PRESS/RELEASE lines that passed magic + device-id + replay-counter
+// Only PRESS/RELEASE lines that passed magic + device-id + replay-sequence
 // validation are ever printed - the PC-side bridge does not need to repeat
 // any of that logic, it just forwards these lines verbatim.
+//
+// Re-pairing: hold the BOOT button (GPIO9) while powering up / resetting this
+// board to clear the stored replay sequence. That is the recovery path for a
+// remote whose NVS was wiped (its epoch restarts at 1, which is correctly
+// rejected as a replay otherwise) - see ../PLAN.md "Re-pairing after an NVS
+// wipe". Physical access to the receiver is already the trust boundary here,
+// so a physical gesture is the right shape for this; automatically accepting a
+// lower sequence would reopen the replay hole the sequence exists to close.
 
 #include <Arduino.h>
 #include <WiFi.h>
@@ -31,17 +41,25 @@
 #define VOICE_REMOTE_WIFI_CHANNEL VOICE_REMOTE_WIFI_CHANNEL_OVERRIDE
 #endif
 
-static const uint8_t LED_PIN = 8;      // onboard LED on the SuperMini, active-low
+static const uint8_t LED_PIN = 8;    // onboard LED on the SuperMini, active-low
+static const uint8_t BOOT_PIN = 9;   // onboard BOOT button, used as the re-pair gesture
 static const uint8_t REMOTE_MAC[6] = VOICE_REMOTE_REMOTE_MAC;
 static const uint8_t PMK[16] = VOICE_REMOTE_PMK;
 static const uint8_t LMK[16] = VOICE_REMOTE_LMK;
 
 static Preferences prefs;
-static uint32_t lastCounter = 0;
+static uint32_t lastEpoch = 0;
+// Deliberately starts at "everything in lastEpoch is already used up": on our
+// own reboot we must not accept a packet from an epoch we previously served,
+// or a packet captured before the reboot could be replayed into us afterwards.
+// The remote bumps its epoch on every wake, so the very next real press passes
+// this anyway.
+static uint32_t lastCounter = UINT32_MAX;
 static unsigned long lastHeartbeatMs = 0;
 
 struct QueueItem {
   uint8_t event;
+  uint32_t bootEpoch;
   uint32_t counter;
   bool macMatch;
 };
@@ -75,14 +93,19 @@ static void onDataRecv(const uint8_t *mac_addr, const uint8_t *data, int len) {
 
   QueueItem item;
   item.event = pkt.event;
+  item.bootEpoch = pkt.bootEpoch;
   item.counter = pkt.counter;
   item.macMatch = mac_addr != nullptr && memcmp(mac_addr, REMOTE_MAC, 6) == 0;
-  xQueueSend(eventQueue, &item, 0);
+  if (eventQueue != nullptr) xQueueSend(eventQueue, &item, 0);
 }
 
 static void setupEspNow() {
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
+  // Modem sleep would let the radio doze between beacons and silently drop
+  // ESP-NOW frames aimed at us; this device is mains-powered, so keep the
+  // receiver hot.
+  WiFi.setSleep(false);
   esp_wifi_set_channel(VOICE_REMOTE_WIFI_CHANNEL, WIFI_SECOND_CHAN_NONE);
 
   if (esp_now_init() != ESP_OK) {
@@ -103,6 +126,17 @@ static void setupEspNow() {
   }
 }
 
+// BOOT held at startup = "forget the paired remote's sequence". See the file
+// header for why this is a physical gesture rather than an automatic rule.
+static bool repairGestureHeld() {
+  pinMode(BOOT_PIN, INPUT_PULLUP);
+  for (uint8_t i = 0; i < 10; i++) {
+    if (digitalRead(BOOT_PIN) != LOW) return false;
+    delay(50);
+  }
+  return true;
+}
+
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   ledOff();
@@ -115,31 +149,50 @@ void setup() {
   while (!Serial && millis() - start < 3000) delay(10);
 
   prefs.begin("vremote-rx", false);
-  lastCounter = prefs.getUInt("lastCtr", 0);
+  const bool repair = repairGestureHeld();
+  if (repair) {
+    prefs.remove("lastEpoch");
+    lastEpoch = 0;
+    lastCounter = 0;  // accept the next packet from any epoch, including 1
+  } else {
+    lastEpoch = prefs.getUInt("lastEpoch", 0);
+  }
 
   eventQueue = xQueueCreate(8, sizeof(QueueItem));
+  if (eventQueue == nullptr) Serial.println("ERR event queue alloc failed");
 
   setupEspNow();
 
   Serial.println("HELLO VOICE-REMOTE-RX v1");
   Serial.print("MAC ");
   Serial.println(WiFi.macAddress());
+  if (repair) Serial.println("ERR replay-state-cleared");
   lastHeartbeatMs = millis();
   blinkLed(30);
 }
 
 void loop() {
   QueueItem item;
-  if (xQueueReceive(eventQueue, &item, 0) == pdTRUE) {
+  if (eventQueue != nullptr && xQueueReceive(eventQueue, &item, 0) == pdTRUE) {
     if (!item.macMatch) {
       // Not our paired remote's MAC - ignore silently (could be noise, a
       // misconfigured device, or a spoofing attempt; either way, dropping
       // it is the correct behavior).
-    } else if (item.counter <= lastCounter) {
-      Serial.println("ERR replay-rejected");
+    } else if (!voiceRemoteIsNewer(lastEpoch, lastCounter, item.bootEpoch, item.counter)) {
+      // Almost always a duplicate of a packet we already accepted: the remote
+      // re-sends the same (epoch, counter) when an ack is lost, on purpose.
+      // That is expected traffic, so drop it silently instead of reporting an
+      // error the PC side would have to interpret. Only a genuinely older
+      // epoch is worth flagging, since that means the remote's NVS was wiped
+      // and re-pairing is needed (BOOT button - see the file header).
+      if (item.bootEpoch < lastEpoch) Serial.println("ERR stale-epoch-repair-needed");
     } else {
+      const bool newEpoch = item.bootEpoch != lastEpoch;
+      lastEpoch = item.bootEpoch;
       lastCounter = item.counter;
-      prefs.putUInt("lastCtr", lastCounter);
+      // One NVS write per press cycle instead of one per packet: only the
+      // epoch has to survive a power cut, the in-epoch counter does not.
+      if (newEpoch) prefs.putUInt("lastEpoch", lastEpoch);
       if (item.event == VOICE_REMOTE_EVENT_PRESS) {
         Serial.println("PRESS");
       } else if (item.event == VOICE_REMOTE_EVENT_RELEASE) {

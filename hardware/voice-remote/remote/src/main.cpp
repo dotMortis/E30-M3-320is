@@ -9,10 +9,17 @@
 // RTC-capable pins (GPIO0-5) required for deep-sleep GPIO wakeup, and is not
 // a strapping pin (unlike GPIO2/8/9) - see PLAN.md "Pin choice".
 //
-// Hard safety cutoff: if the switch is ever stuck/debris-jammed, the remote
-// forces a RELEASE + sleep after VOICE_REMOTE_MAX_AWAKE_MS regardless, so a
-// stuck button drains the battery for at most ~20s per stuck press rather
-// than indefinitely.
+// Latency matters here: everything between the wake and the PRESS packet is
+// time the user is already talking into a recorder that hasn't started yet.
+// So the ordering in setup() is deliberately: read the wake cause -> bring up
+// ESP-NOW -> send PRESS -> only then bother with USB serial (which is purely
+// a bench/provisioning convenience and is skipped entirely on a GPIO wake).
+//
+// Safety cutoff: if the switch is ever stuck/debris-jammed, the remote sends
+// RELEASE after VOICE_REMOTE_MAX_AWAKE_MS and then waits for the switch to
+// actually go idle before re-arming the level-triggered wake source - see
+// sleepUntilButtonIdle() for why sleeping while it is still held would be
+// actively harmful.
 
 #include <Arduino.h>
 #include <WiFi.h>
@@ -36,7 +43,11 @@ static const uint8_t PMK[16] = VOICE_REMOTE_PMK;
 static const uint8_t LMK[16] = VOICE_REMOTE_LMK;
 
 static Preferences prefs;
+static uint32_t bootEpoch = 0;
+// Packet number within this wake only - PRESS is 1, RELEASE is 2. Never
+// persisted: the epoch above is what makes the sequence globally monotonic.
 static uint32_t counter = 0;
+static bool espNowReady = false;
 
 static volatile bool sendCbFired = false;
 static volatile bool sendCbSuccess = false;
@@ -55,13 +66,16 @@ static void onDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   sendCbFired = true;
 }
 
-static void setupEspNow() {
+// Returns false if the radio could not be brought up at all, so a hardware or
+// configuration failure is distinguishable from "receiver out of range"
+// instead of both just looking like a failed send.
+static bool setupEspNow() {
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   esp_wifi_set_channel(VOICE_REMOTE_WIFI_CHANNEL, WIFI_SECOND_CHAN_NONE);
 
-  esp_now_init();
-  esp_now_set_pmk(PMK);
+  if (esp_now_init() != ESP_OK) return false;
+  if (esp_now_set_pmk(PMK) != ESP_OK) return false;
   esp_now_register_send_cb(onDataSent);
 
   esp_now_peer_info_t peer = {};
@@ -70,10 +84,12 @@ static void setupEspNow() {
   peer.ifidx = WIFI_IF_STA;
   peer.encrypt = true;
   memcpy(peer.lmk, LMK, 16);
-  esp_now_add_peer(&peer);
+  if (esp_now_add_peer(&peer) != ESP_OK) return false;
+  return true;
 }
 
 static void teardownEspNow() {
+  if (!espNowReady) return;
   esp_now_deinit();
   WiFi.mode(WIFI_OFF);
 }
@@ -94,30 +110,55 @@ static bool sendWithRetry(const voice_remote_packet_t &pkt, uint8_t maxAttempts,
 }
 
 static void sendEvent(uint8_t event) {
+  if (!espNowReady) {
+    blinkLed(600);  // long solid flash: radio never came up (not a range problem)
+    return;
+  }
   voice_remote_packet_t pkt = {};
   voiceRemoteSetMagic(pkt);
   pkt.deviceId = VOICE_REMOTE_DEVICE_ID;
   pkt.event = event;
-  counter++;
-  pkt.counter = counter;
-  prefs.putUInt("counter", counter);
+  pkt.bootEpoch = bootEpoch;
+  pkt.counter = ++counter;
 
   bool ok = sendWithRetry(pkt, 5, 40);
   blinkLed(ok ? 15 : 200);  // a long flash on total failure is a deliberate bench-debugging signal
 }
 
-static void armWakeSourceAndSleep() {
-  // esp_deep_sleep_enable_gpio_wakeup() configures the pin's pull resistor
-  // itself (internally, right before sleeping) to match the wakeup mode - no
-  // manual rtc_gpio_* setup needed or even available on ESP32-C3, whose RTC
-  // IO pins don't expose the classic rtc_gpio_init/rtc_gpio_pullup_en API
-  // surface that original ESP32 has (SOC_RTCIO_INPUT_OUTPUT_SUPPORTED is 0
-  // here - confirmed against the installed arduino-esp32 2.x/ESP-IDF 4.x
-  // core; driver/rtc_io.h's functions are compiled out entirely for this
-  // target).
-  esp_deep_sleep_enable_gpio_wakeup(1ULL << BUTTON_PIN, ESP_GPIO_WAKEUP_GPIO_LOW);
+static bool buttonPressed() { return digitalRead(BUTTON_PIN) == LOW; }
+
+/**
+ * Deep-sleeps, but only once the button is actually idle.
+ *
+ * esp_deep_sleep_enable_gpio_wakeup() arms a *level* trigger, so entering deep
+ * sleep while the pin still reads LOW satisfies the wake condition
+ * immediately: the chip reboots, sends another PRESS, waits out the 20s
+ * cutoff, and repeats forever at full power. A stuck switch would therefore
+ * drain the pack continuously and spam the plugin with recordings - so wait
+ * for a debounced HIGH first, and if it never comes, sleep on a timer instead
+ * and re-check later.
+ */
+static void sleepUntilButtonIdle() {
+  unsigned long waitStart = millis();
+  uint8_t stableHighCount = 0;
+  while (millis() - waitStart < VOICE_REMOTE_STUCK_WAIT_MS) {
+    if (!buttonPressed()) {
+      if (++stableHighCount >= 3) {
+        esp_deep_sleep_enable_gpio_wakeup(1ULL << BUTTON_PIN, ESP_GPIO_WAKEUP_GPIO_LOW);
+        esp_deep_sleep_start();
+        return;  // unreachable - deep sleep resets the chip
+      }
+    } else {
+      stableHighCount = 0;
+    }
+    delay(VOICE_REMOTE_STUCK_POLL_MS);
+  }
+
+  // Still held: a level wake would fire instantly, so use a timer wake and
+  // re-evaluate after a long nap. On the next boot the button either got
+  // released (normal wake path resumes) or we land right back here.
+  esp_sleep_enable_timer_wakeup(VOICE_REMOTE_STUCK_RECHECK_US);
   esp_deep_sleep_start();
-  // unreachable - esp_deep_sleep_start() never returns, it resets the chip.
 }
 
 void setup() {
@@ -125,28 +166,32 @@ void setup() {
   ledOff();
   pinMode(BUTTON_PIN, INPUT_PULLUP);
 
-  Serial.begin(115200);
-  // Only matters on the bench with USB attached for provisioning/debugging -
-  // do not block meaningfully waiting for a host that isn't there in the field.
-  unsigned long serialWaitStart = millis();
-  while (!Serial && millis() - serialWaitStart < 1500) delay(10);
+  const esp_sleep_wakeup_cause_t wakeCause = esp_sleep_get_wakeup_cause();
+  // A GPIO wake *is* the press: the only thing wired to that wake source is
+  // the button. Do not re-read the pin to decide - the pin says nothing about
+  // whether a press happened, only whether it is still held right now, so a
+  // short tap would be dropped entirely while we were still booting.
+  const bool pressed = (wakeCause == ESP_SLEEP_WAKEUP_GPIO) || buttonPressed();
+  // Only a real power-on/reset is a provisioning run. A timer wake (the
+  // stuck-button recheck below) must not pay the USB-serial wait either.
+  const bool coldBoot = wakeCause != ESP_SLEEP_WAKEUP_GPIO && wakeCause != ESP_SLEEP_WAKEUP_TIMER;
 
   prefs.begin("vremote-tx", false);
-  counter = prefs.getUInt("counter", 0);
+  // One NVS write per wake (instead of one per packet): the in-epoch counter
+  // lives in RAM, so this is the only thing that has to survive a power cut.
+  bootEpoch = prefs.getUInt("epoch", 0) + 1;
+  prefs.putUInt("epoch", bootEpoch);
 
-  bool pressed = digitalRead(BUTTON_PIN) == LOW;
-
-  setupEspNow();
-  Serial.print("MAC ");
-  Serial.println(WiFi.macAddress());
+  espNowReady = setupEspNow();
 
   if (pressed) {
+    // Send first, talk to USB later - see the file header on latency.
     sendEvent(VOICE_REMOTE_EVENT_PRESS);
 
     unsigned long awakeSince = millis();
     uint8_t stableHighCount = 0;
     while (millis() - awakeSince < VOICE_REMOTE_MAX_AWAKE_MS) {
-      if (digitalRead(BUTTON_PIN) == HIGH) {
+      if (!buttonPressed()) {
         stableHighCount++;
         if (stableHighCount >= 3) break;  // debounced release
       } else {
@@ -156,13 +201,23 @@ void setup() {
     }
 
     sendEvent(VOICE_REMOTE_EVENT_RELEASE);
+  } else if (coldBoot) {
+    // Provisioning run: no press to report, but this is exactly when someone
+    // is watching the serial monitor for the MAC address, so it is worth
+    // waiting for a USB host here (and only here).
+    Serial.begin(115200);
+    unsigned long serialWaitStart = millis();
+    while (!Serial && millis() - serialWaitStart < 1500) delay(10);
+    Serial.print("MAC ");
+    Serial.println(WiFi.macAddress());
+    Serial.print("EPOCH ");
+    Serial.println(bootEpoch);
+    if (!espNowReady) Serial.println("ERR esp_now setup failed");
+    delay(50);  // let the CDC buffer drain before the chip resets into sleep
   }
-  // else: cold boot / spurious wake without the button actually held down -
-  // nothing to send, just re-arm and sleep (still useful to have printed the
-  // MAC above for provisioning).
 
   teardownEspNow();
-  armWakeSourceAndSleep();
+  sleepUntilButtonIdle();
 }
 
 void loop() {

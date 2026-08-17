@@ -13,12 +13,21 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 OUT_DIR="../../../.obsidian/plugins/rag-chat/bin"
 mkdir -p "$OUT_DIR"
 
+echo "Running tests ..."
+go test ./...
+
+# -buildvcs=false keeps the output byte-reproducible: without it Go stamps the
+# git revision plus a "vcs.modified=true" flag into the binary, so a committed
+# artifact can never be verified against committed source (and every rebuild
+# from a dirty tree produces a gratuitously different file).
+BUILD_FLAGS=(-trimpath -buildvcs=false -ldflags=-s\ -w)
+
 echo "Building serial-bridge-win32-x64.exe ..."
-GOOS=windows GOARCH=amd64 go build -trimpath -ldflags="-s -w" \
+GOOS=windows GOARCH=amd64 go build "${BUILD_FLAGS[@]}" \
   -o "$OUT_DIR/serial-bridge-win32-x64.exe" .
 
 echo "Building serial-bridge-linux-x64 ..."
-GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" \
+GOOS=linux GOARCH=amd64 go build "${BUILD_FLAGS[@]}" \
   -o "$OUT_DIR/serial-bridge-linux-x64" .
 chmod +x "$OUT_DIR/serial-bridge-linux-x64"
 
