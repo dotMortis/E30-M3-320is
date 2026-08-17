@@ -399,6 +399,7 @@
 }
 
 .rag-chat-mic-button {
+  position: relative;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -420,6 +421,49 @@
   }
   50% {
     opacity: 0.55;
+  }
+}
+
+/* Hardware voice-remote status indicator (see hardware/voice-remote/PLAN.md).
+   Hidden entirely unless the feature is enabled in settings (view.ts only
+   adds .is-visible when a real bridge status is known). */
+.rag-chat-remote-status-dot {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  border: 1px solid var(--background-primary);
+  pointer-events: none;
+}
+
+.rag-chat-remote-status-dot.is-visible {
+  display: block;
+}
+
+.rag-chat-remote-status-dot.is-connected {
+  background-color: var(--color-green, #4caf50);
+}
+
+.rag-chat-remote-status-dot.is-disconnected {
+  background-color: var(--text-muted);
+}
+
+.rag-chat-remote-status-dot.is-pulse {
+  animation: rag-chat-remote-pulse 0.4s ease-out;
+}
+
+@keyframes rag-chat-remote-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.6);
+  }
+  100% {
+    transform: scale(1.4);
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0);
   }
 }
 

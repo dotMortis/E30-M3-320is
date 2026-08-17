@@ -2,7 +2,7 @@ import { makeEl, type FakeElement } from "./dom";
 import { Notice } from "./obsidian/core";
 import { Modal } from "./obsidian/plugin";
 import { Setting } from "./obsidian/components";
-import { requestUrl, setIcon } from "./obsidian/platform";
+import { Platform, requestUrl, setIcon } from "./obsidian/platform";
 
 export { makeEl, type FakeElement };
 export { Component, Notice } from "./obsidian/core";
@@ -15,7 +15,7 @@ export {
   TextComponent,
   ToggleComponent,
 } from "./obsidian/components";
-export { FileSystemAdapter, Keymap, MarkdownRenderer, requestUrl, setIcon } from "./obsidian/platform";
+export { FileSystemAdapter, Keymap, MarkdownRenderer, Platform, requestUrl, setIcon } from "./obsidian/platform";
 
 export function resetObsidianMocks(): void {
   Notice.instances = [];
@@ -23,4 +23,5 @@ export function resetObsidianMocks(): void {
   Modal.instances = [];
   requestUrl.mockReset();
   setIcon.mockClear();
+  Platform.isDesktopApp = true;
 }

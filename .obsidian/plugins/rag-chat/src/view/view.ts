@@ -2,6 +2,7 @@ import { ItemView, Notice, type WorkspaceLeaf } from "obsidian";
 import type RagChatPlugin from "../main";
 import { getIndices } from "../retrieval/index-cache";
 import type { ChatTurn } from "../retrieval/types";
+import type { RemoteBridgeStatus } from "../remote/bridge-client";
 import { MicRecorder } from "../stt/recorder";
 import { blobToWavBase64 } from "../stt/wav-encode";
 import { confirmModal } from "./confirm-modal";
@@ -118,6 +119,7 @@ export class RagChatView extends ItemView {
     this.wireComposer();
     this.wireMic();
     this.wireTtsControls();
+    this.setRemoteStatus(this.plugin.getRemoteStatus());
 
     this.composer.thinkingCheckboxEl.checked =
       this.plugin.settings.thinkingEnabled;
@@ -262,6 +264,38 @@ export class RagChatView extends ItemView {
           `RAG Chat: Sprachaufnahme fehlgeschlagen (${errText(err)}).`,
         );
     }
+  }
+
+  /**
+   * Reflects the hardware voice-remote bridge's link status (or its absence,
+   * when the feature is disabled/unsupported) on the small dot badge over
+   * the mic button. See hardware/voice-remote/PLAN.md.
+   */
+  setRemoteStatus(status: RemoteBridgeStatus | null): void {
+    const dot = this.composer.remoteStatusDot;
+    const visible = status !== null && status !== "unsupported";
+    dot.toggleClass("is-visible", visible);
+    dot.toggleClass("is-connected", status === "connected");
+    dot.toggleClass("is-disconnected", visible && status !== "connected");
+    const labels: Record<RemoteBridgeStatus, string> = {
+      connected: "Hardware-Fernbedienung: verbunden",
+      starting: "Hardware-Fernbedienung: Verbindungsaufbau...",
+      disconnected: "Hardware-Fernbedienung: getrennt",
+      error: "Hardware-Fernbedienung: Fehler",
+      unsupported: "Hardware-Fernbedienung: nicht unterstützt",
+    };
+    dot.setAttribute("aria-label", status ? labels[status] : "");
+    dot.setAttribute("title", status ? labels[status] : "");
+  }
+
+  /** Brief visual confirmation that a real press/release arrived from the remote. */
+  pulseRemoteIndicator(): void {
+    const dot = this.composer.remoteStatusDot;
+    dot.removeClass("is-pulse");
+    // Force a reflow so re-adding the class restarts the CSS animation even
+    // for back-to-back presses.
+    void (dot as unknown as { offsetWidth?: number }).offsetWidth;
+    dot.addClass("is-pulse");
   }
 
   private wireTtsControls(): void {

@@ -13,6 +13,7 @@
     "scripts/",
     "LICENSE",
     "DEVELOPMENT.md",
-    "mise.toml"
+    "mise.toml",
+    "hardware/"
   ]
 }

@@ -25,6 +25,19 @@ __pycache__/
 .obsidian/plugins/rag-chat/node_modules/
 .obsidian/plugins/rag-chat/data.json
 
+# Voice-remote firmware secrets (ESP-NOW PMK/LMK + paired remote's MAC address).
+# Never shipped - see hardware/voice-remote/secrets.h.example for the template.
+hardware/voice-remote/secrets.h
+
+# Voice-remote PlatformIO build tooling (toolchain downloads + build artifacts,
+# IDE/clangd integration files PlatformIO generates on first `pio run`;
+# regenerable from source, never shipped).
+hardware/voice-remote/*/.pio/
+hardware/voice-remote/*/.cache/
+hardware/voice-remote/*/.vscode/
+hardware/voice-remote/*/compile_commands.json
+hardware/voice-remote/*/.gitignore
+
 # Vault Search v2 build tooling (node deps; never shipped). The raw OpenThesaurus
 # dump is a large (~4MB) input to scripts/build-data.mjs - regenerable by
 # re-downloading "Thesaurus im Text-Format" from openthesaurus.de/about/download.

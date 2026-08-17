@@ -1,0 +1,9 @@
+{
+  "id": "hide-excluded-paths",
+  "name": "Hide Excluded Paths",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Reliably hides the files/folders listed in Files & Links \u2192 Excluded files (userIgnoreFilters) from the file explorer via injected CSS. Obsidian's native exclusion only reliably hides files with unrecognized extensions in this vault (a side effect of 'Detect all file extensions', not the exclusion list itself) - this plugin makes the exclusion list actually work for folders and markdown files too.",
+  "author": "E30-M3-320is vault",
+  "isDesktopOnly": false
+}

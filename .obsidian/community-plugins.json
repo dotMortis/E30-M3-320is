@@ -1,5 +1,6 @@
 [
   "hide-image-files",
+  "hide-excluded-paths",
   "auto-reveal-active-file",
   "vault-search",
   "websearch",

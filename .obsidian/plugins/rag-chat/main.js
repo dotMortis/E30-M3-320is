@@ -26,6 +26,8 @@ let node_crypto = require("node:crypto");
 let node_os = require("node:os");
 node_os = __toESM(node_os, 1);
 let node_fs = require("node:fs");
+let node_child_process = require("node:child_process");
+let node_path = require("node:path");
 //#region src/secure-storage.ts
 var ENC_PREFIX = "enc:v1:";
 var KEY_LEN = 32;
@@ -106,7 +108,9 @@ var DEFAULT_SETTINGS = {
 	ttsOutputDeviceId: "",
 	ttsVolume: 1,
 	ttsCharCount: 0,
-	micInputDeviceId: ""
+	micInputDeviceId: "",
+	remoteEnabled: false,
+	remoteSerialPortOverride: ""
 };
 //#endregion
 //#region src/settings/settings-store.ts
@@ -496,6 +500,49 @@ function renderMicInputSection(containerEl, plugin) {
 	refreshDeviceOptions();
 }
 //#endregion
+//#region src/settings/sections/remote.ts
+function remoteStatusLabel(status, enabled) {
+	if (!enabled) return "Deaktiviert.";
+	switch (status) {
+		case "connected": return "Verbunden.";
+		case "starting": return "Verbindungsaufbau...";
+		case "disconnected": return "Getrennt (Empfänger nicht gefunden oder USB-Kabel nicht angeschlossen).";
+		case "error": return "Fehler - siehe Entwicklertools-Konsole.";
+		case "unsupported": return "Nicht unterstützt (nur Desktop, Windows/Linux x64).";
+		default: return "Unbekannt.";
+	}
+}
+/**
+* Hardware voice remote (hardware/voice-remote/PLAN.md): a battery-powered
+* ESP32 button that starts/stops the mic-button recording remotely over
+* ESP-NOW -> USB serial -> this plugin. Off by default and only relevant on
+* this specific machine's paired hardware.
+*/
+function renderRemoteSection(containerEl, plugin) {
+	const statusLine = containerEl.createDiv({ cls: "setting-item-description rag-chat-remote-status-line" });
+	const updateStatusLine = () => {
+		statusLine.setText(`Status: ${remoteStatusLabel(plugin.getRemoteStatus(), plugin.settings.remoteEnabled)}`);
+	};
+	new obsidian.Setting(containerEl).setName("Hardware-Fernbedienung aktivieren").setDesc("Startet/beendet die Sprachaufnahme über eine externe ESP32-Funk-Fernbedienung (siehe hardware/voice-remote/PLAN.md). Nur für dieses Gerät relevant - betrifft keine anderen Nutzer dieses Vaults.").addToggle((toggle) => {
+		toggle.setValue(plugin.settings.remoteEnabled).onChange(async (value) => {
+			plugin.settings.remoteEnabled = value;
+			await plugin.saveSettings();
+			plugin.refreshRemoteBridge();
+			updateStatusLine();
+		});
+	});
+	new obsidian.Setting(containerEl).setName("Serieller Port (optional)").setDesc("Nur nötig, falls der Empfänger nicht automatisch gefunden wird, z.B. /dev/ttyACM0 oder COM5. Leer lassen für automatische Erkennung.").addText((text) => {
+		text.setPlaceholder("automatisch").setValue(plugin.settings.remoteSerialPortOverride);
+		text.onChange(async (value) => {
+			plugin.settings.remoteSerialPortOverride = value.trim();
+			await plugin.saveSettings();
+			plugin.refreshRemoteBridge();
+			updateStatusLine();
+		});
+	});
+	updateStatusLine();
+}
+//#endregion
 //#region src/settings/sections/retrieval.ts
 function renderRetrievalSection(containerEl, plugin) {
 	new obsidian.Setting(containerEl).setName("Embedding model").setDesc("Must match the model the index was built with (see rag-manifest.json). Google-only.").addText((text) => text.setValue(plugin.settings.embeddingModel).onChange(async (value) => {
@@ -817,6 +864,7 @@ var RagChatSettingTab = class extends obsidian.PluginSettingTab {
 		renderTtsVoiceSection(containerEl, this.plugin);
 		renderTtsAudioSection(containerEl, this.plugin, this.app);
 		renderMicInputSection(containerEl, this.plugin);
+		renderRemoteSection(containerEl, this.plugin);
 	}
 };
 //#endregion
@@ -10882,6 +10930,7 @@ function buildComposer(container) {
 		cancelClarificationButton,
 		inputEl,
 		micButton,
+		remoteStatusDot: micButton.createSpan({ cls: "rag-chat-remote-status-dot" }),
 		sendButton: controlsRow.createEl("button", {
 			cls: "rag-chat-send",
 			text: "Fragen"
@@ -11003,6 +11052,7 @@ var RagChatView = class extends obsidian.ItemView {
 		this.wireComposer();
 		this.wireMic();
 		this.wireTtsControls();
+		this.setRemoteStatus(this.plugin.getRemoteStatus());
 		this.composer.thinkingCheckboxEl.checked = this.plugin.settings.thinkingEnabled;
 		this.composer.webSearchCheckboxEl.checked = this.plugin.settings.webSearchEnabled;
 		this.composer.ttsCheckboxEl.checked = this.plugin.settings.ttsEnabled;
@@ -11109,6 +11159,34 @@ var RagChatView = class extends obsidian.ItemView {
 		} catch (err) {
 			if (!this.closed) new obsidian.Notice(`RAG Chat: Sprachaufnahme fehlgeschlagen (${errText(err)}).`);
 		}
+	}
+	/**
+	* Reflects the hardware voice-remote bridge's link status (or its absence,
+	* when the feature is disabled/unsupported) on the small dot badge over
+	* the mic button. See hardware/voice-remote/PLAN.md.
+	*/
+	setRemoteStatus(status) {
+		const dot = this.composer.remoteStatusDot;
+		const visible = status !== null && status !== "unsupported";
+		dot.toggleClass("is-visible", visible);
+		dot.toggleClass("is-connected", status === "connected");
+		dot.toggleClass("is-disconnected", visible && status !== "connected");
+		const labels = {
+			connected: "Hardware-Fernbedienung: verbunden",
+			starting: "Hardware-Fernbedienung: Verbindungsaufbau...",
+			disconnected: "Hardware-Fernbedienung: getrennt",
+			error: "Hardware-Fernbedienung: Fehler",
+			unsupported: "Hardware-Fernbedienung: nicht unterstützt"
+		};
+		dot.setAttribute("aria-label", status ? labels[status] : "");
+		dot.setAttribute("title", status ? labels[status] : "");
+	}
+	/** Brief visual confirmation that a real press/release arrived from the remote. */
+	pulseRemoteIndicator() {
+		const dot = this.composer.remoteStatusDot;
+		dot.removeClass("is-pulse");
+		dot.offsetWidth;
+		dot.addClass("is-pulse");
 	}
 	wireTtsControls() {
 		const t = this.ttsControls;
@@ -11294,14 +11372,156 @@ async function readManifest(vault, pluginDir) {
 	return JSON.parse(raw);
 }
 //#endregion
+//#region src/remote/bridge-client.ts
+var RESTART_BASE_DELAY_MS = 1e3;
+var RESTART_MAX_DELAY_MS = 3e4;
+function binaryNameFor(platform, arch) {
+	if (platform === "win32" && arch === "x64") return "serial-bridge-win32-x64.exe";
+	if (platform === "linux" && arch === "x64") return "serial-bridge-linux-x64";
+	return null;
+}
+/**
+* Spawns and supervises the prebuilt Go serial-bridge binary
+* (.obsidian/plugins/rag-chat/bin/serial-bridge-*), parses its
+* newline-delimited JSON stdout, and surfaces press/release/status events.
+*
+* Deliberately platform-detected rather than bundled as a Node native
+* module: this way the plugin never depends on Obsidian's bundled Electron
+* ABI for serial access (see PLAN.md "Serial bridge approach").
+*/
+var RemoteBridgeClient = class {
+	constructor(pluginDirFullPath, callbacks, getPortOverride) {
+		this.pluginDirFullPath = pluginDirFullPath;
+		this.callbacks = callbacks;
+		this.getPortOverride = getPortOverride;
+		this.child = null;
+		this.stdoutBuffer = "";
+		this.restartAttempt = 0;
+		this.restartTimer = null;
+		this.stopped = true;
+		this.status = "starting";
+	}
+	start() {
+		this.stopped = false;
+		const binaryName = binaryNameFor(process.platform, process.arch);
+		if (!binaryName) {
+			this.setStatus("unsupported", `Nicht unterstützte Plattform: ${process.platform}/${process.arch}`);
+			return;
+		}
+		const binaryPath = (0, node_path.join)(this.pluginDirFullPath, "bin", binaryName);
+		if (!(0, node_fs.existsSync)(binaryPath)) {
+			this.setStatus("unsupported", `Bridge-Programm fehlt: ${binaryPath}`);
+			return;
+		}
+		if (process.platform !== "win32") try {
+			(0, node_fs.chmodSync)(binaryPath, 493);
+		} catch {}
+		this.spawnProcess(binaryPath);
+	}
+	stop() {
+		this.stopped = true;
+		if (this.restartTimer) {
+			clearTimeout(this.restartTimer);
+			this.restartTimer = null;
+		}
+		this.child?.kill();
+		this.child = null;
+	}
+	getStatus() {
+		return this.status;
+	}
+	spawnProcess(binaryPath) {
+		this.setStatus("starting");
+		const override = this.getPortOverride();
+		const args = override ? [`-port=${override}`] : [];
+		let child;
+		try {
+			child = (0, node_child_process.spawn)(binaryPath, args, { stdio: [
+				"pipe",
+				"pipe",
+				"pipe"
+			] });
+		} catch (err) {
+			this.setStatus("error", err instanceof Error ? err.message : String(err));
+			this.scheduleRestart(binaryPath);
+			return;
+		}
+		this.child = child;
+		this.stdoutBuffer = "";
+		child.stdout.on("data", (chunk) => this.handleStdout(chunk));
+		child.on("error", (err) => {
+			this.setStatus("error", err.message);
+			this.scheduleRestart(binaryPath);
+		});
+		child.on("exit", () => {
+			if (this.child === child) this.child = null;
+			if (this.stopped) return;
+			this.setStatus("disconnected");
+			this.scheduleRestart(binaryPath);
+		});
+	}
+	scheduleRestart(binaryPath) {
+		if (this.stopped) return;
+		const delay = Math.min(RESTART_BASE_DELAY_MS * 2 ** this.restartAttempt, RESTART_MAX_DELAY_MS);
+		this.restartAttempt++;
+		this.restartTimer = setTimeout(() => {
+			this.restartTimer = null;
+			if (this.stopped) return;
+			this.spawnProcess(binaryPath);
+		}, delay);
+	}
+	handleStdout(chunk) {
+		this.stdoutBuffer += chunk.toString("utf8");
+		let idx;
+		while ((idx = this.stdoutBuffer.indexOf("\n")) >= 0) {
+			const line = this.stdoutBuffer.slice(0, idx).trim();
+			this.stdoutBuffer = this.stdoutBuffer.slice(idx + 1);
+			if (line) this.handleLine(line);
+		}
+	}
+	handleLine(line) {
+		let ev;
+		try {
+			ev = JSON.parse(line);
+		} catch {
+			return;
+		}
+		this.restartAttempt = 0;
+		switch (ev.type) {
+			case "press":
+				this.callbacks.onPress();
+				break;
+			case "release":
+				this.callbacks.onRelease();
+				break;
+			case "status":
+				this.setStatus(ev.connected ? "connected" : "disconnected", ev.port);
+				break;
+			case "error": this.setStatus("error", ev.message);
+		}
+	}
+	setStatus(status, detail) {
+		this.status = status;
+		this.callbacks.onStatusChange(status, detail);
+	}
+};
+//#endregion
 //#region src/main.ts
 var PUSH_TO_TALK_KEY = "F12";
+/**
+* Safety net for the hardware voice remote (hardware/voice-remote/PLAN.md):
+* if a RELEASE signal is ever lost over the air, auto-stop the recording
+* after this long rather than recording forever.
+*/
+var REMOTE_SAFETY_TIMEOUT_MS = 3e4;
 var RagChatPlugin = class extends obsidian.Plugin {
 	constructor(..._args) {
 		super(..._args);
 		this.store = new SettingsStore(this);
 		this.manifestCache = null;
 		this.pushToTalkActive = false;
+		this.remoteBridge = null;
+		this.remoteSafetyTimer = null;
 		this.handlePushToTalkKeyDown = (evt) => {
 			if (!(evt.ctrlKey && evt.altKey && evt.shiftKey && evt.key === PUSH_TO_TALK_KEY)) return;
 			evt.preventDefault();
@@ -11356,6 +11576,7 @@ var RagChatPlugin = class extends obsidian.Plugin {
 		this.app.workspace.onLayoutReady(() => {
 			this.activateView({ focus: false });
 		});
+		this.refreshRemoteBridge();
 		try {
 			await this.revalidateManifest();
 		} catch (err) {
@@ -11368,10 +11589,67 @@ var RagChatPlugin = class extends obsidian.Plugin {
 			window.removeEventListener("keydown", this.handlePushToTalkKeyDown);
 			window.removeEventListener("keyup", this.handlePushToTalkKeyUp);
 		}
+		this.clearRemoteSafetyTimer();
+		this.remoteBridge?.stop();
+		this.remoteBridge = null;
 	}
 	getFirstChatView() {
 		for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) if (leaf.view instanceof RagChatView) return leaf.view;
 		return null;
+	}
+	/**
+	* (Re)starts the hardware voice-remote bridge (hardware/voice-remote/PLAN.md)
+	* to match current settings. Safe to call any time settings change (e.g.
+	* from the settings tab's toggle/port-override handlers) - always tears
+	* down any existing client first. No-op on mobile, where Node child
+	* processes aren't available.
+	*/
+	refreshRemoteBridge() {
+		this.remoteBridge?.stop();
+		this.remoteBridge = null;
+		this.broadcastRemoteStatus(null);
+		if (!obsidian.Platform.isDesktopApp) return;
+		if (!this.settings.remoteEnabled) return;
+		this.remoteBridge = new RemoteBridgeClient(this.getPluginDirFullPath(), {
+			onPress: () => void this.handleRemotePress(),
+			onRelease: () => this.handleRemoteRelease(),
+			onStatusChange: (status) => this.broadcastRemoteStatus(status)
+		}, () => this.settings.remoteSerialPortOverride);
+		this.remoteBridge.start();
+	}
+	getRemoteStatus() {
+		return this.remoteBridge?.getStatus() ?? null;
+	}
+	async handleRemotePress() {
+		await this.activateView();
+		const view = this.getFirstChatView();
+		if (!view) return;
+		view.startVoiceRecording();
+		view.pulseRemoteIndicator();
+		this.armRemoteSafetyTimer();
+	}
+	handleRemoteRelease() {
+		this.clearRemoteSafetyTimer();
+		const view = this.getFirstChatView();
+		view?.pulseRemoteIndicator();
+		view?.stopVoiceRecordingAndSend();
+	}
+	armRemoteSafetyTimer() {
+		this.clearRemoteSafetyTimer();
+		this.remoteSafetyTimer = setTimeout(() => {
+			this.remoteSafetyTimer = null;
+			this.getFirstChatView()?.stopVoiceRecordingAndSend();
+			new obsidian.Notice("RAG Chat: Fernbedienung - Aufnahme nach 30s automatisch beendet (kein Loslassen-Signal empfangen).", 8e3);
+		}, REMOTE_SAFETY_TIMEOUT_MS);
+	}
+	clearRemoteSafetyTimer() {
+		if (this.remoteSafetyTimer) {
+			clearTimeout(this.remoteSafetyTimer);
+			this.remoteSafetyTimer = null;
+		}
+	}
+	broadcastRemoteStatus(status) {
+		for (const leaf of this.app.workspace.getLeavesOfType(RAG_CHAT_VIEW_TYPE)) if (leaf.view instanceof RagChatView) leaf.view.setRemoteStatus(status);
 	}
 	getPluginDir() {
 		return getPluginDir(this.manifest);

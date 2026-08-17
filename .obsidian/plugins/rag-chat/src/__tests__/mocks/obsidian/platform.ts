@@ -18,6 +18,12 @@ export class FileSystemAdapter {
   }
 }
 
+// Mutable (not frozen) so tests can flip isDesktopApp to exercise the mobile
+// no-op path for the hardware voice remote (see remote/bridge-client.ts).
+export const Platform: { isDesktopApp: boolean } = {
+  isDesktopApp: true,
+};
+
 export const Keymap = {
   isModEvent(evt: unknown): boolean {
     const e = evt as { ctrlKey?: boolean; metaKey?: boolean } | undefined;

@@ -5,6 +5,7 @@ export interface ComposerElements {
   cancelClarificationButton: HTMLButtonElement;
   inputEl: HTMLTextAreaElement;
   micButton: HTMLButtonElement;
+  remoteStatusDot: HTMLElement;
   sendButton: HTMLButtonElement;
   thinkingCheckboxEl: HTMLInputElement;
   webSearchCheckboxEl: HTMLInputElement;
@@ -66,6 +67,10 @@ export function buildComposer(container: HTMLElement): ComposerElements {
   });
   setIcon(micButton, "mic");
 
+  // Hidden unless the hardware voice remote is enabled in settings (see
+  // main.ts's setRemoteStatus wiring) - hardware/voice-remote/PLAN.md.
+  const remoteStatusDot = micButton.createSpan({ cls: "rag-chat-remote-status-dot" });
+
   const sendButton = controlsRow.createEl("button", { cls: "rag-chat-send", text: "Fragen" });
 
   return {
@@ -73,6 +78,7 @@ export function buildComposer(container: HTMLElement): ComposerElements {
     cancelClarificationButton,
     inputEl,
     micButton,
+    remoteStatusDot,
     sendButton,
     thinkingCheckboxEl,
     webSearchCheckboxEl,

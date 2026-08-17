@@ -4,6 +4,7 @@ import { renderApiKeySection } from "./sections/api-key";
 import { renderAgentSection } from "./sections/agent";
 import { renderGenerationModel } from "./sections/generation";
 import { renderMicInputSection } from "./sections/mic-input";
+import { renderRemoteSection } from "./sections/remote";
 import { renderRetrievalKnobs, renderRetrievalSection } from "./sections/retrieval";
 import { renderTtsAudioSection } from "./sections/tts-audio";
 import { renderTtsVoiceSection } from "./sections/tts-voice";
@@ -28,5 +29,6 @@ export class RagChatSettingTab extends PluginSettingTab {
     renderTtsVoiceSection(containerEl, this.plugin);
     renderTtsAudioSection(containerEl, this.plugin, this.app);
     renderMicInputSection(containerEl, this.plugin);
+    renderRemoteSection(containerEl, this.plugin);
   }
 }

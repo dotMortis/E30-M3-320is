@@ -48,6 +48,10 @@ see below for those.
 - **`.obsidian/plugins/vault-search/`** — Obsidian plugin source (JS +
   esbuild) for the custom fuzzy/synonym/compound-word search. Same deal:
   built `main.js` committed, source under `src/`.
+- **`hardware/voice-remote/`** — optional hardware voice remote for the
+  `rag-chat` plugin's mic button (two ESP32-C3 boards + a small PC-side
+  bridge). Off by default, only relevant if you've built the physical
+  hardware — see `hardware/voice-remote/PLAN.md`.
 - **`scripts/dev-setup.sh`** — one-shot dev environment bootstrap (see Quick
   start above).
 
@@ -100,6 +104,38 @@ cd build && npm ci && node build_orama.mjs         # builds the committed index 
 
 Sanity-check retrieval afterwards with `.pipeline/rag/qa_rag.py`.
 
+## Hardware voice remote (optional)
+
+A battery-powered ESP32 button that remotely starts/stops the `rag-chat`
+plugin's voice recording, for hands-free note dictation. Entirely optional —
+off by default (`remoteEnabled: false`), and only relevant if you've built the
+two-board hardware described in `hardware/voice-remote/PLAN.md`. Nothing here
+affects a normal vault reader who doesn't have the hardware.
+
+Flashing the two ESP32-C3 boards (requires [PlatformIO](https://platformio.org/),
+e.g. `pip install platformio` or the VS Code extension — not part of this
+repo's pinned toolchain, since it's only needed for this optional hardware):
+
+```sh
+cd hardware/voice-remote
+cp secrets.h.example secrets.h   # fill in PMK/LMK, see PLAN.md "Provisioning"
+pio run -d receiver -t upload -t monitor
+pio run -d remote -t upload -t monitor
+```
+
+Rebuilding the PC-side serial bridge (only needed if you change
+`hardware/voice-remote/bridge/main.go` — the prebuilt binaries under
+`.obsidian/plugins/rag-chat/bin/` already ship committed, same as `main.js`):
+
+```sh
+mise install   # picks up the pinned `go` version
+cd hardware/voice-remote/bridge
+./build.sh
+```
+
+Full design, security model, and provisioning steps:
+`hardware/voice-remote/PLAN.md`.
+
 ## Adding new scanned manual pages
 
 Use `.pipeline/scripts/` (see `.pipeline/TRANSFORM-PLAN.md` for the full
@@ -114,14 +150,16 @@ pipeline design):
 
 ## Version pinning
 
-Node.js, `uv`, and Python versions are pinned via `mise.toml` and
+Node.js, `uv`, Python, and Go versions are pinned via `mise.toml` and
 `.python-version` to the versions this repo was last verified against. Run
-`mise install` to pick them up (`dev-setup.sh` does this for you).
+`mise install` to pick them up (`dev-setup.sh` does this for you). Go is only
+needed for rebuilding `hardware/voice-remote/bridge`'s prebuilt binaries.
 
 ## License
 
 Source code in this repository (`.obsidian/plugins/*/src` and build configs,
-`.pipeline/scripts/`, `.pipeline/rag/`, `scripts/`) is MIT-licensed — see
+`.pipeline/scripts/`, `.pipeline/rag/`, `scripts/`, `hardware/voice-remote/`)
+is MIT-licensed — see
 [`LICENSE`](LICENSE). The manual content itself (scanned pages,
 transcriptions, glossary, technical data, and all vault text/images derived
 from the original BMW factory manuals) is **not** covered by that license

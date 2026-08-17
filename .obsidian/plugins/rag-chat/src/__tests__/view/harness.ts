@@ -88,6 +88,7 @@ export function makeView() {
     getManifest: vi.fn().mockResolvedValue(fakeManifest()),
     getPluginDirFullPath: vi.fn().mockReturnValue("/plugin/dir"),
     saveSettings: vi.fn().mockResolvedValue(undefined),
+    getRemoteStatus: vi.fn().mockReturnValue(null),
   };
   const leaf = { app };
   const view = new RagChatView(leaf as any, plugin as any);

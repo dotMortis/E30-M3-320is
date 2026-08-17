@@ -2,6 +2,7 @@ import { beforeEach, vi } from "vitest";
 import type { FakeElement } from "../mocks/dom";
 import { resetObsidianMocks } from "../mocks/obsidian";
 import { fakeSettings } from "../fixtures/settings";
+import type { RagChatSettings } from "../../settings/types";
 import { listModelsResponse, mockRequestUrlAlways } from "../mocks/gemini-http";
 
 vi.mock("obsidian", async () => {
@@ -17,11 +18,16 @@ beforeEach(async () => {
   RagChatSettingTab = (await import("../../settings/settings-tab")).RagChatSettingTab;
 });
 
-export function makeTab() {
+export function makeTab(
+  settingsOverrides: Partial<RagChatSettings> = {},
+  opts: { remoteStatus?: string | null } = {},
+) {
   const plugin = {
-    settings: fakeSettings({ ttsApiKey: "tts-key" }),
+    settings: fakeSettings({ ttsApiKey: "tts-key", ...settingsOverrides }),
     saveSettings: vi.fn().mockResolvedValue(undefined),
     revalidateManifest: vi.fn().mockResolvedValue(undefined),
+    getRemoteStatus: vi.fn().mockReturnValue(opts.remoteStatus ?? null),
+    refreshRemoteBridge: vi.fn(),
   };
   const tab = new RagChatSettingTab({} as any, plugin as any);
   tab.display();

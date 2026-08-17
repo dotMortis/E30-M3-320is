@@ -22,6 +22,11 @@ export interface RagChatSettings {
   ttsCharCount: number;
 
   micInputDeviceId: string;
+
+  /** Hardware voice remote (hardware/voice-remote/PLAN.md) - off by default, opt-in per vault copy. */
+  remoteEnabled: boolean;
+  /** Manual serial port/COM name override; empty string means auto-detect. */
+  remoteSerialPortOverride: string;
 }
 
 export const DEFAULT_SETTINGS: RagChatSettings = {
@@ -46,4 +51,7 @@ export const DEFAULT_SETTINGS: RagChatSettings = {
   ttsCharCount: 0,
 
   micInputDeviceId: "",
+
+  remoteEnabled: false,
+  remoteSerialPortOverride: "",
 };

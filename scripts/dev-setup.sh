@@ -13,6 +13,9 @@
 #   - Rebuild the RAG search index itself (costs money, needs a real
 #     GEMINI_API_KEY, and takes a while)
 #   - Run the scan -> Markdown transcription pipeline (.pipeline/scripts/)
+#   - Set up hardware/voice-remote/ (optional ESP32 hardware + PlatformIO/Go
+#     toolchain; unrelated to reading/developing the vault itself - see
+#     DEVELOPMENT.md "Hardware voice remote")
 #
 # Usage: ./scripts/dev-setup.sh
 
